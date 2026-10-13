@@ -1,15 +1,20 @@
-// Runnable example: Account Usage (GET /v1.0/whoisapi/usage)
-// Parameters for accountUsage (GET /v1.0/whoisapi/usage):
-//   (no parameters; the API key is set on the client)
-// whoisfreaks-js is CommonJS; apiKey is set once on the ApiClient
-import pkg from "whoisfreaks-js";
-const { ApiClient, AccountApi } = pkg;
-// or:  const { ApiClient, AccountApi } = require("whoisfreaks-js");
+// Account Usage: GET https://api.whoisfreaks.com/v1.0/whoisapi/usage
+// Run: WHOISFREAKS_API_KEY=your_api_key node AccountUsage.js
+const { ApiClient, AccountApi } = require("whoisfreaks-js");
 
+// Set the API key once; the client adds it to every request.
 const client = ApiClient.instance;
-client.authentications["ApiKeyAuth"].apiKey = "YOUR_API_KEY";  // set once
+client.authentications["ApiKeyAuth"].apiKey = process.env.WHOISFREAKS_API_KEY;
 const api = new AccountApi(client);
 
-api.accountUsage()
-  .then(data => console.log(data))
-  .catch(err => console.error(err));
+// accountUsage() takes no parameters.
+async function main() {
+  const result = await api.accountUsage();
+  console.log(JSON.stringify(result, null, 2));
+}
+
+main().catch((err) => {
+  // API errors carry the HTTP status and the parsed error body
+  console.error(err.status ? `HTTP ${err.status}: ${JSON.stringify(err.body)}` : err);
+  process.exitCode = 1;
+});

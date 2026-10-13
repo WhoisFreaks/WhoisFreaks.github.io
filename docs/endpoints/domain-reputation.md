@@ -4,20 +4,20 @@
 
 Real-time domain threat assessment and trust scoring
 
-1 endpoint(s). All requests require your API key — see [Authentication](../authentication.md).
+1 endpoint. Requests need your API key unless noted otherwise. See [Authentication](../authentication.md).
 
 ## Domain Reputation Lookup
 
-`GET /v1/domain/security`
+`GET https://api.whoisfreaks.com/v1/domain/security`
 
 Real-time domain threat assessment. Returns risk verdict, trust score, DGA analysis, threat intelligence matches, and security signals. 1 credit.
 
 **Parameters**
 
-| Parameter | In | Required | Type | Description |
-|-----------|----|----------|------|-------------|
-| `domainName` | query | yes | string | The domain name to assess |
-| `format` | query | no | string |  (one of: json, xml) |
+| Parameter | In | Required | Type | Default | Description |
+|-----------|----|----------|------|---------|-------------|
+| `domainName` | query | yes | string |  | The domain name to assess |
+| `format` | query | no | string | `json` |  (one of: json, xml) |
 
 **Response** (`DomainReputationResponse`)
 
@@ -108,20 +108,27 @@ Real-time domain threat assessment. Returns risk verdict, trust score, DGA analy
 <details><summary>Python</summary>
 
 ```python
-"""Runnable example: Domain Reputation Lookup (GET /v1/domain/security)."""
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.domain_reputation_api import DomainReputationApi
+"""Domain Reputation Lookup: GET https://api.whoisfreaks.com/v1/domain/security
 
-# Parameters for domainReputation (GET /v1/domain/security):
-#   - domainName (string, required): The domain name to assess
-#   - format (string (one of: json, xml), optional)
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = DomainReputationApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python DomainReputation.py
+"""
+import json
+import os
 
-result = api.domain_reputation(domain_name="example.com")
-print(result)
+import whoisfreaks
 
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DomainReputationApi(client)
+
+    # domain_reputation parameters:
+    #   domain_name (str, required): The domain name to assess
+    #   format (str, optional, keyword): one of json, xml; default "json"
+    result = api.domain_reputation("amazon.com")
+    print(json.dumps(result.to_dict(), indent=2))
 ```
 
 </details>
@@ -129,21 +136,31 @@ print(result)
 <details><summary>TypeScript</summary>
 
 ```typescript
-// Runnable example: Domain Reputation Lookup (GET /v1/domain/security)
-// Parameters for domainReputation (GET /v1/domain/security):
-//   - domainName (string, required): The domain name to assess
-//   - format (string (one of: json, xml), optional)
-import { Configuration, DomainReputationApi } from "whoisfreaks";
+// Domain Reputation Lookup: GET https://api.whoisfreaks.com/v1/domain/security
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DomainReputation.ts
+import { Configuration, DomainReputationApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DomainReputationApi(config);
 
-async function main() {
-  const result = await api.domainReputation({ domainName: "example.com", format: undefined });
-  console.log(result);
+// domainReputation({ domainName, format? })
+//   domainName (string, required): The domain name to assess
+//   format ("json" | "xml", optional): default "json"
+async function main(): Promise<void> {
+  const result = await api.domainReputation({ domainName: "amazon.com" });
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 </details>
@@ -152,28 +169,36 @@ main().catch(console.error);
 
 ```go
 // Runnable example: Domain Reputation Lookup (GET /v1/domain/security)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for domainReputation (GET /v1/domain/security):
 //   - domainName (string, required): The domain name to assess
 //   - format (string (one of: json, xml), optional)
+
 package main
 
 import (
-    "context"
-    "encoding/json"
-    "fmt"
-    wf "github.com/WhoisFreaks/whoisfreaks-go"
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
 )
 
 func main() {
-    cfg := wf.NewConfiguration()
-    client := wf.NewAPIClient(cfg)
-    // apiKey is set once via the request context
-    ctx := context.WithValue(context.Background(), wf.ContextAPIKeys,
-        map[string]wf.APIKey{"ApiKeyAuth": {Key: "YOUR_API_KEY"}})
-    result, _, err := client.DomainReputationAPI.DomainReputation(ctx).DomainName("example.com").Execute()
-    if err != nil { panic(err) }
-    b, _ := json.MarshalIndent(result, "", "  ")
-    fmt.Println(string(b))
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DomainReputationAPI.DomainReputation(ctx).
+		DomainName("amazon.com").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
 }
 
 ```

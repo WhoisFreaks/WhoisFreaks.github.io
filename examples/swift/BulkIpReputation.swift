@@ -1,14 +1,26 @@
-// Runnable example: Bulk IP Reputation (POST /v1.0/security)
+// Bulk IP Reputation
+//
 // Parameters for bulkIpReputation (POST /v1.0/security):
-//   - body: BulkIpReputationRequest (required) -- request body object
+//   - body: BulkGeolocationRequest (required): request body object
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
 import WhoisFreaks
 
-// Set your API key once (applied to every request)
-WhoisFreaksAPI.apiKey = "YOUR_API_KEY"
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+
+let request = BulkGeolocationRequest(ips: ["8.8.8.8", "1.1.1.1"])
 
 do {
-    let result = try await IPReputationAPI.bulkIpReputation(bulkIpReputationRequest: BulkIpReputationRequest())
-    print(result)
+    let result = try await IPReputationAPI.bulkIpReputation(bulkGeolocationRequest: request)
+    print(String(decoding: try CodableHelper.jsonEncoder.encode(result), as: UTF8.self))
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
 } catch {
-    print(error)
+    print("Request failed: \(error)")
+    exit(1)
 }

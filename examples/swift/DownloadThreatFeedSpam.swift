@@ -1,15 +1,28 @@
-// Runnable example: Download the daily spam threat feed (CSV) (GET /v3.4/download/threat-feed/spam)
+// Download the daily spam threat feed (CSV)
+//
 // Parameters for downloadThreatFeedSpam (GET /v3.4/download/threat-feed/spam):
-//   - date (string, optional): Feed date (yyyy-MM-dd); defaults to latest available
+//   - date (string, optional): Feed date (yyyy-MM-dd); omit for the full dump of the feed
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
 import Foundation
 import WhoisFreaks
 
-// Set your API key once (applied to every request)
-WhoisFreaksAPI.apiKey = "YOUR_API_KEY"
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
 
 do {
-    let result = try await DatabasesThreatFeedAPI.downloadThreatFeedSpam(date: String(ISO8601DateFormatter().string(from: Calendar.current.date(byAdding: .day, value: -1, to: Date())!).prefix(10)))
-    print(result)
+    let file = try await DatabasesThreatFeedAPI.downloadThreatFeedSpam(date: "2026-10-01")
+    // The SDK saves the download under the caches directory: move it somewhere permanent.
+    let saveAs = URL(fileURLWithPath: "DownloadThreatFeedSpam.csv")
+    try? FileManager.default.removeItem(at: saveAs)
+    try FileManager.default.moveItem(at: file, to: saveAs)
+    print("Saved \(saveAs.path)")
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
 } catch {
-    print(error)
+    print("Request failed: \(error)")
+    exit(1)
 }

@@ -1,13 +1,22 @@
-// Runnable example: Database File Status (Public) (GET /v3.4/status)
-// Parameters for databaseFileStatus (GET /v3.4/status):
-//   (no parameters; the API key is set on the client)
-import { Configuration, AccountApi } from "whoisfreaks";
+// Database File Status (Public): GET https://files.whoisfreaks.com/v3.4/status
+// Run (public endpoint, no API key needed): npx tsx DatabaseFileStatus.ts
+import { AccountApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
-const api = new AccountApi(config);
+// Public endpoint: no API key needed.
+const api = new AccountApi();
 
-async function main() {
-  const result = await api.databaseFileStatus({  });
-  console.log(result);
+// databaseFileStatus() takes no parameters.
+async function main(): Promise<void> {
+  const result = await api.databaseFileStatus();
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});

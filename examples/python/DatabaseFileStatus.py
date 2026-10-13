@@ -1,12 +1,18 @@
-"""Runnable example: Database File Status (Public) (GET /v3.4/status)."""
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.account_api import AccountApi
+"""Database File Status (Public): GET https://files.whoisfreaks.com/v3.4/status
 
-# Parameters for databaseFileStatus (GET /v3.4/status):
-#   (no parameters; the API key is set on the client)
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = AccountApi(ApiClient(config))
+Run it (public endpoint, no API key needed):
+    python DatabaseFileStatus.py
+"""
+import json
 
-result = api.database_file_status()
-print(result)
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+# Public endpoint: no API key needed.
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.AccountApi(client)
+
+    # database_file_status takes no parameters.
+    result = api.database_file_status()
+    print(json.dumps(result.to_dict(), indent=2))

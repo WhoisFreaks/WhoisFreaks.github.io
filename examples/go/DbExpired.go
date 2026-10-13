@@ -1,26 +1,46 @@
 // Runnable example: Expiring Domains (GET /v3.1/download/domainer/expired)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbExpired (GET /v3.1/download/domainer/expired):
 //   - whois (boolean, required)
 //   - date (string, optional): yyyy-MM-dd; omit for latest
+
 package main
 
 import (
-    "context"
-    "fmt"
-    "os"
-    "time"
-    wf "github.com/WhoisFreaks/whoisfreaks-go"
+	"context"
+	"fmt"
+	"io"
+	"log"
+	"os"
+	"path/filepath"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
 )
 
 func main() {
-    cfg := wf.NewConfiguration()
-    client := wf.NewAPIClient(cfg)
-    // apiKey is set once via the request context
-    ctx := context.WithValue(context.Background(), wf.ContextAPIKeys,
-        map[string]wf.APIKey{"ApiKeyAuth": {Key: "YOUR_API_KEY"}})
-    // returns raw bytes (compressed/binary file) -- write to disk
-    data, _, err := client.DatabasesExpiringDroppedAPI.DbExpired(ctx).Whois(false).Date(time.Now().AddDate(0,0,-1).Format("2006-01-02")).Execute()
-    if err != nil { panic(err) }
-    if err := os.WriteFile("dbExpired.gz", data, 0644); err != nil { panic(err) }
-    fmt.Printf("saved %d bytes to dbExpired.gz\n", len(data))
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	file, _, err := client.DatabasesExpiringDroppedAPI.DbExpired(ctx).
+		Whois(true).Date("2026-10-01").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	// The SDK saves the response to a temporary file: copy it to its destination.
+	defer os.Remove(file.Name())
+	defer file.Close()
+
+	out, err := os.Create("DbExpired.csv")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer out.Close()
+	n, err := io.Copy(out, file)
+	if err != nil {
+		log.Fatal(err)
+	}
+	path, _ := filepath.Abs(out.Name())
+	fmt.Printf("Saved %d bytes to %s\n", n, path)
 }

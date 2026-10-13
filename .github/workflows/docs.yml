@@ -1,0 +1,29 @@
+name: Docs
+on:
+  push:
+    branches: [main]
+  pull_request:
+    paths: ["spec/**", "scripts/**", "docs/**", "examples/**", "README.md"]
+
+permissions:
+  contents: read
+
+jobs:
+  verify-in-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install "pyyaml==6.0.2"
+      - name: Regenerate docs from spec
+        run: python3 scripts/gen_docs.py spec/whoisfreaks-openapi.yaml .
+      - name: Fail if docs are out of date
+        run: |
+          # --porcelain also reports new (untracked) and deleted files
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "::error::Docs are out of sync with the spec. Run: python3 scripts/gen_docs.py spec/whoisfreaks-openapi.yaml ."
+            git status --short
+            exit 1
+          fi
+          echo "Docs are in sync with the spec."

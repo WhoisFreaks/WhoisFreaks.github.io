@@ -4,19 +4,19 @@
 
 IP threat intelligence
 
-2 endpoint(s). All requests require your API key — see [Authentication](../authentication.md).
+2 endpoints. Requests need your API key unless noted otherwise. See [Authentication](../authentication.md).
 
 ## IP Reputation Lookup
 
-`GET /v1.0/security`
+`GET https://api.whoisfreaks.com/v1.0/security`
 
-Threat intel for IP — VPN, proxy, Tor, bots. 1 credit.
+Threat intel for IP: VPN, proxy, Tor, bots. 1 credit.
 
 **Parameters**
 
-| Parameter | In | Required | Type | Description |
-|-----------|----|----------|------|-------------|
-| `ip` | query | yes | string |  |
+| Parameter | In | Required | Type | Default | Description |
+|-----------|----|----------|------|---------|-------------|
+| `ip` | query | yes | string |  |  |
 
 **Response** (`IpReputationResponse`)
 
@@ -111,19 +111,26 @@ Threat intel for IP — VPN, proxy, Tor, bots. 1 credit.
 <details><summary>Python</summary>
 
 ```python
-"""Runnable example: IP Reputation Lookup (GET /v1.0/security)."""
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.ip_reputation_api import IPReputationApi
+"""IP Reputation Lookup: GET https://api.whoisfreaks.com/v1.0/security
 
-# Parameters for ipReputation (GET /v1.0/security):
-#   - ip (string, required)
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = IPReputationApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python IpReputation.py
+"""
+import json
+import os
 
-result = api.ip_reputation(ip="8.8.8.8")
-print(result)
+import whoisfreaks
 
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.IPReputationApi(client)
+
+    # ip_reputation parameters:
+    #   ip (str, required)
+    result = api.ip_reputation("8.8.8.8")
+    print(json.dumps(result.to_dict(), indent=2))
 ```
 
 </details>
@@ -131,20 +138,30 @@ print(result)
 <details><summary>TypeScript</summary>
 
 ```typescript
-// Runnable example: IP Reputation Lookup (GET /v1.0/security)
-// Parameters for ipReputation (GET /v1.0/security):
-//   - ip (string, required)
-import { Configuration, IPReputationApi } from "whoisfreaks";
+// IP Reputation Lookup: GET https://api.whoisfreaks.com/v1.0/security
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx IpReputation.ts
+import { Configuration, IPReputationApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new IPReputationApi(config);
 
-async function main() {
+// ipReputation({ ip })
+//   ip (string, required)
+async function main(): Promise<void> {
   const result = await api.ipReputation({ ip: "8.8.8.8" });
-  console.log(result);
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 </details>
@@ -153,27 +170,34 @@ main().catch(console.error);
 
 ```go
 // Runnable example: IP Reputation Lookup (GET /v1.0/security)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for ipReputation (GET /v1.0/security):
 //   - ip (string, required)
+
 package main
 
 import (
-    "context"
-    "encoding/json"
-    "fmt"
-    wf "github.com/WhoisFreaks/whoisfreaks-go"
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
 )
 
 func main() {
-    cfg := wf.NewConfiguration()
-    client := wf.NewAPIClient(cfg)
-    // apiKey is set once via the request context
-    ctx := context.WithValue(context.Background(), wf.ContextAPIKeys,
-        map[string]wf.APIKey{"ApiKeyAuth": {Key: "YOUR_API_KEY"}})
-    result, _, err := client.IPReputationAPI.IpReputation(ctx).Ip("8.8.8.8").Execute()
-    if err != nil { panic(err) }
-    b, _ := json.MarshalIndent(result, "", "  ")
-    fmt.Println(string(b))
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.IPReputationAPI.IpReputation(ctx).Ip("8.8.8.8").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
 }
 
 ```
@@ -184,16 +208,23 @@ func main() {
 
 ## Bulk IP Reputation
 
-`POST /v1.0/security`
+`POST https://api.whoisfreaks.com/v1.0/security`
 
 Up to 100 IPs.
 
 **Parameters**
 
-| Parameter | In | Required | Type | Description |
-|-----------|----|----------|------|-------------|
+None. The API key is set once on the client.
 
-**Response** (`IpReputationResponse`)
+**Request body** (`application/json`, model `BulkGeolocationRequest`)
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `ips` | array<string> | yes | Up to 100 items. |
+
+Example: `{"ips": ["8.8.8.8", "1.1.1.1"]}`
+
+**Response** (array of `IpReputationResponse`)
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -286,21 +317,27 @@ Up to 100 IPs.
 <details><summary>Python</summary>
 
 ```python
-"""Runnable example: Bulk IP Reputation (POST /v1.0/security)."""
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.ip_reputation_api import IPReputationApi
-from whoisfreaks.models.bulk_ip_reputation_request import BulkIpReputationRequest
+"""Bulk IP Reputation: POST https://api.whoisfreaks.com/v1.0/security
 
-# Parameters for bulkIpReputation (POST /v1.0/security):
-#   - body: BulkIpReputationRequest (required) -- request body object
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = IPReputationApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python BulkIpReputation.py
+"""
+import json
+import os
 
-bulk_ip_reputation_request = BulkIpReputationRequest()  # populate fields as needed
-result = api.bulk_ip_reputation(bulk_ip_reputation_request=bulk_ip_reputation_request)
-print(result)
+import whoisfreaks
 
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.IPReputationApi(client)
+
+    # bulk_ip_reputation parameters:
+    #   bulk_geolocation_request (BulkGeolocationRequest, required): request body
+    body = whoisfreaks.BulkGeolocationRequest(ips=["8.8.8.8", "1.1.1.1"])
+    results = api.bulk_ip_reputation(body)
+    print(json.dumps([item.to_dict() for item in results], indent=2))
 ```
 
 </details>
@@ -308,20 +345,31 @@ print(result)
 <details><summary>TypeScript</summary>
 
 ```typescript
-// Runnable example: Bulk IP Reputation (POST /v1.0/security)
-// Parameters for bulkIpReputation (POST /v1.0/security):
-//   - body: BulkIpReputationRequest (required) -- request body object
-import { Configuration, IPReputationApi } from "whoisfreaks";
+// Bulk IP Reputation: POST https://api.whoisfreaks.com/v1.0/security
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx BulkIpReputation.ts
+import { Configuration, IPReputationApi, ResponseError, type BulkGeolocationRequest } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new IPReputationApi(config);
 
-async function main() {
-  const result = await api.bulkIpReputation({ bulkIpReputationRequest: {} });
-  console.log(result);
+// bulkIpReputation({ bulkGeolocationRequest })
+//   bulkGeolocationRequest (BulkGeolocationRequest, required): request body
+async function main(): Promise<void> {
+  const body: BulkGeolocationRequest = { ips: ["8.8.8.8", "1.1.1.1"] };
+  const results = await api.bulkIpReputation({ bulkGeolocationRequest: body });
+  console.log(JSON.stringify(results, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 </details>
@@ -330,27 +378,36 @@ main().catch(console.error);
 
 ```go
 // Runnable example: Bulk IP Reputation (POST /v1.0/security)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for bulkIpReputation (POST /v1.0/security):
-//   - body: BulkIpReputationRequest (required) -- request body object
+//   - body: BulkGeolocationRequest (required): request body object
+
 package main
 
 import (
-    "context"
-    "encoding/json"
-    "fmt"
-    wf "github.com/WhoisFreaks/whoisfreaks-go"
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
 )
 
 func main() {
-    cfg := wf.NewConfiguration()
-    client := wf.NewAPIClient(cfg)
-    // apiKey is set once via the request context
-    ctx := context.WithValue(context.Background(), wf.ContextAPIKeys,
-        map[string]wf.APIKey{"ApiKeyAuth": {Key: "YOUR_API_KEY"}})
-    result, _, err := client.IPReputationAPI.BulkIpReputation(ctx).BulkIpReputationRequest(*wf.NewBulkIpReputationRequest()).Execute()
-    if err != nil { panic(err) }
-    b, _ := json.MarshalIndent(result, "", "  ")
-    fmt.Println(string(b))
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	body := whoisfreaks.NewBulkGeolocationRequest([]string{"8.8.8.8", "1.1.1.1"})
+	result, _, err := client.IPReputationAPI.BulkIpReputation(ctx).
+		BulkGeolocationRequest(*body).Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
 }
 
 ```

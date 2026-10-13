@@ -1,15 +1,20 @@
-// Runnable example: IP Security Snapshot Status (GET /v3.3/status/snapshot/ip/security)
-// Parameters for dbIpSecurityStatus (GET /v3.3/status/snapshot/ip/security):
-//   (no parameters; the API key is set on the client)
-// whoisfreaks-js is CommonJS; apiKey is set once on the ApiClient
-import pkg from "whoisfreaks-js";
-const { ApiClient, DatabasesIPSecurityApi } = pkg;
-// or:  const { ApiClient, DatabasesIPSecurityApi } = require("whoisfreaks-js");
+// IP Security Snapshot Status: GET https://files.whoisfreaks.com/v3.3/status/snapshot/ip/security
+// Run: WHOISFREAKS_API_KEY=your_api_key node DbIpSecurityStatus.js
+const { ApiClient, DatabasesIPSecurityApi } = require("whoisfreaks-js");
 
+// Set the API key once; the client adds it to every request.
 const client = ApiClient.instance;
-client.authentications["ApiKeyAuth"].apiKey = "YOUR_API_KEY";  // set once
+client.authentications["ApiKeyAuth"].apiKey = process.env.WHOISFREAKS_API_KEY;
 const api = new DatabasesIPSecurityApi(client);
 
-api.dbIpSecurityStatus()
-  .then(data => console.log(data))
-  .catch(err => console.error(err));
+// dbIpSecurityStatus() takes no parameters.
+async function main() {
+  const result = await api.dbIpSecurityStatus();
+  console.log(JSON.stringify(result, null, 2));
+}
+
+main().catch((err) => {
+  // API errors carry the HTTP status and the parsed error body
+  console.error(err.status ? `HTTP ${err.status}: ${JSON.stringify(err.body)}` : err);
+  process.exitCode = 1;
+});

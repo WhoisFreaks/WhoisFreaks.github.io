@@ -1,4 +1,5 @@
 // Runnable example: SSL Certificate Lookup (GET /v1.0/ssl/live)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for sslLookup (GET /v1.0/ssl/live):
 //   - domainName (string, required)
 //   - chain (boolean, optional)
@@ -7,13 +8,13 @@
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
+using WhoisFreaks.Model;
 
-class SslLookup {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new SSLApi(config);
-        var result = api.SslLookup("example.com", null, null, null);
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new SSLApi(config);
+
+SslResponse result = api.SslLookup("whoisfreaks.com");
+Console.WriteLine(result.ToJson());

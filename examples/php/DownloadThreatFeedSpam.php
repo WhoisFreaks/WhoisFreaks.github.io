@@ -1,11 +1,29 @@
 <?php
-// Runnable example: Download the daily spam threat feed (CSV) (GET /v3.4/download/threat-feed/spam)
+// Download the daily spam threat feed (CSV)
+//
 // Parameters for downloadThreatFeedSpam (GET /v3.4/download/threat-feed/spam):
-//   - date (string, optional): Feed date (yyyy-MM-dd); defaults to latest available
-require 'vendor/autoload.php';
+//   - date (string, optional): Feed date (yyyy-MM-dd); omit for the full dump of the feed
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesThreatFeedApi(new GuzzleHttp\Client(), $config);
-$result = $api->downloadThreatFeedSpam((new DateTime("yesterday"))->format("Y-m-d"));
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesThreatFeedApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesThreatFeedApi(new Client(), $config);
+
+try {
+    $file = $api->downloadThreatFeedSpam('2026-10-01');
+    // The SDK streams the download into a temporary file: copy it somewhere permanent.
+    $saveAs = 'DownloadThreatFeedSpam.csv';
+    copy($file->getPathname(), $saveAs);
+    echo 'Saved ', realpath($saveAs), ' (', filesize($saveAs), ' bytes)', PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}

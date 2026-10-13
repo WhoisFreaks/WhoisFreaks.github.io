@@ -1,12 +1,19 @@
-"""Runnable example: IP to City Snapshot Status (GET /v3.3/status/snapshot/ip/city)."""
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.databases_ip_geolocation_api import DatabasesIPGeolocationApi
+"""IP to City Snapshot Status: GET https://files.whoisfreaks.com/v3.3/status/snapshot/ip/city
 
-# Parameters for dbIpCityStatus (GET /v3.3/status/snapshot/ip/city):
-#   (no parameters; the API key is set on the client)
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = DatabasesIPGeolocationApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python DbIpCityStatus.py
+"""
+import json
+import os
 
-result = api.db_ip_city_status()
-print(result)
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesIPGeolocationApi(client)
+
+    # db_ip_city_status takes no parameters.
+    result = api.db_ip_city_status()
+    print(json.dumps(result.to_dict(), indent=2))

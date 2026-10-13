@@ -1,16 +1,23 @@
-"""Runnable example: WHOIS Database Daily (GET /v3.3/download/dbupdate/daily/domains/whois).
-Returns raw bytes (a compressed/binary file) -- write to disk, do not print."""
-from datetime import date, timedelta
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.databases_whois_api import DatabasesWHOISApi
+"""WHOIS Database Daily: GET https://files.whoisfreaks.com/v3.3/download/dbupdate/daily/domains/whois
 
-# Parameters for dbWhoisDaily (GET /v3.3/download/dbupdate/daily/domains/whois):
-#   - date (string, optional): yyyy-MM-dd; omit for latest
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = DatabasesWHOISApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python DbWhoisDaily.py
+"""
+import os
+from datetime import date
 
-data = api.db_whois_daily(var_date=str(date.today() - timedelta(days=1)))   # bytes
-with open("dbWhoisDaily.gz", "wb") as f:
-    f.write(data)
-print(f"saved {len(data)} bytes to dbWhoisDaily.gz")
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesWHOISApi(client)
+
+    # db_whois_daily parameters:
+    #   var_date (datetime.date, optional, keyword): yyyy-MM-dd; omit for latest
+    data = api.db_whois_daily(var_date=date(2026, 10, 1))  # the file's raw bytes
+    path = "DbWhoisDaily.csv"
+    with open(path, "wb") as f:
+        f.write(data)
+    print(f"Saved {len(data)} bytes to {os.path.abspath(path)}")

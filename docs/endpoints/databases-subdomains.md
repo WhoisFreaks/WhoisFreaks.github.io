@@ -4,42 +4,48 @@
 
 Subdomain database snapshots
 
-3 endpoint(s). All requests require your API key — see [Authentication](../authentication.md).
+3 endpoints. Requests need your API key unless noted otherwise. See [Authentication](../authentication.md).
 
 ## Subdomains Daily
 
-`GET /v3.2/download/dbupdate/daily/subdomains`
+`GET https://files.whoisfreaks.com/v3.2/download/dbupdate/daily/subdomains`
 
 Subdomains Daily. Returns the file/snapshot described by this operation.
 
 **Parameters**
 
-| Parameter | In | Required | Type | Description |
-|-----------|----|----------|------|-------------|
-| `date` | query | no | string | yyyy-MM-dd; omit for latest |
+| Parameter | In | Required | Type | Default | Description |
+|-----------|----|----------|------|---------|-------------|
+| `date` | query | no | string (date) |  | yyyy-MM-dd; omit for latest |
 
 **Usage**
 
 <details><summary>Python</summary>
 
 ```python
-"""Runnable example: Subdomains Daily (GET /v3.2/download/dbupdate/daily/subdomains).
-Returns raw bytes (a compressed/binary file) -- write to disk, do not print."""
-from datetime import date, timedelta
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.databases_subdomains_api import DatabasesSubdomainsApi
+"""Subdomains Daily: GET https://files.whoisfreaks.com/v3.2/download/dbupdate/daily/subdomains
 
-# Parameters for dbSubdomainsDaily (GET /v3.2/download/dbupdate/daily/subdomains):
-#   - date (string, optional): yyyy-MM-dd; omit for latest
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = DatabasesSubdomainsApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python DbSubdomainsDaily.py
+"""
+import os
+from datetime import date
 
-data = api.db_subdomains_daily(var_date=str(date.today() - timedelta(days=1)))   # bytes
-with open("dbSubdomainsDaily.gz", "wb") as f:
-    f.write(data)
-print(f"saved {len(data)} bytes to dbSubdomainsDaily.gz")
+import whoisfreaks
 
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesSubdomainsApi(client)
+
+    # db_subdomains_daily parameters:
+    #   var_date (datetime.date, optional, keyword): yyyy-MM-dd; omit for latest
+    data = api.db_subdomains_daily(var_date=date(2026, 10, 1))  # the file's raw bytes
+    path = "DbSubdomainsDaily.csv"
+    with open(path, "wb") as f:
+        f.write(data)
+    print(f"Saved {len(data)} bytes to {os.path.abspath(path)}")
 ```
 
 </details>
@@ -47,20 +53,34 @@ print(f"saved {len(data)} bytes to dbSubdomainsDaily.gz")
 <details><summary>TypeScript</summary>
 
 ```typescript
-// Runnable example: Subdomains Daily (GET /v3.2/download/dbupdate/daily/subdomains)
-// Parameters for dbSubdomainsDaily (GET /v3.2/download/dbupdate/daily/subdomains):
-//   - date (string, optional): yyyy-MM-dd; omit for latest
-import { Configuration, DatabasesSubdomainsApi } from "whoisfreaks";
+// Subdomains Daily: GET https://files.whoisfreaks.com/v3.2/download/dbupdate/daily/subdomains
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbSubdomainsDaily.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesSubdomainsApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesSubdomainsApi(config);
 
-async function main() {
-  const result = await api.dbSubdomainsDaily({ date: new Date(Date.now()-86400000).toISOString().slice(0,10) });
-  console.log(result);
+// dbSubdomainsDaily({ date? })
+//   date (Date, optional): yyyy-MM-dd; omit for latest
+async function main(): Promise<void> {
+  const blob = await api.dbSubdomainsDaily({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
+  const file = "DbSubdomainsDaily.csv";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 </details>
@@ -69,29 +89,49 @@ main().catch(console.error);
 
 ```go
 // Runnable example: Subdomains Daily (GET /v3.2/download/dbupdate/daily/subdomains)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbSubdomainsDaily (GET /v3.2/download/dbupdate/daily/subdomains):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
+
 package main
 
 import (
-    "context"
-    "fmt"
-    "os"
-    "time"
-    wf "github.com/WhoisFreaks/whoisfreaks-go"
+	"context"
+	"fmt"
+	"io"
+	"log"
+	"os"
+	"path/filepath"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
 )
 
 func main() {
-    cfg := wf.NewConfiguration()
-    client := wf.NewAPIClient(cfg)
-    // apiKey is set once via the request context
-    ctx := context.WithValue(context.Background(), wf.ContextAPIKeys,
-        map[string]wf.APIKey{"ApiKeyAuth": {Key: "YOUR_API_KEY"}})
-    // returns raw bytes (compressed/binary file) -- write to disk
-    data, _, err := client.DatabasesSubdomainsAPI.DbSubdomainsDaily(ctx).Date(time.Now().AddDate(0,0,-1).Format("2006-01-02")).Execute()
-    if err != nil { panic(err) }
-    if err := os.WriteFile("dbSubdomainsDaily.gz", data, 0644); err != nil { panic(err) }
-    fmt.Printf("saved %d bytes to dbSubdomainsDaily.gz\n", len(data))
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	file, _, err := client.DatabasesSubdomainsAPI.DbSubdomainsDaily(ctx).
+		Date("2026-10-01").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	// The SDK saves the response to a temporary file: copy it to its destination.
+	defer os.Remove(file.Name())
+	defer file.Close()
+
+	out, err := os.Create("DbSubdomainsDaily.csv")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer out.Close()
+	n, err := io.Copy(out, file)
+	if err != nil {
+		log.Fatal(err)
+	}
+	path, _ := filepath.Abs(out.Name())
+	fmt.Printf("Saved %d bytes to %s\n", n, path)
 }
 
 ```
@@ -102,38 +142,44 @@ func main() {
 
 ## Subdomains Weekly
 
-`GET /v3.2/download/dbupdate/weekly/subdomains`
+`GET https://files.whoisfreaks.com/v3.2/download/dbupdate/weekly/subdomains`
 
 Subdomains Weekly. Returns the file/snapshot described by this operation.
 
 **Parameters**
 
-| Parameter | In | Required | Type | Description |
-|-----------|----|----------|------|-------------|
-| `date` | query | no | string | yyyy-MM-dd; omit for latest |
+| Parameter | In | Required | Type | Default | Description |
+|-----------|----|----------|------|---------|-------------|
+| `date` | query | no | string (date) |  | yyyy-MM-dd; omit for latest |
 
 **Usage**
 
 <details><summary>Python</summary>
 
 ```python
-"""Runnable example: Subdomains Weekly (GET /v3.2/download/dbupdate/weekly/subdomains).
-Returns raw bytes (a compressed/binary file) -- write to disk, do not print."""
-from datetime import date, timedelta
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.databases_subdomains_api import DatabasesSubdomainsApi
+"""Subdomains Weekly: GET https://files.whoisfreaks.com/v3.2/download/dbupdate/weekly/subdomains
 
-# Parameters for dbSubdomainsWeekly (GET /v3.2/download/dbupdate/weekly/subdomains):
-#   - date (string, optional): yyyy-MM-dd; omit for latest
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = DatabasesSubdomainsApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python DbSubdomainsWeekly.py
+"""
+import os
+from datetime import date
 
-data = api.db_subdomains_weekly(var_date=str(date.today() - timedelta(days=1)))   # bytes
-with open("dbSubdomainsWeekly.gz", "wb") as f:
-    f.write(data)
-print(f"saved {len(data)} bytes to dbSubdomainsWeekly.gz")
+import whoisfreaks
 
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesSubdomainsApi(client)
+
+    # db_subdomains_weekly parameters:
+    #   var_date (datetime.date, optional, keyword): yyyy-MM-dd; omit for latest
+    data = api.db_subdomains_weekly(var_date=date(2026, 10, 1))  # the file's raw bytes
+    path = "DbSubdomainsWeekly.csv"
+    with open(path, "wb") as f:
+        f.write(data)
+    print(f"Saved {len(data)} bytes to {os.path.abspath(path)}")
 ```
 
 </details>
@@ -141,20 +187,34 @@ print(f"saved {len(data)} bytes to dbSubdomainsWeekly.gz")
 <details><summary>TypeScript</summary>
 
 ```typescript
-// Runnable example: Subdomains Weekly (GET /v3.2/download/dbupdate/weekly/subdomains)
-// Parameters for dbSubdomainsWeekly (GET /v3.2/download/dbupdate/weekly/subdomains):
-//   - date (string, optional): yyyy-MM-dd; omit for latest
-import { Configuration, DatabasesSubdomainsApi } from "whoisfreaks";
+// Subdomains Weekly: GET https://files.whoisfreaks.com/v3.2/download/dbupdate/weekly/subdomains
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbSubdomainsWeekly.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesSubdomainsApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesSubdomainsApi(config);
 
-async function main() {
-  const result = await api.dbSubdomainsWeekly({ date: new Date(Date.now()-86400000).toISOString().slice(0,10) });
-  console.log(result);
+// dbSubdomainsWeekly({ date? })
+//   date (Date, optional): yyyy-MM-dd; omit for latest
+async function main(): Promise<void> {
+  const blob = await api.dbSubdomainsWeekly({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
+  const file = "DbSubdomainsWeekly.csv";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 </details>
@@ -163,29 +223,49 @@ main().catch(console.error);
 
 ```go
 // Runnable example: Subdomains Weekly (GET /v3.2/download/dbupdate/weekly/subdomains)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbSubdomainsWeekly (GET /v3.2/download/dbupdate/weekly/subdomains):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
+
 package main
 
 import (
-    "context"
-    "fmt"
-    "os"
-    "time"
-    wf "github.com/WhoisFreaks/whoisfreaks-go"
+	"context"
+	"fmt"
+	"io"
+	"log"
+	"os"
+	"path/filepath"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
 )
 
 func main() {
-    cfg := wf.NewConfiguration()
-    client := wf.NewAPIClient(cfg)
-    // apiKey is set once via the request context
-    ctx := context.WithValue(context.Background(), wf.ContextAPIKeys,
-        map[string]wf.APIKey{"ApiKeyAuth": {Key: "YOUR_API_KEY"}})
-    // returns raw bytes (compressed/binary file) -- write to disk
-    data, _, err := client.DatabasesSubdomainsAPI.DbSubdomainsWeekly(ctx).Date(time.Now().AddDate(0,0,-1).Format("2006-01-02")).Execute()
-    if err != nil { panic(err) }
-    if err := os.WriteFile("dbSubdomainsWeekly.gz", data, 0644); err != nil { panic(err) }
-    fmt.Printf("saved %d bytes to dbSubdomainsWeekly.gz\n", len(data))
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	file, _, err := client.DatabasesSubdomainsAPI.DbSubdomainsWeekly(ctx).
+		Date("2026-10-01").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	// The SDK saves the response to a temporary file: copy it to its destination.
+	defer os.Remove(file.Name())
+	defer file.Close()
+
+	out, err := os.Create("DbSubdomainsWeekly.csv")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer out.Close()
+	n, err := io.Copy(out, file)
+	if err != nil {
+		log.Fatal(err)
+	}
+	path, _ := filepath.Abs(out.Name())
+	fmt.Printf("Saved %d bytes to %s\n", n, path)
 }
 
 ```
@@ -196,38 +276,44 @@ func main() {
 
 ## Subdomains Monthly
 
-`GET /v3.2/download/dbupdate/monthly/subdomains`
+`GET https://files.whoisfreaks.com/v3.2/download/dbupdate/monthly/subdomains`
 
 Subdomains Monthly. Returns the file/snapshot described by this operation.
 
 **Parameters**
 
-| Parameter | In | Required | Type | Description |
-|-----------|----|----------|------|-------------|
-| `date` | query | no | string | yyyy-MM-dd; omit for latest |
+| Parameter | In | Required | Type | Default | Description |
+|-----------|----|----------|------|---------|-------------|
+| `date` | query | no | string (date) |  | yyyy-MM-dd; omit for latest |
 
 **Usage**
 
 <details><summary>Python</summary>
 
 ```python
-"""Runnable example: Subdomains Monthly (GET /v3.2/download/dbupdate/monthly/subdomains).
-Returns raw bytes (a compressed/binary file) -- write to disk, do not print."""
-from datetime import date, timedelta
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.databases_subdomains_api import DatabasesSubdomainsApi
+"""Subdomains Monthly: GET https://files.whoisfreaks.com/v3.2/download/dbupdate/monthly/subdomains
 
-# Parameters for dbSubdomainsMonthly (GET /v3.2/download/dbupdate/monthly/subdomains):
-#   - date (string, optional): yyyy-MM-dd; omit for latest
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = DatabasesSubdomainsApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python DbSubdomainsMonthly.py
+"""
+import os
+from datetime import date
 
-data = api.db_subdomains_monthly(var_date=str(date.today() - timedelta(days=1)))   # bytes
-with open("dbSubdomainsMonthly.gz", "wb") as f:
-    f.write(data)
-print(f"saved {len(data)} bytes to dbSubdomainsMonthly.gz")
+import whoisfreaks
 
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesSubdomainsApi(client)
+
+    # db_subdomains_monthly parameters:
+    #   var_date (datetime.date, optional, keyword): yyyy-MM-dd; omit for latest
+    data = api.db_subdomains_monthly(var_date=date(2026, 10, 1))  # the file's raw bytes
+    path = "DbSubdomainsMonthly.csv"
+    with open(path, "wb") as f:
+        f.write(data)
+    print(f"Saved {len(data)} bytes to {os.path.abspath(path)}")
 ```
 
 </details>
@@ -235,20 +321,34 @@ print(f"saved {len(data)} bytes to dbSubdomainsMonthly.gz")
 <details><summary>TypeScript</summary>
 
 ```typescript
-// Runnable example: Subdomains Monthly (GET /v3.2/download/dbupdate/monthly/subdomains)
-// Parameters for dbSubdomainsMonthly (GET /v3.2/download/dbupdate/monthly/subdomains):
-//   - date (string, optional): yyyy-MM-dd; omit for latest
-import { Configuration, DatabasesSubdomainsApi } from "whoisfreaks";
+// Subdomains Monthly: GET https://files.whoisfreaks.com/v3.2/download/dbupdate/monthly/subdomains
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbSubdomainsMonthly.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesSubdomainsApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesSubdomainsApi(config);
 
-async function main() {
-  const result = await api.dbSubdomainsMonthly({ date: new Date(Date.now()-86400000).toISOString().slice(0,10) });
-  console.log(result);
+// dbSubdomainsMonthly({ date? })
+//   date (Date, optional): yyyy-MM-dd; omit for latest
+async function main(): Promise<void> {
+  const blob = await api.dbSubdomainsMonthly({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
+  const file = "DbSubdomainsMonthly.csv";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 </details>
@@ -257,29 +357,49 @@ main().catch(console.error);
 
 ```go
 // Runnable example: Subdomains Monthly (GET /v3.2/download/dbupdate/monthly/subdomains)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbSubdomainsMonthly (GET /v3.2/download/dbupdate/monthly/subdomains):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
+
 package main
 
 import (
-    "context"
-    "fmt"
-    "os"
-    "time"
-    wf "github.com/WhoisFreaks/whoisfreaks-go"
+	"context"
+	"fmt"
+	"io"
+	"log"
+	"os"
+	"path/filepath"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
 )
 
 func main() {
-    cfg := wf.NewConfiguration()
-    client := wf.NewAPIClient(cfg)
-    // apiKey is set once via the request context
-    ctx := context.WithValue(context.Background(), wf.ContextAPIKeys,
-        map[string]wf.APIKey{"ApiKeyAuth": {Key: "YOUR_API_KEY"}})
-    // returns raw bytes (compressed/binary file) -- write to disk
-    data, _, err := client.DatabasesSubdomainsAPI.DbSubdomainsMonthly(ctx).Date(time.Now().AddDate(0,0,-1).Format("2006-01-02")).Execute()
-    if err != nil { panic(err) }
-    if err := os.WriteFile("dbSubdomainsMonthly.gz", data, 0644); err != nil { panic(err) }
-    fmt.Printf("saved %d bytes to dbSubdomainsMonthly.gz\n", len(data))
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	file, _, err := client.DatabasesSubdomainsAPI.DbSubdomainsMonthly(ctx).
+		Date("2026-10-01").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	// The SDK saves the response to a temporary file: copy it to its destination.
+	defer os.Remove(file.Name())
+	defer file.Close()
+
+	out, err := os.Create("DbSubdomainsMonthly.csv")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer out.Close()
+	n, err := io.Copy(out, file)
+	if err != nil {
+		log.Fatal(err)
+	}
+	path, _ := filepath.Abs(out.Name())
+	fmt.Printf("Saved %d bytes to %s\n", n, path)
 }
 
 ```

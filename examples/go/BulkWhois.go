@@ -1,24 +1,32 @@
 // Runnable example: Bulk WHOIS Lookup (POST /v2.0/bulkwhois/live)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for bulkWhois (POST /v2.0/bulkwhois/live):
 //   - format (string (one of: json, xml), optional)
-//   - body: BulkWhoisRequest (required) -- request body object
+//   - body: BulkWhoisRequest (required): request body object
+
 package main
 
 import (
-    "context"
-    "encoding/json"
-    "fmt"
-    wf "github.com/WhoisFreaks/whoisfreaks-go"
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
 )
 
 func main() {
-    cfg := wf.NewConfiguration()
-    client := wf.NewAPIClient(cfg)
-    // apiKey is set once via the request context
-    ctx := context.WithValue(context.Background(), wf.ContextAPIKeys,
-        map[string]wf.APIKey{"ApiKeyAuth": {Key: "YOUR_API_KEY"}})
-    result, _, err := client.WHOISAPI.BulkWhois(ctx).BulkWhoisRequest(*wf.NewBulkWhoisRequest()).Execute()
-    if err != nil { panic(err) }
-    b, _ := json.MarshalIndent(result, "", "  ")
-    fmt.Println(string(b))
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	body := whoisfreaks.NewBulkWhoisRequest([]string{"whoisfreaks.com", "jfreaks.com"})
+	result, _, err := client.WHOISAPI.BulkWhois(ctx).BulkWhoisRequest(*body).Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
 }

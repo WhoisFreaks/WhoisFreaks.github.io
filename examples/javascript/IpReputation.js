@@ -1,15 +1,21 @@
-// Runnable example: IP Reputation Lookup (GET /v1.0/security)
-// Parameters for ipReputation (GET /v1.0/security):
-//   - ip (string, required)
-// whoisfreaks-js is CommonJS; apiKey is set once on the ApiClient
-import pkg from "whoisfreaks-js";
-const { ApiClient, IPReputationApi } = pkg;
-// or:  const { ApiClient, IPReputationApi } = require("whoisfreaks-js");
+// IP Reputation Lookup: GET https://api.whoisfreaks.com/v1.0/security
+// Run: WHOISFREAKS_API_KEY=your_api_key node IpReputation.js
+const { ApiClient, IPReputationApi } = require("whoisfreaks-js");
 
+// Set the API key once; the client adds it to every request.
 const client = ApiClient.instance;
-client.authentications["ApiKeyAuth"].apiKey = "YOUR_API_KEY";  // set once
+client.authentications["ApiKeyAuth"].apiKey = process.env.WHOISFREAKS_API_KEY;
 const api = new IPReputationApi(client);
 
-api.ipReputation("8.8.8.8")
-  .then(data => console.log(data))
-  .catch(err => console.error(err));
+// ipReputation(ip)
+//   ip (string, required)
+async function main() {
+  const result = await api.ipReputation("8.8.8.8");
+  console.log(JSON.stringify(result, null, 2));
+}
+
+main().catch((err) => {
+  // API errors carry the HTTP status and the parsed error body
+  console.error(err.status ? `HTTP ${err.status}: ${JSON.stringify(err.body)}` : err);
+  process.exitCode = 1;
+});

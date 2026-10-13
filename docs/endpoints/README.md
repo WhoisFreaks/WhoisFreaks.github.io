@@ -6,44 +6,44 @@ The WhoisFreaks API exposes **60 endpoints** across **22 categories**, organized
 
 Real-time and on-demand lookup APIs. Query a single domain, IP, or ASN and get structured JSON (or XML) back immediately.
 
-20 endpoints across 11 categories — see the [API Solutions overview](api-solutions.md).
+20 endpoints across 11 categories. See the [API Solutions overview](api-solutions.md).
 
-- [WHOIS](whois.md) — 4 endpoint(s)
-- [DNS](dns.md) — 4 endpoint(s)
-- [Domain Availability](domain-availability.md) — 2 endpoint(s)
-- [Typosquatting](typosquatting.md) — 1 endpoint(s)
-- [SSL](ssl.md) — 1 endpoint(s)
-- [Geolocation](geolocation.md) — 2 endpoint(s)
-- [Subdomains](subdomains.md) — 1 endpoint(s)
-- [IP Reputation](ip-reputation.md) — 2 endpoint(s)
-- [Domain Reputation](domain-reputation.md) — 1 endpoint(s)
-- [ASN WHOIS](asn-whois.md) — 1 endpoint(s)
-- [IP WHOIS](ip-whois.md) — 1 endpoint(s)
+- [WHOIS](whois.md): 4 endpoints
+- [DNS](dns.md): 4 endpoints
+- [Domain Availability](domain-availability.md): 2 endpoints
+- [Typosquatting](typosquatting.md): 1 endpoint
+- [SSL](ssl.md): 1 endpoint
+- [Geolocation](geolocation.md): 2 endpoints
+- [Subdomains](subdomains.md): 1 endpoint
+- [IP Reputation](ip-reputation.md): 2 endpoints
+- [Domain Reputation](domain-reputation.md): 1 endpoint
+- [ASN WHOIS](asn-whois.md): 1 endpoint
+- [IP WHOIS](ip-whois.md): 1 endpoint
 
 ## Databases
 
-Bulk data feeds and downloadable database snapshots for large-scale processing — newly registered, expiring/dropped, and full WHOIS/DNS/IP datasets.
+Bulk data feeds and downloadable database snapshots for large-scale processing: newly registered, expiring/dropped, and full WHOIS/DNS/IP datasets.
 
-37 endpoints across 10 categories — see the [Databases overview](databases.md).
+37 endpoints across 10 categories. See the [Databases overview](databases.md).
 
-- [Databases - Newly Registered](databases-newly-registered.md) — 7 endpoint(s)
-- [Databases - Expiring & Dropped](databases-expiring-dropped.md) — 5 endpoint(s)
-- [Databases - WHOIS](databases-whois.md) — 3 endpoint(s)
-- [Databases - DNS](databases-dns.md) — 3 endpoint(s)
-- [Databases - Subdomains](databases-subdomains.md) — 3 endpoint(s)
-- [Databases - IP Geolocation](databases-ip-geolocation.md) — 4 endpoint(s)
-- [Databases - ASN WHOIS](databases-asn-whois.md) — 2 endpoint(s)
-- [Databases - IP WHOIS](databases-ip-whois.md) — 2 endpoint(s)
-- [Databases - IP Security](databases-ip-security.md) — 2 endpoint(s)
-- [Databases - Threat Feed](databases-threat-feed.md) — 6 endpoint(s)
+- [Databases - Newly Registered](databases-newly-registered.md): 7 endpoints
+- [Databases - Expiring & Dropped](databases-expiring-dropped.md): 5 endpoints
+- [Databases - WHOIS](databases-whois.md): 3 endpoints
+- [Databases - DNS](databases-dns.md): 3 endpoints
+- [Databases - Subdomains](databases-subdomains.md): 3 endpoints
+- [Databases - IP Geolocation](databases-ip-geolocation.md): 4 endpoints
+- [Databases - ASN WHOIS](databases-asn-whois.md): 2 endpoints
+- [Databases - IP WHOIS](databases-ip-whois.md): 2 endpoints
+- [Databases - IP Security](databases-ip-security.md): 2 endpoints
+- [Databases - Threat Feed](databases-threat-feed.md): 6 endpoints
 
 ## Account & Utilities
 
 Manage your account, monitor API usage and credits, and rotate your API key.
 
-3 endpoints across 1 categories — see the [Account & Utilities overview](account-utilities.md).
+3 endpoints across 1 category. See the [Account & Utilities overview](account-utilities.md).
 
-- [Account](account.md) — 3 endpoint(s)
+- [Account](account.md): 3 endpoints
 
 ## Full endpoint list
 

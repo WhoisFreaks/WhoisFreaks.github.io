@@ -1,14 +1,21 @@
-"""Runnable example: Bulk IP Geolocation (POST /v1.0/geolocation)."""
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.geolocation_api import GeolocationApi
-from whoisfreaks.models.bulk_geolocation_request import BulkGeolocationRequest
+"""Bulk IP Geolocation: POST https://api.whoisfreaks.com/v1.0/geolocation
 
-# Parameters for bulkGeolocation (POST /v1.0/geolocation):
-#   - body: BulkGeolocationRequest (required) -- request body object
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = GeolocationApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python BulkGeolocation.py
+"""
+import json
+import os
 
-bulk_geolocation_request = BulkGeolocationRequest()  # populate fields as needed
-result = api.bulk_geolocation(bulk_geolocation_request=bulk_geolocation_request)
-print(result)
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.GeolocationApi(client)
+
+    # bulk_geolocation parameters:
+    #   bulk_geolocation_request (BulkGeolocationRequest, required): request body
+    body = whoisfreaks.BulkGeolocationRequest(ips=["8.8.8.8", "1.1.1.1"])
+    results = api.bulk_geolocation(body)
+    print(json.dumps([item.to_dict() for item in results], indent=2))

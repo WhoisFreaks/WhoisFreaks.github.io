@@ -4,22 +4,22 @@
 
 Check domain availability
 
-2 endpoint(s). All requests require your API key — see [Authentication](../authentication.md).
+2 endpoints. Requests need your API key unless noted otherwise. See [Authentication](../authentication.md).
 
 ## Domain Availability Check with Suggestions
 
-`GET /v2.0/domain/availability`
+`GET https://api.whoisfreaks.com/v2.0/domain/availability`
 
 Check availability of a single domain and optionally get suggestions across multiple TLDs. 1 credit per domain checked. sug=false checks only the queried domain; sug=true returns up to `count` (max 100) TLD suggestions.
 
 **Parameters**
 
-| Parameter | In | Required | Type | Description |
-|-----------|----|----------|------|-------------|
-| `domain` | query | yes | string | The domain name to check |
-| `sug` | query | no | boolean | Whether to return TLD suggestions alongside the queried domain. |
-| `count` | query | no | integer | Number of TLD suggestions to return when sug=true. Maximum is 100. |
-| `format` | query | no | string |  (one of: json, xml) |
+| Parameter | In | Required | Type | Default | Description |
+|-----------|----|----------|------|---------|-------------|
+| `domain` | query | yes | string |  | The domain name to check |
+| `sug` | query | no | boolean | `false` | Whether to return TLD suggestions alongside the queried domain. |
+| `count` | query | no | integer | `5` | Number of TLD suggestions to return when sug=true. Maximum is 100. |
+| `format` | query | no | string | `json` |  (one of: json, xml) |
 
 **Response** (`DomainAvailabilityResponse`)
 
@@ -46,22 +46,29 @@ Check availability of a single domain and optionally get suggestions across mult
 <details><summary>Python</summary>
 
 ```python
-"""Runnable example: Domain Availability Check with Suggestions (GET /v2.0/domain/availability)."""
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.domain_availability_api import DomainAvailabilityApi
+"""Domain Availability Check with Suggestions: GET https://api.whoisfreaks.com/v2.0/domain/availability
 
-# Parameters for domainAvailabilityV2 (GET /v2.0/domain/availability):
-#   - domain (string, required): The domain name to check
-#   - sug (boolean, optional): Whether to return TLD suggestions alongside the queried domain.
-#   - count (integer, optional): Number of TLD suggestions to return when sug=true. Maximum is 100.
-#   - format (string (one of: json, xml), optional)
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = DomainAvailabilityApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python DomainAvailabilityV2.py
+"""
+import json
+import os
 
-result = api.domain_availability_v2(domain="example.com")
-print(result)
+import whoisfreaks
 
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DomainAvailabilityApi(client)
+
+    # domain_availability_v2 parameters:
+    #   domain (str, required): The domain name to check
+    #   sug (bool, optional, keyword): Whether to return TLD suggestions alongside the queried domain; default False
+    #   count (int, optional, keyword): Number of TLD suggestions to return when sug=true. Maximum is 100; default 5
+    #   format (str, optional, keyword): one of json, xml; default "json"
+    result = api.domain_availability_v2("google.com", sug=True, count=5)
+    print(json.dumps(result.to_dict(), indent=2))
 ```
 
 </details>
@@ -69,23 +76,33 @@ print(result)
 <details><summary>TypeScript</summary>
 
 ```typescript
-// Runnable example: Domain Availability Check with Suggestions (GET /v2.0/domain/availability)
-// Parameters for domainAvailabilityV2 (GET /v2.0/domain/availability):
-//   - domain (string, required): The domain name to check
-//   - sug (boolean, optional): Whether to return TLD suggestions alongside the queried domain.
-//   - count (integer, optional): Number of TLD suggestions to return when sug=true. Maximum is 100.
-//   - format (string (one of: json, xml), optional)
-import { Configuration, DomainAvailabilityApi } from "whoisfreaks";
+// Domain Availability Check with Suggestions: GET https://api.whoisfreaks.com/v2.0/domain/availability
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DomainAvailabilityV2.ts
+import { Configuration, DomainAvailabilityApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DomainAvailabilityApi(config);
 
-async function main() {
-  const result = await api.domainAvailabilityV2({ domain: "example.com", sug: undefined, count: undefined, format: undefined });
-  console.log(result);
+// domainAvailabilityV2({ domain, sug?, count?, format? })
+//   domain (string, required): The domain name to check
+//   sug (boolean, optional): Whether to return TLD suggestions alongside the queried domain; default false
+//   count (number, optional): Number of TLD suggestions to return when sug=true. Maximum is 100; default 5
+//   format ("json" | "xml", optional): default "json"
+async function main(): Promise<void> {
+  const result = await api.domainAvailabilityV2({ domain: "google.com", sug: true, count: 5 });
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 </details>
@@ -94,30 +111,38 @@ main().catch(console.error);
 
 ```go
 // Runnable example: Domain Availability Check with Suggestions (GET /v2.0/domain/availability)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for domainAvailabilityV2 (GET /v2.0/domain/availability):
 //   - domain (string, required): The domain name to check
 //   - sug (boolean, optional): Whether to return TLD suggestions alongside the queried domain.
 //   - count (integer, optional): Number of TLD suggestions to return when sug=true. Maximum is 100.
 //   - format (string (one of: json, xml), optional)
+
 package main
 
 import (
-    "context"
-    "encoding/json"
-    "fmt"
-    wf "github.com/WhoisFreaks/whoisfreaks-go"
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
 )
 
 func main() {
-    cfg := wf.NewConfiguration()
-    client := wf.NewAPIClient(cfg)
-    // apiKey is set once via the request context
-    ctx := context.WithValue(context.Background(), wf.ContextAPIKeys,
-        map[string]wf.APIKey{"ApiKeyAuth": {Key: "YOUR_API_KEY"}})
-    result, _, err := client.DomainAvailabilityAPI.DomainAvailabilityV2(ctx).Domain("example.com").Execute()
-    if err != nil { panic(err) }
-    b, _ := json.MarshalIndent(result, "", "  ")
-    fmt.Println(string(b))
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DomainAvailabilityAPI.DomainAvailabilityV2(ctx).
+		Domain("google.com").Sug(true).Count(5).Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
 }
 
 ```
@@ -128,16 +153,25 @@ func main() {
 
 ## Bulk Domain Availability Check
 
-`POST /v2.0/domain/availability`
+`POST https://api.whoisfreaks.com/v2.0/domain/availability`
 
 Two bulk modes. Mode 1: POST domainNames array. Mode 2: POST tld array plus domain query param. Max 100 domains per request. 1 credit per domain checked.
 
 **Parameters**
 
-| Parameter | In | Required | Type | Description |
-|-----------|----|----------|------|-------------|
-| `domain` | query | no | string | Required for TLD-mode bulk check (base domain). |
-| `format` | query | no | string |  (one of: json, xml) |
+| Parameter | In | Required | Type | Default | Description |
+|-----------|----|----------|------|---------|-------------|
+| `domain` | query | no | string |  | Required for TLD-mode bulk check (base domain). |
+| `format` | query | no | string | `json` |  (one of: json, xml) |
+
+**Request body** (`application/json`, model `BulkDomainAvailabilityRequest`)
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `domainNames` | array<string> | no | Mode 1: list of full domain names. Cannot be used with tld. |
+| `tld` | array<string> | no | Mode 2: TLDs to check against the domain query param. Cannot be used with domainNames. |
+
+Example: `{"domainNames": ["whoisfreaks.com", "example.com"]}`
 
 **Response** (`BulkDomainAvailabilityResponse`)
 
@@ -161,23 +195,29 @@ Two bulk modes. Mode 1: POST domainNames array. Mode 2: POST tld array plus doma
 <details><summary>Python</summary>
 
 ```python
-"""Runnable example: Bulk Domain Availability Check (POST /v2.0/domain/availability)."""
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.domain_availability_api import DomainAvailabilityApi
-from whoisfreaks.models.bulk_domain_availability_request import BulkDomainAvailabilityRequest
+"""Bulk Domain Availability Check: POST https://api.whoisfreaks.com/v2.0/domain/availability
 
-# Parameters for bulkDomainAvailabilityV2 (POST /v2.0/domain/availability):
-#   - domain (string, optional): Required for TLD-mode bulk check (base domain).
-#   - format (string (one of: json, xml), optional)
-#   - body: BulkDomainAvailabilityRequest (required) -- request body object
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = DomainAvailabilityApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python BulkDomainAvailabilityV2.py
+"""
+import json
+import os
 
-bulk_domain_availability_request = BulkDomainAvailabilityRequest()  # populate fields as needed
-result = api.bulk_domain_availability_v2(bulk_domain_availability_request=bulk_domain_availability_request)
-print(result)
+import whoisfreaks
 
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DomainAvailabilityApi(client)
+
+    # bulk_domain_availability_v2 parameters:
+    #   bulk_domain_availability_request (BulkDomainAvailabilityRequest, required): request body
+    #   domain (str, optional, keyword): Required for TLD-mode bulk check (base domain)
+    #   format (str, optional, keyword): one of json, xml; default "json"
+    body = whoisfreaks.BulkDomainAvailabilityRequest(domain_names=["whoisfreaks.com", "example.com"])
+    result = api.bulk_domain_availability_v2(body)
+    print(json.dumps(result.to_dict(), indent=2))
 ```
 
 </details>
@@ -185,22 +225,33 @@ print(result)
 <details><summary>TypeScript</summary>
 
 ```typescript
-// Runnable example: Bulk Domain Availability Check (POST /v2.0/domain/availability)
-// Parameters for bulkDomainAvailabilityV2 (POST /v2.0/domain/availability):
-//   - domain (string, optional): Required for TLD-mode bulk check (base domain).
-//   - format (string (one of: json, xml), optional)
-//   - body: BulkDomainAvailabilityRequest (required) -- request body object
-import { Configuration, DomainAvailabilityApi } from "whoisfreaks";
+// Bulk Domain Availability Check: POST https://api.whoisfreaks.com/v2.0/domain/availability
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx BulkDomainAvailabilityV2.ts
+import { Configuration, DomainAvailabilityApi, ResponseError, type BulkDomainAvailabilityRequest } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DomainAvailabilityApi(config);
 
-async function main() {
-  const result = await api.bulkDomainAvailabilityV2({ bulkDomainAvailabilityRequest: {}, domain: undefined, format: undefined });
-  console.log(result);
+// bulkDomainAvailabilityV2({ bulkDomainAvailabilityRequest, domain?, format? })
+//   bulkDomainAvailabilityRequest (BulkDomainAvailabilityRequest, required): request body
+//   domain (string, optional): Required for TLD-mode bulk check (base domain)
+//   format ("json" | "xml", optional): default "json"
+async function main(): Promise<void> {
+  const body: BulkDomainAvailabilityRequest = { domainNames: ["whoisfreaks.com", "example.com"] };
+  const result = await api.bulkDomainAvailabilityV2({ bulkDomainAvailabilityRequest: body });
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 </details>
@@ -209,29 +260,39 @@ main().catch(console.error);
 
 ```go
 // Runnable example: Bulk Domain Availability Check (POST /v2.0/domain/availability)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for bulkDomainAvailabilityV2 (POST /v2.0/domain/availability):
 //   - domain (string, optional): Required for TLD-mode bulk check (base domain).
 //   - format (string (one of: json, xml), optional)
-//   - body: BulkDomainAvailabilityRequest (required) -- request body object
+//   - body: BulkDomainAvailabilityRequest (required): request body object
+
 package main
 
 import (
-    "context"
-    "encoding/json"
-    "fmt"
-    wf "github.com/WhoisFreaks/whoisfreaks-go"
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
 )
 
 func main() {
-    cfg := wf.NewConfiguration()
-    client := wf.NewAPIClient(cfg)
-    // apiKey is set once via the request context
-    ctx := context.WithValue(context.Background(), wf.ContextAPIKeys,
-        map[string]wf.APIKey{"ApiKeyAuth": {Key: "YOUR_API_KEY"}})
-    result, _, err := client.DomainAvailabilityAPI.BulkDomainAvailabilityV2(ctx).BulkDomainAvailabilityRequest(*wf.NewBulkDomainAvailabilityRequest()).Execute()
-    if err != nil { panic(err) }
-    b, _ := json.MarshalIndent(result, "", "  ")
-    fmt.Println(string(b))
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	body := whoisfreaks.NewBulkDomainAvailabilityRequest()
+	body.SetDomainNames([]string{"whoisfreaks.com", "example.com"})
+	result, _, err := client.DomainAvailabilityAPI.BulkDomainAvailabilityV2(ctx).
+		BulkDomainAvailabilityRequest(*body).Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
 }
 
 ```

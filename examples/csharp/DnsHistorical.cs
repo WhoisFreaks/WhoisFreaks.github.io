@@ -1,4 +1,5 @@
 // Runnable example: Historical DNS Lookup (GET /v2.0/dns/historical)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dnsHistorical (GET /v2.0/dns/historical):
 //   - domainName (string, required)
 //   - type (string, required)
@@ -7,13 +8,13 @@
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
+using WhoisFreaks.Model;
 
-class DnsHistorical {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DNSApi(config);
-        var result = api.DnsHistorical("example.com", "value", null, null);
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DNSApi(config);
+
+HistoricalDnsResponse result = api.DnsHistorical("whoisfreaks.com", "A,MX,TXT", page: 1);
+Console.WriteLine(result.ToJson());

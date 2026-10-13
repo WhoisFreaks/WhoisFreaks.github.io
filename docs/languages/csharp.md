@@ -2,7 +2,7 @@
 
 ## About
 
-The official **WhoisFreaks C# / .NET SDK** — a complete client for WHOIS, DNS, SSL, domain availability, subdomain, IP geolocation, IP reputation, ASN, typosquatting, and domain reputation lookups, plus bulk database downloads. Query real-time and historical domain data, reverse WHOIS, and threat intelligence from C# / .NET with a single API key. Generated from the WhoisFreaks OpenAPI specification and published to NuGet.
+The official **WhoisFreaks C# / .NET SDK**: a complete client for WHOIS, DNS, SSL, domain availability, subdomain, IP geolocation, IP reputation, ASN, typosquatting, and domain reputation lookups, plus bulk database downloads. Query real-time and historical domain data, reverse WHOIS, and threat intelligence from C# / .NET with a single API key. Generated from the WhoisFreaks OpenAPI specification and published to NuGet.
 
 **Keywords:** c# / .net whois api, c# / .net whois sdk, whoisfreaks c# / .net, c# / .net domain lookup, c# / .net dns api, whois api, whois lookup, domain api, dns api, dns lookup, reverse whois, historical whois, domain availability api, ssl certificate api, ip geolocation api, ip reputation api, asn lookup, subdomain finder, typosquatting api, domain reputation, threat intelligence api, domain data api, whois sdk, domain monitoring, brand protection api
 
@@ -17,7 +17,7 @@ dotnet add package WhoisFreaks
 
 ## Build from Source
 
-Prefer to build the SDK yourself instead of installing from NuGet? Clone the monorepo and build the C# / .NET package locally:
+Prefer to build the SDK yourself instead of installing from NuGet? Clone the C# / .NET SDK repository and build it locally:
 
 ```bash
 git clone https://github.com/WhoisFreaks/whoisfreaks-csharp
@@ -29,10 +29,12 @@ dotnet build   # or: dotnet pack -c Release
 
 A complete walkthrough from an empty directory to a running program:
 
+You need the .NET 8 SDK or later. Create a console app and add the package:
+
 ```bash
-mkdir whoisfreaks-test && cd whoisfreaks-test
-dotnet new console
-dotnet add package WhoisFreaks
+dotnet new console -o whoisfreaks-test
+cd whoisfreaks-test
+dotnet add package WhoisFreaks --version 0.23.0
 ```
 
 Replace `Program.cs` with:
@@ -41,20 +43,27 @@ Replace `Program.cs` with:
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
+using WhoisFreaks.Model;
 
-var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");   // set once
-var api = new WHOISApi(config);
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
 
-var result = api.WhoisLive("example.com");
-Console.WriteLine(result);
+var whois = new WHOISApi(config);
+WhoisResponse record = whois.WhoisLive("whoisfreaks.com");
+Console.WriteLine($"{record.DomainName} expires {record.ExpiryDate}");
+Console.WriteLine(record.ToJson());
 ```
 
-Run it:
+Set your API key and run it:
 
 ```bash
+export WHOISFREAKS_API_KEY="your_api_key"
 dotnet run
 ```
+
+To run one of the [runnable examples](../../examples/csharp/README.md), use it as `Program.cs` and run `dotnet run` again.
 
 ## Configure
 
@@ -62,22 +71,23 @@ See [Authentication](../authentication.md) for how to obtain a key. Minimal setu
 
 ```csharp
 // Runnable example: Live WHOIS Lookup (GET /v2.0/whois/live)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for whoisLive (GET /v2.0/whois/live):
 //   - domainName (string, required)
 //   - format (string (one of: json, xml), optional)
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
+using WhoisFreaks.Model;
 
-class WhoisLive {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new WHOISApi(config);
-        var result = api.WhoisLive("example.com", null);
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new WHOISApi(config);
+
+WhoisResponse result = api.WhoisLive("whoisfreaks.com");
+Console.WriteLine(result.ToJson());
 
 ```
 
@@ -93,22 +103,23 @@ All 60 endpoints are shown below, grouped by category. Each includes its method,
 
 ```csharp
 // Runnable example: Live WHOIS Lookup (GET /v2.0/whois/live)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for whoisLive (GET /v2.0/whois/live):
 //   - domainName (string, required)
 //   - format (string (one of: json, xml), optional)
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
+using WhoisFreaks.Model;
 
-class WhoisLive {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new WHOISApi(config);
-        var result = api.WhoisLive("example.com", null);
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new WHOISApi(config);
+
+WhoisResponse result = api.WhoisLive("whoisfreaks.com");
+Console.WriteLine(result.ToJson());
 
 ```
 
@@ -118,23 +129,25 @@ class WhoisLive {
 
 ```csharp
 // Runnable example: Bulk WHOIS Lookup (POST /v2.0/bulkwhois/live)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for bulkWhois (POST /v2.0/bulkwhois/live):
 //   - format (string (one of: json, xml), optional)
-//   - body: BulkWhoisRequest (required) -- request body object
+//   - body: BulkWhoisRequest (required): request body object
 using System;
+using System.Collections.Generic;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 using WhoisFreaks.Model;
 
-class BulkWhois {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new WHOISApi(config);
-        var result = api.BulkWhois(new BulkWhoisRequest(), null);
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new WHOISApi(config);
+
+var body = new BulkWhoisRequest(domainNames: new List<string> { "whoisfreaks.com", "jfreaks.com" });
+BulkWhoisResponse result = api.BulkWhois(body);
+Console.WriteLine(result.ToJson());
 
 ```
 
@@ -144,23 +157,23 @@ class BulkWhois {
 
 ```csharp
 // Runnable example: Historical WHOIS records for a domain (GET /v2.0/whois/history)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for whoisHistory (GET /v2.0/whois/history):
 //   - domainName (string, required): Domain to fetch historical WHOIS records for
-//   - page (integer, optional): Page number
 //   - format (string (one of: json, xml), optional)
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
+using WhoisFreaks.Model;
 
-class WhoisHistory {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new WHOISApi(config);
-        var result = api.WhoisHistory("example.com", null, null);
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new WHOISApi(config);
+
+WhoisHistoricalResponse result = api.WhoisHistory("whoisfreaks.com");
+Console.WriteLine(result.ToJson());
 
 ```
 
@@ -170,6 +183,7 @@ class WhoisHistory {
 
 ```csharp
 // Runnable example: Reverse WHOIS lookup by keyword (GET /v2.0/whois/reverse)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for whoisReverse (GET /v2.0/whois/reverse):
 //   - keyword (string, required): Keyword to search across WHOIS records
 //   - page (integer, optional): Page number
@@ -177,16 +191,16 @@ class WhoisHistory {
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
+using WhoisFreaks.Model;
 
-class WhoisReverse {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new WHOISApi(config);
-        var result = api.WhoisReverse("value", null, null);
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new WHOISApi(config);
+
+ReverseWhoisResponse result = api.WhoisReverse("whoisfreaks", page: 1);
+Console.WriteLine(result.ToJson());
 
 ```
 
@@ -198,24 +212,25 @@ class WhoisReverse {
 
 ```csharp
 // Runnable example: Live DNS Lookup (GET /v2.0/dns/live)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dnsLive (GET /v2.0/dns/live):
-//   - domainName (string, required)
-//   - ipAddress (string, required): Use for PTR lookups
+//   - domainName (string, optional)
+//   - ipAddress (string, optional): Use for PTR lookups
 //   - type (string, required): all or comma-separated: A,MX,NS,TXT,SOA,SPF,AAAA,CNAME
 //   - format (string (one of: json, xml), optional)
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
+using WhoisFreaks.Model;
 
-class DnsLive {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DNSApi(config);
-        var result = api.DnsLive("example.com", "8.8.8.8", "value", null);
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DNSApi(config);
+
+DnsResponse result = api.DnsLive("A,MX,TXT", domainName: "whoisfreaks.com");
+Console.WriteLine(result.ToJson());
 
 ```
 
@@ -225,6 +240,7 @@ class DnsLive {
 
 ```csharp
 // Runnable example: Historical DNS Lookup (GET /v2.0/dns/historical)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dnsHistorical (GET /v2.0/dns/historical):
 //   - domainName (string, required)
 //   - type (string, required)
@@ -233,16 +249,16 @@ class DnsLive {
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
+using WhoisFreaks.Model;
 
-class DnsHistorical {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DNSApi(config);
-        var result = api.DnsHistorical("example.com", "value", null, null);
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DNSApi(config);
+
+HistoricalDnsResponse result = api.DnsHistorical("whoisfreaks.com", "A,MX,TXT", page: 1);
+Console.WriteLine(result.ToJson());
 
 ```
 
@@ -252,6 +268,7 @@ class DnsHistorical {
 
 ```csharp
 // Runnable example: Reverse DNS Lookup (GET /v2.1/dns/reverse)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dnsReverse (GET /v2.1/dns/reverse):
 //   - value (string, required): IP, CIDR, or record value
 //   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
@@ -261,16 +278,16 @@ class DnsHistorical {
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
+using WhoisFreaks.Model;
 
-class DnsReverse {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DNSApi(config);
-        var result = api.DnsReverse("value", "a", true, null, null);
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DNSApi(config);
+
+ReverseDnsResponse result = api.DnsReverse("8.8.8.8", "a", page: 1);
+Console.WriteLine(result.ToJson());
 
 ```
 
@@ -280,24 +297,26 @@ class DnsReverse {
 
 ```csharp
 // Runnable example: Bulk DNS Lookup (POST /v2.0/dns/bulk/live)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dnsBulk (POST /v2.0/dns/bulk/live):
 //   - type (string, required)
 //   - format (string (one of: json, xml), optional)
-//   - body: DnsBulkRequest (required) -- request body object
+//   - body: DnsBulkRequest (required): request body object
 using System;
+using System.Collections.Generic;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 using WhoisFreaks.Model;
 
-class DnsBulk {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DNSApi(config);
-        var result = api.DnsBulk("value", new DnsBulkRequest(), null);
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DNSApi(config);
+
+var body = new DnsBulkRequest(domainNames: new List<string> { "whoisfreaks.com", "example.com" });
+BulkDnsResponse result = api.DnsBulk("A,MX,TXT", body);
+Console.WriteLine(result.ToJson());
 
 ```
 
@@ -309,6 +328,7 @@ class DnsBulk {
 
 ```csharp
 // Runnable example: Domain Availability Check with Suggestions (GET /v2.0/domain/availability)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for domainAvailabilityV2 (GET /v2.0/domain/availability):
 //   - domain (string, required): The domain name to check
 //   - sug (boolean, optional): Whether to return TLD suggestions alongside the queried domain.
@@ -317,16 +337,16 @@ class DnsBulk {
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
+using WhoisFreaks.Model;
 
-class DomainAvailabilityV2 {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DomainAvailabilityApi(config);
-        var result = api.DomainAvailabilityV2("example.com", null, null, null);
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DomainAvailabilityApi(config);
+
+DomainAvailabilityResponse result = api.DomainAvailabilityV2("google.com", sug: true, count: 5);
+Console.WriteLine(result.ToJson());
 
 ```
 
@@ -336,24 +356,26 @@ class DomainAvailabilityV2 {
 
 ```csharp
 // Runnable example: Bulk Domain Availability Check (POST /v2.0/domain/availability)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for bulkDomainAvailabilityV2 (POST /v2.0/domain/availability):
 //   - domain (string, optional): Required for TLD-mode bulk check (base domain).
 //   - format (string (one of: json, xml), optional)
-//   - body: BulkDomainAvailabilityRequest (required) -- request body object
+//   - body: BulkDomainAvailabilityRequest (required): request body object
 using System;
+using System.Collections.Generic;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 using WhoisFreaks.Model;
 
-class BulkDomainAvailabilityV2 {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DomainAvailabilityApi(config);
-        var result = api.BulkDomainAvailabilityV2(new BulkDomainAvailabilityRequest(), null, null);
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DomainAvailabilityApi(config);
+
+var body = new BulkDomainAvailabilityRequest(domainNames: new List<string> { "whoisfreaks.com", "example.com" });
+BulkDomainAvailabilityResponse result = api.BulkDomainAvailabilityV2(body);
+Console.WriteLine(result.ToJson());
 
 ```
 
@@ -365,6 +387,7 @@ class BulkDomainAvailabilityV2 {
 
 ```csharp
 // Runnable example: Typosquatting Lookup (GET /v3.0/domain/typos)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for typosquatting (GET /v3.0/domain/typos):
 //   - keyword (string, optional)
 //   - pattern (string, optional)
@@ -372,16 +395,16 @@ class BulkDomainAvailabilityV2 {
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
+using WhoisFreaks.Model;
 
-class Typosquatting {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new TyposquattingApi(config);
-        var result = api.Typosquatting(null, null, null);
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new TyposquattingApi(config);
+
+TyposquattingResponse result = api.Typosquatting(keyword: "whoisfreaks");
+Console.WriteLine(result.ToJson());
 
 ```
 
@@ -393,6 +416,7 @@ class Typosquatting {
 
 ```csharp
 // Runnable example: SSL Certificate Lookup (GET /v1.0/ssl/live)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for sslLookup (GET /v1.0/ssl/live):
 //   - domainName (string, required)
 //   - chain (boolean, optional)
@@ -401,16 +425,16 @@ class Typosquatting {
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
+using WhoisFreaks.Model;
 
-class SslLookup {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new SSLApi(config);
-        var result = api.SslLookup("example.com", null, null, null);
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new SSLApi(config);
+
+SslResponse result = api.SslLookup("whoisfreaks.com");
+Console.WriteLine(result.ToJson());
 
 ```
 
@@ -422,21 +446,22 @@ class SslLookup {
 
 ```csharp
 // Runnable example: IP Geolocation Lookup (GET /v1.0/geolocation)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for geolocation (GET /v1.0/geolocation):
 //   - ip (string, required)
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
+using WhoisFreaks.Model;
 
-class Geolocation {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new GeolocationApi(config);
-        var result = api.Geolocation("8.8.8.8");
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new GeolocationApi(config);
+
+GeolocationResponse result = api.Geolocation("8.8.8.8");
+Console.WriteLine(result.ToJson());
 
 ```
 
@@ -446,21 +471,26 @@ class Geolocation {
 
 ```csharp
 // Runnable example: Bulk IP Geolocation (POST /v1.0/geolocation)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for bulkGeolocation (POST /v1.0/geolocation):
-//   - body: BulkGeolocationRequest (required) -- request body object
+//   - body: BulkGeolocationRequest (required): request body object
 using System;
+using System.Collections.Generic;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 using WhoisFreaks.Model;
 
-class BulkGeolocation {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new GeolocationApi(config);
-        var result = api.BulkGeolocation(new BulkGeolocationRequest());
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new GeolocationApi(config);
+
+var body = new BulkGeolocationRequest(ips: new List<string> { "8.8.8.8", "1.1.1.1" });
+List<GeolocationResponse> result = api.BulkGeolocation(body);
+foreach (var item in result)
+{
+    Console.WriteLine(item.ToJson());
 }
 
 ```
@@ -473,6 +503,7 @@ class BulkGeolocation {
 
 ```csharp
 // Runnable example: Subdomains Lookup (GET /v1.0/subdomains)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for subdomains (GET /v1.0/subdomains):
 //   - domain (string, required)
 //   - after (string, optional)
@@ -483,16 +514,16 @@ class BulkGeolocation {
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
+using WhoisFreaks.Model;
 
-class Subdomains {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new SubdomainsApi(config);
-        var result = api.Subdomains("example.com", "2000-01-01", DateTime.UtcNow.ToString("yyyy-MM-dd"), null, null, null);
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new SubdomainsApi(config);
+
+SubdomainsResponse result = api.Subdomains("whoisfreaks.com", page: 1);
+Console.WriteLine(result.ToJson());
 
 ```
 
@@ -504,21 +535,22 @@ class Subdomains {
 
 ```csharp
 // Runnable example: IP Reputation Lookup (GET /v1.0/security)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for ipReputation (GET /v1.0/security):
 //   - ip (string, required)
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
+using WhoisFreaks.Model;
 
-class IpReputation {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new IPReputationApi(config);
-        var result = api.IpReputation("8.8.8.8");
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new IPReputationApi(config);
+
+IpReputationResponse result = api.IpReputation("8.8.8.8");
+Console.WriteLine(result.ToJson());
 
 ```
 
@@ -528,21 +560,26 @@ class IpReputation {
 
 ```csharp
 // Runnable example: Bulk IP Reputation (POST /v1.0/security)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for bulkIpReputation (POST /v1.0/security):
-//   - body: BulkIpReputationRequest (required) -- request body object
+//   - body: BulkGeolocationRequest (required): request body object
 using System;
+using System.Collections.Generic;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 using WhoisFreaks.Model;
 
-class BulkIpReputation {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new IPReputationApi(config);
-        var result = api.BulkIpReputation(new BulkIpReputationRequest());
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new IPReputationApi(config);
+
+var body = new BulkGeolocationRequest(ips: new List<string> { "8.8.8.8", "1.1.1.1" });
+List<IpReputationResponse> result = api.BulkIpReputation(body);
+foreach (var item in result)
+{
+    Console.WriteLine(item.ToJson());
 }
 
 ```
@@ -555,22 +592,23 @@ class BulkIpReputation {
 
 ```csharp
 // Runnable example: Domain Reputation Lookup (GET /v1/domain/security)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for domainReputation (GET /v1/domain/security):
 //   - domainName (string, required): The domain name to assess
 //   - format (string (one of: json, xml), optional)
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
+using WhoisFreaks.Model;
 
-class DomainReputation {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DomainReputationApi(config);
-        var result = api.DomainReputation("example.com", null);
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DomainReputationApi(config);
+
+DomainReputationResponse result = api.DomainReputation("amazon.com");
+Console.WriteLine(result.ToJson());
 
 ```
 
@@ -582,22 +620,23 @@ class DomainReputation {
 
 ```csharp
 // Runnable example: ASN WHOIS Lookup (GET /v2.0/asn-whois)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for asnWhois (GET /v2.0/asn-whois):
 //   - asn (string, required)
 //   - format (string (one of: json, xml), optional)
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
+using WhoisFreaks.Model;
 
-class AsnWhois {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new ASNWHOISApi(config);
-        var result = api.AsnWhois("AS15169", null);
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new ASNWHOISApi(config);
+
+AsnWhoisResponse result = api.AsnWhois("as15169");
+Console.WriteLine(result.ToJson());
 
 ```
 
@@ -609,22 +648,23 @@ class AsnWhois {
 
 ```csharp
 // Runnable example: IP WHOIS Lookup (GET /v1.0/ip-whois)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for ipWhois (GET /v1.0/ip-whois):
 //   - ip (string, required)
 //   - format (string (one of: json, xml), optional)
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
+using WhoisFreaks.Model;
 
-class IpWhois {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new IPWHOISApi(config);
-        var result = api.IpWhois("8.8.8.8", null);
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new IPWHOISApi(config);
+
+IpWhoisResponse result = api.IpWhois("8.8.8.8");
+Console.WriteLine(result.ToJson());
 
 ```
 
@@ -636,21 +676,22 @@ class IpWhois {
 
 ```csharp
 // Runnable example: Rotate API Key (GET /v1.0/api-key/rotate)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for rotateApiKey (GET /v1.0/api-key/rotate):
 //   (no parameters; the API key is set on the client)
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class RotateApiKey {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new AccountApi(config);
-        var result = api.RotateApiKey();
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new AccountApi(config);
+
+string newKey = api.RotateApiKey();
+// The old key stops working: store the new one, e.g. in WHOISFREAKS_API_KEY.
+Console.WriteLine($"New API key: {newKey}");
 
 ```
 
@@ -660,21 +701,22 @@ class RotateApiKey {
 
 ```csharp
 // Runnable example: Account Usage (GET /v1.0/whoisapi/usage)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for accountUsage (GET /v1.0/whoisapi/usage):
 //   (no parameters; the API key is set on the client)
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
+using WhoisFreaks.Model;
 
-class AccountUsage {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new AccountApi(config);
-        var result = api.AccountUsage();
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new AccountApi(config);
+
+AccountUsageResponse result = api.AccountUsage();
+Console.WriteLine(result.ToJson());
 
 ```
 
@@ -684,21 +726,20 @@ class AccountUsage {
 
 ```csharp
 // Runnable example: Database File Status (Public) (GET /v3.4/status)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for databaseFileStatus (GET /v3.4/status):
-//   (no parameters; the API key is set on the client)
+//   (no parameters; no API key required)
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
+using WhoisFreaks.Model;
 
-class DatabaseFileStatus {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new AccountApi(config);
-        var result = api.DatabaseFileStatus();
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+// Public endpoint: no API key needed.
+var api = new AccountApi(config);
+
+DatabaseFileStatus result = api.DatabaseFileStatus();
+Console.WriteLine(result.ToJson());
 
 ```
 
@@ -710,23 +751,31 @@ class DatabaseFileStatus {
 
 ```csharp
 // Runnable example: Newly Registered gTLD (CSV) (GET /v3.1/download/domainer/gtld)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbNewlyGtld (GET /v3.1/download/domainer/gtld):
 //   - whois (boolean, required)
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 //   - tlds (string, optional)
 using System;
+using System.IO;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DbNewlyGtld {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesNewlyRegisteredApi(config);
-        var result = api.DbNewlyGtld(false, DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd"), null);
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesNewlyRegisteredApi(config);
+
+FileParameter download = api.DbNewlyGtld(true, date: new DateOnly(2026, 10, 1));
+// The SDK returns the response body as a stream: copy it to a file.
+var path = Path.GetFullPath("DbNewlyGtld.csv");
+using (Stream input = download.Content)
+using (FileStream output = File.Create(path))
+{
+    input.CopyTo(output);
 }
+Console.WriteLine($"Saved {new FileInfo(path).Length} bytes to {path}");
 
 ```
 
@@ -736,23 +785,31 @@ class DbNewlyGtld {
 
 ```csharp
 // Runnable example: Newly Registered ccTLD (CSV) (GET /v3.1/download/domainer/cctld)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbNewlyCctld (GET /v3.1/download/domainer/cctld):
 //   - whois (boolean, required)
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 //   - tlds (string, optional)
 using System;
+using System.IO;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DbNewlyCctld {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesNewlyRegisteredApi(config);
-        var result = api.DbNewlyCctld(false, DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd"), null);
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesNewlyRegisteredApi(config);
+
+FileParameter download = api.DbNewlyCctld(true, date: new DateOnly(2026, 10, 1));
+// The SDK returns the response body as a stream: copy it to a file.
+var path = Path.GetFullPath("DbNewlyCctld.csv");
+using (Stream input = download.Content)
+using (FileStream output = File.Create(path))
+{
+    input.CopyTo(output);
 }
+Console.WriteLine($"Saved {new FileInfo(path).Length} bytes to {path}");
 
 ```
 
@@ -762,21 +819,29 @@ class DbNewlyCctld {
 
 ```csharp
 // Runnable example: Newly Registered gTLD Cleaned WHOIS (CSV) (GET /v3.1/download/domainer/gtld/cleaned)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbNewlyGtldCleaned (GET /v3.1/download/domainer/gtld/cleaned):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 using System;
+using System.IO;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DbNewlyGtldCleaned {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesNewlyRegisteredApi(config);
-        var result = api.DbNewlyGtldCleaned(DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd"));
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesNewlyRegisteredApi(config);
+
+FileParameter download = api.DbNewlyGtldCleaned(date: new DateOnly(2026, 10, 1));
+// The SDK returns the response body as a stream: copy it to a file.
+var path = Path.GetFullPath("DbNewlyGtldCleaned.csv");
+using (Stream input = download.Content)
+using (FileStream output = File.Create(path))
+{
+    input.CopyTo(output);
 }
+Console.WriteLine($"Saved {new FileInfo(path).Length} bytes to {path}");
 
 ```
 
@@ -786,21 +851,29 @@ class DbNewlyGtldCleaned {
 
 ```csharp
 // Runnable example: Newly Registered ccTLD Cleaned WHOIS (CSV) (GET /v3.1/download/domainer/cctld/cleaned)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbNewlyCctldCleaned (GET /v3.1/download/domainer/cctld/cleaned):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 using System;
+using System.IO;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DbNewlyCctldCleaned {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesNewlyRegisteredApi(config);
-        var result = api.DbNewlyCctldCleaned(DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd"));
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesNewlyRegisteredApi(config);
+
+FileParameter download = api.DbNewlyCctldCleaned(date: new DateOnly(2026, 10, 1));
+// The SDK returns the response body as a stream: copy it to a file.
+var path = Path.GetFullPath("DbNewlyCctldCleaned.csv");
+using (Stream input = download.Content)
+using (FileStream output = File.Create(path))
+{
+    input.CopyTo(output);
 }
+Console.WriteLine($"Saved {new FileInfo(path).Length} bytes to {path}");
 
 ```
 
@@ -810,21 +883,25 @@ class DbNewlyCctldCleaned {
 
 ```csharp
 // Runnable example: Newly Registered gTLD (JSON) (GET /v3.1/domains/newly/gtld)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbNewlyGtldJson (GET /v3.1/domains/newly/gtld):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 //   - tlds (string, optional)
 using System;
+using System.Collections.Generic;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DbNewlyGtldJson {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesNewlyRegisteredApi(config);
-        var result = api.DbNewlyGtldJson(DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd"), null);
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesNewlyRegisteredApi(config);
+
+List<string> result = api.DbNewlyGtldJson(date: new DateOnly(2026, 10, 1));
+foreach (var item in result)
+{
+    Console.WriteLine(item);
 }
 
 ```
@@ -835,21 +912,25 @@ class DbNewlyGtldJson {
 
 ```csharp
 // Runnable example: Newly Registered ccTLD (JSON) (GET /v3.1/domains/newly/cctld)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbNewlyCctldJson (GET /v3.1/domains/newly/cctld):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 //   - tlds (string, optional)
 using System;
+using System.Collections.Generic;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DbNewlyCctldJson {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesNewlyRegisteredApi(config);
-        var result = api.DbNewlyCctldJson(DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd"), null);
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesNewlyRegisteredApi(config);
+
+List<string> result = api.DbNewlyCctldJson(date: new DateOnly(2026, 10, 1));
+foreach (var item in result)
+{
+    Console.WriteLine(item);
 }
 
 ```
@@ -860,21 +941,29 @@ class DbNewlyCctldJson {
 
 ```csharp
 // Runnable example: Newly Registered With DNS (GET /v3.1/download/domainer/newly/dns)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbNewlyDns (GET /v3.1/download/domainer/newly/dns):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 using System;
+using System.IO;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DbNewlyDns {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesNewlyRegisteredApi(config);
-        var result = api.DbNewlyDns(DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd"));
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesNewlyRegisteredApi(config);
+
+FileParameter download = api.DbNewlyDns(date: new DateOnly(2026, 10, 1));
+// The SDK returns the response body as a stream: copy it to a file.
+var path = Path.GetFullPath("DbNewlyDns.json");
+using (Stream input = download.Content)
+using (FileStream output = File.Create(path))
+{
+    input.CopyTo(output);
 }
+Console.WriteLine($"Saved {new FileInfo(path).Length} bytes to {path}");
 
 ```
 
@@ -886,22 +975,30 @@ class DbNewlyDns {
 
 ```csharp
 // Runnable example: Expiring Domains (GET /v3.1/download/domainer/expired)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbExpired (GET /v3.1/download/domainer/expired):
 //   - whois (boolean, required)
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 using System;
+using System.IO;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DbExpired {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesExpiringDroppedApi(config);
-        var result = api.DbExpired(false, DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd"));
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesExpiringDroppedApi(config);
+
+FileParameter download = api.DbExpired(true, date: new DateOnly(2026, 10, 1));
+// The SDK returns the response body as a stream: copy it to a file.
+var path = Path.GetFullPath("DbExpired.csv");
+using (Stream input = download.Content)
+using (FileStream output = File.Create(path))
+{
+    input.CopyTo(output);
 }
+Console.WriteLine($"Saved {new FileInfo(path).Length} bytes to {path}");
 
 ```
 
@@ -911,21 +1008,29 @@ class DbExpired {
 
 ```csharp
 // Runnable example: Expiring Cleaned WHOIS (GET /v3.1/download/domainer/expired/cleaned)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbExpiredCleaned (GET /v3.1/download/domainer/expired/cleaned):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 using System;
+using System.IO;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DbExpiredCleaned {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesExpiringDroppedApi(config);
-        var result = api.DbExpiredCleaned(DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd"));
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesExpiringDroppedApi(config);
+
+FileParameter download = api.DbExpiredCleaned(date: new DateOnly(2026, 10, 1));
+// The SDK returns the response body as a stream: copy it to a file.
+var path = Path.GetFullPath("DbExpiredCleaned.csv");
+using (Stream input = download.Content)
+using (FileStream output = File.Create(path))
+{
+    input.CopyTo(output);
 }
+Console.WriteLine($"Saved {new FileInfo(path).Length} bytes to {path}");
 
 ```
 
@@ -935,22 +1040,30 @@ class DbExpiredCleaned {
 
 ```csharp
 // Runnable example: Dropped Domains (GET /v3.1/download/domainer/dropped)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbDropped (GET /v3.1/download/domainer/dropped):
 //   - whois (boolean, required)
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 using System;
+using System.IO;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DbDropped {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesExpiringDroppedApi(config);
-        var result = api.DbDropped(false, DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd"));
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesExpiringDroppedApi(config);
+
+FileParameter download = api.DbDropped(true, date: new DateOnly(2026, 10, 1));
+// The SDK returns the response body as a stream: copy it to a file.
+var path = Path.GetFullPath("DbDropped.csv");
+using (Stream input = download.Content)
+using (FileStream output = File.Create(path))
+{
+    input.CopyTo(output);
 }
+Console.WriteLine($"Saved {new FileInfo(path).Length} bytes to {path}");
 
 ```
 
@@ -960,21 +1073,25 @@ class DbDropped {
 
 ```csharp
 // Runnable example: Dropped Domains (JSON) (GET /v3.1/domains/dropped)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbDroppedJson (GET /v3.1/domains/dropped):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 //   - tlds (string, optional)
 using System;
+using System.Collections.Generic;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DbDroppedJson {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesExpiringDroppedApi(config);
-        var result = api.DbDroppedJson(DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd"), null);
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesExpiringDroppedApi(config);
+
+List<string> result = api.DbDroppedJson(date: new DateOnly(2026, 10, 1));
+foreach (var item in result)
+{
+    Console.WriteLine(item);
 }
 
 ```
@@ -985,22 +1102,30 @@ class DbDroppedJson {
 
 ```csharp
 // Runnable example: Dropped With Backlinks (GET /v3.3/download/domainer/dropped/backlinks)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbDroppedBacklinks (GET /v3.3/download/domainer/dropped/backlinks):
 //   - whois (boolean, optional)
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 using System;
+using System.IO;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DbDroppedBacklinks {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesExpiringDroppedApi(config);
-        var result = api.DbDroppedBacklinks(false, DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd"));
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesExpiringDroppedApi(config);
+
+FileParameter download = api.DbDroppedBacklinks(date: new DateOnly(2026, 10, 1));
+// The SDK returns the response body as a stream: copy it to a file.
+var path = Path.GetFullPath("DbDroppedBacklinks.csv");
+using (Stream input = download.Content)
+using (FileStream output = File.Create(path))
+{
+    input.CopyTo(output);
 }
+Console.WriteLine($"Saved {new FileInfo(path).Length} bytes to {path}");
 
 ```
 
@@ -1012,21 +1137,29 @@ class DbDroppedBacklinks {
 
 ```csharp
 // Runnable example: WHOIS Database Daily (GET /v3.3/download/dbupdate/daily/domains/whois)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbWhoisDaily (GET /v3.3/download/dbupdate/daily/domains/whois):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 using System;
+using System.IO;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DbWhoisDaily {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesWHOISApi(config);
-        var result = api.DbWhoisDaily(DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd"));
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesWHOISApi(config);
+
+FileParameter download = api.DbWhoisDaily(date: new DateOnly(2026, 10, 1));
+// The SDK returns the response body as a stream: copy it to a file.
+var path = Path.GetFullPath("DbWhoisDaily.csv");
+using (Stream input = download.Content)
+using (FileStream output = File.Create(path))
+{
+    input.CopyTo(output);
 }
+Console.WriteLine($"Saved {new FileInfo(path).Length} bytes to {path}");
 
 ```
 
@@ -1036,21 +1169,29 @@ class DbWhoisDaily {
 
 ```csharp
 // Runnable example: WHOIS Database Weekly (GET /v3.3/download/dbupdate/weekly/domains/whois)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbWhoisWeekly (GET /v3.3/download/dbupdate/weekly/domains/whois):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 using System;
+using System.IO;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DbWhoisWeekly {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesWHOISApi(config);
-        var result = api.DbWhoisWeekly(DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd"));
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesWHOISApi(config);
+
+FileParameter download = api.DbWhoisWeekly(date: new DateOnly(2026, 10, 1));
+// The SDK returns the response body as a stream: copy it to a file.
+var path = Path.GetFullPath("DbWhoisWeekly.csv");
+using (Stream input = download.Content)
+using (FileStream output = File.Create(path))
+{
+    input.CopyTo(output);
 }
+Console.WriteLine($"Saved {new FileInfo(path).Length} bytes to {path}");
 
 ```
 
@@ -1060,21 +1201,29 @@ class DbWhoisWeekly {
 
 ```csharp
 // Runnable example: WHOIS Database Monthly (GET /v3.3/download/dbupdate/monthly/domains/whois)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbWhoisMonthly (GET /v3.3/download/dbupdate/monthly/domains/whois):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 using System;
+using System.IO;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DbWhoisMonthly {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesWHOISApi(config);
-        var result = api.DbWhoisMonthly(DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd"));
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesWHOISApi(config);
+
+FileParameter download = api.DbWhoisMonthly(date: new DateOnly(2026, 10, 1));
+// The SDK returns the response body as a stream: copy it to a file.
+var path = Path.GetFullPath("DbWhoisMonthly.csv");
+using (Stream input = download.Content)
+using (FileStream output = File.Create(path))
+{
+    input.CopyTo(output);
 }
+Console.WriteLine($"Saved {new FileInfo(path).Length} bytes to {path}");
 
 ```
 
@@ -1086,21 +1235,29 @@ class DbWhoisMonthly {
 
 ```csharp
 // Runnable example: DNS Database Daily (GET /v3.2/download/dbupdate/daily/dns)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbDnsDaily (GET /v3.2/download/dbupdate/daily/dns):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 using System;
+using System.IO;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DbDnsDaily {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesDNSApi(config);
-        var result = api.DbDnsDaily(DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd"));
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesDNSApi(config);
+
+FileParameter download = api.DbDnsDaily(date: new DateOnly(2026, 10, 1));
+// The SDK returns the response body as a stream: copy it to a file.
+var path = Path.GetFullPath("DbDnsDaily.csv");
+using (Stream input = download.Content)
+using (FileStream output = File.Create(path))
+{
+    input.CopyTo(output);
 }
+Console.WriteLine($"Saved {new FileInfo(path).Length} bytes to {path}");
 
 ```
 
@@ -1110,21 +1267,29 @@ class DbDnsDaily {
 
 ```csharp
 // Runnable example: DNS Database Weekly (GET /v3.2/download/dbupdate/weekly/dns)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbDnsWeekly (GET /v3.2/download/dbupdate/weekly/dns):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 using System;
+using System.IO;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DbDnsWeekly {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesDNSApi(config);
-        var result = api.DbDnsWeekly(DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd"));
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesDNSApi(config);
+
+FileParameter download = api.DbDnsWeekly(date: new DateOnly(2026, 10, 1));
+// The SDK returns the response body as a stream: copy it to a file.
+var path = Path.GetFullPath("DbDnsWeekly.csv");
+using (Stream input = download.Content)
+using (FileStream output = File.Create(path))
+{
+    input.CopyTo(output);
 }
+Console.WriteLine($"Saved {new FileInfo(path).Length} bytes to {path}");
 
 ```
 
@@ -1134,21 +1299,29 @@ class DbDnsWeekly {
 
 ```csharp
 // Runnable example: DNS Database Monthly (GET /v3.2/download/dbupdate/monthly/dns)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbDnsMonthly (GET /v3.2/download/dbupdate/monthly/dns):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 using System;
+using System.IO;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DbDnsMonthly {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesDNSApi(config);
-        var result = api.DbDnsMonthly(DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd"));
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesDNSApi(config);
+
+FileParameter download = api.DbDnsMonthly(date: new DateOnly(2026, 10, 1));
+// The SDK returns the response body as a stream: copy it to a file.
+var path = Path.GetFullPath("DbDnsMonthly.csv");
+using (Stream input = download.Content)
+using (FileStream output = File.Create(path))
+{
+    input.CopyTo(output);
 }
+Console.WriteLine($"Saved {new FileInfo(path).Length} bytes to {path}");
 
 ```
 
@@ -1160,21 +1333,29 @@ class DbDnsMonthly {
 
 ```csharp
 // Runnable example: Subdomains Daily (GET /v3.2/download/dbupdate/daily/subdomains)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbSubdomainsDaily (GET /v3.2/download/dbupdate/daily/subdomains):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 using System;
+using System.IO;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DbSubdomainsDaily {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesSubdomainsApi(config);
-        var result = api.DbSubdomainsDaily(DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd"));
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesSubdomainsApi(config);
+
+FileParameter download = api.DbSubdomainsDaily(date: new DateOnly(2026, 10, 1));
+// The SDK returns the response body as a stream: copy it to a file.
+var path = Path.GetFullPath("DbSubdomainsDaily.csv");
+using (Stream input = download.Content)
+using (FileStream output = File.Create(path))
+{
+    input.CopyTo(output);
 }
+Console.WriteLine($"Saved {new FileInfo(path).Length} bytes to {path}");
 
 ```
 
@@ -1184,21 +1365,29 @@ class DbSubdomainsDaily {
 
 ```csharp
 // Runnable example: Subdomains Weekly (GET /v3.2/download/dbupdate/weekly/subdomains)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbSubdomainsWeekly (GET /v3.2/download/dbupdate/weekly/subdomains):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 using System;
+using System.IO;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DbSubdomainsWeekly {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesSubdomainsApi(config);
-        var result = api.DbSubdomainsWeekly(DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd"));
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesSubdomainsApi(config);
+
+FileParameter download = api.DbSubdomainsWeekly(date: new DateOnly(2026, 10, 1));
+// The SDK returns the response body as a stream: copy it to a file.
+var path = Path.GetFullPath("DbSubdomainsWeekly.csv");
+using (Stream input = download.Content)
+using (FileStream output = File.Create(path))
+{
+    input.CopyTo(output);
 }
+Console.WriteLine($"Saved {new FileInfo(path).Length} bytes to {path}");
 
 ```
 
@@ -1208,21 +1397,29 @@ class DbSubdomainsWeekly {
 
 ```csharp
 // Runnable example: Subdomains Monthly (GET /v3.2/download/dbupdate/monthly/subdomains)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbSubdomainsMonthly (GET /v3.2/download/dbupdate/monthly/subdomains):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 using System;
+using System.IO;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DbSubdomainsMonthly {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesSubdomainsApi(config);
-        var result = api.DbSubdomainsMonthly(DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd"));
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesSubdomainsApi(config);
+
+FileParameter download = api.DbSubdomainsMonthly(date: new DateOnly(2026, 10, 1));
+// The SDK returns the response body as a stream: copy it to a file.
+var path = Path.GetFullPath("DbSubdomainsMonthly.csv");
+using (Stream input = download.Content)
+using (FileStream output = File.Create(path))
+{
+    input.CopyTo(output);
 }
+Console.WriteLine($"Saved {new FileInfo(path).Length} bytes to {path}");
 
 ```
 
@@ -1234,21 +1431,22 @@ class DbSubdomainsMonthly {
 
 ```csharp
 // Runnable example: IP to Country Snapshot Status (GET /v3.3/status/snapshot/ip/country)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbIpCountryStatus (GET /v3.3/status/snapshot/ip/country):
 //   (no parameters; the API key is set on the client)
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
+using WhoisFreaks.Model;
 
-class DbIpCountryStatus {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesIPGeolocationApi(config);
-        var result = api.DbIpCountryStatus();
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesIPGeolocationApi(config);
+
+SnapshotStatus result = api.DbIpCountryStatus();
+Console.WriteLine(result.ToJson());
 
 ```
 
@@ -1258,21 +1456,29 @@ class DbIpCountryStatus {
 
 ```csharp
 // Runnable example: IP to Country Snapshot (GET /v3.3/download/snapshot/ip/country)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbIpCountry (GET /v3.3/download/snapshot/ip/country):
 //   - date (string, required)
 using System;
+using System.IO;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DbIpCountry {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesIPGeolocationApi(config);
-        var result = api.DbIpCountry(DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd"));
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesIPGeolocationApi(config);
+
+FileParameter download = api.DbIpCountry(new DateOnly(2026, 10, 1));
+// The SDK returns the response body as a stream: copy it to a file.
+var path = Path.GetFullPath("DbIpCountry.zip");
+using (Stream input = download.Content)
+using (FileStream output = File.Create(path))
+{
+    input.CopyTo(output);
 }
+Console.WriteLine($"Saved {new FileInfo(path).Length} bytes to {path}");
 
 ```
 
@@ -1282,21 +1488,22 @@ class DbIpCountry {
 
 ```csharp
 // Runnable example: IP to City Snapshot Status (GET /v3.3/status/snapshot/ip/city)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbIpCityStatus (GET /v3.3/status/snapshot/ip/city):
 //   (no parameters; the API key is set on the client)
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
+using WhoisFreaks.Model;
 
-class DbIpCityStatus {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesIPGeolocationApi(config);
-        var result = api.DbIpCityStatus();
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesIPGeolocationApi(config);
+
+SnapshotStatus result = api.DbIpCityStatus();
+Console.WriteLine(result.ToJson());
 
 ```
 
@@ -1306,21 +1513,29 @@ class DbIpCityStatus {
 
 ```csharp
 // Runnable example: IP to City Snapshot (GET /v3.3/download/snapshot/ip/city)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbIpCity (GET /v3.3/download/snapshot/ip/city):
 //   - date (string, required)
 using System;
+using System.IO;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DbIpCity {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesIPGeolocationApi(config);
-        var result = api.DbIpCity(DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd"));
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesIPGeolocationApi(config);
+
+FileParameter download = api.DbIpCity(new DateOnly(2026, 10, 1));
+// The SDK returns the response body as a stream: copy it to a file.
+var path = Path.GetFullPath("DbIpCity.zip");
+using (Stream input = download.Content)
+using (FileStream output = File.Create(path))
+{
+    input.CopyTo(output);
 }
+Console.WriteLine($"Saved {new FileInfo(path).Length} bytes to {path}");
 
 ```
 
@@ -1332,21 +1547,29 @@ class DbIpCity {
 
 ```csharp
 // Runnable example: ASN WHOIS Snapshot (GET /v3.3/download/snapshot/asn/whois)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbAsnWhois (GET /v3.3/download/snapshot/asn/whois):
 //   - date (string, required)
 using System;
+using System.IO;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DbAsnWhois {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesASNWHOISApi(config);
-        var result = api.DbAsnWhois(DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd"));
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesASNWHOISApi(config);
+
+FileParameter download = api.DbAsnWhois(new DateOnly(2026, 10, 1));
+// The SDK returns the response body as a stream: copy it to a file.
+var path = Path.GetFullPath("DbAsnWhois.json.gz");
+using (Stream input = download.Content)
+using (FileStream output = File.Create(path))
+{
+    input.CopyTo(output);
 }
+Console.WriteLine($"Saved {new FileInfo(path).Length} bytes to {path}");
 
 ```
 
@@ -1356,21 +1579,22 @@ class DbAsnWhois {
 
 ```csharp
 // Runnable example: ASN WHOIS Snapshot Status (GET /v3.3/status/snapshot/asn/whois)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbAsnWhoisStatus (GET /v3.3/status/snapshot/asn/whois):
 //   (no parameters; the API key is set on the client)
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
+using WhoisFreaks.Model;
 
-class DbAsnWhoisStatus {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesASNWHOISApi(config);
-        var result = api.DbAsnWhoisStatus();
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesASNWHOISApi(config);
+
+SnapshotStatus result = api.DbAsnWhoisStatus();
+Console.WriteLine(result.ToJson());
 
 ```
 
@@ -1382,21 +1606,29 @@ class DbAsnWhoisStatus {
 
 ```csharp
 // Runnable example: IP WHOIS Snapshot (GET /v3.3/download/snapshot/ip/whois)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbIpWhois (GET /v3.3/download/snapshot/ip/whois):
 //   - date (string, required)
 using System;
+using System.IO;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DbIpWhois {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesIPWHOISApi(config);
-        var result = api.DbIpWhois(DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd"));
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesIPWHOISApi(config);
+
+FileParameter download = api.DbIpWhois(new DateOnly(2026, 10, 1));
+// The SDK returns the response body as a stream: copy it to a file.
+var path = Path.GetFullPath("DbIpWhois.json.gz");
+using (Stream input = download.Content)
+using (FileStream output = File.Create(path))
+{
+    input.CopyTo(output);
 }
+Console.WriteLine($"Saved {new FileInfo(path).Length} bytes to {path}");
 
 ```
 
@@ -1406,21 +1638,22 @@ class DbIpWhois {
 
 ```csharp
 // Runnable example: IP WHOIS Snapshot Status (GET /v3.3/status/snapshot/ip/whois)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbIpWhoisStatus (GET /v3.3/status/snapshot/ip/whois):
 //   (no parameters; the API key is set on the client)
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
+using WhoisFreaks.Model;
 
-class DbIpWhoisStatus {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesIPWHOISApi(config);
-        var result = api.DbIpWhoisStatus();
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesIPWHOISApi(config);
+
+SnapshotStatus result = api.DbIpWhoisStatus();
+Console.WriteLine(result.ToJson());
 
 ```
 
@@ -1432,21 +1665,29 @@ class DbIpWhoisStatus {
 
 ```csharp
 // Runnable example: IP Security Snapshot (GET /v3.3/download/snapshot/ip/security)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbIpSecurity (GET /v3.3/download/snapshot/ip/security):
 //   - date (string, required)
 using System;
+using System.IO;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DbIpSecurity {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesIPSecurityApi(config);
-        var result = api.DbIpSecurity(DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd"));
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesIPSecurityApi(config);
+
+FileParameter download = api.DbIpSecurity(new DateOnly(2026, 10, 1));
+// The SDK returns the response body as a stream: copy it to a file.
+var path = Path.GetFullPath("DbIpSecurity.csv");
+using (Stream input = download.Content)
+using (FileStream output = File.Create(path))
+{
+    input.CopyTo(output);
 }
+Console.WriteLine($"Saved {new FileInfo(path).Length} bytes to {path}");
 
 ```
 
@@ -1456,21 +1697,22 @@ class DbIpSecurity {
 
 ```csharp
 // Runnable example: IP Security Snapshot Status (GET /v3.3/status/snapshot/ip/security)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbIpSecurityStatus (GET /v3.3/status/snapshot/ip/security):
 //   (no parameters; the API key is set on the client)
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
+using WhoisFreaks.Model;
 
-class DbIpSecurityStatus {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesIPSecurityApi(config);
-        var result = api.DbIpSecurityStatus();
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesIPSecurityApi(config);
+
+SnapshotStatus result = api.DbIpSecurityStatus();
+Console.WriteLine(result.ToJson());
 
 ```
 
@@ -1482,21 +1724,29 @@ class DbIpSecurityStatus {
 
 ```csharp
 // Runnable example: Download the daily phishing threat feed (CSV) (GET /v3.4/download/threat-feed/phishing)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for downloadThreatFeedPhishing (GET /v3.4/download/threat-feed/phishing):
-//   - date (string, optional): Feed date (yyyy-MM-dd); defaults to latest available
+//   - date (string, optional): Feed date (yyyy-MM-dd); omit for the full dump of the feed
 using System;
+using System.IO;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DownloadThreatFeedPhishing {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesThreatFeedApi(config);
-        var result = api.DownloadThreatFeedPhishing(DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd"));
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesThreatFeedApi(config);
+
+FileParameter download = api.DownloadThreatFeedPhishing(date: "2026-10-01");
+// The SDK returns the response body as a stream: copy it to a file.
+var path = Path.GetFullPath("DownloadThreatFeedPhishing.csv");
+using (Stream input = download.Content)
+using (FileStream output = File.Create(path))
+{
+    input.CopyTo(output);
 }
+Console.WriteLine($"Saved {new FileInfo(path).Length} bytes to {path}");
 
 ```
 
@@ -1506,21 +1756,29 @@ class DownloadThreatFeedPhishing {
 
 ```csharp
 // Runnable example: Download a sample of the phishing threat feed (CSV) (GET /v3.4/download/threat-feed/phishing/sample)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for downloadThreatFeedPhishingSample (GET /v3.4/download/threat-feed/phishing/sample):
 //   (no parameters; the API key is set on the client)
 using System;
+using System.IO;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DownloadThreatFeedPhishingSample {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesThreatFeedApi(config);
-        var result = api.DownloadThreatFeedPhishingSample();
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesThreatFeedApi(config);
+
+FileParameter download = api.DownloadThreatFeedPhishingSample();
+// The SDK returns the response body as a stream: copy it to a file.
+var path = Path.GetFullPath("DownloadThreatFeedPhishingSample.csv");
+using (Stream input = download.Content)
+using (FileStream output = File.Create(path))
+{
+    input.CopyTo(output);
 }
+Console.WriteLine($"Saved {new FileInfo(path).Length} bytes to {path}");
 
 ```
 
@@ -1530,21 +1788,29 @@ class DownloadThreatFeedPhishingSample {
 
 ```csharp
 // Runnable example: Download the daily malware threat feed (CSV) (GET /v3.4/download/threat-feed/malware)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for downloadThreatFeedMalware (GET /v3.4/download/threat-feed/malware):
-//   - date (string, optional): Feed date (yyyy-MM-dd); defaults to latest available
+//   - date (string, optional): Feed date (yyyy-MM-dd); omit for the full dump of the feed
 using System;
+using System.IO;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DownloadThreatFeedMalware {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesThreatFeedApi(config);
-        var result = api.DownloadThreatFeedMalware(DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd"));
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesThreatFeedApi(config);
+
+FileParameter download = api.DownloadThreatFeedMalware(date: "2026-10-01");
+// The SDK returns the response body as a stream: copy it to a file.
+var path = Path.GetFullPath("DownloadThreatFeedMalware.csv");
+using (Stream input = download.Content)
+using (FileStream output = File.Create(path))
+{
+    input.CopyTo(output);
 }
+Console.WriteLine($"Saved {new FileInfo(path).Length} bytes to {path}");
 
 ```
 
@@ -1554,21 +1820,29 @@ class DownloadThreatFeedMalware {
 
 ```csharp
 // Runnable example: Download a sample of the malware threat feed (CSV) (GET /v3.4/download/threat-feed/malware/sample)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for downloadThreatFeedMalwareSample (GET /v3.4/download/threat-feed/malware/sample):
 //   (no parameters; the API key is set on the client)
 using System;
+using System.IO;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DownloadThreatFeedMalwareSample {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesThreatFeedApi(config);
-        var result = api.DownloadThreatFeedMalwareSample();
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesThreatFeedApi(config);
+
+FileParameter download = api.DownloadThreatFeedMalwareSample();
+// The SDK returns the response body as a stream: copy it to a file.
+var path = Path.GetFullPath("DownloadThreatFeedMalwareSample.csv");
+using (Stream input = download.Content)
+using (FileStream output = File.Create(path))
+{
+    input.CopyTo(output);
 }
+Console.WriteLine($"Saved {new FileInfo(path).Length} bytes to {path}");
 
 ```
 
@@ -1578,21 +1852,29 @@ class DownloadThreatFeedMalwareSample {
 
 ```csharp
 // Runnable example: Download the daily spam threat feed (CSV) (GET /v3.4/download/threat-feed/spam)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for downloadThreatFeedSpam (GET /v3.4/download/threat-feed/spam):
-//   - date (string, optional): Feed date (yyyy-MM-dd); defaults to latest available
+//   - date (string, optional): Feed date (yyyy-MM-dd); omit for the full dump of the feed
 using System;
+using System.IO;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DownloadThreatFeedSpam {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesThreatFeedApi(config);
-        var result = api.DownloadThreatFeedSpam(DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd"));
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesThreatFeedApi(config);
+
+FileParameter download = api.DownloadThreatFeedSpam(date: "2026-10-01");
+// The SDK returns the response body as a stream: copy it to a file.
+var path = Path.GetFullPath("DownloadThreatFeedSpam.csv");
+using (Stream input = download.Content)
+using (FileStream output = File.Create(path))
+{
+    input.CopyTo(output);
 }
+Console.WriteLine($"Saved {new FileInfo(path).Length} bytes to {path}");
 
 ```
 
@@ -1602,20 +1884,28 @@ class DownloadThreatFeedSpam {
 
 ```csharp
 // Runnable example: Download a sample of the spam threat feed (CSV) (GET /v3.4/download/threat-feed/spam/sample)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for downloadThreatFeedSpamSample (GET /v3.4/download/threat-feed/spam/sample):
 //   (no parameters; the API key is set on the client)
 using System;
+using System.IO;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DownloadThreatFeedSpamSample {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesThreatFeedApi(config);
-        var result = api.DownloadThreatFeedSpamSample();
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesThreatFeedApi(config);
+
+FileParameter download = api.DownloadThreatFeedSpamSample();
+// The SDK returns the response body as a stream: copy it to a file.
+var path = Path.GetFullPath("DownloadThreatFeedSpamSample.csv");
+using (Stream input = download.Content)
+using (FileStream output = File.Create(path))
+{
+    input.CopyTo(output);
 }
+Console.WriteLine($"Saved {new FileInfo(path).Length} bytes to {path}");
 
 ```

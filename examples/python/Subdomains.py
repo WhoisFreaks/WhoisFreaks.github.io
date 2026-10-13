@@ -1,18 +1,25 @@
-"""Runnable example: Subdomains Lookup (GET /v1.0/subdomains)."""
-from datetime import date, timedelta
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.subdomains_api import SubdomainsApi
+"""Subdomains Lookup: GET https://api.whoisfreaks.com/v1.0/subdomains
 
-# Parameters for subdomains (GET /v1.0/subdomains):
-#   - domain (string, required)
-#   - after (string, optional)
-#   - before (string, optional)
-#   - status (string (one of: active, inactive), optional)
-#   - page (integer, optional)
-#   - format (string (one of: json, xml), optional)
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = SubdomainsApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python Subdomains.py
+"""
+import json
+import os
 
-result = api.subdomains(domain="example.com", after="2000-01-01", before=str(date.today()))
-print(result)
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.SubdomainsApi(client)
+
+    # subdomains parameters:
+    #   domain (str, required)
+    #   after (datetime.date, optional, keyword)
+    #   before (datetime.date, optional, keyword)
+    #   status (str, optional, keyword): one of active, inactive
+    #   page (int, optional, keyword): default 1
+    #   format (str, optional, keyword): one of json, xml; default "json"
+    result = api.subdomains("whoisfreaks.com", page=1)
+    print(json.dumps(result.to_dict(), indent=2))

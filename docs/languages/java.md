@@ -2,7 +2,7 @@
 
 ## About
 
-The official **WhoisFreaks Java SDK** — a complete client for WHOIS, DNS, SSL, domain availability, subdomain, IP geolocation, IP reputation, ASN, typosquatting, and domain reputation lookups, plus bulk database downloads. Query real-time and historical domain data, reverse WHOIS, and threat intelligence from Java with a single API key. Generated from the WhoisFreaks OpenAPI specification and published to Maven Central.
+The official **WhoisFreaks Java SDK**: a complete client for WHOIS, DNS, SSL, domain availability, subdomain, IP geolocation, IP reputation, ASN, typosquatting, and domain reputation lookups, plus bulk database downloads. Query real-time and historical domain data, reverse WHOIS, and threat intelligence from Java with a single API key. Generated from the WhoisFreaks OpenAPI specification and published to Maven Central.
 
 **Keywords:** java whois api, java whois sdk, whoisfreaks java, java domain lookup, java dns api, whois api, whois lookup, domain api, dns api, dns lookup, reverse whois, historical whois, domain availability api, ssl certificate api, ip geolocation api, ip reputation api, asn lookup, subdomain finder, typosquatting api, domain reputation, threat intelligence api, domain data api, whois sdk, domain monitoring, brand protection api
 
@@ -15,13 +15,13 @@ The official **WhoisFreaks Java SDK** — a complete client for WHOIS, DNS, SSL,
 <dependency>
   <groupId>com.whoisfreaks</groupId>
   <artifactId>whoisfreaks</artifactId>
-  <version>LATEST</version>
+  <version>0.23.0</version>
 </dependency>
 ```
 
 ## Build from Source
 
-Prefer to build the SDK yourself instead of installing from Maven Central? Clone the monorepo and build the Java package locally:
+Prefer to build the SDK yourself instead of installing from Maven Central? Clone the Java SDK repository and build it locally:
 
 ```bash
 git clone https://github.com/WhoisFreaks/whoisfreaks-java
@@ -33,37 +33,83 @@ mvn clean install   # builds + installs to local ~/.m2
 
 A complete walkthrough from an empty directory to a running program:
 
-Create a Maven project and add the dependency to `pom.xml`:
+You need JDK 8 or later and Maven. Create the project directory:
 
-```xml
-<dependency>
-  <groupId>com.whoisfreaks</groupId>
-  <artifactId>whoisfreaks</artifactId>
-  <version>LATEST</version>   <!-- pin to a real version, e.g. 1.0.0 -->
-</dependency>
+```bash
+mkdir -p whoisfreaks-test/src/main/java && cd whoisfreaks-test
 ```
 
-`src/main/java/Main.java`:
+Create `pom.xml`. The `exec.mainClass` property picks the class that `mvn exec:java` runs:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.example</groupId>
+  <artifactId>whoisfreaks-test</artifactId>
+  <version>1.0-SNAPSHOT</version>
+
+  <properties>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <exec.mainClass>Main</exec.mainClass>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.whoisfreaks</groupId>
+      <artifactId>whoisfreaks</artifactId>
+      <version>0.23.0</version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.5.0</version>
+      </plugin>
+    </plugins>
+  </build>
+</project>
+```
+
+Create `src/main/java/Main.java`:
 
 ```java
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.WhoisApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.WhoisResponse;
 
 public class Main {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
-        WhoisApi api = new WhoisApi(client);
-        var result = api.whoisLive("example.com");
-        System.out.println(result);
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
+
+        WhoisApi whois = new WhoisApi(client);
+        // whoisLive(domainName, format); null format returns JSON
+        WhoisResponse record = whois.whoisLive("whoisfreaks.com", null);
+        System.out.println(record.getDomainName() + " expires " + record.getExpiryDate());
+        System.out.println(record);
     }
 }
 ```
 
-Build and run with `mvn compile exec:java -Dexec.mainClass=Main` (or your IDE).
+Set your API key and run it:
+
+```bash
+export WHOISFREAKS_API_KEY="your_api_key"
+mvn -q compile exec:java
+```
+
+To run one of the [runnable examples](../../examples/java/README.md), copy it into `src/main/java` and pass its class name, for example `mvn -q compile exec:java -Dexec.mainClass=WhoisLive`.
 
 ## Configure
 
@@ -71,21 +117,25 @@ See [Authentication](../authentication.md) for how to obtain a key. Minimal setu
 
 ```java
 // Runnable example: Live WHOIS Lookup (GET /v2.0/whois/live)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=WhoisLive
 // Parameters for whoisLive (GET /v2.0/whois/live):
 //   - domainName (string, required)
 //   - format (string (one of: json, xml), optional)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.WhoisApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.WhoisResponse;
 
 public class WhoisLive {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         WhoisApi api = new WhoisApi(client);
-        var result = api.whoisLive("example.com", null);
+
+        // whoisLive(domainName, format); null leaves an optional parameter unset
+        WhoisResponse result = api.whoisLive("whoisfreaks.com", null);
         System.out.println(result);
     }
 }
@@ -104,21 +154,25 @@ All 60 endpoints are shown below, grouped by category. Each includes its method,
 
 ```java
 // Runnable example: Live WHOIS Lookup (GET /v2.0/whois/live)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=WhoisLive
 // Parameters for whoisLive (GET /v2.0/whois/live):
 //   - domainName (string, required)
 //   - format (string (one of: json, xml), optional)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.WhoisApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.WhoisResponse;
 
 public class WhoisLive {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         WhoisApi api = new WhoisApi(client);
-        var result = api.whoisLive("example.com", null);
+
+        // whoisLive(domainName, format); null leaves an optional parameter unset
+        WhoisResponse result = api.whoisLive("whoisfreaks.com", null);
         System.out.println(result);
     }
 }
@@ -131,22 +185,30 @@ public class WhoisLive {
 
 ```java
 // Runnable example: Bulk WHOIS Lookup (POST /v2.0/bulkwhois/live)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=BulkWhois
 // Parameters for bulkWhois (POST /v2.0/bulkwhois/live):
 //   - format (string (one of: json, xml), optional)
-//   - body: BulkWhoisRequest (required) -- request body object
+//   - body: BulkWhoisRequest (required): request body object
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.WhoisApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.model.BulkWhoisRequest;
+import com.whoisfreaks.client.model.BulkWhoisResponse;
+
+import java.util.Arrays;
 
 public class BulkWhois {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         WhoisApi api = new WhoisApi(client);
-        var result = api.bulkWhois(new BulkWhoisRequest(), null);
+
+        BulkWhoisRequest body = new BulkWhoisRequest()
+            .domainNames(Arrays.asList("whoisfreaks.com", "jfreaks.com"));
+        // bulkWhois(bulkWhoisRequest, format); null leaves an optional parameter unset
+        BulkWhoisResponse result = api.bulkWhois(body, null);
         System.out.println(result);
     }
 }
@@ -159,22 +221,25 @@ public class BulkWhois {
 
 ```java
 // Runnable example: Historical WHOIS records for a domain (GET /v2.0/whois/history)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=WhoisHistory
 // Parameters for whoisHistory (GET /v2.0/whois/history):
 //   - domainName (string, required): Domain to fetch historical WHOIS records for
-//   - page (integer, optional): Page number
 //   - format (string (one of: json, xml), optional)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.WhoisApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.WhoisHistoricalResponse;
 
 public class WhoisHistory {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         WhoisApi api = new WhoisApi(client);
-        var result = api.whoisHistory("example.com", null, null);
+
+        // whoisHistory(domainName, format); null leaves an optional parameter unset
+        WhoisHistoricalResponse result = api.whoisHistory("whoisfreaks.com", null);
         System.out.println(result);
     }
 }
@@ -187,22 +252,26 @@ public class WhoisHistory {
 
 ```java
 // Runnable example: Reverse WHOIS lookup by keyword (GET /v2.0/whois/reverse)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=WhoisReverse
 // Parameters for whoisReverse (GET /v2.0/whois/reverse):
 //   - keyword (string, required): Keyword to search across WHOIS records
 //   - page (integer, optional): Page number
 //   - format (string (one of: json, xml), optional)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.WhoisApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.ReverseWhoisResponse;
 
 public class WhoisReverse {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         WhoisApi api = new WhoisApi(client);
-        var result = api.whoisReverse("value", null, null);
+
+        // whoisReverse(keyword, page, format); null leaves an optional parameter unset
+        ReverseWhoisResponse result = api.whoisReverse("whoisfreaks", 1, null);
         System.out.println(result);
     }
 }
@@ -217,23 +286,27 @@ public class WhoisReverse {
 
 ```java
 // Runnable example: Live DNS Lookup (GET /v2.0/dns/live)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DnsLive
 // Parameters for dnsLive (GET /v2.0/dns/live):
-//   - domainName (string, required)
-//   - ipAddress (string, required): Use for PTR lookups
+//   - domainName (string, optional)
+//   - ipAddress (string, optional): Use for PTR lookups
 //   - type (string, required): all or comma-separated: A,MX,NS,TXT,SOA,SPF,AAAA,CNAME
 //   - format (string (one of: json, xml), optional)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DnsApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.DnsResponse;
 
 public class DnsLive {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DnsApi api = new DnsApi(client);
-        var result = api.dnsLive("example.com", "8.8.8.8", "value", null);
+
+        // dnsLive(type, domainName, ipAddress, format); null leaves an optional parameter unset
+        DnsResponse result = api.dnsLive("A,MX,TXT", "whoisfreaks.com", null, null);
         System.out.println(result);
     }
 }
@@ -246,6 +319,7 @@ public class DnsLive {
 
 ```java
 // Runnable example: Historical DNS Lookup (GET /v2.0/dns/historical)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DnsHistorical
 // Parameters for dnsHistorical (GET /v2.0/dns/historical):
 //   - domainName (string, required)
 //   - type (string, required)
@@ -253,16 +327,19 @@ public class DnsLive {
 //   - format (string (one of: json, xml), optional)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DnsApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.HistoricalDnsResponse;
 
 public class DnsHistorical {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DnsApi api = new DnsApi(client);
-        var result = api.dnsHistorical("example.com", "value", null, null);
+
+        // dnsHistorical(domainName, type, page, format); null leaves an optional parameter unset
+        HistoricalDnsResponse result = api.dnsHistorical("whoisfreaks.com", "A,MX,TXT", 1, null);
         System.out.println(result);
     }
 }
@@ -275,6 +352,7 @@ public class DnsHistorical {
 
 ```java
 // Runnable example: Reverse DNS Lookup (GET /v2.1/dns/reverse)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DnsReverse
 // Parameters for dnsReverse (GET /v2.1/dns/reverse):
 //   - value (string, required): IP, CIDR, or record value
 //   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
@@ -283,16 +361,19 @@ public class DnsHistorical {
 //   - format (string (one of: json, xml), optional)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DnsApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.ReverseDnsResponse;
 
 public class DnsReverse {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DnsApi api = new DnsApi(client);
-        var result = api.dnsReverse("value", "a", true, null, null);
+
+        // dnsReverse(value, type, exact, page, format); null leaves an optional parameter unset
+        ReverseDnsResponse result = api.dnsReverse("8.8.8.8", "a", null, 1, null);
         System.out.println(result);
     }
 }
@@ -305,23 +386,31 @@ public class DnsReverse {
 
 ```java
 // Runnable example: Bulk DNS Lookup (POST /v2.0/dns/bulk/live)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DnsBulk
 // Parameters for dnsBulk (POST /v2.0/dns/bulk/live):
 //   - type (string, required)
 //   - format (string (one of: json, xml), optional)
-//   - body: DnsBulkRequest (required) -- request body object
+//   - body: DnsBulkRequest (required): request body object
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DnsApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.BulkDnsResponse;
 import com.whoisfreaks.client.model.DnsBulkRequest;
+
+import java.util.Arrays;
 
 public class DnsBulk {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DnsApi api = new DnsApi(client);
-        var result = api.dnsBulk("value", new DnsBulkRequest(), null);
+
+        DnsBulkRequest body = new DnsBulkRequest()
+            .domainNames(Arrays.asList("whoisfreaks.com", "example.com"));
+        // dnsBulk(type, dnsBulkRequest, format); null leaves an optional parameter unset
+        BulkDnsResponse result = api.dnsBulk("A,MX,TXT", body, null);
         System.out.println(result);
     }
 }
@@ -336,6 +425,7 @@ public class DnsBulk {
 
 ```java
 // Runnable example: Domain Availability Check with Suggestions (GET /v2.0/domain/availability)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DomainAvailabilityV2
 // Parameters for domainAvailabilityV2 (GET /v2.0/domain/availability):
 //   - domain (string, required): The domain name to check
 //   - sug (boolean, optional): Whether to return TLD suggestions alongside the queried domain.
@@ -343,16 +433,19 @@ public class DnsBulk {
 //   - format (string (one of: json, xml), optional)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DomainAvailabilityApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.DomainAvailabilityResponse;
 
 public class DomainAvailabilityV2 {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DomainAvailabilityApi api = new DomainAvailabilityApi(client);
-        var result = api.domainAvailabilityV2("example.com", null, null, null);
+
+        // domainAvailabilityV2(domain, sug, count, format); null leaves an optional parameter unset
+        DomainAvailabilityResponse result = api.domainAvailabilityV2("google.com", true, 5, null);
         System.out.println(result);
     }
 }
@@ -365,23 +458,31 @@ public class DomainAvailabilityV2 {
 
 ```java
 // Runnable example: Bulk Domain Availability Check (POST /v2.0/domain/availability)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=BulkDomainAvailabilityV2
 // Parameters for bulkDomainAvailabilityV2 (POST /v2.0/domain/availability):
 //   - domain (string, optional): Required for TLD-mode bulk check (base domain).
 //   - format (string (one of: json, xml), optional)
-//   - body: BulkDomainAvailabilityRequest (required) -- request body object
+//   - body: BulkDomainAvailabilityRequest (required): request body object
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DomainAvailabilityApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.model.BulkDomainAvailabilityRequest;
+import com.whoisfreaks.client.model.BulkDomainAvailabilityResponse;
+
+import java.util.Arrays;
 
 public class BulkDomainAvailabilityV2 {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DomainAvailabilityApi api = new DomainAvailabilityApi(client);
-        var result = api.bulkDomainAvailabilityV2(new BulkDomainAvailabilityRequest(), null, null);
+
+        BulkDomainAvailabilityRequest body = new BulkDomainAvailabilityRequest()
+            .domainNames(Arrays.asList("whoisfreaks.com", "example.com"));
+        // bulkDomainAvailabilityV2(bulkDomainAvailabilityRequest, domain, format); null leaves an optional parameter unset
+        BulkDomainAvailabilityResponse result = api.bulkDomainAvailabilityV2(body, null, null);
         System.out.println(result);
     }
 }
@@ -396,22 +497,26 @@ public class BulkDomainAvailabilityV2 {
 
 ```java
 // Runnable example: Typosquatting Lookup (GET /v3.0/domain/typos)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=Typosquatting
 // Parameters for typosquatting (GET /v3.0/domain/typos):
 //   - keyword (string, optional)
 //   - pattern (string, optional)
 //   - pageToken (string, optional)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.TyposquattingApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.TyposquattingResponse;
 
 public class Typosquatting {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         TyposquattingApi api = new TyposquattingApi(client);
-        var result = api.typosquatting(null, null, null);
+
+        // typosquatting(keyword, pattern, pageToken); null leaves an optional parameter unset
+        TyposquattingResponse result = api.typosquatting("whoisfreaks", null, null);
         System.out.println(result);
     }
 }
@@ -426,6 +531,7 @@ public class Typosquatting {
 
 ```java
 // Runnable example: SSL Certificate Lookup (GET /v1.0/ssl/live)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=SslLookup
 // Parameters for sslLookup (GET /v1.0/ssl/live):
 //   - domainName (string, required)
 //   - chain (boolean, optional)
@@ -433,16 +539,19 @@ public class Typosquatting {
 //   - format (string (one of: json, xml), optional)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.SslApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.SslResponse;
 
 public class SslLookup {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         SslApi api = new SslApi(client);
-        var result = api.sslLookup("example.com", null, null, null);
+
+        // sslLookup(domainName, chain, sslRaw, format); null leaves an optional parameter unset
+        SslResponse result = api.sslLookup("whoisfreaks.com", null, null, null);
         System.out.println(result);
     }
 }
@@ -457,20 +566,23 @@ public class SslLookup {
 
 ```java
 // Runnable example: IP Geolocation Lookup (GET /v1.0/geolocation)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=Geolocation
 // Parameters for geolocation (GET /v1.0/geolocation):
 //   - ip (string, required)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.GeolocationApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.GeolocationResponse;
 
 public class Geolocation {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         GeolocationApi api = new GeolocationApi(client);
-        var result = api.geolocation("8.8.8.8");
+
+        GeolocationResponse result = api.geolocation("8.8.8.8");
         System.out.println(result);
     }
 }
@@ -483,21 +595,29 @@ public class Geolocation {
 
 ```java
 // Runnable example: Bulk IP Geolocation (POST /v1.0/geolocation)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=BulkGeolocation
 // Parameters for bulkGeolocation (POST /v1.0/geolocation):
-//   - body: BulkGeolocationRequest (required) -- request body object
+//   - body: BulkGeolocationRequest (required): request body object
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.GeolocationApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.model.BulkGeolocationRequest;
+import com.whoisfreaks.client.model.GeolocationResponse;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class BulkGeolocation {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         GeolocationApi api = new GeolocationApi(client);
-        var result = api.bulkGeolocation(new BulkGeolocationRequest());
+
+        BulkGeolocationRequest body = new BulkGeolocationRequest()
+            .ips(Arrays.asList("8.8.8.8", "1.1.1.1"));
+        List<GeolocationResponse> result = api.bulkGeolocation(body);
         System.out.println(result);
     }
 }
@@ -512,6 +632,7 @@ public class BulkGeolocation {
 
 ```java
 // Runnable example: Subdomains Lookup (GET /v1.0/subdomains)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=Subdomains
 // Parameters for subdomains (GET /v1.0/subdomains):
 //   - domain (string, required)
 //   - after (string, optional)
@@ -521,16 +642,19 @@ public class BulkGeolocation {
 //   - format (string (one of: json, xml), optional)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.SubdomainsApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.SubdomainsResponse;
 
 public class Subdomains {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         SubdomainsApi api = new SubdomainsApi(client);
-        var result = api.subdomains("example.com", "2000-01-01", java.time.LocalDate.now().toString(), null, null, null);
+
+        // subdomains(domain, after, before, status, page, format); null leaves an optional parameter unset
+        SubdomainsResponse result = api.subdomains("whoisfreaks.com", null, null, null, 1, null);
         System.out.println(result);
     }
 }
@@ -545,20 +669,23 @@ public class Subdomains {
 
 ```java
 // Runnable example: IP Reputation Lookup (GET /v1.0/security)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=IpReputation
 // Parameters for ipReputation (GET /v1.0/security):
 //   - ip (string, required)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.IpReputationApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.IpReputationResponse;
 
 public class IpReputation {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         IpReputationApi api = new IpReputationApi(client);
-        var result = api.ipReputation("8.8.8.8");
+
+        IpReputationResponse result = api.ipReputation("8.8.8.8");
         System.out.println(result);
     }
 }
@@ -571,21 +698,29 @@ public class IpReputation {
 
 ```java
 // Runnable example: Bulk IP Reputation (POST /v1.0/security)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=BulkIpReputation
 // Parameters for bulkIpReputation (POST /v1.0/security):
-//   - body: BulkIpReputationRequest (required) -- request body object
+//   - body: BulkGeolocationRequest (required): request body object
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.IpReputationApi;
-import com.whoisfreaks.client.model.BulkIpReputationRequest;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.BulkGeolocationRequest;
+import com.whoisfreaks.client.model.IpReputationResponse;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class BulkIpReputation {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         IpReputationApi api = new IpReputationApi(client);
-        var result = api.bulkIpReputation(new BulkIpReputationRequest());
+
+        BulkGeolocationRequest body = new BulkGeolocationRequest()
+            .ips(Arrays.asList("8.8.8.8", "1.1.1.1"));
+        List<IpReputationResponse> result = api.bulkIpReputation(body);
         System.out.println(result);
     }
 }
@@ -600,21 +735,25 @@ public class BulkIpReputation {
 
 ```java
 // Runnable example: Domain Reputation Lookup (GET /v1/domain/security)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DomainReputation
 // Parameters for domainReputation (GET /v1/domain/security):
 //   - domainName (string, required): The domain name to assess
 //   - format (string (one of: json, xml), optional)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DomainReputationApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.DomainReputationResponse;
 
 public class DomainReputation {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DomainReputationApi api = new DomainReputationApi(client);
-        var result = api.domainReputation("example.com", null);
+
+        // domainReputation(domainName, format); null leaves an optional parameter unset
+        DomainReputationResponse result = api.domainReputation("amazon.com", null);
         System.out.println(result);
     }
 }
@@ -629,21 +768,25 @@ public class DomainReputation {
 
 ```java
 // Runnable example: ASN WHOIS Lookup (GET /v2.0/asn-whois)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=AsnWhois
 // Parameters for asnWhois (GET /v2.0/asn-whois):
 //   - asn (string, required)
 //   - format (string (one of: json, xml), optional)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.AsnWhoisApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.AsnWhoisResponse;
 
 public class AsnWhois {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         AsnWhoisApi api = new AsnWhoisApi(client);
-        var result = api.asnWhois("AS15169", null);
+
+        // asnWhois(asn, format); null leaves an optional parameter unset
+        AsnWhoisResponse result = api.asnWhois("as15169", null);
         System.out.println(result);
     }
 }
@@ -658,21 +801,25 @@ public class AsnWhois {
 
 ```java
 // Runnable example: IP WHOIS Lookup (GET /v1.0/ip-whois)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=IpWhois
 // Parameters for ipWhois (GET /v1.0/ip-whois):
 //   - ip (string, required)
 //   - format (string (one of: json, xml), optional)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.IpWhoisApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.IpWhoisResponse;
 
 public class IpWhois {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         IpWhoisApi api = new IpWhoisApi(client);
-        var result = api.ipWhois("8.8.8.8", null);
+
+        // ipWhois(ip, format); null leaves an optional parameter unset
+        IpWhoisResponse result = api.ipWhois("8.8.8.8", null);
         System.out.println(result);
     }
 }
@@ -687,21 +834,24 @@ public class IpWhois {
 
 ```java
 // Runnable example: Rotate API Key (GET /v1.0/api-key/rotate)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=RotateApiKey
 // Parameters for rotateApiKey (GET /v1.0/api-key/rotate):
 //   (no parameters; the API key is set on the client)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.AccountApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
 
 public class RotateApiKey {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         AccountApi api = new AccountApi(client);
-        var result = api.rotateApiKey();
-        System.out.println(result);
+
+        String newKey = api.rotateApiKey();
+        // The old key stops working: store the new one, e.g. in WHOISFREAKS_API_KEY.
+        System.out.println("New API key: " + newKey);
     }
 }
 
@@ -713,20 +863,23 @@ public class RotateApiKey {
 
 ```java
 // Runnable example: Account Usage (GET /v1.0/whoisapi/usage)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=AccountUsage
 // Parameters for accountUsage (GET /v1.0/whoisapi/usage):
 //   (no parameters; the API key is set on the client)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.AccountApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.AccountUsageResponse;
 
 public class AccountUsage {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         AccountApi api = new AccountApi(client);
-        var result = api.accountUsage();
+
+        AccountUsageResponse result = api.accountUsage();
         System.out.println(result);
     }
 }
@@ -739,20 +892,20 @@ public class AccountUsage {
 
 ```java
 // Runnable example: Database File Status (Public) (GET /v3.4/status)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DatabaseFileStatus
 // Parameters for databaseFileStatus (GET /v3.4/status):
-//   (no parameters; the API key is set on the client)
+//   (no parameters; no API key required)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.AccountApi;
 
 public class DatabaseFileStatus {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        // Public endpoint: no API key needed.
         AccountApi api = new AccountApi(client);
-        var result = api.databaseFileStatus();
+
+        com.whoisfreaks.client.model.DatabaseFileStatus result = api.databaseFileStatus();
         System.out.println(result);
     }
 }
@@ -767,23 +920,36 @@ public class DatabaseFileStatus {
 
 ```java
 // Runnable example: Newly Registered gTLD (CSV) (GET /v3.1/download/domainer/gtld)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbNewlyGtld
 // Parameters for dbNewlyGtld (GET /v3.1/download/domainer/gtld):
 //   - whois (boolean, required)
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 //   - tlds (string, optional)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesNewlyRegisteredApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 
 public class DbNewlyGtld {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesNewlyRegisteredApi api = new DatabasesNewlyRegisteredApi(client);
-        var result = api.dbNewlyGtld(false, java.time.LocalDate.now().minusDays(1).toString(), null);
-        System.out.println(result);
+
+        // dbNewlyGtld(whois, date, tlds); null leaves an optional parameter unset
+        File download = api.dbNewlyGtld(true, LocalDate.of(2026, 10, 1), null);
+        // The SDK saves the response to a temporary file: move it where you want it.
+        Path target = Paths.get("DbNewlyGtld.csv");
+        Files.move(download.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("Saved " + Files.size(target) + " bytes to " + target.toAbsolutePath());
     }
 }
 
@@ -795,23 +961,36 @@ public class DbNewlyGtld {
 
 ```java
 // Runnable example: Newly Registered ccTLD (CSV) (GET /v3.1/download/domainer/cctld)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbNewlyCctld
 // Parameters for dbNewlyCctld (GET /v3.1/download/domainer/cctld):
 //   - whois (boolean, required)
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 //   - tlds (string, optional)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesNewlyRegisteredApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 
 public class DbNewlyCctld {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesNewlyRegisteredApi api = new DatabasesNewlyRegisteredApi(client);
-        var result = api.dbNewlyCctld(false, java.time.LocalDate.now().minusDays(1).toString(), null);
-        System.out.println(result);
+
+        // dbNewlyCctld(whois, date, tlds); null leaves an optional parameter unset
+        File download = api.dbNewlyCctld(true, LocalDate.of(2026, 10, 1), null);
+        // The SDK saves the response to a temporary file: move it where you want it.
+        Path target = Paths.get("DbNewlyCctld.csv");
+        Files.move(download.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("Saved " + Files.size(target) + " bytes to " + target.toAbsolutePath());
     }
 }
 
@@ -823,21 +1002,33 @@ public class DbNewlyCctld {
 
 ```java
 // Runnable example: Newly Registered gTLD Cleaned WHOIS (CSV) (GET /v3.1/download/domainer/gtld/cleaned)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbNewlyGtldCleaned
 // Parameters for dbNewlyGtldCleaned (GET /v3.1/download/domainer/gtld/cleaned):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesNewlyRegisteredApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 
 public class DbNewlyGtldCleaned {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesNewlyRegisteredApi api = new DatabasesNewlyRegisteredApi(client);
-        var result = api.dbNewlyGtldCleaned(java.time.LocalDate.now().minusDays(1).toString());
-        System.out.println(result);
+
+        File download = api.dbNewlyGtldCleaned(LocalDate.of(2026, 10, 1));
+        // The SDK saves the response to a temporary file: move it where you want it.
+        Path target = Paths.get("DbNewlyGtldCleaned.csv");
+        Files.move(download.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("Saved " + Files.size(target) + " bytes to " + target.toAbsolutePath());
     }
 }
 
@@ -849,21 +1040,33 @@ public class DbNewlyGtldCleaned {
 
 ```java
 // Runnable example: Newly Registered ccTLD Cleaned WHOIS (CSV) (GET /v3.1/download/domainer/cctld/cleaned)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbNewlyCctldCleaned
 // Parameters for dbNewlyCctldCleaned (GET /v3.1/download/domainer/cctld/cleaned):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesNewlyRegisteredApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 
 public class DbNewlyCctldCleaned {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesNewlyRegisteredApi api = new DatabasesNewlyRegisteredApi(client);
-        var result = api.dbNewlyCctldCleaned(java.time.LocalDate.now().minusDays(1).toString());
-        System.out.println(result);
+
+        File download = api.dbNewlyCctldCleaned(LocalDate.of(2026, 10, 1));
+        // The SDK saves the response to a temporary file: move it where you want it.
+        Path target = Paths.get("DbNewlyCctldCleaned.csv");
+        Files.move(download.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("Saved " + Files.size(target) + " bytes to " + target.toAbsolutePath());
     }
 }
 
@@ -875,21 +1078,27 @@ public class DbNewlyCctldCleaned {
 
 ```java
 // Runnable example: Newly Registered gTLD (JSON) (GET /v3.1/domains/newly/gtld)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbNewlyGtldJson
 // Parameters for dbNewlyGtldJson (GET /v3.1/domains/newly/gtld):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 //   - tlds (string, optional)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesNewlyRegisteredApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.time.LocalDate;
+import java.util.List;
 
 public class DbNewlyGtldJson {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesNewlyRegisteredApi api = new DatabasesNewlyRegisteredApi(client);
-        var result = api.dbNewlyGtldJson(java.time.LocalDate.now().minusDays(1).toString(), null);
+
+        // dbNewlyGtldJson(date, tlds); null leaves an optional parameter unset
+        List<String> result = api.dbNewlyGtldJson(LocalDate.of(2026, 10, 1), null);
         System.out.println(result);
     }
 }
@@ -902,21 +1111,27 @@ public class DbNewlyGtldJson {
 
 ```java
 // Runnable example: Newly Registered ccTLD (JSON) (GET /v3.1/domains/newly/cctld)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbNewlyCctldJson
 // Parameters for dbNewlyCctldJson (GET /v3.1/domains/newly/cctld):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 //   - tlds (string, optional)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesNewlyRegisteredApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.time.LocalDate;
+import java.util.List;
 
 public class DbNewlyCctldJson {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesNewlyRegisteredApi api = new DatabasesNewlyRegisteredApi(client);
-        var result = api.dbNewlyCctldJson(java.time.LocalDate.now().minusDays(1).toString(), null);
+
+        // dbNewlyCctldJson(date, tlds); null leaves an optional parameter unset
+        List<String> result = api.dbNewlyCctldJson(LocalDate.of(2026, 10, 1), null);
         System.out.println(result);
     }
 }
@@ -929,21 +1144,33 @@ public class DbNewlyCctldJson {
 
 ```java
 // Runnable example: Newly Registered With DNS (GET /v3.1/download/domainer/newly/dns)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbNewlyDns
 // Parameters for dbNewlyDns (GET /v3.1/download/domainer/newly/dns):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesNewlyRegisteredApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 
 public class DbNewlyDns {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesNewlyRegisteredApi api = new DatabasesNewlyRegisteredApi(client);
-        var result = api.dbNewlyDns(java.time.LocalDate.now().minusDays(1).toString());
-        System.out.println(result);
+
+        File download = api.dbNewlyDns(LocalDate.of(2026, 10, 1));
+        // The SDK saves the response to a temporary file: move it where you want it.
+        Path target = Paths.get("DbNewlyDns.json");
+        Files.move(download.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("Saved " + Files.size(target) + " bytes to " + target.toAbsolutePath());
     }
 }
 
@@ -957,22 +1184,34 @@ public class DbNewlyDns {
 
 ```java
 // Runnable example: Expiring Domains (GET /v3.1/download/domainer/expired)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbExpired
 // Parameters for dbExpired (GET /v3.1/download/domainer/expired):
 //   - whois (boolean, required)
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesExpiringDroppedApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 
 public class DbExpired {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesExpiringDroppedApi api = new DatabasesExpiringDroppedApi(client);
-        var result = api.dbExpired(false, java.time.LocalDate.now().minusDays(1).toString());
-        System.out.println(result);
+
+        File download = api.dbExpired(true, LocalDate.of(2026, 10, 1));
+        // The SDK saves the response to a temporary file: move it where you want it.
+        Path target = Paths.get("DbExpired.csv");
+        Files.move(download.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("Saved " + Files.size(target) + " bytes to " + target.toAbsolutePath());
     }
 }
 
@@ -984,21 +1223,33 @@ public class DbExpired {
 
 ```java
 // Runnable example: Expiring Cleaned WHOIS (GET /v3.1/download/domainer/expired/cleaned)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbExpiredCleaned
 // Parameters for dbExpiredCleaned (GET /v3.1/download/domainer/expired/cleaned):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesExpiringDroppedApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 
 public class DbExpiredCleaned {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesExpiringDroppedApi api = new DatabasesExpiringDroppedApi(client);
-        var result = api.dbExpiredCleaned(java.time.LocalDate.now().minusDays(1).toString());
-        System.out.println(result);
+
+        File download = api.dbExpiredCleaned(LocalDate.of(2026, 10, 1));
+        // The SDK saves the response to a temporary file: move it where you want it.
+        Path target = Paths.get("DbExpiredCleaned.csv");
+        Files.move(download.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("Saved " + Files.size(target) + " bytes to " + target.toAbsolutePath());
     }
 }
 
@@ -1010,22 +1261,34 @@ public class DbExpiredCleaned {
 
 ```java
 // Runnable example: Dropped Domains (GET /v3.1/download/domainer/dropped)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbDropped
 // Parameters for dbDropped (GET /v3.1/download/domainer/dropped):
 //   - whois (boolean, required)
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesExpiringDroppedApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 
 public class DbDropped {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesExpiringDroppedApi api = new DatabasesExpiringDroppedApi(client);
-        var result = api.dbDropped(false, java.time.LocalDate.now().minusDays(1).toString());
-        System.out.println(result);
+
+        File download = api.dbDropped(true, LocalDate.of(2026, 10, 1));
+        // The SDK saves the response to a temporary file: move it where you want it.
+        Path target = Paths.get("DbDropped.csv");
+        Files.move(download.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("Saved " + Files.size(target) + " bytes to " + target.toAbsolutePath());
     }
 }
 
@@ -1037,21 +1300,27 @@ public class DbDropped {
 
 ```java
 // Runnable example: Dropped Domains (JSON) (GET /v3.1/domains/dropped)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbDroppedJson
 // Parameters for dbDroppedJson (GET /v3.1/domains/dropped):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 //   - tlds (string, optional)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesExpiringDroppedApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.time.LocalDate;
+import java.util.List;
 
 public class DbDroppedJson {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesExpiringDroppedApi api = new DatabasesExpiringDroppedApi(client);
-        var result = api.dbDroppedJson(java.time.LocalDate.now().minusDays(1).toString(), null);
+
+        // dbDroppedJson(date, tlds); null leaves an optional parameter unset
+        List<String> result = api.dbDroppedJson(LocalDate.of(2026, 10, 1), null);
         System.out.println(result);
     }
 }
@@ -1064,22 +1333,35 @@ public class DbDroppedJson {
 
 ```java
 // Runnable example: Dropped With Backlinks (GET /v3.3/download/domainer/dropped/backlinks)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbDroppedBacklinks
 // Parameters for dbDroppedBacklinks (GET /v3.3/download/domainer/dropped/backlinks):
 //   - whois (boolean, optional)
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesExpiringDroppedApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 
 public class DbDroppedBacklinks {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesExpiringDroppedApi api = new DatabasesExpiringDroppedApi(client);
-        var result = api.dbDroppedBacklinks(false, java.time.LocalDate.now().minusDays(1).toString());
-        System.out.println(result);
+
+        // dbDroppedBacklinks(whois, date); null leaves an optional parameter unset
+        File download = api.dbDroppedBacklinks(null, LocalDate.of(2026, 10, 1));
+        // The SDK saves the response to a temporary file: move it where you want it.
+        Path target = Paths.get("DbDroppedBacklinks.csv");
+        Files.move(download.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("Saved " + Files.size(target) + " bytes to " + target.toAbsolutePath());
     }
 }
 
@@ -1093,21 +1375,33 @@ public class DbDroppedBacklinks {
 
 ```java
 // Runnable example: WHOIS Database Daily (GET /v3.3/download/dbupdate/daily/domains/whois)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbWhoisDaily
 // Parameters for dbWhoisDaily (GET /v3.3/download/dbupdate/daily/domains/whois):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesWhoisApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 
 public class DbWhoisDaily {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesWhoisApi api = new DatabasesWhoisApi(client);
-        var result = api.dbWhoisDaily(java.time.LocalDate.now().minusDays(1).toString());
-        System.out.println(result);
+
+        File download = api.dbWhoisDaily(LocalDate.of(2026, 10, 1));
+        // The SDK saves the response to a temporary file: move it where you want it.
+        Path target = Paths.get("DbWhoisDaily.csv");
+        Files.move(download.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("Saved " + Files.size(target) + " bytes to " + target.toAbsolutePath());
     }
 }
 
@@ -1119,21 +1413,33 @@ public class DbWhoisDaily {
 
 ```java
 // Runnable example: WHOIS Database Weekly (GET /v3.3/download/dbupdate/weekly/domains/whois)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbWhoisWeekly
 // Parameters for dbWhoisWeekly (GET /v3.3/download/dbupdate/weekly/domains/whois):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesWhoisApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 
 public class DbWhoisWeekly {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesWhoisApi api = new DatabasesWhoisApi(client);
-        var result = api.dbWhoisWeekly(java.time.LocalDate.now().minusDays(1).toString());
-        System.out.println(result);
+
+        File download = api.dbWhoisWeekly(LocalDate.of(2026, 10, 1));
+        // The SDK saves the response to a temporary file: move it where you want it.
+        Path target = Paths.get("DbWhoisWeekly.csv");
+        Files.move(download.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("Saved " + Files.size(target) + " bytes to " + target.toAbsolutePath());
     }
 }
 
@@ -1145,21 +1451,33 @@ public class DbWhoisWeekly {
 
 ```java
 // Runnable example: WHOIS Database Monthly (GET /v3.3/download/dbupdate/monthly/domains/whois)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbWhoisMonthly
 // Parameters for dbWhoisMonthly (GET /v3.3/download/dbupdate/monthly/domains/whois):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesWhoisApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 
 public class DbWhoisMonthly {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesWhoisApi api = new DatabasesWhoisApi(client);
-        var result = api.dbWhoisMonthly(java.time.LocalDate.now().minusDays(1).toString());
-        System.out.println(result);
+
+        File download = api.dbWhoisMonthly(LocalDate.of(2026, 10, 1));
+        // The SDK saves the response to a temporary file: move it where you want it.
+        Path target = Paths.get("DbWhoisMonthly.csv");
+        Files.move(download.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("Saved " + Files.size(target) + " bytes to " + target.toAbsolutePath());
     }
 }
 
@@ -1173,21 +1491,33 @@ public class DbWhoisMonthly {
 
 ```java
 // Runnable example: DNS Database Daily (GET /v3.2/download/dbupdate/daily/dns)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbDnsDaily
 // Parameters for dbDnsDaily (GET /v3.2/download/dbupdate/daily/dns):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesDnsApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 
 public class DbDnsDaily {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesDnsApi api = new DatabasesDnsApi(client);
-        var result = api.dbDnsDaily(java.time.LocalDate.now().minusDays(1).toString());
-        System.out.println(result);
+
+        File download = api.dbDnsDaily(LocalDate.of(2026, 10, 1));
+        // The SDK saves the response to a temporary file: move it where you want it.
+        Path target = Paths.get("DbDnsDaily.csv");
+        Files.move(download.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("Saved " + Files.size(target) + " bytes to " + target.toAbsolutePath());
     }
 }
 
@@ -1199,21 +1529,33 @@ public class DbDnsDaily {
 
 ```java
 // Runnable example: DNS Database Weekly (GET /v3.2/download/dbupdate/weekly/dns)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbDnsWeekly
 // Parameters for dbDnsWeekly (GET /v3.2/download/dbupdate/weekly/dns):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesDnsApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 
 public class DbDnsWeekly {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesDnsApi api = new DatabasesDnsApi(client);
-        var result = api.dbDnsWeekly(java.time.LocalDate.now().minusDays(1).toString());
-        System.out.println(result);
+
+        File download = api.dbDnsWeekly(LocalDate.of(2026, 10, 1));
+        // The SDK saves the response to a temporary file: move it where you want it.
+        Path target = Paths.get("DbDnsWeekly.csv");
+        Files.move(download.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("Saved " + Files.size(target) + " bytes to " + target.toAbsolutePath());
     }
 }
 
@@ -1225,21 +1567,33 @@ public class DbDnsWeekly {
 
 ```java
 // Runnable example: DNS Database Monthly (GET /v3.2/download/dbupdate/monthly/dns)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbDnsMonthly
 // Parameters for dbDnsMonthly (GET /v3.2/download/dbupdate/monthly/dns):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesDnsApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 
 public class DbDnsMonthly {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesDnsApi api = new DatabasesDnsApi(client);
-        var result = api.dbDnsMonthly(java.time.LocalDate.now().minusDays(1).toString());
-        System.out.println(result);
+
+        File download = api.dbDnsMonthly(LocalDate.of(2026, 10, 1));
+        // The SDK saves the response to a temporary file: move it where you want it.
+        Path target = Paths.get("DbDnsMonthly.csv");
+        Files.move(download.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("Saved " + Files.size(target) + " bytes to " + target.toAbsolutePath());
     }
 }
 
@@ -1253,21 +1607,33 @@ public class DbDnsMonthly {
 
 ```java
 // Runnable example: Subdomains Daily (GET /v3.2/download/dbupdate/daily/subdomains)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbSubdomainsDaily
 // Parameters for dbSubdomainsDaily (GET /v3.2/download/dbupdate/daily/subdomains):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesSubdomainsApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 
 public class DbSubdomainsDaily {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesSubdomainsApi api = new DatabasesSubdomainsApi(client);
-        var result = api.dbSubdomainsDaily(java.time.LocalDate.now().minusDays(1).toString());
-        System.out.println(result);
+
+        File download = api.dbSubdomainsDaily(LocalDate.of(2026, 10, 1));
+        // The SDK saves the response to a temporary file: move it where you want it.
+        Path target = Paths.get("DbSubdomainsDaily.csv");
+        Files.move(download.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("Saved " + Files.size(target) + " bytes to " + target.toAbsolutePath());
     }
 }
 
@@ -1279,21 +1645,33 @@ public class DbSubdomainsDaily {
 
 ```java
 // Runnable example: Subdomains Weekly (GET /v3.2/download/dbupdate/weekly/subdomains)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbSubdomainsWeekly
 // Parameters for dbSubdomainsWeekly (GET /v3.2/download/dbupdate/weekly/subdomains):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesSubdomainsApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 
 public class DbSubdomainsWeekly {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesSubdomainsApi api = new DatabasesSubdomainsApi(client);
-        var result = api.dbSubdomainsWeekly(java.time.LocalDate.now().minusDays(1).toString());
-        System.out.println(result);
+
+        File download = api.dbSubdomainsWeekly(LocalDate.of(2026, 10, 1));
+        // The SDK saves the response to a temporary file: move it where you want it.
+        Path target = Paths.get("DbSubdomainsWeekly.csv");
+        Files.move(download.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("Saved " + Files.size(target) + " bytes to " + target.toAbsolutePath());
     }
 }
 
@@ -1305,21 +1683,33 @@ public class DbSubdomainsWeekly {
 
 ```java
 // Runnable example: Subdomains Monthly (GET /v3.2/download/dbupdate/monthly/subdomains)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbSubdomainsMonthly
 // Parameters for dbSubdomainsMonthly (GET /v3.2/download/dbupdate/monthly/subdomains):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesSubdomainsApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 
 public class DbSubdomainsMonthly {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesSubdomainsApi api = new DatabasesSubdomainsApi(client);
-        var result = api.dbSubdomainsMonthly(java.time.LocalDate.now().minusDays(1).toString());
-        System.out.println(result);
+
+        File download = api.dbSubdomainsMonthly(LocalDate.of(2026, 10, 1));
+        // The SDK saves the response to a temporary file: move it where you want it.
+        Path target = Paths.get("DbSubdomainsMonthly.csv");
+        Files.move(download.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("Saved " + Files.size(target) + " bytes to " + target.toAbsolutePath());
     }
 }
 
@@ -1333,20 +1723,23 @@ public class DbSubdomainsMonthly {
 
 ```java
 // Runnable example: IP to Country Snapshot Status (GET /v3.3/status/snapshot/ip/country)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbIpCountryStatus
 // Parameters for dbIpCountryStatus (GET /v3.3/status/snapshot/ip/country):
 //   (no parameters; the API key is set on the client)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesIpGeolocationApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.SnapshotStatus;
 
 public class DbIpCountryStatus {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesIpGeolocationApi api = new DatabasesIpGeolocationApi(client);
-        var result = api.dbIpCountryStatus();
+
+        SnapshotStatus result = api.dbIpCountryStatus();
         System.out.println(result);
     }
 }
@@ -1359,21 +1752,33 @@ public class DbIpCountryStatus {
 
 ```java
 // Runnable example: IP to Country Snapshot (GET /v3.3/download/snapshot/ip/country)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbIpCountry
 // Parameters for dbIpCountry (GET /v3.3/download/snapshot/ip/country):
 //   - date (string, required)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesIpGeolocationApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 
 public class DbIpCountry {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesIpGeolocationApi api = new DatabasesIpGeolocationApi(client);
-        var result = api.dbIpCountry(java.time.LocalDate.now().minusDays(1).toString());
-        System.out.println(result);
+
+        File download = api.dbIpCountry(LocalDate.of(2026, 10, 1));
+        // The SDK saves the response to a temporary file: move it where you want it.
+        Path target = Paths.get("DbIpCountry.zip");
+        Files.move(download.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("Saved " + Files.size(target) + " bytes to " + target.toAbsolutePath());
     }
 }
 
@@ -1385,20 +1790,23 @@ public class DbIpCountry {
 
 ```java
 // Runnable example: IP to City Snapshot Status (GET /v3.3/status/snapshot/ip/city)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbIpCityStatus
 // Parameters for dbIpCityStatus (GET /v3.3/status/snapshot/ip/city):
 //   (no parameters; the API key is set on the client)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesIpGeolocationApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.SnapshotStatus;
 
 public class DbIpCityStatus {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesIpGeolocationApi api = new DatabasesIpGeolocationApi(client);
-        var result = api.dbIpCityStatus();
+
+        SnapshotStatus result = api.dbIpCityStatus();
         System.out.println(result);
     }
 }
@@ -1411,21 +1819,33 @@ public class DbIpCityStatus {
 
 ```java
 // Runnable example: IP to City Snapshot (GET /v3.3/download/snapshot/ip/city)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbIpCity
 // Parameters for dbIpCity (GET /v3.3/download/snapshot/ip/city):
 //   - date (string, required)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesIpGeolocationApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 
 public class DbIpCity {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesIpGeolocationApi api = new DatabasesIpGeolocationApi(client);
-        var result = api.dbIpCity(java.time.LocalDate.now().minusDays(1).toString());
-        System.out.println(result);
+
+        File download = api.dbIpCity(LocalDate.of(2026, 10, 1));
+        // The SDK saves the response to a temporary file: move it where you want it.
+        Path target = Paths.get("DbIpCity.zip");
+        Files.move(download.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("Saved " + Files.size(target) + " bytes to " + target.toAbsolutePath());
     }
 }
 
@@ -1439,21 +1859,33 @@ public class DbIpCity {
 
 ```java
 // Runnable example: ASN WHOIS Snapshot (GET /v3.3/download/snapshot/asn/whois)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbAsnWhois
 // Parameters for dbAsnWhois (GET /v3.3/download/snapshot/asn/whois):
 //   - date (string, required)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesAsnWhoisApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 
 public class DbAsnWhois {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesAsnWhoisApi api = new DatabasesAsnWhoisApi(client);
-        var result = api.dbAsnWhois(java.time.LocalDate.now().minusDays(1).toString());
-        System.out.println(result);
+
+        File download = api.dbAsnWhois(LocalDate.of(2026, 10, 1));
+        // The SDK saves the response to a temporary file: move it where you want it.
+        Path target = Paths.get("DbAsnWhois.json.gz");
+        Files.move(download.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("Saved " + Files.size(target) + " bytes to " + target.toAbsolutePath());
     }
 }
 
@@ -1465,20 +1897,23 @@ public class DbAsnWhois {
 
 ```java
 // Runnable example: ASN WHOIS Snapshot Status (GET /v3.3/status/snapshot/asn/whois)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbAsnWhoisStatus
 // Parameters for dbAsnWhoisStatus (GET /v3.3/status/snapshot/asn/whois):
 //   (no parameters; the API key is set on the client)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesAsnWhoisApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.SnapshotStatus;
 
 public class DbAsnWhoisStatus {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesAsnWhoisApi api = new DatabasesAsnWhoisApi(client);
-        var result = api.dbAsnWhoisStatus();
+
+        SnapshotStatus result = api.dbAsnWhoisStatus();
         System.out.println(result);
     }
 }
@@ -1493,21 +1928,33 @@ public class DbAsnWhoisStatus {
 
 ```java
 // Runnable example: IP WHOIS Snapshot (GET /v3.3/download/snapshot/ip/whois)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbIpWhois
 // Parameters for dbIpWhois (GET /v3.3/download/snapshot/ip/whois):
 //   - date (string, required)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesIpWhoisApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 
 public class DbIpWhois {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesIpWhoisApi api = new DatabasesIpWhoisApi(client);
-        var result = api.dbIpWhois(java.time.LocalDate.now().minusDays(1).toString());
-        System.out.println(result);
+
+        File download = api.dbIpWhois(LocalDate.of(2026, 10, 1));
+        // The SDK saves the response to a temporary file: move it where you want it.
+        Path target = Paths.get("DbIpWhois.json.gz");
+        Files.move(download.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("Saved " + Files.size(target) + " bytes to " + target.toAbsolutePath());
     }
 }
 
@@ -1519,20 +1966,23 @@ public class DbIpWhois {
 
 ```java
 // Runnable example: IP WHOIS Snapshot Status (GET /v3.3/status/snapshot/ip/whois)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbIpWhoisStatus
 // Parameters for dbIpWhoisStatus (GET /v3.3/status/snapshot/ip/whois):
 //   (no parameters; the API key is set on the client)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesIpWhoisApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.SnapshotStatus;
 
 public class DbIpWhoisStatus {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesIpWhoisApi api = new DatabasesIpWhoisApi(client);
-        var result = api.dbIpWhoisStatus();
+
+        SnapshotStatus result = api.dbIpWhoisStatus();
         System.out.println(result);
     }
 }
@@ -1547,21 +1997,33 @@ public class DbIpWhoisStatus {
 
 ```java
 // Runnable example: IP Security Snapshot (GET /v3.3/download/snapshot/ip/security)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbIpSecurity
 // Parameters for dbIpSecurity (GET /v3.3/download/snapshot/ip/security):
 //   - date (string, required)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesIpSecurityApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
 
 public class DbIpSecurity {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesIpSecurityApi api = new DatabasesIpSecurityApi(client);
-        var result = api.dbIpSecurity(java.time.LocalDate.now().minusDays(1).toString());
-        System.out.println(result);
+
+        File download = api.dbIpSecurity(LocalDate.of(2026, 10, 1));
+        // The SDK saves the response to a temporary file: move it where you want it.
+        Path target = Paths.get("DbIpSecurity.csv");
+        Files.move(download.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("Saved " + Files.size(target) + " bytes to " + target.toAbsolutePath());
     }
 }
 
@@ -1573,20 +2035,23 @@ public class DbIpSecurity {
 
 ```java
 // Runnable example: IP Security Snapshot Status (GET /v3.3/status/snapshot/ip/security)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbIpSecurityStatus
 // Parameters for dbIpSecurityStatus (GET /v3.3/status/snapshot/ip/security):
 //   (no parameters; the API key is set on the client)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesIpSecurityApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.SnapshotStatus;
 
 public class DbIpSecurityStatus {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesIpSecurityApi api = new DatabasesIpSecurityApi(client);
-        var result = api.dbIpSecurityStatus();
+
+        SnapshotStatus result = api.dbIpSecurityStatus();
         System.out.println(result);
     }
 }
@@ -1601,21 +2066,32 @@ public class DbIpSecurityStatus {
 
 ```java
 // Runnable example: Download the daily phishing threat feed (CSV) (GET /v3.4/download/threat-feed/phishing)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DownloadThreatFeedPhishing
 // Parameters for downloadThreatFeedPhishing (GET /v3.4/download/threat-feed/phishing):
-//   - date (string, optional): Feed date (yyyy-MM-dd); defaults to latest available
+//   - date (string, optional): Feed date (yyyy-MM-dd); omit for the full dump of the feed
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesThreatFeedApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 public class DownloadThreatFeedPhishing {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesThreatFeedApi api = new DatabasesThreatFeedApi(client);
-        var result = api.downloadThreatFeedPhishing(java.time.LocalDate.now().minusDays(1).toString());
-        System.out.println(result);
+
+        File download = api.downloadThreatFeedPhishing("2026-10-01");
+        // The SDK saves the response to a temporary file: move it where you want it.
+        Path target = Paths.get("DownloadThreatFeedPhishing.csv");
+        Files.move(download.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("Saved " + Files.size(target) + " bytes to " + target.toAbsolutePath());
     }
 }
 
@@ -1627,21 +2103,32 @@ public class DownloadThreatFeedPhishing {
 
 ```java
 // Runnable example: Download a sample of the phishing threat feed (CSV) (GET /v3.4/download/threat-feed/phishing/sample)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DownloadThreatFeedPhishingSample
 // Parameters for downloadThreatFeedPhishingSample (GET /v3.4/download/threat-feed/phishing/sample):
 //   (no parameters; the API key is set on the client)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesThreatFeedApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 public class DownloadThreatFeedPhishingSample {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesThreatFeedApi api = new DatabasesThreatFeedApi(client);
-        var result = api.downloadThreatFeedPhishingSample();
-        System.out.println(result);
+
+        File download = api.downloadThreatFeedPhishingSample();
+        // The SDK saves the response to a temporary file: move it where you want it.
+        Path target = Paths.get("DownloadThreatFeedPhishingSample.csv");
+        Files.move(download.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("Saved " + Files.size(target) + " bytes to " + target.toAbsolutePath());
     }
 }
 
@@ -1653,21 +2140,32 @@ public class DownloadThreatFeedPhishingSample {
 
 ```java
 // Runnable example: Download the daily malware threat feed (CSV) (GET /v3.4/download/threat-feed/malware)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DownloadThreatFeedMalware
 // Parameters for downloadThreatFeedMalware (GET /v3.4/download/threat-feed/malware):
-//   - date (string, optional): Feed date (yyyy-MM-dd); defaults to latest available
+//   - date (string, optional): Feed date (yyyy-MM-dd); omit for the full dump of the feed
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesThreatFeedApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 public class DownloadThreatFeedMalware {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesThreatFeedApi api = new DatabasesThreatFeedApi(client);
-        var result = api.downloadThreatFeedMalware(java.time.LocalDate.now().minusDays(1).toString());
-        System.out.println(result);
+
+        File download = api.downloadThreatFeedMalware("2026-10-01");
+        // The SDK saves the response to a temporary file: move it where you want it.
+        Path target = Paths.get("DownloadThreatFeedMalware.csv");
+        Files.move(download.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("Saved " + Files.size(target) + " bytes to " + target.toAbsolutePath());
     }
 }
 
@@ -1679,21 +2177,32 @@ public class DownloadThreatFeedMalware {
 
 ```java
 // Runnable example: Download a sample of the malware threat feed (CSV) (GET /v3.4/download/threat-feed/malware/sample)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DownloadThreatFeedMalwareSample
 // Parameters for downloadThreatFeedMalwareSample (GET /v3.4/download/threat-feed/malware/sample):
 //   (no parameters; the API key is set on the client)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesThreatFeedApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 public class DownloadThreatFeedMalwareSample {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesThreatFeedApi api = new DatabasesThreatFeedApi(client);
-        var result = api.downloadThreatFeedMalwareSample();
-        System.out.println(result);
+
+        File download = api.downloadThreatFeedMalwareSample();
+        // The SDK saves the response to a temporary file: move it where you want it.
+        Path target = Paths.get("DownloadThreatFeedMalwareSample.csv");
+        Files.move(download.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("Saved " + Files.size(target) + " bytes to " + target.toAbsolutePath());
     }
 }
 
@@ -1705,21 +2214,32 @@ public class DownloadThreatFeedMalwareSample {
 
 ```java
 // Runnable example: Download the daily spam threat feed (CSV) (GET /v3.4/download/threat-feed/spam)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DownloadThreatFeedSpam
 // Parameters for downloadThreatFeedSpam (GET /v3.4/download/threat-feed/spam):
-//   - date (string, optional): Feed date (yyyy-MM-dd); defaults to latest available
+//   - date (string, optional): Feed date (yyyy-MM-dd); omit for the full dump of the feed
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesThreatFeedApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 public class DownloadThreatFeedSpam {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesThreatFeedApi api = new DatabasesThreatFeedApi(client);
-        var result = api.downloadThreatFeedSpam(java.time.LocalDate.now().minusDays(1).toString());
-        System.out.println(result);
+
+        File download = api.downloadThreatFeedSpam("2026-10-01");
+        // The SDK saves the response to a temporary file: move it where you want it.
+        Path target = Paths.get("DownloadThreatFeedSpam.csv");
+        Files.move(download.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("Saved " + Files.size(target) + " bytes to " + target.toAbsolutePath());
     }
 }
 
@@ -1731,21 +2251,32 @@ public class DownloadThreatFeedSpam {
 
 ```java
 // Runnable example: Download a sample of the spam threat feed (CSV) (GET /v3.4/download/threat-feed/spam/sample)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DownloadThreatFeedSpamSample
 // Parameters for downloadThreatFeedSpamSample (GET /v3.4/download/threat-feed/spam/sample):
 //   (no parameters; the API key is set on the client)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.DatabasesThreatFeedApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 public class DownloadThreatFeedSpamSample {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         DatabasesThreatFeedApi api = new DatabasesThreatFeedApi(client);
-        var result = api.downloadThreatFeedSpamSample();
-        System.out.println(result);
+
+        File download = api.downloadThreatFeedSpamSample();
+        // The SDK saves the response to a temporary file: move it where you want it.
+        Path target = Paths.get("DownloadThreatFeedSpamSample.csv");
+        Files.move(download.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("Saved " + Files.size(target) + " bytes to " + target.toAbsolutePath());
     }
 }
 

@@ -1,15 +1,28 @@
-// Runnable example: IP Security Snapshot (GET /v3.3/download/snapshot/ip/security)
+// IP Security Snapshot
+//
 // Parameters for dbIpSecurity (GET /v3.3/download/snapshot/ip/security):
 //   - date (string, required)
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
 import Foundation
 import WhoisFreaks
 
-// Set your API key once (applied to every request)
-WhoisFreaksAPI.apiKey = "YOUR_API_KEY"
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
 
 do {
-    let result = try await DatabasesIPSecurityAPI.dbIpSecurity(date: String(ISO8601DateFormatter().string(from: Calendar.current.date(byAdding: .day, value: -1, to: Date())!).prefix(10)))
-    print(result)
+    let file = try await DatabasesIPSecurityAPI.dbIpSecurity(date: OpenAPIDateWithoutTime(rawValue: "2026-10-01")!)
+    // The SDK saves the download under the caches directory: move it somewhere permanent.
+    let saveAs = URL(fileURLWithPath: "DbIpSecurity.csv")
+    try? FileManager.default.removeItem(at: saveAs)
+    try FileManager.default.moveItem(at: file, to: saveAs)
+    print("Saved \(saveAs.path)")
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
 } catch {
-    print(error)
+    print("Request failed: \(error)")
+    exit(1)
 }

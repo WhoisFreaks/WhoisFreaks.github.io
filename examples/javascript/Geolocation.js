@@ -1,15 +1,21 @@
-// Runnable example: IP Geolocation Lookup (GET /v1.0/geolocation)
-// Parameters for geolocation (GET /v1.0/geolocation):
-//   - ip (string, required)
-// whoisfreaks-js is CommonJS; apiKey is set once on the ApiClient
-import pkg from "whoisfreaks-js";
-const { ApiClient, GeolocationApi } = pkg;
-// or:  const { ApiClient, GeolocationApi } = require("whoisfreaks-js");
+// IP Geolocation Lookup: GET https://api.whoisfreaks.com/v1.0/geolocation
+// Run: WHOISFREAKS_API_KEY=your_api_key node Geolocation.js
+const { ApiClient, GeolocationApi } = require("whoisfreaks-js");
 
+// Set the API key once; the client adds it to every request.
 const client = ApiClient.instance;
-client.authentications["ApiKeyAuth"].apiKey = "YOUR_API_KEY";  // set once
+client.authentications["ApiKeyAuth"].apiKey = process.env.WHOISFREAKS_API_KEY;
 const api = new GeolocationApi(client);
 
-api.geolocation("8.8.8.8")
-  .then(data => console.log(data))
-  .catch(err => console.error(err));
+// geolocation(ip)
+//   ip (string, required)
+async function main() {
+  const result = await api.geolocation("8.8.8.8");
+  console.log(JSON.stringify(result, null, 2));
+}
+
+main().catch((err) => {
+  // API errors carry the HTTP status and the parsed error body
+  console.error(err.status ? `HTTP ${err.status}: ${JSON.stringify(err.body)}` : err);
+  process.exitCode = 1;
+});

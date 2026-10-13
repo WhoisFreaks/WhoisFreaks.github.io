@@ -2,7 +2,7 @@
 
 ## About
 
-The official **WhoisFreaks TypeScript SDK** — a complete client for WHOIS, DNS, SSL, domain availability, subdomain, IP geolocation, IP reputation, ASN, typosquatting, and domain reputation lookups, plus bulk database downloads. Query real-time and historical domain data, reverse WHOIS, and threat intelligence from TypeScript with a single API key. Generated from the WhoisFreaks OpenAPI specification and published to npm.
+The official **WhoisFreaks TypeScript SDK**: a complete client for WHOIS, DNS, SSL, domain availability, subdomain, IP geolocation, IP reputation, ASN, typosquatting, and domain reputation lookups, plus bulk database downloads. Query real-time and historical domain data, reverse WHOIS, and threat intelligence from TypeScript with a single API key. Generated from the WhoisFreaks OpenAPI specification and published to npm.
 
 **Keywords:** typescript whois api, typescript whois sdk, whoisfreaks typescript, typescript domain lookup, typescript dns api, whois api, whois lookup, domain api, dns api, dns lookup, reverse whois, historical whois, domain availability api, ssl certificate api, ip geolocation api, ip reputation api, asn lookup, subdomain finder, typosquatting api, domain reputation, threat intelligence api, domain data api, whois sdk, domain monitoring, brand protection api
 
@@ -17,7 +17,7 @@ npm install whoisfreaks
 
 ## Build from Source
 
-Prefer to build the SDK yourself instead of installing from npm? Clone the monorepo and build the TypeScript package locally:
+Prefer to build the SDK yourself instead of installing from npm? Clone the TypeScript SDK repository and build it locally:
 
 ```bash
 git clone https://github.com/WhoisFreaks/whoisfreaks-typescript
@@ -30,29 +30,53 @@ npm run build
 
 A complete walkthrough from an empty directory to a running program:
 
+1. Create a project and install the SDK (Node.js 18 or later), plus [tsx](https://tsx.is) to run TypeScript files directly:
+
 ```bash
 mkdir whoisfreaks-test && cd whoisfreaks-test
 npm init -y
 npm install whoisfreaks
-npm install -D typescript ts-node @types/node
+npm install -D tsx @types/node
 ```
 
-Set `"type": "module"` in `package.json`, then create `main.ts`:
+2. Create `main.ts`:
 
-```ts
-import { Configuration, WHOISApi } from "whoisfreaks";
+```typescript
+import { Configuration, WHOISApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new WHOISApi(config);
 
-const result = await api.whoisLive({ domainName: "example.com" });
-console.log(result);
+async function main(): Promise<void> {
+  const record = await api.whoisLive({ domainName: "whoisfreaks.com" });
+  console.log("Domain: ", record.domain_name);
+  console.log("Created:", record.create_date);
+  console.log("Expires:", record.expiry_date);
+}
+
+main().catch(async (err: unknown) => {
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
-Run it:
+3. Set your API key and run it:
 
 ```bash
-npx ts-node main.ts
+export WHOISFREAKS_API_KEY="your_api_key"   # PowerShell: $env:WHOISFREAKS_API_KEY="your_api_key"
+npx tsx main.ts
+```
+
+`tsx` runs the file without a separate compile step. To type-check as well, add the compiler and run it in strict mode:
+
+```bash
+npm install -D typescript
+npx tsc --noEmit --strict --module nodenext --types node main.ts
 ```
 
 ## Configure
@@ -60,21 +84,31 @@ npx ts-node main.ts
 See [Authentication](../authentication.md) for how to obtain a key. Minimal setup:
 
 ```typescript
-// Runnable example: Live WHOIS Lookup (GET /v2.0/whois/live)
-// Parameters for whoisLive (GET /v2.0/whois/live):
-//   - domainName (string, required)
-//   - format (string (one of: json, xml), optional)
-import { Configuration, WHOISApi } from "whoisfreaks";
+// Live WHOIS Lookup: GET https://api.whoisfreaks.com/v2.0/whois/live
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx WhoisLive.ts
+import { Configuration, WHOISApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new WHOISApi(config);
 
-async function main() {
-  const result = await api.whoisLive({ domainName: "example.com", format: undefined });
-  console.log(result);
+// whoisLive({ domainName, format? })
+//   domainName (string, required)
+//   format ("json" | "xml", optional): default "json"
+async function main(): Promise<void> {
+  const result = await api.whoisLive({ domainName: "whoisfreaks.com" });
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 ## Endpoints
@@ -88,21 +122,31 @@ All 60 endpoints are shown below, grouped by category. Each includes its method,
 `GET /v2.0/whois/live`
 
 ```typescript
-// Runnable example: Live WHOIS Lookup (GET /v2.0/whois/live)
-// Parameters for whoisLive (GET /v2.0/whois/live):
-//   - domainName (string, required)
-//   - format (string (one of: json, xml), optional)
-import { Configuration, WHOISApi } from "whoisfreaks";
+// Live WHOIS Lookup: GET https://api.whoisfreaks.com/v2.0/whois/live
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx WhoisLive.ts
+import { Configuration, WHOISApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new WHOISApi(config);
 
-async function main() {
-  const result = await api.whoisLive({ domainName: "example.com", format: undefined });
-  console.log(result);
+// whoisLive({ domainName, format? })
+//   domainName (string, required)
+//   format ("json" | "xml", optional): default "json"
+async function main(): Promise<void> {
+  const result = await api.whoisLive({ domainName: "whoisfreaks.com" });
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### Bulk WHOIS Lookup
@@ -110,21 +154,32 @@ main().catch(console.error);
 `POST /v2.0/bulkwhois/live`
 
 ```typescript
-// Runnable example: Bulk WHOIS Lookup (POST /v2.0/bulkwhois/live)
-// Parameters for bulkWhois (POST /v2.0/bulkwhois/live):
-//   - format (string (one of: json, xml), optional)
-//   - body: BulkWhoisRequest (required) -- request body object
-import { Configuration, WHOISApi } from "whoisfreaks";
+// Bulk WHOIS Lookup: POST https://api.whoisfreaks.com/v2.0/bulkwhois/live
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx BulkWhois.ts
+import { Configuration, WHOISApi, ResponseError, type BulkWhoisRequest } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new WHOISApi(config);
 
-async function main() {
-  const result = await api.bulkWhois({ bulkWhoisRequest: {}, format: undefined });
-  console.log(result);
+// bulkWhois({ bulkWhoisRequest, format? })
+//   bulkWhoisRequest (BulkWhoisRequest, required): request body
+//   format ("json" | "xml", optional): default "json"
+async function main(): Promise<void> {
+  const body: BulkWhoisRequest = { domainNames: ["whoisfreaks.com", "jfreaks.com"] };
+  const result = await api.bulkWhois({ bulkWhoisRequest: body });
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### Historical WHOIS records for a domain
@@ -132,22 +187,31 @@ main().catch(console.error);
 `GET /v2.0/whois/history`
 
 ```typescript
-// Runnable example: Historical WHOIS records for a domain (GET /v2.0/whois/history)
-// Parameters for whoisHistory (GET /v2.0/whois/history):
-//   - domainName (string, required): Domain to fetch historical WHOIS records for
-//   - page (integer, optional): Page number
-//   - format (string (one of: json, xml), optional)
-import { Configuration, WHOISApi } from "whoisfreaks";
+// Historical WHOIS records for a domain: GET https://api.whoisfreaks.com/v2.0/whois/history
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx WhoisHistory.ts
+import { Configuration, WHOISApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new WHOISApi(config);
 
-async function main() {
-  const result = await api.whoisHistory({ domainName: "example.com", page: undefined, format: undefined });
-  console.log(result);
+// whoisHistory({ domainName, format? })
+//   domainName (string, required): Domain to fetch historical WHOIS records for
+//   format ("json" | "xml", optional)
+async function main(): Promise<void> {
+  const result = await api.whoisHistory({ domainName: "whoisfreaks.com" });
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### Reverse WHOIS lookup by keyword
@@ -155,22 +219,32 @@ main().catch(console.error);
 `GET /v2.0/whois/reverse`
 
 ```typescript
-// Runnable example: Reverse WHOIS lookup by keyword (GET /v2.0/whois/reverse)
-// Parameters for whoisReverse (GET /v2.0/whois/reverse):
-//   - keyword (string, required): Keyword to search across WHOIS records
-//   - page (integer, optional): Page number
-//   - format (string (one of: json, xml), optional)
-import { Configuration, WHOISApi } from "whoisfreaks";
+// Reverse WHOIS lookup by keyword: GET https://api.whoisfreaks.com/v2.0/whois/reverse
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx WhoisReverse.ts
+import { Configuration, WHOISApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new WHOISApi(config);
 
-async function main() {
-  const result = await api.whoisReverse({ keyword: "value", page: undefined, format: undefined });
-  console.log(result);
+// whoisReverse({ keyword, page?, format? })
+//   keyword (string, required): Keyword to search across WHOIS records
+//   page (number, optional): Page number
+//   format ("json" | "xml", optional)
+async function main(): Promise<void> {
+  const result = await api.whoisReverse({ keyword: "whoisfreaks", page: 1 });
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 ### DNS
@@ -180,23 +254,33 @@ main().catch(console.error);
 `GET /v2.0/dns/live`
 
 ```typescript
-// Runnable example: Live DNS Lookup (GET /v2.0/dns/live)
-// Parameters for dnsLive (GET /v2.0/dns/live):
-//   - domainName (string, required)
-//   - ipAddress (string, required): Use for PTR lookups
-//   - type (string, required): all or comma-separated: A,MX,NS,TXT,SOA,SPF,AAAA,CNAME
-//   - format (string (one of: json, xml), optional)
-import { Configuration, DNSApi } from "whoisfreaks";
+// Live DNS Lookup: GET https://api.whoisfreaks.com/v2.0/dns/live
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DnsLive.ts
+import { Configuration, DNSApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DNSApi(config);
 
-async function main() {
-  const result = await api.dnsLive({ domainName: "example.com", ipAddress: "8.8.8.8", type: "value", format: undefined });
-  console.log(result);
+// dnsLive({ type, domainName?, ipAddress?, format? })
+//   type (string, required): all or comma-separated: A,MX,NS,TXT,SOA,SPF,AAAA,CNAME; default "all"
+//   domainName (string, optional)
+//   ipAddress (string, optional): Use for PTR lookups
+//   format ("json" | "xml", optional): default "json"
+async function main(): Promise<void> {
+  const result = await api.dnsLive({ type: "A,MX,TXT", domainName: "whoisfreaks.com" });
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### Historical DNS Lookup
@@ -204,23 +288,33 @@ main().catch(console.error);
 `GET /v2.0/dns/historical`
 
 ```typescript
-// Runnable example: Historical DNS Lookup (GET /v2.0/dns/historical)
-// Parameters for dnsHistorical (GET /v2.0/dns/historical):
-//   - domainName (string, required)
-//   - type (string, required)
-//   - page (integer, optional)
-//   - format (string (one of: json, xml), optional)
-import { Configuration, DNSApi } from "whoisfreaks";
+// Historical DNS Lookup: GET https://api.whoisfreaks.com/v2.0/dns/historical
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DnsHistorical.ts
+import { Configuration, DNSApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DNSApi(config);
 
-async function main() {
-  const result = await api.dnsHistorical({ domainName: "example.com", type: "value", page: undefined, format: undefined });
-  console.log(result);
+// dnsHistorical({ domainName, type, page?, format? })
+//   domainName (string, required)
+//   type (string, required): default "all"
+//   page (number, optional): default 1
+//   format ("json" | "xml", optional): default "json"
+async function main(): Promise<void> {
+  const result = await api.dnsHistorical({ domainName: "whoisfreaks.com", type: "A,MX,TXT", page: 1 });
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### Reverse DNS Lookup
@@ -228,24 +322,34 @@ main().catch(console.error);
 `GET /v2.1/dns/reverse`
 
 ```typescript
-// Runnable example: Reverse DNS Lookup (GET /v2.1/dns/reverse)
-// Parameters for dnsReverse (GET /v2.1/dns/reverse):
-//   - value (string, required): IP, CIDR, or record value
-//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
-//   - exact (boolean, optional)
-//   - page (integer, optional)
-//   - format (string (one of: json, xml), optional)
-import { Configuration, DNSApi } from "whoisfreaks";
+// Reverse DNS Lookup: GET https://api.whoisfreaks.com/v2.1/dns/reverse
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DnsReverse.ts
+import { Configuration, DNSApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DNSApi(config);
 
-async function main() {
-  const result = await api.dnsReverse({ value: "value", type: "a", exact: true, page: undefined, format: undefined });
-  console.log(result);
+// dnsReverse({ value, type, exact?, page?, format? })
+//   value (string, required): IP, CIDR, or record value
+//   type ("a" | "mx" | "cname" | "ns" | "aaaa" | "txt" | "soa", required)
+//   exact (boolean, optional): default true
+//   page (number, optional): default 1
+//   format ("json" | "xml", optional): default "json"
+async function main(): Promise<void> {
+  const result = await api.dnsReverse({ value: "8.8.8.8", type: "a", page: 1 });
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### Bulk DNS Lookup
@@ -253,22 +357,33 @@ main().catch(console.error);
 `POST /v2.0/dns/bulk/live`
 
 ```typescript
-// Runnable example: Bulk DNS Lookup (POST /v2.0/dns/bulk/live)
-// Parameters for dnsBulk (POST /v2.0/dns/bulk/live):
-//   - type (string, required)
-//   - format (string (one of: json, xml), optional)
-//   - body: DnsBulkRequest (required) -- request body object
-import { Configuration, DNSApi } from "whoisfreaks";
+// Bulk DNS Lookup: POST https://api.whoisfreaks.com/v2.0/dns/bulk/live
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DnsBulk.ts
+import { Configuration, DNSApi, ResponseError, type DnsBulkRequest } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DNSApi(config);
 
-async function main() {
-  const result = await api.dnsBulk({ type: "value", dnsBulkRequest: {}, format: undefined });
-  console.log(result);
+// dnsBulk({ type, dnsBulkRequest, format? })
+//   type (string, required): default "all"
+//   dnsBulkRequest (DnsBulkRequest, required): request body
+//   format ("json" | "xml", optional): default "json"
+async function main(): Promise<void> {
+  const body: DnsBulkRequest = { domainNames: ["whoisfreaks.com", "example.com"] };
+  const result = await api.dnsBulk({ type: "A,MX,TXT", dnsBulkRequest: body });
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 ### Domain Availability
@@ -278,23 +393,33 @@ main().catch(console.error);
 `GET /v2.0/domain/availability`
 
 ```typescript
-// Runnable example: Domain Availability Check with Suggestions (GET /v2.0/domain/availability)
-// Parameters for domainAvailabilityV2 (GET /v2.0/domain/availability):
-//   - domain (string, required): The domain name to check
-//   - sug (boolean, optional): Whether to return TLD suggestions alongside the queried domain.
-//   - count (integer, optional): Number of TLD suggestions to return when sug=true. Maximum is 100.
-//   - format (string (one of: json, xml), optional)
-import { Configuration, DomainAvailabilityApi } from "whoisfreaks";
+// Domain Availability Check with Suggestions: GET https://api.whoisfreaks.com/v2.0/domain/availability
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DomainAvailabilityV2.ts
+import { Configuration, DomainAvailabilityApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DomainAvailabilityApi(config);
 
-async function main() {
-  const result = await api.domainAvailabilityV2({ domain: "example.com", sug: undefined, count: undefined, format: undefined });
-  console.log(result);
+// domainAvailabilityV2({ domain, sug?, count?, format? })
+//   domain (string, required): The domain name to check
+//   sug (boolean, optional): Whether to return TLD suggestions alongside the queried domain; default false
+//   count (number, optional): Number of TLD suggestions to return when sug=true. Maximum is 100; default 5
+//   format ("json" | "xml", optional): default "json"
+async function main(): Promise<void> {
+  const result = await api.domainAvailabilityV2({ domain: "google.com", sug: true, count: 5 });
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### Bulk Domain Availability Check
@@ -302,22 +427,33 @@ main().catch(console.error);
 `POST /v2.0/domain/availability`
 
 ```typescript
-// Runnable example: Bulk Domain Availability Check (POST /v2.0/domain/availability)
-// Parameters for bulkDomainAvailabilityV2 (POST /v2.0/domain/availability):
-//   - domain (string, optional): Required for TLD-mode bulk check (base domain).
-//   - format (string (one of: json, xml), optional)
-//   - body: BulkDomainAvailabilityRequest (required) -- request body object
-import { Configuration, DomainAvailabilityApi } from "whoisfreaks";
+// Bulk Domain Availability Check: POST https://api.whoisfreaks.com/v2.0/domain/availability
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx BulkDomainAvailabilityV2.ts
+import { Configuration, DomainAvailabilityApi, ResponseError, type BulkDomainAvailabilityRequest } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DomainAvailabilityApi(config);
 
-async function main() {
-  const result = await api.bulkDomainAvailabilityV2({ bulkDomainAvailabilityRequest: {}, domain: undefined, format: undefined });
-  console.log(result);
+// bulkDomainAvailabilityV2({ bulkDomainAvailabilityRequest, domain?, format? })
+//   bulkDomainAvailabilityRequest (BulkDomainAvailabilityRequest, required): request body
+//   domain (string, optional): Required for TLD-mode bulk check (base domain)
+//   format ("json" | "xml", optional): default "json"
+async function main(): Promise<void> {
+  const body: BulkDomainAvailabilityRequest = { domainNames: ["whoisfreaks.com", "example.com"] };
+  const result = await api.bulkDomainAvailabilityV2({ bulkDomainAvailabilityRequest: body });
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 ### Typosquatting
@@ -327,22 +463,32 @@ main().catch(console.error);
 `GET /v3.0/domain/typos`
 
 ```typescript
-// Runnable example: Typosquatting Lookup (GET /v3.0/domain/typos)
-// Parameters for typosquatting (GET /v3.0/domain/typos):
-//   - keyword (string, optional)
-//   - pattern (string, optional)
-//   - pageToken (string, optional)
-import { Configuration, TyposquattingApi } from "whoisfreaks";
+// Typosquatting Lookup: GET https://api.whoisfreaks.com/v3.0/domain/typos
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx Typosquatting.ts
+import { Configuration, TyposquattingApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new TyposquattingApi(config);
 
-async function main() {
-  const result = await api.typosquatting({ keyword: undefined, pattern: undefined, pageToken: undefined });
-  console.log(result);
+// typosquatting({ keyword?, pattern?, pageToken? })
+//   keyword (string, optional)
+//   pattern (string, optional)
+//   pageToken (string, optional)
+async function main(): Promise<void> {
+  const result = await api.typosquatting({ keyword: "whoisfreaks" });
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 ### SSL
@@ -352,23 +498,33 @@ main().catch(console.error);
 `GET /v1.0/ssl/live`
 
 ```typescript
-// Runnable example: SSL Certificate Lookup (GET /v1.0/ssl/live)
-// Parameters for sslLookup (GET /v1.0/ssl/live):
-//   - domainName (string, required)
-//   - chain (boolean, optional)
-//   - sslRaw (boolean, optional)
-//   - format (string (one of: json, xml), optional)
-import { Configuration, SSLApi } from "whoisfreaks";
+// SSL Certificate Lookup: GET https://api.whoisfreaks.com/v1.0/ssl/live
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx SslLookup.ts
+import { Configuration, SSLApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new SSLApi(config);
 
-async function main() {
-  const result = await api.sslLookup({ domainName: "example.com", chain: undefined, sslRaw: undefined, format: undefined });
-  console.log(result);
+// sslLookup({ domainName, chain?, sslRaw?, format? })
+//   domainName (string, required)
+//   chain (boolean, optional): default false
+//   sslRaw (boolean, optional): default false
+//   format ("json" | "xml", optional): default "json"
+async function main(): Promise<void> {
+  const result = await api.sslLookup({ domainName: "whoisfreaks.com" });
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 ### Geolocation
@@ -378,20 +534,30 @@ main().catch(console.error);
 `GET /v1.0/geolocation`
 
 ```typescript
-// Runnable example: IP Geolocation Lookup (GET /v1.0/geolocation)
-// Parameters for geolocation (GET /v1.0/geolocation):
-//   - ip (string, required)
-import { Configuration, GeolocationApi } from "whoisfreaks";
+// IP Geolocation Lookup: GET https://api.whoisfreaks.com/v1.0/geolocation
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx Geolocation.ts
+import { Configuration, GeolocationApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new GeolocationApi(config);
 
-async function main() {
+// geolocation({ ip })
+//   ip (string, required)
+async function main(): Promise<void> {
   const result = await api.geolocation({ ip: "8.8.8.8" });
-  console.log(result);
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### Bulk IP Geolocation
@@ -399,20 +565,31 @@ main().catch(console.error);
 `POST /v1.0/geolocation`
 
 ```typescript
-// Runnable example: Bulk IP Geolocation (POST /v1.0/geolocation)
-// Parameters for bulkGeolocation (POST /v1.0/geolocation):
-//   - body: BulkGeolocationRequest (required) -- request body object
-import { Configuration, GeolocationApi } from "whoisfreaks";
+// Bulk IP Geolocation: POST https://api.whoisfreaks.com/v1.0/geolocation
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx BulkGeolocation.ts
+import { Configuration, GeolocationApi, ResponseError, type BulkGeolocationRequest } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new GeolocationApi(config);
 
-async function main() {
-  const result = await api.bulkGeolocation({ bulkGeolocationRequest: {} });
-  console.log(result);
+// bulkGeolocation({ bulkGeolocationRequest })
+//   bulkGeolocationRequest (BulkGeolocationRequest, required): request body
+async function main(): Promise<void> {
+  const body: BulkGeolocationRequest = { ips: ["8.8.8.8", "1.1.1.1"] };
+  const results = await api.bulkGeolocation({ bulkGeolocationRequest: body });
+  console.log(JSON.stringify(results, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 ### Subdomains
@@ -422,25 +599,35 @@ main().catch(console.error);
 `GET /v1.0/subdomains`
 
 ```typescript
-// Runnable example: Subdomains Lookup (GET /v1.0/subdomains)
-// Parameters for subdomains (GET /v1.0/subdomains):
-//   - domain (string, required)
-//   - after (string, optional)
-//   - before (string, optional)
-//   - status (string (one of: active, inactive), optional)
-//   - page (integer, optional)
-//   - format (string (one of: json, xml), optional)
-import { Configuration, SubdomainsApi } from "whoisfreaks";
+// Subdomains Lookup: GET https://api.whoisfreaks.com/v1.0/subdomains
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx Subdomains.ts
+import { Configuration, SubdomainsApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new SubdomainsApi(config);
 
-async function main() {
-  const result = await api.subdomains({ domain: "example.com", after: "2000-01-01", before: new Date().toISOString().slice(0,10), status: undefined, page: undefined, format: undefined });
-  console.log(result);
+// subdomains({ domain, after?, before?, status?, page?, format? })
+//   domain (string, required)
+//   after (Date, optional)
+//   before (Date, optional)
+//   status ("active" | "inactive", optional)
+//   page (number, optional): default 1
+//   format ("json" | "xml", optional): default "json"
+async function main(): Promise<void> {
+  const result = await api.subdomains({ domain: "whoisfreaks.com", page: 1 });
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 ### IP Reputation
@@ -450,20 +637,30 @@ main().catch(console.error);
 `GET /v1.0/security`
 
 ```typescript
-// Runnable example: IP Reputation Lookup (GET /v1.0/security)
-// Parameters for ipReputation (GET /v1.0/security):
-//   - ip (string, required)
-import { Configuration, IPReputationApi } from "whoisfreaks";
+// IP Reputation Lookup: GET https://api.whoisfreaks.com/v1.0/security
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx IpReputation.ts
+import { Configuration, IPReputationApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new IPReputationApi(config);
 
-async function main() {
+// ipReputation({ ip })
+//   ip (string, required)
+async function main(): Promise<void> {
   const result = await api.ipReputation({ ip: "8.8.8.8" });
-  console.log(result);
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### Bulk IP Reputation
@@ -471,20 +668,31 @@ main().catch(console.error);
 `POST /v1.0/security`
 
 ```typescript
-// Runnable example: Bulk IP Reputation (POST /v1.0/security)
-// Parameters for bulkIpReputation (POST /v1.0/security):
-//   - body: BulkIpReputationRequest (required) -- request body object
-import { Configuration, IPReputationApi } from "whoisfreaks";
+// Bulk IP Reputation: POST https://api.whoisfreaks.com/v1.0/security
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx BulkIpReputation.ts
+import { Configuration, IPReputationApi, ResponseError, type BulkGeolocationRequest } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new IPReputationApi(config);
 
-async function main() {
-  const result = await api.bulkIpReputation({ bulkIpReputationRequest: {} });
-  console.log(result);
+// bulkIpReputation({ bulkGeolocationRequest })
+//   bulkGeolocationRequest (BulkGeolocationRequest, required): request body
+async function main(): Promise<void> {
+  const body: BulkGeolocationRequest = { ips: ["8.8.8.8", "1.1.1.1"] };
+  const results = await api.bulkIpReputation({ bulkGeolocationRequest: body });
+  console.log(JSON.stringify(results, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 ### Domain Reputation
@@ -494,21 +702,31 @@ main().catch(console.error);
 `GET /v1/domain/security`
 
 ```typescript
-// Runnable example: Domain Reputation Lookup (GET /v1/domain/security)
-// Parameters for domainReputation (GET /v1/domain/security):
-//   - domainName (string, required): The domain name to assess
-//   - format (string (one of: json, xml), optional)
-import { Configuration, DomainReputationApi } from "whoisfreaks";
+// Domain Reputation Lookup: GET https://api.whoisfreaks.com/v1/domain/security
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DomainReputation.ts
+import { Configuration, DomainReputationApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DomainReputationApi(config);
 
-async function main() {
-  const result = await api.domainReputation({ domainName: "example.com", format: undefined });
-  console.log(result);
+// domainReputation({ domainName, format? })
+//   domainName (string, required): The domain name to assess
+//   format ("json" | "xml", optional): default "json"
+async function main(): Promise<void> {
+  const result = await api.domainReputation({ domainName: "amazon.com" });
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 ### ASN WHOIS
@@ -518,21 +736,31 @@ main().catch(console.error);
 `GET /v2.0/asn-whois`
 
 ```typescript
-// Runnable example: ASN WHOIS Lookup (GET /v2.0/asn-whois)
-// Parameters for asnWhois (GET /v2.0/asn-whois):
-//   - asn (string, required)
-//   - format (string (one of: json, xml), optional)
-import { Configuration, ASNWHOISApi } from "whoisfreaks";
+// ASN WHOIS Lookup: GET https://api.whoisfreaks.com/v2.0/asn-whois
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx AsnWhois.ts
+import { Configuration, ASNWHOISApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new ASNWHOISApi(config);
 
-async function main() {
-  const result = await api.asnWhois({ asn: "AS15169", format: undefined });
-  console.log(result);
+// asnWhois({ asn, format? })
+//   asn (string, required)
+//   format ("json" | "xml", optional): default "json"
+async function main(): Promise<void> {
+  const result = await api.asnWhois({ asn: "as15169" });
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 ### IP WHOIS
@@ -542,21 +770,31 @@ main().catch(console.error);
 `GET /v1.0/ip-whois`
 
 ```typescript
-// Runnable example: IP WHOIS Lookup (GET /v1.0/ip-whois)
-// Parameters for ipWhois (GET /v1.0/ip-whois):
-//   - ip (string, required)
-//   - format (string (one of: json, xml), optional)
-import { Configuration, IPWHOISApi } from "whoisfreaks";
+// IP WHOIS Lookup: GET https://api.whoisfreaks.com/v1.0/ip-whois
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx IpWhois.ts
+import { Configuration, IPWHOISApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new IPWHOISApi(config);
 
-async function main() {
-  const result = await api.ipWhois({ ip: "8.8.8.8", format: undefined });
-  console.log(result);
+// ipWhois({ ip, format? })
+//   ip (string, required)
+//   format ("json" | "xml", optional): default "json"
+async function main(): Promise<void> {
+  const result = await api.ipWhois({ ip: "8.8.8.8" });
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 ### Account
@@ -566,20 +804,29 @@ main().catch(console.error);
 `GET /v1.0/api-key/rotate`
 
 ```typescript
-// Runnable example: Rotate API Key (GET /v1.0/api-key/rotate)
-// Parameters for rotateApiKey (GET /v1.0/api-key/rotate):
-//   (no parameters; the API key is set on the client)
-import { Configuration, AccountApi } from "whoisfreaks";
+// Rotate API Key: GET https://api.whoisfreaks.com/v1.0/api-key/rotate
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx RotateApiKey.ts
+import { Configuration, AccountApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new AccountApi(config);
 
-async function main() {
-  const result = await api.rotateApiKey({  });
-  console.log(result);
+// rotateApiKey() takes no parameters.
+async function main(): Promise<void> {
+  const newKey = await api.rotateApiKey(); // use this key from now on
+  console.log("New API key:", newKey);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### Account Usage
@@ -587,20 +834,29 @@ main().catch(console.error);
 `GET /v1.0/whoisapi/usage`
 
 ```typescript
-// Runnable example: Account Usage (GET /v1.0/whoisapi/usage)
-// Parameters for accountUsage (GET /v1.0/whoisapi/usage):
-//   (no parameters; the API key is set on the client)
-import { Configuration, AccountApi } from "whoisfreaks";
+// Account Usage: GET https://api.whoisfreaks.com/v1.0/whoisapi/usage
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx AccountUsage.ts
+import { Configuration, AccountApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new AccountApi(config);
 
-async function main() {
-  const result = await api.accountUsage({  });
-  console.log(result);
+// accountUsage() takes no parameters.
+async function main(): Promise<void> {
+  const result = await api.accountUsage();
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### Database File Status (Public)
@@ -608,20 +864,28 @@ main().catch(console.error);
 `GET /v3.4/status`
 
 ```typescript
-// Runnable example: Database File Status (Public) (GET /v3.4/status)
-// Parameters for databaseFileStatus (GET /v3.4/status):
-//   (no parameters; the API key is set on the client)
-import { Configuration, AccountApi } from "whoisfreaks";
+// Database File Status (Public): GET https://files.whoisfreaks.com/v3.4/status
+// Run (public endpoint, no API key needed): npx tsx DatabaseFileStatus.ts
+import { AccountApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
-const api = new AccountApi(config);
+// Public endpoint: no API key needed.
+const api = new AccountApi();
 
-async function main() {
-  const result = await api.databaseFileStatus({  });
-  console.log(result);
+// databaseFileStatus() takes no parameters.
+async function main(): Promise<void> {
+  const result = await api.databaseFileStatus();
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 ### Databases - Newly Registered
@@ -631,22 +895,36 @@ main().catch(console.error);
 `GET /v3.1/download/domainer/gtld`
 
 ```typescript
-// Runnable example: Newly Registered gTLD (CSV) (GET /v3.1/download/domainer/gtld)
-// Parameters for dbNewlyGtld (GET /v3.1/download/domainer/gtld):
-//   - whois (boolean, required)
-//   - date (string, optional): yyyy-MM-dd; omit for latest
-//   - tlds (string, optional)
-import { Configuration, DatabasesNewlyRegisteredApi } from "whoisfreaks";
+// Newly Registered gTLD (CSV): GET https://files.whoisfreaks.com/v3.1/download/domainer/gtld
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbNewlyGtld.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesNewlyRegisteredApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesNewlyRegisteredApi(config);
 
-async function main() {
-  const result = await api.dbNewlyGtld({ whois: false, date: new Date(Date.now()-86400000).toISOString().slice(0,10), tlds: undefined });
-  console.log(result);
+// dbNewlyGtld({ whois, date?, tlds? })
+//   whois (boolean, required)
+//   date (Date, optional): yyyy-MM-dd; omit for latest
+//   tlds (string, optional)
+async function main(): Promise<void> {
+  const blob = await api.dbNewlyGtld({ whois: true, date: new Date("2026-10-01") }); // a Blob with the file's bytes
+  const file = "DbNewlyGtld.csv";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### Newly Registered ccTLD (CSV)
@@ -654,22 +932,36 @@ main().catch(console.error);
 `GET /v3.1/download/domainer/cctld`
 
 ```typescript
-// Runnable example: Newly Registered ccTLD (CSV) (GET /v3.1/download/domainer/cctld)
-// Parameters for dbNewlyCctld (GET /v3.1/download/domainer/cctld):
-//   - whois (boolean, required)
-//   - date (string, optional): yyyy-MM-dd; omit for latest
-//   - tlds (string, optional)
-import { Configuration, DatabasesNewlyRegisteredApi } from "whoisfreaks";
+// Newly Registered ccTLD (CSV): GET https://files.whoisfreaks.com/v3.1/download/domainer/cctld
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbNewlyCctld.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesNewlyRegisteredApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesNewlyRegisteredApi(config);
 
-async function main() {
-  const result = await api.dbNewlyCctld({ whois: false, date: new Date(Date.now()-86400000).toISOString().slice(0,10), tlds: undefined });
-  console.log(result);
+// dbNewlyCctld({ whois, date?, tlds? })
+//   whois (boolean, required)
+//   date (Date, optional): yyyy-MM-dd; omit for latest
+//   tlds (string, optional)
+async function main(): Promise<void> {
+  const blob = await api.dbNewlyCctld({ whois: true, date: new Date("2026-10-01") }); // a Blob with the file's bytes
+  const file = "DbNewlyCctld.csv";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### Newly Registered gTLD Cleaned WHOIS (CSV)
@@ -677,20 +969,34 @@ main().catch(console.error);
 `GET /v3.1/download/domainer/gtld/cleaned`
 
 ```typescript
-// Runnable example: Newly Registered gTLD Cleaned WHOIS (CSV) (GET /v3.1/download/domainer/gtld/cleaned)
-// Parameters for dbNewlyGtldCleaned (GET /v3.1/download/domainer/gtld/cleaned):
-//   - date (string, optional): yyyy-MM-dd; omit for latest
-import { Configuration, DatabasesNewlyRegisteredApi } from "whoisfreaks";
+// Newly Registered gTLD Cleaned WHOIS (CSV): GET https://files.whoisfreaks.com/v3.1/download/domainer/gtld/cleaned
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbNewlyGtldCleaned.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesNewlyRegisteredApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesNewlyRegisteredApi(config);
 
-async function main() {
-  const result = await api.dbNewlyGtldCleaned({ date: new Date(Date.now()-86400000).toISOString().slice(0,10) });
-  console.log(result);
+// dbNewlyGtldCleaned({ date? })
+//   date (Date, optional): yyyy-MM-dd; omit for latest
+async function main(): Promise<void> {
+  const blob = await api.dbNewlyGtldCleaned({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
+  const file = "DbNewlyGtldCleaned.csv";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### Newly Registered ccTLD Cleaned WHOIS (CSV)
@@ -698,20 +1004,34 @@ main().catch(console.error);
 `GET /v3.1/download/domainer/cctld/cleaned`
 
 ```typescript
-// Runnable example: Newly Registered ccTLD Cleaned WHOIS (CSV) (GET /v3.1/download/domainer/cctld/cleaned)
-// Parameters for dbNewlyCctldCleaned (GET /v3.1/download/domainer/cctld/cleaned):
-//   - date (string, optional): yyyy-MM-dd; omit for latest
-import { Configuration, DatabasesNewlyRegisteredApi } from "whoisfreaks";
+// Newly Registered ccTLD Cleaned WHOIS (CSV): GET https://files.whoisfreaks.com/v3.1/download/domainer/cctld/cleaned
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbNewlyCctldCleaned.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesNewlyRegisteredApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesNewlyRegisteredApi(config);
 
-async function main() {
-  const result = await api.dbNewlyCctldCleaned({ date: new Date(Date.now()-86400000).toISOString().slice(0,10) });
-  console.log(result);
+// dbNewlyCctldCleaned({ date? })
+//   date (Date, optional): yyyy-MM-dd; omit for latest
+async function main(): Promise<void> {
+  const blob = await api.dbNewlyCctldCleaned({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
+  const file = "DbNewlyCctldCleaned.csv";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### Newly Registered gTLD (JSON)
@@ -719,21 +1039,32 @@ main().catch(console.error);
 `GET /v3.1/domains/newly/gtld`
 
 ```typescript
-// Runnable example: Newly Registered gTLD (JSON) (GET /v3.1/domains/newly/gtld)
-// Parameters for dbNewlyGtldJson (GET /v3.1/domains/newly/gtld):
-//   - date (string, optional): yyyy-MM-dd; omit for latest
-//   - tlds (string, optional)
-import { Configuration, DatabasesNewlyRegisteredApi } from "whoisfreaks";
+// Newly Registered gTLD (JSON): GET https://files.whoisfreaks.com/v3.1/domains/newly/gtld
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbNewlyGtldJson.ts
+import { Configuration, DatabasesNewlyRegisteredApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesNewlyRegisteredApi(config);
 
-async function main() {
-  const result = await api.dbNewlyGtldJson({ date: new Date(Date.now()-86400000).toISOString().slice(0,10), tlds: undefined });
-  console.log(result);
+// dbNewlyGtldJson({ date?, tlds? })
+//   date (Date, optional): yyyy-MM-dd; omit for latest
+//   tlds (string, optional)
+async function main(): Promise<void> {
+  const domains = await api.dbNewlyGtldJson({ date: new Date("2026-10-01") });
+  console.log(`${domains.length} domains`);
+  console.log(domains.slice(0, 10).join("\n"));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### Newly Registered ccTLD (JSON)
@@ -741,21 +1072,32 @@ main().catch(console.error);
 `GET /v3.1/domains/newly/cctld`
 
 ```typescript
-// Runnable example: Newly Registered ccTLD (JSON) (GET /v3.1/domains/newly/cctld)
-// Parameters for dbNewlyCctldJson (GET /v3.1/domains/newly/cctld):
-//   - date (string, optional): yyyy-MM-dd; omit for latest
-//   - tlds (string, optional)
-import { Configuration, DatabasesNewlyRegisteredApi } from "whoisfreaks";
+// Newly Registered ccTLD (JSON): GET https://files.whoisfreaks.com/v3.1/domains/newly/cctld
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbNewlyCctldJson.ts
+import { Configuration, DatabasesNewlyRegisteredApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesNewlyRegisteredApi(config);
 
-async function main() {
-  const result = await api.dbNewlyCctldJson({ date: new Date(Date.now()-86400000).toISOString().slice(0,10), tlds: undefined });
-  console.log(result);
+// dbNewlyCctldJson({ date?, tlds? })
+//   date (Date, optional): yyyy-MM-dd; omit for latest
+//   tlds (string, optional)
+async function main(): Promise<void> {
+  const domains = await api.dbNewlyCctldJson({ date: new Date("2026-10-01") });
+  console.log(`${domains.length} domains`);
+  console.log(domains.slice(0, 10).join("\n"));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### Newly Registered With DNS
@@ -763,20 +1105,34 @@ main().catch(console.error);
 `GET /v3.1/download/domainer/newly/dns`
 
 ```typescript
-// Runnable example: Newly Registered With DNS (GET /v3.1/download/domainer/newly/dns)
-// Parameters for dbNewlyDns (GET /v3.1/download/domainer/newly/dns):
-//   - date (string, optional): yyyy-MM-dd; omit for latest
-import { Configuration, DatabasesNewlyRegisteredApi } from "whoisfreaks";
+// Newly Registered With DNS: GET https://files.whoisfreaks.com/v3.1/download/domainer/newly/dns
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbNewlyDns.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesNewlyRegisteredApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesNewlyRegisteredApi(config);
 
-async function main() {
-  const result = await api.dbNewlyDns({ date: new Date(Date.now()-86400000).toISOString().slice(0,10) });
-  console.log(result);
+// dbNewlyDns({ date? })
+//   date (Date, optional): yyyy-MM-dd; omit for latest
+async function main(): Promise<void> {
+  const blob = await api.dbNewlyDns({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
+  const file = "DbNewlyDns.json";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 ### Databases - Expiring & Dropped
@@ -786,21 +1142,35 @@ main().catch(console.error);
 `GET /v3.1/download/domainer/expired`
 
 ```typescript
-// Runnable example: Expiring Domains (GET /v3.1/download/domainer/expired)
-// Parameters for dbExpired (GET /v3.1/download/domainer/expired):
-//   - whois (boolean, required)
-//   - date (string, optional): yyyy-MM-dd; omit for latest
-import { Configuration, DatabasesExpiringDroppedApi } from "whoisfreaks";
+// Expiring Domains: GET https://files.whoisfreaks.com/v3.1/download/domainer/expired
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbExpired.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesExpiringDroppedApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesExpiringDroppedApi(config);
 
-async function main() {
-  const result = await api.dbExpired({ whois: false, date: new Date(Date.now()-86400000).toISOString().slice(0,10) });
-  console.log(result);
+// dbExpired({ whois, date? })
+//   whois (boolean, required)
+//   date (Date, optional): yyyy-MM-dd; omit for latest
+async function main(): Promise<void> {
+  const blob = await api.dbExpired({ whois: true, date: new Date("2026-10-01") }); // a Blob with the file's bytes
+  const file = "DbExpired.csv";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### Expiring Cleaned WHOIS
@@ -808,20 +1178,34 @@ main().catch(console.error);
 `GET /v3.1/download/domainer/expired/cleaned`
 
 ```typescript
-// Runnable example: Expiring Cleaned WHOIS (GET /v3.1/download/domainer/expired/cleaned)
-// Parameters for dbExpiredCleaned (GET /v3.1/download/domainer/expired/cleaned):
-//   - date (string, optional): yyyy-MM-dd; omit for latest
-import { Configuration, DatabasesExpiringDroppedApi } from "whoisfreaks";
+// Expiring Cleaned WHOIS: GET https://files.whoisfreaks.com/v3.1/download/domainer/expired/cleaned
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbExpiredCleaned.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesExpiringDroppedApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesExpiringDroppedApi(config);
 
-async function main() {
-  const result = await api.dbExpiredCleaned({ date: new Date(Date.now()-86400000).toISOString().slice(0,10) });
-  console.log(result);
+// dbExpiredCleaned({ date? })
+//   date (Date, optional): yyyy-MM-dd; omit for latest
+async function main(): Promise<void> {
+  const blob = await api.dbExpiredCleaned({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
+  const file = "DbExpiredCleaned.csv";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### Dropped Domains
@@ -829,21 +1213,35 @@ main().catch(console.error);
 `GET /v3.1/download/domainer/dropped`
 
 ```typescript
-// Runnable example: Dropped Domains (GET /v3.1/download/domainer/dropped)
-// Parameters for dbDropped (GET /v3.1/download/domainer/dropped):
-//   - whois (boolean, required)
-//   - date (string, optional): yyyy-MM-dd; omit for latest
-import { Configuration, DatabasesExpiringDroppedApi } from "whoisfreaks";
+// Dropped Domains: GET https://files.whoisfreaks.com/v3.1/download/domainer/dropped
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbDropped.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesExpiringDroppedApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesExpiringDroppedApi(config);
 
-async function main() {
-  const result = await api.dbDropped({ whois: false, date: new Date(Date.now()-86400000).toISOString().slice(0,10) });
-  console.log(result);
+// dbDropped({ whois, date? })
+//   whois (boolean, required)
+//   date (Date, optional): yyyy-MM-dd; omit for latest
+async function main(): Promise<void> {
+  const blob = await api.dbDropped({ whois: true, date: new Date("2026-10-01") }); // a Blob with the file's bytes
+  const file = "DbDropped.csv";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### Dropped Domains (JSON)
@@ -851,21 +1249,32 @@ main().catch(console.error);
 `GET /v3.1/domains/dropped`
 
 ```typescript
-// Runnable example: Dropped Domains (JSON) (GET /v3.1/domains/dropped)
-// Parameters for dbDroppedJson (GET /v3.1/domains/dropped):
-//   - date (string, optional): yyyy-MM-dd; omit for latest
-//   - tlds (string, optional)
-import { Configuration, DatabasesExpiringDroppedApi } from "whoisfreaks";
+// Dropped Domains (JSON): GET https://files.whoisfreaks.com/v3.1/domains/dropped
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbDroppedJson.ts
+import { Configuration, DatabasesExpiringDroppedApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesExpiringDroppedApi(config);
 
-async function main() {
-  const result = await api.dbDroppedJson({ date: new Date(Date.now()-86400000).toISOString().slice(0,10), tlds: undefined });
-  console.log(result);
+// dbDroppedJson({ date?, tlds? })
+//   date (Date, optional): yyyy-MM-dd; omit for latest
+//   tlds (string, optional)
+async function main(): Promise<void> {
+  const domains = await api.dbDroppedJson({ date: new Date("2026-10-01") });
+  console.log(`${domains.length} domains`);
+  console.log(domains.slice(0, 10).join("\n"));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### Dropped With Backlinks
@@ -873,21 +1282,35 @@ main().catch(console.error);
 `GET /v3.3/download/domainer/dropped/backlinks`
 
 ```typescript
-// Runnable example: Dropped With Backlinks (GET /v3.3/download/domainer/dropped/backlinks)
-// Parameters for dbDroppedBacklinks (GET /v3.3/download/domainer/dropped/backlinks):
-//   - whois (boolean, optional)
-//   - date (string, optional): yyyy-MM-dd; omit for latest
-import { Configuration, DatabasesExpiringDroppedApi } from "whoisfreaks";
+// Dropped With Backlinks: GET https://files.whoisfreaks.com/v3.3/download/domainer/dropped/backlinks
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbDroppedBacklinks.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesExpiringDroppedApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesExpiringDroppedApi(config);
 
-async function main() {
-  const result = await api.dbDroppedBacklinks({ whois: false, date: new Date(Date.now()-86400000).toISOString().slice(0,10) });
-  console.log(result);
+// dbDroppedBacklinks({ whois?, date? })
+//   whois (boolean, optional)
+//   date (Date, optional): yyyy-MM-dd; omit for latest
+async function main(): Promise<void> {
+  const blob = await api.dbDroppedBacklinks({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
+  const file = "DbDroppedBacklinks.csv";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 ### Databases - WHOIS
@@ -897,20 +1320,34 @@ main().catch(console.error);
 `GET /v3.3/download/dbupdate/daily/domains/whois`
 
 ```typescript
-// Runnable example: WHOIS Database Daily (GET /v3.3/download/dbupdate/daily/domains/whois)
-// Parameters for dbWhoisDaily (GET /v3.3/download/dbupdate/daily/domains/whois):
-//   - date (string, optional): yyyy-MM-dd; omit for latest
-import { Configuration, DatabasesWHOISApi } from "whoisfreaks";
+// WHOIS Database Daily: GET https://files.whoisfreaks.com/v3.3/download/dbupdate/daily/domains/whois
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbWhoisDaily.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesWHOISApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesWHOISApi(config);
 
-async function main() {
-  const result = await api.dbWhoisDaily({ date: new Date(Date.now()-86400000).toISOString().slice(0,10) });
-  console.log(result);
+// dbWhoisDaily({ date? })
+//   date (Date, optional): yyyy-MM-dd; omit for latest
+async function main(): Promise<void> {
+  const blob = await api.dbWhoisDaily({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
+  const file = "DbWhoisDaily.csv";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### WHOIS Database Weekly
@@ -918,20 +1355,34 @@ main().catch(console.error);
 `GET /v3.3/download/dbupdate/weekly/domains/whois`
 
 ```typescript
-// Runnable example: WHOIS Database Weekly (GET /v3.3/download/dbupdate/weekly/domains/whois)
-// Parameters for dbWhoisWeekly (GET /v3.3/download/dbupdate/weekly/domains/whois):
-//   - date (string, optional): yyyy-MM-dd; omit for latest
-import { Configuration, DatabasesWHOISApi } from "whoisfreaks";
+// WHOIS Database Weekly: GET https://files.whoisfreaks.com/v3.3/download/dbupdate/weekly/domains/whois
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbWhoisWeekly.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesWHOISApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesWHOISApi(config);
 
-async function main() {
-  const result = await api.dbWhoisWeekly({ date: new Date(Date.now()-86400000).toISOString().slice(0,10) });
-  console.log(result);
+// dbWhoisWeekly({ date? })
+//   date (Date, optional): yyyy-MM-dd; omit for latest
+async function main(): Promise<void> {
+  const blob = await api.dbWhoisWeekly({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
+  const file = "DbWhoisWeekly.csv";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### WHOIS Database Monthly
@@ -939,20 +1390,34 @@ main().catch(console.error);
 `GET /v3.3/download/dbupdate/monthly/domains/whois`
 
 ```typescript
-// Runnable example: WHOIS Database Monthly (GET /v3.3/download/dbupdate/monthly/domains/whois)
-// Parameters for dbWhoisMonthly (GET /v3.3/download/dbupdate/monthly/domains/whois):
-//   - date (string, optional): yyyy-MM-dd; omit for latest
-import { Configuration, DatabasesWHOISApi } from "whoisfreaks";
+// WHOIS Database Monthly: GET https://files.whoisfreaks.com/v3.3/download/dbupdate/monthly/domains/whois
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbWhoisMonthly.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesWHOISApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesWHOISApi(config);
 
-async function main() {
-  const result = await api.dbWhoisMonthly({ date: new Date(Date.now()-86400000).toISOString().slice(0,10) });
-  console.log(result);
+// dbWhoisMonthly({ date? })
+//   date (Date, optional): yyyy-MM-dd; omit for latest
+async function main(): Promise<void> {
+  const blob = await api.dbWhoisMonthly({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
+  const file = "DbWhoisMonthly.csv";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 ### Databases - DNS
@@ -962,20 +1427,34 @@ main().catch(console.error);
 `GET /v3.2/download/dbupdate/daily/dns`
 
 ```typescript
-// Runnable example: DNS Database Daily (GET /v3.2/download/dbupdate/daily/dns)
-// Parameters for dbDnsDaily (GET /v3.2/download/dbupdate/daily/dns):
-//   - date (string, optional): yyyy-MM-dd; omit for latest
-import { Configuration, DatabasesDNSApi } from "whoisfreaks";
+// DNS Database Daily: GET https://files.whoisfreaks.com/v3.2/download/dbupdate/daily/dns
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbDnsDaily.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesDNSApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesDNSApi(config);
 
-async function main() {
-  const result = await api.dbDnsDaily({ date: new Date(Date.now()-86400000).toISOString().slice(0,10) });
-  console.log(result);
+// dbDnsDaily({ date? })
+//   date (Date, optional): yyyy-MM-dd; omit for latest
+async function main(): Promise<void> {
+  const blob = await api.dbDnsDaily({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
+  const file = "DbDnsDaily.csv";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### DNS Database Weekly
@@ -983,20 +1462,34 @@ main().catch(console.error);
 `GET /v3.2/download/dbupdate/weekly/dns`
 
 ```typescript
-// Runnable example: DNS Database Weekly (GET /v3.2/download/dbupdate/weekly/dns)
-// Parameters for dbDnsWeekly (GET /v3.2/download/dbupdate/weekly/dns):
-//   - date (string, optional): yyyy-MM-dd; omit for latest
-import { Configuration, DatabasesDNSApi } from "whoisfreaks";
+// DNS Database Weekly: GET https://files.whoisfreaks.com/v3.2/download/dbupdate/weekly/dns
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbDnsWeekly.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesDNSApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesDNSApi(config);
 
-async function main() {
-  const result = await api.dbDnsWeekly({ date: new Date(Date.now()-86400000).toISOString().slice(0,10) });
-  console.log(result);
+// dbDnsWeekly({ date? })
+//   date (Date, optional): yyyy-MM-dd; omit for latest
+async function main(): Promise<void> {
+  const blob = await api.dbDnsWeekly({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
+  const file = "DbDnsWeekly.csv";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### DNS Database Monthly
@@ -1004,20 +1497,34 @@ main().catch(console.error);
 `GET /v3.2/download/dbupdate/monthly/dns`
 
 ```typescript
-// Runnable example: DNS Database Monthly (GET /v3.2/download/dbupdate/monthly/dns)
-// Parameters for dbDnsMonthly (GET /v3.2/download/dbupdate/monthly/dns):
-//   - date (string, optional): yyyy-MM-dd; omit for latest
-import { Configuration, DatabasesDNSApi } from "whoisfreaks";
+// DNS Database Monthly: GET https://files.whoisfreaks.com/v3.2/download/dbupdate/monthly/dns
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbDnsMonthly.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesDNSApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesDNSApi(config);
 
-async function main() {
-  const result = await api.dbDnsMonthly({ date: new Date(Date.now()-86400000).toISOString().slice(0,10) });
-  console.log(result);
+// dbDnsMonthly({ date? })
+//   date (Date, optional): yyyy-MM-dd; omit for latest
+async function main(): Promise<void> {
+  const blob = await api.dbDnsMonthly({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
+  const file = "DbDnsMonthly.csv";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 ### Databases - Subdomains
@@ -1027,20 +1534,34 @@ main().catch(console.error);
 `GET /v3.2/download/dbupdate/daily/subdomains`
 
 ```typescript
-// Runnable example: Subdomains Daily (GET /v3.2/download/dbupdate/daily/subdomains)
-// Parameters for dbSubdomainsDaily (GET /v3.2/download/dbupdate/daily/subdomains):
-//   - date (string, optional): yyyy-MM-dd; omit for latest
-import { Configuration, DatabasesSubdomainsApi } from "whoisfreaks";
+// Subdomains Daily: GET https://files.whoisfreaks.com/v3.2/download/dbupdate/daily/subdomains
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbSubdomainsDaily.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesSubdomainsApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesSubdomainsApi(config);
 
-async function main() {
-  const result = await api.dbSubdomainsDaily({ date: new Date(Date.now()-86400000).toISOString().slice(0,10) });
-  console.log(result);
+// dbSubdomainsDaily({ date? })
+//   date (Date, optional): yyyy-MM-dd; omit for latest
+async function main(): Promise<void> {
+  const blob = await api.dbSubdomainsDaily({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
+  const file = "DbSubdomainsDaily.csv";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### Subdomains Weekly
@@ -1048,20 +1569,34 @@ main().catch(console.error);
 `GET /v3.2/download/dbupdate/weekly/subdomains`
 
 ```typescript
-// Runnable example: Subdomains Weekly (GET /v3.2/download/dbupdate/weekly/subdomains)
-// Parameters for dbSubdomainsWeekly (GET /v3.2/download/dbupdate/weekly/subdomains):
-//   - date (string, optional): yyyy-MM-dd; omit for latest
-import { Configuration, DatabasesSubdomainsApi } from "whoisfreaks";
+// Subdomains Weekly: GET https://files.whoisfreaks.com/v3.2/download/dbupdate/weekly/subdomains
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbSubdomainsWeekly.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesSubdomainsApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesSubdomainsApi(config);
 
-async function main() {
-  const result = await api.dbSubdomainsWeekly({ date: new Date(Date.now()-86400000).toISOString().slice(0,10) });
-  console.log(result);
+// dbSubdomainsWeekly({ date? })
+//   date (Date, optional): yyyy-MM-dd; omit for latest
+async function main(): Promise<void> {
+  const blob = await api.dbSubdomainsWeekly({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
+  const file = "DbSubdomainsWeekly.csv";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### Subdomains Monthly
@@ -1069,20 +1604,34 @@ main().catch(console.error);
 `GET /v3.2/download/dbupdate/monthly/subdomains`
 
 ```typescript
-// Runnable example: Subdomains Monthly (GET /v3.2/download/dbupdate/monthly/subdomains)
-// Parameters for dbSubdomainsMonthly (GET /v3.2/download/dbupdate/monthly/subdomains):
-//   - date (string, optional): yyyy-MM-dd; omit for latest
-import { Configuration, DatabasesSubdomainsApi } from "whoisfreaks";
+// Subdomains Monthly: GET https://files.whoisfreaks.com/v3.2/download/dbupdate/monthly/subdomains
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbSubdomainsMonthly.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesSubdomainsApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesSubdomainsApi(config);
 
-async function main() {
-  const result = await api.dbSubdomainsMonthly({ date: new Date(Date.now()-86400000).toISOString().slice(0,10) });
-  console.log(result);
+// dbSubdomainsMonthly({ date? })
+//   date (Date, optional): yyyy-MM-dd; omit for latest
+async function main(): Promise<void> {
+  const blob = await api.dbSubdomainsMonthly({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
+  const file = "DbSubdomainsMonthly.csv";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 ### Databases - IP Geolocation
@@ -1092,20 +1641,29 @@ main().catch(console.error);
 `GET /v3.3/status/snapshot/ip/country`
 
 ```typescript
-// Runnable example: IP to Country Snapshot Status (GET /v3.3/status/snapshot/ip/country)
-// Parameters for dbIpCountryStatus (GET /v3.3/status/snapshot/ip/country):
-//   (no parameters; the API key is set on the client)
-import { Configuration, DatabasesIPGeolocationApi } from "whoisfreaks";
+// IP to Country Snapshot Status: GET https://files.whoisfreaks.com/v3.3/status/snapshot/ip/country
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbIpCountryStatus.ts
+import { Configuration, DatabasesIPGeolocationApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesIPGeolocationApi(config);
 
-async function main() {
-  const result = await api.dbIpCountryStatus({  });
-  console.log(result);
+// dbIpCountryStatus() takes no parameters.
+async function main(): Promise<void> {
+  const result = await api.dbIpCountryStatus();
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### IP to Country Snapshot
@@ -1113,20 +1671,34 @@ main().catch(console.error);
 `GET /v3.3/download/snapshot/ip/country`
 
 ```typescript
-// Runnable example: IP to Country Snapshot (GET /v3.3/download/snapshot/ip/country)
-// Parameters for dbIpCountry (GET /v3.3/download/snapshot/ip/country):
-//   - date (string, required)
-import { Configuration, DatabasesIPGeolocationApi } from "whoisfreaks";
+// IP to Country Snapshot: GET https://files.whoisfreaks.com/v3.3/download/snapshot/ip/country
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbIpCountry.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesIPGeolocationApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesIPGeolocationApi(config);
 
-async function main() {
-  const result = await api.dbIpCountry({ date: new Date(Date.now()-86400000).toISOString().slice(0,10) });
-  console.log(result);
+// dbIpCountry({ date })
+//   date (Date, required)
+async function main(): Promise<void> {
+  const blob = await api.dbIpCountry({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
+  const file = "DbIpCountry.zip";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### IP to City Snapshot Status
@@ -1134,20 +1706,29 @@ main().catch(console.error);
 `GET /v3.3/status/snapshot/ip/city`
 
 ```typescript
-// Runnable example: IP to City Snapshot Status (GET /v3.3/status/snapshot/ip/city)
-// Parameters for dbIpCityStatus (GET /v3.3/status/snapshot/ip/city):
-//   (no parameters; the API key is set on the client)
-import { Configuration, DatabasesIPGeolocationApi } from "whoisfreaks";
+// IP to City Snapshot Status: GET https://files.whoisfreaks.com/v3.3/status/snapshot/ip/city
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbIpCityStatus.ts
+import { Configuration, DatabasesIPGeolocationApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesIPGeolocationApi(config);
 
-async function main() {
-  const result = await api.dbIpCityStatus({  });
-  console.log(result);
+// dbIpCityStatus() takes no parameters.
+async function main(): Promise<void> {
+  const result = await api.dbIpCityStatus();
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### IP to City Snapshot
@@ -1155,20 +1736,34 @@ main().catch(console.error);
 `GET /v3.3/download/snapshot/ip/city`
 
 ```typescript
-// Runnable example: IP to City Snapshot (GET /v3.3/download/snapshot/ip/city)
-// Parameters for dbIpCity (GET /v3.3/download/snapshot/ip/city):
-//   - date (string, required)
-import { Configuration, DatabasesIPGeolocationApi } from "whoisfreaks";
+// IP to City Snapshot: GET https://files.whoisfreaks.com/v3.3/download/snapshot/ip/city
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbIpCity.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesIPGeolocationApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesIPGeolocationApi(config);
 
-async function main() {
-  const result = await api.dbIpCity({ date: new Date(Date.now()-86400000).toISOString().slice(0,10) });
-  console.log(result);
+// dbIpCity({ date })
+//   date (Date, required)
+async function main(): Promise<void> {
+  const blob = await api.dbIpCity({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
+  const file = "DbIpCity.zip";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 ### Databases - ASN WHOIS
@@ -1178,20 +1773,34 @@ main().catch(console.error);
 `GET /v3.3/download/snapshot/asn/whois`
 
 ```typescript
-// Runnable example: ASN WHOIS Snapshot (GET /v3.3/download/snapshot/asn/whois)
-// Parameters for dbAsnWhois (GET /v3.3/download/snapshot/asn/whois):
-//   - date (string, required)
-import { Configuration, DatabasesASNWHOISApi } from "whoisfreaks";
+// ASN WHOIS Snapshot: GET https://files.whoisfreaks.com/v3.3/download/snapshot/asn/whois
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbAsnWhois.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesASNWHOISApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesASNWHOISApi(config);
 
-async function main() {
-  const result = await api.dbAsnWhois({ date: new Date(Date.now()-86400000).toISOString().slice(0,10) });
-  console.log(result);
+// dbAsnWhois({ date })
+//   date (Date, required)
+async function main(): Promise<void> {
+  const blob = await api.dbAsnWhois({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
+  const file = "DbAsnWhois.json.gz";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### ASN WHOIS Snapshot Status
@@ -1199,20 +1808,29 @@ main().catch(console.error);
 `GET /v3.3/status/snapshot/asn/whois`
 
 ```typescript
-// Runnable example: ASN WHOIS Snapshot Status (GET /v3.3/status/snapshot/asn/whois)
-// Parameters for dbAsnWhoisStatus (GET /v3.3/status/snapshot/asn/whois):
-//   (no parameters; the API key is set on the client)
-import { Configuration, DatabasesASNWHOISApi } from "whoisfreaks";
+// ASN WHOIS Snapshot Status: GET https://files.whoisfreaks.com/v3.3/status/snapshot/asn/whois
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbAsnWhoisStatus.ts
+import { Configuration, DatabasesASNWHOISApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesASNWHOISApi(config);
 
-async function main() {
-  const result = await api.dbAsnWhoisStatus({  });
-  console.log(result);
+// dbAsnWhoisStatus() takes no parameters.
+async function main(): Promise<void> {
+  const result = await api.dbAsnWhoisStatus();
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 ### Databases - IP WHOIS
@@ -1222,20 +1840,34 @@ main().catch(console.error);
 `GET /v3.3/download/snapshot/ip/whois`
 
 ```typescript
-// Runnable example: IP WHOIS Snapshot (GET /v3.3/download/snapshot/ip/whois)
-// Parameters for dbIpWhois (GET /v3.3/download/snapshot/ip/whois):
-//   - date (string, required)
-import { Configuration, DatabasesIPWHOISApi } from "whoisfreaks";
+// IP WHOIS Snapshot: GET https://files.whoisfreaks.com/v3.3/download/snapshot/ip/whois
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbIpWhois.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesIPWHOISApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesIPWHOISApi(config);
 
-async function main() {
-  const result = await api.dbIpWhois({ date: new Date(Date.now()-86400000).toISOString().slice(0,10) });
-  console.log(result);
+// dbIpWhois({ date })
+//   date (Date, required)
+async function main(): Promise<void> {
+  const blob = await api.dbIpWhois({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
+  const file = "DbIpWhois.json.gz";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### IP WHOIS Snapshot Status
@@ -1243,20 +1875,29 @@ main().catch(console.error);
 `GET /v3.3/status/snapshot/ip/whois`
 
 ```typescript
-// Runnable example: IP WHOIS Snapshot Status (GET /v3.3/status/snapshot/ip/whois)
-// Parameters for dbIpWhoisStatus (GET /v3.3/status/snapshot/ip/whois):
-//   (no parameters; the API key is set on the client)
-import { Configuration, DatabasesIPWHOISApi } from "whoisfreaks";
+// IP WHOIS Snapshot Status: GET https://files.whoisfreaks.com/v3.3/status/snapshot/ip/whois
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbIpWhoisStatus.ts
+import { Configuration, DatabasesIPWHOISApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesIPWHOISApi(config);
 
-async function main() {
-  const result = await api.dbIpWhoisStatus({  });
-  console.log(result);
+// dbIpWhoisStatus() takes no parameters.
+async function main(): Promise<void> {
+  const result = await api.dbIpWhoisStatus();
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 ### Databases - IP Security
@@ -1266,20 +1907,34 @@ main().catch(console.error);
 `GET /v3.3/download/snapshot/ip/security`
 
 ```typescript
-// Runnable example: IP Security Snapshot (GET /v3.3/download/snapshot/ip/security)
-// Parameters for dbIpSecurity (GET /v3.3/download/snapshot/ip/security):
-//   - date (string, required)
-import { Configuration, DatabasesIPSecurityApi } from "whoisfreaks";
+// IP Security Snapshot: GET https://files.whoisfreaks.com/v3.3/download/snapshot/ip/security
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbIpSecurity.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesIPSecurityApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesIPSecurityApi(config);
 
-async function main() {
-  const result = await api.dbIpSecurity({ date: new Date(Date.now()-86400000).toISOString().slice(0,10) });
-  console.log(result);
+// dbIpSecurity({ date })
+//   date (Date, required)
+async function main(): Promise<void> {
+  const blob = await api.dbIpSecurity({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
+  const file = "DbIpSecurity.csv";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### IP Security Snapshot Status
@@ -1287,20 +1942,29 @@ main().catch(console.error);
 `GET /v3.3/status/snapshot/ip/security`
 
 ```typescript
-// Runnable example: IP Security Snapshot Status (GET /v3.3/status/snapshot/ip/security)
-// Parameters for dbIpSecurityStatus (GET /v3.3/status/snapshot/ip/security):
-//   (no parameters; the API key is set on the client)
-import { Configuration, DatabasesIPSecurityApi } from "whoisfreaks";
+// IP Security Snapshot Status: GET https://files.whoisfreaks.com/v3.3/status/snapshot/ip/security
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbIpSecurityStatus.ts
+import { Configuration, DatabasesIPSecurityApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesIPSecurityApi(config);
 
-async function main() {
-  const result = await api.dbIpSecurityStatus({  });
-  console.log(result);
+// dbIpSecurityStatus() takes no parameters.
+async function main(): Promise<void> {
+  const result = await api.dbIpSecurityStatus();
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 ### Databases - Threat Feed
@@ -1310,20 +1974,34 @@ main().catch(console.error);
 `GET /v3.4/download/threat-feed/phishing`
 
 ```typescript
-// Runnable example: Download the daily phishing threat feed (CSV) (GET /v3.4/download/threat-feed/phishing)
-// Parameters for downloadThreatFeedPhishing (GET /v3.4/download/threat-feed/phishing):
-//   - date (string, optional): Feed date (yyyy-MM-dd); defaults to latest available
-import { Configuration, DatabasesThreatFeedApi } from "whoisfreaks";
+// Download the daily phishing threat feed (CSV): GET https://files.whoisfreaks.com/v3.4/download/threat-feed/phishing
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DownloadThreatFeedPhishing.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesThreatFeedApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesThreatFeedApi(config);
 
-async function main() {
-  const result = await api.downloadThreatFeedPhishing({ date: new Date(Date.now()-86400000).toISOString().slice(0,10) });
-  console.log(result);
+// downloadThreatFeedPhishing({ date? })
+//   date (string, optional): Feed date (yyyy-MM-dd); omit for the full dump of the feed
+async function main(): Promise<void> {
+  const blob = await api.downloadThreatFeedPhishing({ date: "2026-10-01" }); // a Blob with the file's bytes
+  const file = "DownloadThreatFeedPhishing.csv";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### Download a sample of the phishing threat feed (CSV)
@@ -1331,20 +2009,33 @@ main().catch(console.error);
 `GET /v3.4/download/threat-feed/phishing/sample`
 
 ```typescript
-// Runnable example: Download a sample of the phishing threat feed (CSV) (GET /v3.4/download/threat-feed/phishing/sample)
-// Parameters for downloadThreatFeedPhishingSample (GET /v3.4/download/threat-feed/phishing/sample):
-//   (no parameters; the API key is set on the client)
-import { Configuration, DatabasesThreatFeedApi } from "whoisfreaks";
+// Download a sample of the phishing threat feed (CSV): GET https://files.whoisfreaks.com/v3.4/download/threat-feed/phishing/sample
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DownloadThreatFeedPhishingSample.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesThreatFeedApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesThreatFeedApi(config);
 
-async function main() {
-  const result = await api.downloadThreatFeedPhishingSample({  });
-  console.log(result);
+// downloadThreatFeedPhishingSample() takes no parameters.
+async function main(): Promise<void> {
+  const blob = await api.downloadThreatFeedPhishingSample(); // a Blob with the file's bytes
+  const file = "DownloadThreatFeedPhishingSample.csv";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### Download the daily malware threat feed (CSV)
@@ -1352,20 +2043,34 @@ main().catch(console.error);
 `GET /v3.4/download/threat-feed/malware`
 
 ```typescript
-// Runnable example: Download the daily malware threat feed (CSV) (GET /v3.4/download/threat-feed/malware)
-// Parameters for downloadThreatFeedMalware (GET /v3.4/download/threat-feed/malware):
-//   - date (string, optional): Feed date (yyyy-MM-dd); defaults to latest available
-import { Configuration, DatabasesThreatFeedApi } from "whoisfreaks";
+// Download the daily malware threat feed (CSV): GET https://files.whoisfreaks.com/v3.4/download/threat-feed/malware
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DownloadThreatFeedMalware.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesThreatFeedApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesThreatFeedApi(config);
 
-async function main() {
-  const result = await api.downloadThreatFeedMalware({ date: new Date(Date.now()-86400000).toISOString().slice(0,10) });
-  console.log(result);
+// downloadThreatFeedMalware({ date? })
+//   date (string, optional): Feed date (yyyy-MM-dd); omit for the full dump of the feed
+async function main(): Promise<void> {
+  const blob = await api.downloadThreatFeedMalware({ date: "2026-10-01" }); // a Blob with the file's bytes
+  const file = "DownloadThreatFeedMalware.csv";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### Download a sample of the malware threat feed (CSV)
@@ -1373,20 +2078,33 @@ main().catch(console.error);
 `GET /v3.4/download/threat-feed/malware/sample`
 
 ```typescript
-// Runnable example: Download a sample of the malware threat feed (CSV) (GET /v3.4/download/threat-feed/malware/sample)
-// Parameters for downloadThreatFeedMalwareSample (GET /v3.4/download/threat-feed/malware/sample):
-//   (no parameters; the API key is set on the client)
-import { Configuration, DatabasesThreatFeedApi } from "whoisfreaks";
+// Download a sample of the malware threat feed (CSV): GET https://files.whoisfreaks.com/v3.4/download/threat-feed/malware/sample
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DownloadThreatFeedMalwareSample.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesThreatFeedApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesThreatFeedApi(config);
 
-async function main() {
-  const result = await api.downloadThreatFeedMalwareSample({  });
-  console.log(result);
+// downloadThreatFeedMalwareSample() takes no parameters.
+async function main(): Promise<void> {
+  const blob = await api.downloadThreatFeedMalwareSample(); // a Blob with the file's bytes
+  const file = "DownloadThreatFeedMalwareSample.csv";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### Download the daily spam threat feed (CSV)
@@ -1394,20 +2112,34 @@ main().catch(console.error);
 `GET /v3.4/download/threat-feed/spam`
 
 ```typescript
-// Runnable example: Download the daily spam threat feed (CSV) (GET /v3.4/download/threat-feed/spam)
-// Parameters for downloadThreatFeedSpam (GET /v3.4/download/threat-feed/spam):
-//   - date (string, optional): Feed date (yyyy-MM-dd); defaults to latest available
-import { Configuration, DatabasesThreatFeedApi } from "whoisfreaks";
+// Download the daily spam threat feed (CSV): GET https://files.whoisfreaks.com/v3.4/download/threat-feed/spam
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DownloadThreatFeedSpam.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesThreatFeedApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesThreatFeedApi(config);
 
-async function main() {
-  const result = await api.downloadThreatFeedSpam({ date: new Date(Date.now()-86400000).toISOString().slice(0,10) });
-  console.log(result);
+// downloadThreatFeedSpam({ date? })
+//   date (string, optional): Feed date (yyyy-MM-dd); omit for the full dump of the feed
+async function main(): Promise<void> {
+  const blob = await api.downloadThreatFeedSpam({ date: "2026-10-01" }); // a Blob with the file's bytes
+  const file = "DownloadThreatFeedSpam.csv";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 #### Download a sample of the spam threat feed (CSV)
@@ -1415,18 +2147,31 @@ main().catch(console.error);
 `GET /v3.4/download/threat-feed/spam/sample`
 
 ```typescript
-// Runnable example: Download a sample of the spam threat feed (CSV) (GET /v3.4/download/threat-feed/spam/sample)
-// Parameters for downloadThreatFeedSpamSample (GET /v3.4/download/threat-feed/spam/sample):
-//   (no parameters; the API key is set on the client)
-import { Configuration, DatabasesThreatFeedApi } from "whoisfreaks";
+// Download a sample of the spam threat feed (CSV): GET https://files.whoisfreaks.com/v3.4/download/threat-feed/spam/sample
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DownloadThreatFeedSpamSample.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesThreatFeedApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesThreatFeedApi(config);
 
-async function main() {
-  const result = await api.downloadThreatFeedSpamSample({  });
-  console.log(result);
+// downloadThreatFeedSpamSample() takes no parameters.
+async function main(): Promise<void> {
+  const blob = await api.downloadThreatFeedSpamSample(); // a Blob with the file's bytes
+  const file = "DownloadThreatFeedSpamSample.csv";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```

@@ -4,19 +4,19 @@
 
 IP geolocation lookup
 
-2 endpoint(s). All requests require your API key — see [Authentication](../authentication.md).
+2 endpoints. Requests need your API key unless noted otherwise. See [Authentication](../authentication.md).
 
 ## IP Geolocation Lookup
 
-`GET /v1.0/geolocation`
+`GET https://api.whoisfreaks.com/v1.0/geolocation`
 
 Get location, ASN, currency for an IP. 1 credit.
 
 **Parameters**
 
-| Parameter | In | Required | Type | Description |
-|-----------|----|----------|------|-------------|
-| `ip` | query | yes | string |  |
+| Parameter | In | Required | Type | Default | Description |
+|-----------|----|----------|------|---------|-------------|
+| `ip` | query | yes | string |  |  |
 
 **Response** (`GeolocationResponse`)
 
@@ -91,19 +91,26 @@ Get location, ASN, currency for an IP. 1 credit.
 <details><summary>Python</summary>
 
 ```python
-"""Runnable example: IP Geolocation Lookup (GET /v1.0/geolocation)."""
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.geolocation_api import GeolocationApi
+"""IP Geolocation Lookup: GET https://api.whoisfreaks.com/v1.0/geolocation
 
-# Parameters for geolocation (GET /v1.0/geolocation):
-#   - ip (string, required)
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = GeolocationApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python Geolocation.py
+"""
+import json
+import os
 
-result = api.geolocation(ip="8.8.8.8")
-print(result)
+import whoisfreaks
 
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.GeolocationApi(client)
+
+    # geolocation parameters:
+    #   ip (str, required)
+    result = api.geolocation("8.8.8.8")
+    print(json.dumps(result.to_dict(), indent=2))
 ```
 
 </details>
@@ -111,20 +118,30 @@ print(result)
 <details><summary>TypeScript</summary>
 
 ```typescript
-// Runnable example: IP Geolocation Lookup (GET /v1.0/geolocation)
-// Parameters for geolocation (GET /v1.0/geolocation):
-//   - ip (string, required)
-import { Configuration, GeolocationApi } from "whoisfreaks";
+// IP Geolocation Lookup: GET https://api.whoisfreaks.com/v1.0/geolocation
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx Geolocation.ts
+import { Configuration, GeolocationApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new GeolocationApi(config);
 
-async function main() {
+// geolocation({ ip })
+//   ip (string, required)
+async function main(): Promise<void> {
   const result = await api.geolocation({ ip: "8.8.8.8" });
-  console.log(result);
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 </details>
@@ -133,27 +150,34 @@ main().catch(console.error);
 
 ```go
 // Runnable example: IP Geolocation Lookup (GET /v1.0/geolocation)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for geolocation (GET /v1.0/geolocation):
 //   - ip (string, required)
+
 package main
 
 import (
-    "context"
-    "encoding/json"
-    "fmt"
-    wf "github.com/WhoisFreaks/whoisfreaks-go"
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
 )
 
 func main() {
-    cfg := wf.NewConfiguration()
-    client := wf.NewAPIClient(cfg)
-    // apiKey is set once via the request context
-    ctx := context.WithValue(context.Background(), wf.ContextAPIKeys,
-        map[string]wf.APIKey{"ApiKeyAuth": {Key: "YOUR_API_KEY"}})
-    result, _, err := client.GeolocationAPI.Geolocation(ctx).Ip("8.8.8.8").Execute()
-    if err != nil { panic(err) }
-    b, _ := json.MarshalIndent(result, "", "  ")
-    fmt.Println(string(b))
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.GeolocationAPI.Geolocation(ctx).Ip("8.8.8.8").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
 }
 
 ```
@@ -164,16 +188,23 @@ func main() {
 
 ## Bulk IP Geolocation
 
-`POST /v1.0/geolocation`
+`POST https://api.whoisfreaks.com/v1.0/geolocation`
 
 Up to 100 IPs.
 
 **Parameters**
 
-| Parameter | In | Required | Type | Description |
-|-----------|----|----------|------|-------------|
+None. The API key is set once on the client.
 
-**Response** (`GeolocationResponse`)
+**Request body** (`application/json`, model `BulkGeolocationRequest`)
+
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `ips` | array<string> | yes | Up to 100 items. |
+
+Example: `{"ips": ["8.8.8.8", "1.1.1.1"]}`
+
+**Response** (array of `GeolocationResponse`)
 
 | Field | Type | Description |
 |-------|------|-------------|
@@ -246,21 +277,27 @@ Up to 100 IPs.
 <details><summary>Python</summary>
 
 ```python
-"""Runnable example: Bulk IP Geolocation (POST /v1.0/geolocation)."""
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.geolocation_api import GeolocationApi
-from whoisfreaks.models.bulk_geolocation_request import BulkGeolocationRequest
+"""Bulk IP Geolocation: POST https://api.whoisfreaks.com/v1.0/geolocation
 
-# Parameters for bulkGeolocation (POST /v1.0/geolocation):
-#   - body: BulkGeolocationRequest (required) -- request body object
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = GeolocationApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python BulkGeolocation.py
+"""
+import json
+import os
 
-bulk_geolocation_request = BulkGeolocationRequest()  # populate fields as needed
-result = api.bulk_geolocation(bulk_geolocation_request=bulk_geolocation_request)
-print(result)
+import whoisfreaks
 
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.GeolocationApi(client)
+
+    # bulk_geolocation parameters:
+    #   bulk_geolocation_request (BulkGeolocationRequest, required): request body
+    body = whoisfreaks.BulkGeolocationRequest(ips=["8.8.8.8", "1.1.1.1"])
+    results = api.bulk_geolocation(body)
+    print(json.dumps([item.to_dict() for item in results], indent=2))
 ```
 
 </details>
@@ -268,20 +305,31 @@ print(result)
 <details><summary>TypeScript</summary>
 
 ```typescript
-// Runnable example: Bulk IP Geolocation (POST /v1.0/geolocation)
-// Parameters for bulkGeolocation (POST /v1.0/geolocation):
-//   - body: BulkGeolocationRequest (required) -- request body object
-import { Configuration, GeolocationApi } from "whoisfreaks";
+// Bulk IP Geolocation: POST https://api.whoisfreaks.com/v1.0/geolocation
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx BulkGeolocation.ts
+import { Configuration, GeolocationApi, ResponseError, type BulkGeolocationRequest } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new GeolocationApi(config);
 
-async function main() {
-  const result = await api.bulkGeolocation({ bulkGeolocationRequest: {} });
-  console.log(result);
+// bulkGeolocation({ bulkGeolocationRequest })
+//   bulkGeolocationRequest (BulkGeolocationRequest, required): request body
+async function main(): Promise<void> {
+  const body: BulkGeolocationRequest = { ips: ["8.8.8.8", "1.1.1.1"] };
+  const results = await api.bulkGeolocation({ bulkGeolocationRequest: body });
+  console.log(JSON.stringify(results, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 </details>
@@ -290,27 +338,36 @@ main().catch(console.error);
 
 ```go
 // Runnable example: Bulk IP Geolocation (POST /v1.0/geolocation)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for bulkGeolocation (POST /v1.0/geolocation):
-//   - body: BulkGeolocationRequest (required) -- request body object
+//   - body: BulkGeolocationRequest (required): request body object
+
 package main
 
 import (
-    "context"
-    "encoding/json"
-    "fmt"
-    wf "github.com/WhoisFreaks/whoisfreaks-go"
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
 )
 
 func main() {
-    cfg := wf.NewConfiguration()
-    client := wf.NewAPIClient(cfg)
-    // apiKey is set once via the request context
-    ctx := context.WithValue(context.Background(), wf.ContextAPIKeys,
-        map[string]wf.APIKey{"ApiKeyAuth": {Key: "YOUR_API_KEY"}})
-    result, _, err := client.GeolocationAPI.BulkGeolocation(ctx).BulkGeolocationRequest(*wf.NewBulkGeolocationRequest()).Execute()
-    if err != nil { panic(err) }
-    b, _ := json.MarshalIndent(result, "", "  ")
-    fmt.Println(string(b))
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	body := whoisfreaks.NewBulkGeolocationRequest([]string{"8.8.8.8", "1.1.1.1"})
+	result, _, err := client.GeolocationAPI.BulkGeolocation(ctx).
+		BulkGeolocationRequest(*body).Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
 }
 
 ```

@@ -4,42 +4,48 @@
 
 IP security database snapshots
 
-2 endpoint(s). All requests require your API key — see [Authentication](../authentication.md).
+2 endpoints. Requests need your API key unless noted otherwise. See [Authentication](../authentication.md).
 
 ## IP Security Snapshot
 
-`GET /v3.3/download/snapshot/ip/security`
+`GET https://files.whoisfreaks.com/v3.3/download/snapshot/ip/security`
 
 IP Security Snapshot. Returns the file/snapshot described by this operation.
 
 **Parameters**
 
-| Parameter | In | Required | Type | Description |
-|-----------|----|----------|------|-------------|
-| `date` | query | yes | string |  |
+| Parameter | In | Required | Type | Default | Description |
+|-----------|----|----------|------|---------|-------------|
+| `date` | query | yes | string (date) |  |  |
 
 **Usage**
 
 <details><summary>Python</summary>
 
 ```python
-"""Runnable example: IP Security Snapshot (GET /v3.3/download/snapshot/ip/security).
-Returns raw bytes (a compressed/binary file) -- write to disk, do not print."""
-from datetime import date, timedelta
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.databases_ip_security_api import DatabasesIPSecurityApi
+"""IP Security Snapshot: GET https://files.whoisfreaks.com/v3.3/download/snapshot/ip/security
 
-# Parameters for dbIpSecurity (GET /v3.3/download/snapshot/ip/security):
-#   - date (string, required)
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = DatabasesIPSecurityApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python DbIpSecurity.py
+"""
+import os
+from datetime import date
 
-data = api.db_ip_security(var_date=str(date.today() - timedelta(days=1)))   # bytes
-with open("dbIpSecurity.gz", "wb") as f:
-    f.write(data)
-print(f"saved {len(data)} bytes to dbIpSecurity.gz")
+import whoisfreaks
 
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesIPSecurityApi(client)
+
+    # db_ip_security parameters:
+    #   var_date (datetime.date, required)
+    data = api.db_ip_security(date(2026, 10, 1))  # the file's raw bytes
+    path = "DbIpSecurity.csv"
+    with open(path, "wb") as f:
+        f.write(data)
+    print(f"Saved {len(data)} bytes to {os.path.abspath(path)}")
 ```
 
 </details>
@@ -47,20 +53,34 @@ print(f"saved {len(data)} bytes to dbIpSecurity.gz")
 <details><summary>TypeScript</summary>
 
 ```typescript
-// Runnable example: IP Security Snapshot (GET /v3.3/download/snapshot/ip/security)
-// Parameters for dbIpSecurity (GET /v3.3/download/snapshot/ip/security):
-//   - date (string, required)
-import { Configuration, DatabasesIPSecurityApi } from "whoisfreaks";
+// IP Security Snapshot: GET https://files.whoisfreaks.com/v3.3/download/snapshot/ip/security
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbIpSecurity.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesIPSecurityApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesIPSecurityApi(config);
 
-async function main() {
-  const result = await api.dbIpSecurity({ date: new Date(Date.now()-86400000).toISOString().slice(0,10) });
-  console.log(result);
+// dbIpSecurity({ date })
+//   date (Date, required)
+async function main(): Promise<void> {
+  const blob = await api.dbIpSecurity({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
+  const file = "DbIpSecurity.csv";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 </details>
@@ -69,29 +89,48 @@ main().catch(console.error);
 
 ```go
 // Runnable example: IP Security Snapshot (GET /v3.3/download/snapshot/ip/security)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbIpSecurity (GET /v3.3/download/snapshot/ip/security):
 //   - date (string, required)
+
 package main
 
 import (
-    "context"
-    "fmt"
-    "os"
-    "time"
-    wf "github.com/WhoisFreaks/whoisfreaks-go"
+	"context"
+	"fmt"
+	"io"
+	"log"
+	"os"
+	"path/filepath"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
 )
 
 func main() {
-    cfg := wf.NewConfiguration()
-    client := wf.NewAPIClient(cfg)
-    // apiKey is set once via the request context
-    ctx := context.WithValue(context.Background(), wf.ContextAPIKeys,
-        map[string]wf.APIKey{"ApiKeyAuth": {Key: "YOUR_API_KEY"}})
-    // returns raw bytes (compressed/binary file) -- write to disk
-    data, _, err := client.DatabasesIPSecurityAPI.DbIpSecurity(ctx).Date(time.Now().AddDate(0,0,-1).Format("2006-01-02")).Execute()
-    if err != nil { panic(err) }
-    if err := os.WriteFile("dbIpSecurity.gz", data, 0644); err != nil { panic(err) }
-    fmt.Printf("saved %d bytes to dbIpSecurity.gz\n", len(data))
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	file, _, err := client.DatabasesIPSecurityAPI.DbIpSecurity(ctx).Date("2026-10-01").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	// The SDK saves the response to a temporary file: copy it to its destination.
+	defer os.Remove(file.Name())
+	defer file.Close()
+
+	out, err := os.Create("DbIpSecurity.csv")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer out.Close()
+	n, err := io.Copy(out, file)
+	if err != nil {
+		log.Fatal(err)
+	}
+	path, _ := filepath.Abs(out.Name())
+	fmt.Printf("Saved %d bytes to %s\n", n, path)
 }
 
 ```
@@ -102,14 +141,13 @@ func main() {
 
 ## IP Security Snapshot Status
 
-`GET /v3.3/status/snapshot/ip/security`
+`GET https://files.whoisfreaks.com/v3.3/status/snapshot/ip/security`
 
 IP Security Snapshot Status. Returns the file/snapshot described by this operation.
 
 **Parameters**
 
-| Parameter | In | Required | Type | Description |
-|-----------|----|----------|------|-------------|
+None. The API key is set once on the client.
 
 **Response** (`SnapshotStatus`)
 
@@ -127,19 +165,25 @@ IP Security Snapshot Status. Returns the file/snapshot described by this operati
 <details><summary>Python</summary>
 
 ```python
-"""Runnable example: IP Security Snapshot Status (GET /v3.3/status/snapshot/ip/security)."""
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.databases_ip_security_api import DatabasesIPSecurityApi
+"""IP Security Snapshot Status: GET https://files.whoisfreaks.com/v3.3/status/snapshot/ip/security
 
-# Parameters for dbIpSecurityStatus (GET /v3.3/status/snapshot/ip/security):
-#   (no parameters; the API key is set on the client)
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = DatabasesIPSecurityApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python DbIpSecurityStatus.py
+"""
+import json
+import os
 
-result = api.db_ip_security_status()
-print(result)
+import whoisfreaks
 
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesIPSecurityApi(client)
+
+    # db_ip_security_status takes no parameters.
+    result = api.db_ip_security_status()
+    print(json.dumps(result.to_dict(), indent=2))
 ```
 
 </details>
@@ -147,20 +191,29 @@ print(result)
 <details><summary>TypeScript</summary>
 
 ```typescript
-// Runnable example: IP Security Snapshot Status (GET /v3.3/status/snapshot/ip/security)
-// Parameters for dbIpSecurityStatus (GET /v3.3/status/snapshot/ip/security):
-//   (no parameters; the API key is set on the client)
-import { Configuration, DatabasesIPSecurityApi } from "whoisfreaks";
+// IP Security Snapshot Status: GET https://files.whoisfreaks.com/v3.3/status/snapshot/ip/security
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbIpSecurityStatus.ts
+import { Configuration, DatabasesIPSecurityApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesIPSecurityApi(config);
 
-async function main() {
-  const result = await api.dbIpSecurityStatus({  });
-  console.log(result);
+// dbIpSecurityStatus() takes no parameters.
+async function main(): Promise<void> {
+  const result = await api.dbIpSecurityStatus();
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 </details>
@@ -169,27 +222,34 @@ main().catch(console.error);
 
 ```go
 // Runnable example: IP Security Snapshot Status (GET /v3.3/status/snapshot/ip/security)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbIpSecurityStatus (GET /v3.3/status/snapshot/ip/security):
 //   (no parameters; the API key is set on the client)
+
 package main
 
 import (
-    "context"
-    "encoding/json"
-    "fmt"
-    wf "github.com/WhoisFreaks/whoisfreaks-go"
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
 )
 
 func main() {
-    cfg := wf.NewConfiguration()
-    client := wf.NewAPIClient(cfg)
-    // apiKey is set once via the request context
-    ctx := context.WithValue(context.Background(), wf.ContextAPIKeys,
-        map[string]wf.APIKey{"ApiKeyAuth": {Key: "YOUR_API_KEY"}})
-    result, _, err := client.DatabasesIPSecurityAPI.DbIpSecurityStatus(ctx).Execute()
-    if err != nil { panic(err) }
-    b, _ := json.MarshalIndent(result, "", "  ")
-    fmt.Println(string(b))
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DatabasesIPSecurityAPI.DbIpSecurityStatus(ctx).Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
 }
 
 ```

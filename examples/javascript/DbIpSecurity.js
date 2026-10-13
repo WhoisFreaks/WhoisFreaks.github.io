@@ -1,15 +1,25 @@
-// Runnable example: IP Security Snapshot (GET /v3.3/download/snapshot/ip/security)
-// Parameters for dbIpSecurity (GET /v3.3/download/snapshot/ip/security):
-//   - date (string, required)
-// whoisfreaks-js is CommonJS; apiKey is set once on the ApiClient
-import pkg from "whoisfreaks-js";
-const { ApiClient, DatabasesIPSecurityApi } = pkg;
-// or:  const { ApiClient, DatabasesIPSecurityApi } = require("whoisfreaks-js");
+// IP Security Snapshot: GET https://files.whoisfreaks.com/v3.3/download/snapshot/ip/security
+// Run: WHOISFREAKS_API_KEY=your_api_key node DbIpSecurity.js
+const fs = require("node:fs");
+const path = require("node:path");
+const { ApiClient, DatabasesIPSecurityApi } = require("whoisfreaks-js");
 
+// Set the API key once; the client adds it to every request.
 const client = ApiClient.instance;
-client.authentications["ApiKeyAuth"].apiKey = "YOUR_API_KEY";  // set once
+client.authentications["ApiKeyAuth"].apiKey = process.env.WHOISFREAKS_API_KEY;
 const api = new DatabasesIPSecurityApi(client);
 
-api.dbIpSecurity(new Date(Date.now()-86400000).toISOString().slice(0,10))
-  .then(data => console.log(data))
-  .catch(err => console.error(err));
+// dbIpSecurity(date)
+//   date (string, "yyyy-MM-dd", required)
+async function main() {
+  const data = await api.dbIpSecurity("2026-10-01"); // a Buffer with the file's bytes
+  const file = "DbIpSecurity.csv";
+  fs.writeFileSync(file, data);
+  console.log(`Saved ${data.length} bytes to ${path.resolve(file)}`);
+}
+
+main().catch((err) => {
+  // API errors carry the HTTP status and the parsed error body
+  console.error(err.status ? `HTTP ${err.status}: ${JSON.stringify(err.body)}` : err);
+  process.exitCode = 1;
+});

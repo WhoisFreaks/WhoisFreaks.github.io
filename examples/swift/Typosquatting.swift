@@ -1,16 +1,26 @@
-// Runnable example: Typosquatting Lookup (GET /v3.0/domain/typos)
+// Typosquatting Lookup
+//
 // Parameters for typosquatting (GET /v3.0/domain/typos):
 //   - keyword (string, optional)
 //   - pattern (string, optional)
 //   - pageToken (string, optional)
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
 import WhoisFreaks
 
-// Set your API key once (applied to every request)
-WhoisFreaksAPI.apiKey = "YOUR_API_KEY"
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
 
 do {
-    let result = try await TyposquattingAPI.typosquatting(keyword: nil, pattern: nil, pageToken: nil)
-    print(result)
+    let result = try await TyposquattingAPI.typosquatting(keyword: "whoisfreaks")
+    print(String(decoding: try CodableHelper.jsonEncoder.encode(result), as: UTF8.self))
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
 } catch {
-    print(error)
+    print("Request failed: \(error)")
+    exit(1)
 }

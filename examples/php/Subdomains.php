@@ -1,5 +1,6 @@
 <?php
-// Runnable example: Subdomains Lookup (GET /v1.0/subdomains)
+// Subdomains Lookup
+//
 // Parameters for subdomains (GET /v1.0/subdomains):
 //   - domain (string, required)
 //   - after (string, optional)
@@ -7,10 +8,24 @@
 //   - status (string (one of: active, inactive), optional)
 //   - page (integer, optional)
 //   - format (string (one of: json, xml), optional)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\SubdomainsApi(new GuzzleHttp\Client(), $config);
-$result = $api->subdomains("example.com", "2000-01-01", (new DateTime("today"))->format("Y-m-d"), null, null, null);
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\SubdomainsApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new SubdomainsApi(new Client(), $config);
+
+try {
+    $result = $api->subdomains('whoisfreaks.com', null, null, null, 1);  // domain, after, before, status, page
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}

@@ -1,14 +1,25 @@
-// Runnable example: IP WHOIS Lookup (GET /v1.0/ip-whois)
-// Parameters for ipWhois (GET /v1.0/ip-whois):
-//   - ip (string, required)
-//   - format (string (one of: json, xml), optional)
-import { Configuration, IPWHOISApi } from "whoisfreaks";
+// IP WHOIS Lookup: GET https://api.whoisfreaks.com/v1.0/ip-whois
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx IpWhois.ts
+import { Configuration, IPWHOISApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new IPWHOISApi(config);
 
-async function main() {
-  const result = await api.ipWhois({ ip: "8.8.8.8", format: undefined });
-  console.log(result);
+// ipWhois({ ip, format? })
+//   ip (string, required)
+//   format ("json" | "xml", optional): default "json"
+async function main(): Promise<void> {
+  const result = await api.ipWhois({ ip: "8.8.8.8" });
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});

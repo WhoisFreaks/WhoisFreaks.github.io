@@ -1,14 +1,21 @@
-"""Runnable example: Historical WHOIS records for a domain (GET /v2.0/whois/history)."""
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.whois_api import WHOISApi
+"""Historical WHOIS records for a domain: GET https://api.whoisfreaks.com/v2.0/whois/history
 
-# Parameters for whoisHistory (GET /v2.0/whois/history):
-#   - domainName (string, required): Domain to fetch historical WHOIS records for
-#   - page (integer, optional): Page number
-#   - format (string (one of: json, xml), optional)
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = WHOISApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python WhoisHistory.py
+"""
+import json
+import os
 
-result = api.whois_history(domain_name="example.com")
-print(result)
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.WHOISApi(client)
+
+    # whois_history parameters:
+    #   domain_name (str, required): Domain to fetch historical WHOIS records for
+    #   format (str, optional, keyword): one of json, xml
+    result = api.whois_history("whoisfreaks.com")
+    print(json.dumps(result.to_dict(), indent=2))

@@ -4,20 +4,20 @@
 
 IP address WHOIS
 
-1 endpoint(s). All requests require your API key — see [Authentication](../authentication.md).
+1 endpoint. Requests need your API key unless noted otherwise. See [Authentication](../authentication.md).
 
 ## IP WHOIS Lookup
 
-`GET /v1.0/ip-whois`
+`GET https://api.whoisfreaks.com/v1.0/ip-whois`
 
 WHOIS for an IP address. 1 credit.
 
 **Parameters**
 
-| Parameter | In | Required | Type | Description |
-|-----------|----|----------|------|-------------|
-| `ip` | query | yes | string |  |
-| `format` | query | no | string |  (one of: json, xml) |
+| Parameter | In | Required | Type | Default | Description |
+|-----------|----|----------|------|---------|-------------|
+| `ip` | query | yes | string |  |  |
+| `format` | query | no | string | `json` |  (one of: json, xml) |
 
 **Response** (`IpWhoisResponse`)
 
@@ -204,20 +204,27 @@ WHOIS for an IP address. 1 credit.
 <details><summary>Python</summary>
 
 ```python
-"""Runnable example: IP WHOIS Lookup (GET /v1.0/ip-whois)."""
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.ipwhois_api import IPWHOISApi
+"""IP WHOIS Lookup: GET https://api.whoisfreaks.com/v1.0/ip-whois
 
-# Parameters for ipWhois (GET /v1.0/ip-whois):
-#   - ip (string, required)
-#   - format (string (one of: json, xml), optional)
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = IPWHOISApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python IpWhois.py
+"""
+import json
+import os
 
-result = api.ip_whois(ip="8.8.8.8")
-print(result)
+import whoisfreaks
 
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.IPWHOISApi(client)
+
+    # ip_whois parameters:
+    #   ip (str, required)
+    #   format (str, optional, keyword): one of json, xml; default "json"
+    result = api.ip_whois("8.8.8.8")
+    print(json.dumps(result.to_dict(), indent=2))
 ```
 
 </details>
@@ -225,21 +232,31 @@ print(result)
 <details><summary>TypeScript</summary>
 
 ```typescript
-// Runnable example: IP WHOIS Lookup (GET /v1.0/ip-whois)
-// Parameters for ipWhois (GET /v1.0/ip-whois):
-//   - ip (string, required)
-//   - format (string (one of: json, xml), optional)
-import { Configuration, IPWHOISApi } from "whoisfreaks";
+// IP WHOIS Lookup: GET https://api.whoisfreaks.com/v1.0/ip-whois
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx IpWhois.ts
+import { Configuration, IPWHOISApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new IPWHOISApi(config);
 
-async function main() {
-  const result = await api.ipWhois({ ip: "8.8.8.8", format: undefined });
-  console.log(result);
+// ipWhois({ ip, format? })
+//   ip (string, required)
+//   format ("json" | "xml", optional): default "json"
+async function main(): Promise<void> {
+  const result = await api.ipWhois({ ip: "8.8.8.8" });
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 </details>
@@ -248,28 +265,35 @@ main().catch(console.error);
 
 ```go
 // Runnable example: IP WHOIS Lookup (GET /v1.0/ip-whois)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for ipWhois (GET /v1.0/ip-whois):
 //   - ip (string, required)
 //   - format (string (one of: json, xml), optional)
+
 package main
 
 import (
-    "context"
-    "encoding/json"
-    "fmt"
-    wf "github.com/WhoisFreaks/whoisfreaks-go"
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
 )
 
 func main() {
-    cfg := wf.NewConfiguration()
-    client := wf.NewAPIClient(cfg)
-    // apiKey is set once via the request context
-    ctx := context.WithValue(context.Background(), wf.ContextAPIKeys,
-        map[string]wf.APIKey{"ApiKeyAuth": {Key: "YOUR_API_KEY"}})
-    result, _, err := client.IPWHOISAPI.IpWhois(ctx).Ip("8.8.8.8").Execute()
-    if err != nil { panic(err) }
-    b, _ := json.MarshalIndent(result, "", "  ")
-    fmt.Println(string(b))
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.IPWHOISAPI.IpWhois(ctx).Ip("8.8.8.8").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
 }
 
 ```
