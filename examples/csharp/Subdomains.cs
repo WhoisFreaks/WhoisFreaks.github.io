@@ -1,4 +1,5 @@
 // Runnable example: Subdomains Lookup (GET /v1.0/subdomains)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for subdomains (GET /v1.0/subdomains):
 //   - domain (string, required)
 //   - after (string, optional)
@@ -9,13 +10,13 @@
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
+using WhoisFreaks.Model;
 
-class Subdomains {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new SubdomainsApi(config);
-        var result = api.Subdomains("example.com", "2000-01-01", DateTime.UtcNow.ToString("yyyy-MM-dd"), null, null, null);
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new SubdomainsApi(config);
+
+SubdomainsResponse result = api.Subdomains("whoisfreaks.com", page: 1);
+Console.WriteLine(result.ToJson());

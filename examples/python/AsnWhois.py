@@ -1,13 +1,21 @@
-"""Runnable example: ASN WHOIS Lookup (GET /v2.0/asn-whois)."""
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.asnwhois_api import ASNWHOISApi
+"""ASN WHOIS Lookup: GET https://api.whoisfreaks.com/v2.0/asn-whois
 
-# Parameters for asnWhois (GET /v2.0/asn-whois):
-#   - asn (string, required)
-#   - format (string (one of: json, xml), optional)
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = ASNWHOISApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python AsnWhois.py
+"""
+import json
+import os
 
-result = api.asn_whois(asn="AS15169")
-print(result)
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.ASNWHOISApi(client)
+
+    # asn_whois parameters:
+    #   asn (str, required)
+    #   format (str, optional, keyword): one of json, xml; default "json"
+    result = api.asn_whois("as15169")
+    print(json.dumps(result.to_dict(), indent=2))

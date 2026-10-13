@@ -4,20 +4,20 @@
 
 Autonomous System Number WHOIS
 
-1 endpoint(s). All requests require your API key — see [Authentication](../authentication.md).
+1 endpoint. Requests need your API key unless noted otherwise. See [Authentication](../authentication.md).
 
 ## ASN WHOIS Lookup
 
-`GET /v2.0/asn-whois`
+`GET https://api.whoisfreaks.com/v2.0/asn-whois`
 
 WHOIS for an ASN. 1 credit.
 
 **Parameters**
 
-| Parameter | In | Required | Type | Description |
-|-----------|----|----------|------|-------------|
-| `asn` | query | yes | string |  |
-| `format` | query | no | string |  (one of: json, xml) |
+| Parameter | In | Required | Type | Default | Description |
+|-----------|----|----------|------|---------|-------------|
+| `asn` | query | yes | string |  |  |
+| `format` | query | no | string | `json` |  (one of: json, xml) |
 
 **Response** (`AsnWhoisResponse`)
 
@@ -54,20 +54,27 @@ WHOIS for an ASN. 1 credit.
 <details><summary>Python</summary>
 
 ```python
-"""Runnable example: ASN WHOIS Lookup (GET /v2.0/asn-whois)."""
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.asnwhois_api import ASNWHOISApi
+"""ASN WHOIS Lookup: GET https://api.whoisfreaks.com/v2.0/asn-whois
 
-# Parameters for asnWhois (GET /v2.0/asn-whois):
-#   - asn (string, required)
-#   - format (string (one of: json, xml), optional)
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = ASNWHOISApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python AsnWhois.py
+"""
+import json
+import os
 
-result = api.asn_whois(asn="AS15169")
-print(result)
+import whoisfreaks
 
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.ASNWHOISApi(client)
+
+    # asn_whois parameters:
+    #   asn (str, required)
+    #   format (str, optional, keyword): one of json, xml; default "json"
+    result = api.asn_whois("as15169")
+    print(json.dumps(result.to_dict(), indent=2))
 ```
 
 </details>
@@ -75,21 +82,31 @@ print(result)
 <details><summary>TypeScript</summary>
 
 ```typescript
-// Runnable example: ASN WHOIS Lookup (GET /v2.0/asn-whois)
-// Parameters for asnWhois (GET /v2.0/asn-whois):
-//   - asn (string, required)
-//   - format (string (one of: json, xml), optional)
-import { Configuration, ASNWHOISApi } from "whoisfreaks";
+// ASN WHOIS Lookup: GET https://api.whoisfreaks.com/v2.0/asn-whois
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx AsnWhois.ts
+import { Configuration, ASNWHOISApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new ASNWHOISApi(config);
 
-async function main() {
-  const result = await api.asnWhois({ asn: "AS15169", format: undefined });
-  console.log(result);
+// asnWhois({ asn, format? })
+//   asn (string, required)
+//   format ("json" | "xml", optional): default "json"
+async function main(): Promise<void> {
+  const result = await api.asnWhois({ asn: "as15169" });
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 </details>
@@ -98,28 +115,35 @@ main().catch(console.error);
 
 ```go
 // Runnable example: ASN WHOIS Lookup (GET /v2.0/asn-whois)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for asnWhois (GET /v2.0/asn-whois):
 //   - asn (string, required)
 //   - format (string (one of: json, xml), optional)
+
 package main
 
 import (
-    "context"
-    "encoding/json"
-    "fmt"
-    wf "github.com/WhoisFreaks/whoisfreaks-go"
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
 )
 
 func main() {
-    cfg := wf.NewConfiguration()
-    client := wf.NewAPIClient(cfg)
-    // apiKey is set once via the request context
-    ctx := context.WithValue(context.Background(), wf.ContextAPIKeys,
-        map[string]wf.APIKey{"ApiKeyAuth": {Key: "YOUR_API_KEY"}})
-    result, _, err := client.ASNWHOISAPI.AsnWhois(ctx).Asn("AS15169").Execute()
-    if err != nil { panic(err) }
-    b, _ := json.MarshalIndent(result, "", "  ")
-    fmt.Println(string(b))
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.ASNWHOISAPI.AsnWhois(ctx).Asn("as15169").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
 }
 
 ```

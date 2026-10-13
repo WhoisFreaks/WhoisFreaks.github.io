@@ -1,15 +1,27 @@
-// Runnable example: Bulk WHOIS Lookup (POST /v2.0/bulkwhois/live)
+// Bulk WHOIS Lookup
+//
 // Parameters for bulkWhois (POST /v2.0/bulkwhois/live):
 //   - format (string (one of: json, xml), optional)
-//   - body: BulkWhoisRequest (required) -- request body object
+//   - body: BulkWhoisRequest (required): request body object
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
 import WhoisFreaks
 
-// Set your API key once (applied to every request)
-WhoisFreaksAPI.apiKey = "YOUR_API_KEY"
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+
+let request = BulkWhoisRequest(domainNames: ["whoisfreaks.com", "jfreaks.com"])
 
 do {
-    let result = try await WHOISAPI.bulkWhois(bulkWhoisRequest: BulkWhoisRequest(), format: nil)
-    print(result)
+    let result = try await WHOISAPI.bulkWhois(bulkWhoisRequest: request)
+    print(String(decoding: try CodableHelper.jsonEncoder.encode(result), as: UTF8.self))
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
 } catch {
-    print(error)
+    print("Request failed: \(error)")
+    exit(1)
 }

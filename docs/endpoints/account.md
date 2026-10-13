@@ -4,37 +4,41 @@
 
 Account, API key, and usage utilities
 
-3 endpoint(s). All requests require your API key — see [Authentication](../authentication.md).
+3 endpoints. Requests need your API key unless noted otherwise. See [Authentication](../authentication.md).
 
 ## Rotate API Key
 
-`GET /v1.0/api-key/rotate`
+`GET https://api.whoisfreaks.com/v1.0/api-key/rotate`
 
 Rotate API Key. Returns the file/snapshot described by this operation.
 
 **Parameters**
 
-| Parameter | In | Required | Type | Description |
-|-----------|----|----------|------|-------------|
+None. The API key is set once on the client.
 
 **Usage**
 
 <details><summary>Python</summary>
 
 ```python
-"""Runnable example: Rotate API Key (GET /v1.0/api-key/rotate)."""
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.account_api import AccountApi
+"""Rotate API Key: GET https://api.whoisfreaks.com/v1.0/api-key/rotate
 
-# Parameters for rotateApiKey (GET /v1.0/api-key/rotate):
-#   (no parameters; the API key is set on the client)
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = AccountApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python RotateApiKey.py
+"""
+import os
 
-result = api.rotate_api_key()
-print(result)
+import whoisfreaks
 
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.AccountApi(client)
+
+    # rotate_api_key takes no parameters.
+    new_key = api.rotate_api_key()  # use this key from now on
+    print("New API key:", new_key)
 ```
 
 </details>
@@ -42,20 +46,29 @@ print(result)
 <details><summary>TypeScript</summary>
 
 ```typescript
-// Runnable example: Rotate API Key (GET /v1.0/api-key/rotate)
-// Parameters for rotateApiKey (GET /v1.0/api-key/rotate):
-//   (no parameters; the API key is set on the client)
-import { Configuration, AccountApi } from "whoisfreaks";
+// Rotate API Key: GET https://api.whoisfreaks.com/v1.0/api-key/rotate
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx RotateApiKey.ts
+import { Configuration, AccountApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new AccountApi(config);
 
-async function main() {
-  const result = await api.rotateApiKey({  });
-  console.log(result);
+// rotateApiKey() takes no parameters.
+async function main(): Promise<void> {
+  const newKey = await api.rotateApiKey(); // use this key from now on
+  console.log("New API key:", newKey);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 </details>
@@ -64,27 +77,33 @@ main().catch(console.error);
 
 ```go
 // Runnable example: Rotate API Key (GET /v1.0/api-key/rotate)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for rotateApiKey (GET /v1.0/api-key/rotate):
 //   (no parameters; the API key is set on the client)
+
 package main
 
 import (
-    "context"
-    "encoding/json"
-    "fmt"
-    wf "github.com/WhoisFreaks/whoisfreaks-go"
+	"context"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
 )
 
 func main() {
-    cfg := wf.NewConfiguration()
-    client := wf.NewAPIClient(cfg)
-    // apiKey is set once via the request context
-    ctx := context.WithValue(context.Background(), wf.ContextAPIKeys,
-        map[string]wf.APIKey{"ApiKeyAuth": {Key: "YOUR_API_KEY"}})
-    result, _, err := client.AccountAPI.RotateApiKey(ctx).Execute()
-    if err != nil { panic(err) }
-    b, _ := json.MarshalIndent(result, "", "  ")
-    fmt.Println(string(b))
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	newKey, _, err := client.AccountAPI.RotateApiKey(ctx).Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	// The old key stops working: store the new one, e.g. in WHOISFREAKS_API_KEY.
+	fmt.Println("New API key:", newKey)
 }
 
 ```
@@ -95,14 +114,13 @@ func main() {
 
 ## Account Usage
 
-`GET /v1.0/whoisapi/usage`
+`GET https://api.whoisfreaks.com/v1.0/whoisapi/usage`
 
 Account Usage. Returns the file/snapshot described by this operation.
 
 **Parameters**
 
-| Parameter | In | Required | Type | Description |
-|-----------|----|----------|------|-------------|
+None. The API key is set once on the client.
 
 **Response** (`AccountUsageResponse`)
 
@@ -139,19 +157,25 @@ Account Usage. Returns the file/snapshot described by this operation.
 <details><summary>Python</summary>
 
 ```python
-"""Runnable example: Account Usage (GET /v1.0/whoisapi/usage)."""
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.account_api import AccountApi
+"""Account Usage: GET https://api.whoisfreaks.com/v1.0/whoisapi/usage
 
-# Parameters for accountUsage (GET /v1.0/whoisapi/usage):
-#   (no parameters; the API key is set on the client)
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = AccountApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python AccountUsage.py
+"""
+import json
+import os
 
-result = api.account_usage()
-print(result)
+import whoisfreaks
 
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.AccountApi(client)
+
+    # account_usage takes no parameters.
+    result = api.account_usage()
+    print(json.dumps(result.to_dict(), indent=2))
 ```
 
 </details>
@@ -159,20 +183,29 @@ print(result)
 <details><summary>TypeScript</summary>
 
 ```typescript
-// Runnable example: Account Usage (GET /v1.0/whoisapi/usage)
-// Parameters for accountUsage (GET /v1.0/whoisapi/usage):
-//   (no parameters; the API key is set on the client)
-import { Configuration, AccountApi } from "whoisfreaks";
+// Account Usage: GET https://api.whoisfreaks.com/v1.0/whoisapi/usage
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx AccountUsage.ts
+import { Configuration, AccountApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new AccountApi(config);
 
-async function main() {
-  const result = await api.accountUsage({  });
-  console.log(result);
+// accountUsage() takes no parameters.
+async function main(): Promise<void> {
+  const result = await api.accountUsage();
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 </details>
@@ -181,27 +214,34 @@ main().catch(console.error);
 
 ```go
 // Runnable example: Account Usage (GET /v1.0/whoisapi/usage)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for accountUsage (GET /v1.0/whoisapi/usage):
 //   (no parameters; the API key is set on the client)
+
 package main
 
 import (
-    "context"
-    "encoding/json"
-    "fmt"
-    wf "github.com/WhoisFreaks/whoisfreaks-go"
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
 )
 
 func main() {
-    cfg := wf.NewConfiguration()
-    client := wf.NewAPIClient(cfg)
-    // apiKey is set once via the request context
-    ctx := context.WithValue(context.Background(), wf.ContextAPIKeys,
-        map[string]wf.APIKey{"ApiKeyAuth": {Key: "YOUR_API_KEY"}})
-    result, _, err := client.AccountAPI.AccountUsage(ctx).Execute()
-    if err != nil { panic(err) }
-    b, _ := json.MarshalIndent(result, "", "  ")
-    fmt.Println(string(b))
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.AccountAPI.AccountUsage(ctx).Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
 }
 
 ```
@@ -212,14 +252,15 @@ func main() {
 
 ## Database File Status (Public)
 
-`GET /v3.4/status`
+`GET https://files.whoisfreaks.com/v3.4/status`
+
+Public endpoint: no API key required.
 
 No API key required. Returns freshness of all downloadable files.
 
 **Parameters**
 
-| Parameter | In | Required | Type | Description |
-|-----------|----|----------|------|-------------|
+None. The API key is set once on the client.
 
 **Response** (`DatabaseFileStatus`)
 
@@ -281,19 +322,24 @@ No API key required. Returns freshness of all downloadable files.
 <details><summary>Python</summary>
 
 ```python
-"""Runnable example: Database File Status (Public) (GET /v3.4/status)."""
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.account_api import AccountApi
+"""Database File Status (Public): GET https://files.whoisfreaks.com/v3.4/status
 
-# Parameters for databaseFileStatus (GET /v3.4/status):
-#   (no parameters; the API key is set on the client)
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = AccountApi(ApiClient(config))
+Run it (public endpoint, no API key needed):
+    python DatabaseFileStatus.py
+"""
+import json
 
-result = api.database_file_status()
-print(result)
+import whoisfreaks
 
+config = whoisfreaks.Configuration()
+# Public endpoint: no API key needed.
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.AccountApi(client)
+
+    # database_file_status takes no parameters.
+    result = api.database_file_status()
+    print(json.dumps(result.to_dict(), indent=2))
 ```
 
 </details>
@@ -301,20 +347,28 @@ print(result)
 <details><summary>TypeScript</summary>
 
 ```typescript
-// Runnable example: Database File Status (Public) (GET /v3.4/status)
-// Parameters for databaseFileStatus (GET /v3.4/status):
-//   (no parameters; the API key is set on the client)
-import { Configuration, AccountApi } from "whoisfreaks";
+// Database File Status (Public): GET https://files.whoisfreaks.com/v3.4/status
+// Run (public endpoint, no API key needed): npx tsx DatabaseFileStatus.ts
+import { AccountApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
-const api = new AccountApi(config);
+// Public endpoint: no API key needed.
+const api = new AccountApi();
 
-async function main() {
-  const result = await api.databaseFileStatus({  });
-  console.log(result);
+// databaseFileStatus() takes no parameters.
+async function main(): Promise<void> {
+  const result = await api.databaseFileStatus();
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 </details>
@@ -323,27 +377,32 @@ main().catch(console.error);
 
 ```go
 // Runnable example: Database File Status (Public) (GET /v3.4/status)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for databaseFileStatus (GET /v3.4/status):
-//   (no parameters; the API key is set on the client)
+//   (no parameters; no API key required)
+
 package main
 
 import (
-    "context"
-    "encoding/json"
-    "fmt"
-    wf "github.com/WhoisFreaks/whoisfreaks-go"
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
 )
 
 func main() {
-    cfg := wf.NewConfiguration()
-    client := wf.NewAPIClient(cfg)
-    // apiKey is set once via the request context
-    ctx := context.WithValue(context.Background(), wf.ContextAPIKeys,
-        map[string]wf.APIKey{"ApiKeyAuth": {Key: "YOUR_API_KEY"}})
-    result, _, err := client.AccountAPI.DatabaseFileStatus(ctx).Execute()
-    if err != nil { panic(err) }
-    b, _ := json.MarshalIndent(result, "", "  ")
-    fmt.Println(string(b))
+	// Public endpoint: no API key needed.
+	ctx := context.Background()
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.AccountAPI.DatabaseFileStatus(ctx).Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
 }
 
 ```

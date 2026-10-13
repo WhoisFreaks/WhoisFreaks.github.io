@@ -1,16 +1,23 @@
-"""Runnable example: IP to City Snapshot (GET /v3.3/download/snapshot/ip/city).
-Returns raw bytes (a compressed/binary file) -- write to disk, do not print."""
-from datetime import date, timedelta
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.databases_ip_geolocation_api import DatabasesIPGeolocationApi
+"""IP to City Snapshot: GET https://files.whoisfreaks.com/v3.3/download/snapshot/ip/city
 
-# Parameters for dbIpCity (GET /v3.3/download/snapshot/ip/city):
-#   - date (string, required)
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = DatabasesIPGeolocationApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python DbIpCity.py
+"""
+import os
+from datetime import date
 
-data = api.db_ip_city(var_date=str(date.today() - timedelta(days=1)))   # bytes
-with open("dbIpCity.gz", "wb") as f:
-    f.write(data)
-print(f"saved {len(data)} bytes to dbIpCity.gz")
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesIPGeolocationApi(client)
+
+    # db_ip_city parameters:
+    #   var_date (datetime.date, required)
+    data = api.db_ip_city(date(2026, 10, 1))  # the file's raw bytes
+    path = "DbIpCity.zip"
+    with open(path, "wb") as f:
+        f.write(data)
+    print(f"Saved {len(data)} bytes to {os.path.abspath(path)}")

@@ -1,13 +1,28 @@
 <?php
-// Runnable example: Typosquatting Lookup (GET /v3.0/domain/typos)
+// Typosquatting Lookup
+//
 // Parameters for typosquatting (GET /v3.0/domain/typos):
 //   - keyword (string, optional)
 //   - pattern (string, optional)
 //   - pageToken (string, optional)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\TyposquattingApi(new GuzzleHttp\Client(), $config);
-$result = $api->typosquatting(null, null, null);
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\TyposquattingApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new TyposquattingApi(new Client(), $config);
+
+try {
+    $result = $api->typosquatting('whoisfreaks');
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}

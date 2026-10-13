@@ -1,14 +1,28 @@
-// Runnable example: Download a sample of the spam threat feed (CSV) (GET /v3.4/download/threat-feed/spam/sample)
+// Download a sample of the spam threat feed (CSV)
+//
 // Parameters for downloadThreatFeedSpamSample (GET /v3.4/download/threat-feed/spam/sample):
 //   (no parameters; the API key is set on the client)
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
 import WhoisFreaks
 
-// Set your API key once (applied to every request)
-WhoisFreaksAPI.apiKey = "YOUR_API_KEY"
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
 
 do {
-    let result = try await DatabasesThreatFeedAPI.downloadThreatFeedSpamSample()
-    print(result)
+    let file = try await DatabasesThreatFeedAPI.downloadThreatFeedSpamSample()
+    // The SDK saves the download under the caches directory: move it somewhere permanent.
+    let saveAs = URL(fileURLWithPath: "DownloadThreatFeedSpamSample.csv")
+    try? FileManager.default.removeItem(at: saveAs)
+    try FileManager.default.moveItem(at: file, to: saveAs)
+    print("Saved \(saveAs.path)")
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
 } catch {
-    print(error)
+    print("Request failed: \(error)")
+    exit(1)
 }

@@ -1,13 +1,28 @@
-// Runnable example: IP to City Snapshot (GET /v3.3/download/snapshot/ip/city)
-// Parameters for dbIpCity (GET /v3.3/download/snapshot/ip/city):
-//   - date (string, required)
-import { Configuration, DatabasesIPGeolocationApi } from "whoisfreaks";
+// IP to City Snapshot: GET https://files.whoisfreaks.com/v3.3/download/snapshot/ip/city
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbIpCity.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesIPGeolocationApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesIPGeolocationApi(config);
 
-async function main() {
-  const result = await api.dbIpCity({ date: new Date(Date.now()-86400000).toISOString().slice(0,10) });
-  console.log(result);
+// dbIpCity({ date })
+//   date (Date, required)
+async function main(): Promise<void> {
+  const blob = await api.dbIpCity({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
+  const file = "DbIpCity.zip";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});

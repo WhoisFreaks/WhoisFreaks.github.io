@@ -1,15 +1,20 @@
-// Runnable example: ASN WHOIS Snapshot Status (GET /v3.3/status/snapshot/asn/whois)
-// Parameters for dbAsnWhoisStatus (GET /v3.3/status/snapshot/asn/whois):
-//   (no parameters; the API key is set on the client)
-// whoisfreaks-js is CommonJS; apiKey is set once on the ApiClient
-import pkg from "whoisfreaks-js";
-const { ApiClient, DatabasesASNWHOISApi } = pkg;
-// or:  const { ApiClient, DatabasesASNWHOISApi } = require("whoisfreaks-js");
+// ASN WHOIS Snapshot Status: GET https://files.whoisfreaks.com/v3.3/status/snapshot/asn/whois
+// Run: WHOISFREAKS_API_KEY=your_api_key node DbAsnWhoisStatus.js
+const { ApiClient, DatabasesASNWHOISApi } = require("whoisfreaks-js");
 
+// Set the API key once; the client adds it to every request.
 const client = ApiClient.instance;
-client.authentications["ApiKeyAuth"].apiKey = "YOUR_API_KEY";  // set once
+client.authentications["ApiKeyAuth"].apiKey = process.env.WHOISFREAKS_API_KEY;
 const api = new DatabasesASNWHOISApi(client);
 
-api.dbAsnWhoisStatus()
-  .then(data => console.log(data))
-  .catch(err => console.error(err));
+// dbAsnWhoisStatus() takes no parameters.
+async function main() {
+  const result = await api.dbAsnWhoisStatus();
+  console.log(JSON.stringify(result, null, 2));
+}
+
+main().catch((err) => {
+  // API errors carry the HTTP status and the parsed error body
+  console.error(err.status ? `HTTP ${err.status}: ${JSON.stringify(err.body)}` : err);
+  process.exitCode = 1;
+});

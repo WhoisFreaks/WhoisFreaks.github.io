@@ -1,13 +1,23 @@
-# Runnable example: IP WHOIS Lookup (GET /v1.0/ip-whois)
+# IP WHOIS Lookup
+#
 # Parameters for ipWhois (GET /v1.0/ip-whois):
 #   - ip (string, required)
 #   - format (string (one of: json, xml), optional)
-require 'whoisfreaks'
 
+require "json"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
 WhoisFreaks.configure do |config|
-  config.api_key["apiKey"] = "YOUR_API_KEY"   # set once
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
 end
 
 api = WhoisFreaks::IPWHOISApi.new
-result = api.ip_whois("8.8.8.8")
-puts result
+
+begin
+  result = api.ip_whois("8.8.8.8")
+  puts JSON.pretty_generate(result.to_hash)
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end

@@ -1,16 +1,17 @@
 // Runnable example: Account Usage (GET /v1.0/whoisapi/usage)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for accountUsage (GET /v1.0/whoisapi/usage):
 //   (no parameters; the API key is set on the client)
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
+using WhoisFreaks.Model;
 
-class AccountUsage {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new AccountApi(config);
-        var result = api.AccountUsage();
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new AccountApi(config);
+
+AccountUsageResponse result = api.AccountUsage();
+Console.WriteLine(result.ToJson());

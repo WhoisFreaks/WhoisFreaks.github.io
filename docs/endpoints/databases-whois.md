@@ -4,42 +4,48 @@
 
 WHOIS database snapshots
 
-3 endpoint(s). All requests require your API key — see [Authentication](../authentication.md).
+3 endpoints. Requests need your API key unless noted otherwise. See [Authentication](../authentication.md).
 
 ## WHOIS Database Daily
 
-`GET /v3.3/download/dbupdate/daily/domains/whois`
+`GET https://files.whoisfreaks.com/v3.3/download/dbupdate/daily/domains/whois`
 
 WHOIS Database Daily. Returns the file/snapshot described by this operation.
 
 **Parameters**
 
-| Parameter | In | Required | Type | Description |
-|-----------|----|----------|------|-------------|
-| `date` | query | no | string | yyyy-MM-dd; omit for latest |
+| Parameter | In | Required | Type | Default | Description |
+|-----------|----|----------|------|---------|-------------|
+| `date` | query | no | string (date) |  | yyyy-MM-dd; omit for latest |
 
 **Usage**
 
 <details><summary>Python</summary>
 
 ```python
-"""Runnable example: WHOIS Database Daily (GET /v3.3/download/dbupdate/daily/domains/whois).
-Returns raw bytes (a compressed/binary file) -- write to disk, do not print."""
-from datetime import date, timedelta
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.databases_whois_api import DatabasesWHOISApi
+"""WHOIS Database Daily: GET https://files.whoisfreaks.com/v3.3/download/dbupdate/daily/domains/whois
 
-# Parameters for dbWhoisDaily (GET /v3.3/download/dbupdate/daily/domains/whois):
-#   - date (string, optional): yyyy-MM-dd; omit for latest
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = DatabasesWHOISApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python DbWhoisDaily.py
+"""
+import os
+from datetime import date
 
-data = api.db_whois_daily(var_date=str(date.today() - timedelta(days=1)))   # bytes
-with open("dbWhoisDaily.gz", "wb") as f:
-    f.write(data)
-print(f"saved {len(data)} bytes to dbWhoisDaily.gz")
+import whoisfreaks
 
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesWHOISApi(client)
+
+    # db_whois_daily parameters:
+    #   var_date (datetime.date, optional, keyword): yyyy-MM-dd; omit for latest
+    data = api.db_whois_daily(var_date=date(2026, 10, 1))  # the file's raw bytes
+    path = "DbWhoisDaily.csv"
+    with open(path, "wb") as f:
+        f.write(data)
+    print(f"Saved {len(data)} bytes to {os.path.abspath(path)}")
 ```
 
 </details>
@@ -47,20 +53,34 @@ print(f"saved {len(data)} bytes to dbWhoisDaily.gz")
 <details><summary>TypeScript</summary>
 
 ```typescript
-// Runnable example: WHOIS Database Daily (GET /v3.3/download/dbupdate/daily/domains/whois)
-// Parameters for dbWhoisDaily (GET /v3.3/download/dbupdate/daily/domains/whois):
-//   - date (string, optional): yyyy-MM-dd; omit for latest
-import { Configuration, DatabasesWHOISApi } from "whoisfreaks";
+// WHOIS Database Daily: GET https://files.whoisfreaks.com/v3.3/download/dbupdate/daily/domains/whois
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbWhoisDaily.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesWHOISApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesWHOISApi(config);
 
-async function main() {
-  const result = await api.dbWhoisDaily({ date: new Date(Date.now()-86400000).toISOString().slice(0,10) });
-  console.log(result);
+// dbWhoisDaily({ date? })
+//   date (Date, optional): yyyy-MM-dd; omit for latest
+async function main(): Promise<void> {
+  const blob = await api.dbWhoisDaily({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
+  const file = "DbWhoisDaily.csv";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 </details>
@@ -69,29 +89,48 @@ main().catch(console.error);
 
 ```go
 // Runnable example: WHOIS Database Daily (GET /v3.3/download/dbupdate/daily/domains/whois)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbWhoisDaily (GET /v3.3/download/dbupdate/daily/domains/whois):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
+
 package main
 
 import (
-    "context"
-    "fmt"
-    "os"
-    "time"
-    wf "github.com/WhoisFreaks/whoisfreaks-go"
+	"context"
+	"fmt"
+	"io"
+	"log"
+	"os"
+	"path/filepath"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
 )
 
 func main() {
-    cfg := wf.NewConfiguration()
-    client := wf.NewAPIClient(cfg)
-    // apiKey is set once via the request context
-    ctx := context.WithValue(context.Background(), wf.ContextAPIKeys,
-        map[string]wf.APIKey{"ApiKeyAuth": {Key: "YOUR_API_KEY"}})
-    // returns raw bytes (compressed/binary file) -- write to disk
-    data, _, err := client.DatabasesWHOISAPI.DbWhoisDaily(ctx).Date(time.Now().AddDate(0,0,-1).Format("2006-01-02")).Execute()
-    if err != nil { panic(err) }
-    if err := os.WriteFile("dbWhoisDaily.gz", data, 0644); err != nil { panic(err) }
-    fmt.Printf("saved %d bytes to dbWhoisDaily.gz\n", len(data))
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	file, _, err := client.DatabasesWHOISAPI.DbWhoisDaily(ctx).Date("2026-10-01").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	// The SDK saves the response to a temporary file: copy it to its destination.
+	defer os.Remove(file.Name())
+	defer file.Close()
+
+	out, err := os.Create("DbWhoisDaily.csv")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer out.Close()
+	n, err := io.Copy(out, file)
+	if err != nil {
+		log.Fatal(err)
+	}
+	path, _ := filepath.Abs(out.Name())
+	fmt.Printf("Saved %d bytes to %s\n", n, path)
 }
 
 ```
@@ -102,38 +141,44 @@ func main() {
 
 ## WHOIS Database Weekly
 
-`GET /v3.3/download/dbupdate/weekly/domains/whois`
+`GET https://files.whoisfreaks.com/v3.3/download/dbupdate/weekly/domains/whois`
 
 WHOIS Database Weekly. Returns the file/snapshot described by this operation.
 
 **Parameters**
 
-| Parameter | In | Required | Type | Description |
-|-----------|----|----------|------|-------------|
-| `date` | query | no | string | yyyy-MM-dd; omit for latest |
+| Parameter | In | Required | Type | Default | Description |
+|-----------|----|----------|------|---------|-------------|
+| `date` | query | no | string (date) |  | yyyy-MM-dd; omit for latest |
 
 **Usage**
 
 <details><summary>Python</summary>
 
 ```python
-"""Runnable example: WHOIS Database Weekly (GET /v3.3/download/dbupdate/weekly/domains/whois).
-Returns raw bytes (a compressed/binary file) -- write to disk, do not print."""
-from datetime import date, timedelta
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.databases_whois_api import DatabasesWHOISApi
+"""WHOIS Database Weekly: GET https://files.whoisfreaks.com/v3.3/download/dbupdate/weekly/domains/whois
 
-# Parameters for dbWhoisWeekly (GET /v3.3/download/dbupdate/weekly/domains/whois):
-#   - date (string, optional): yyyy-MM-dd; omit for latest
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = DatabasesWHOISApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python DbWhoisWeekly.py
+"""
+import os
+from datetime import date
 
-data = api.db_whois_weekly(var_date=str(date.today() - timedelta(days=1)))   # bytes
-with open("dbWhoisWeekly.gz", "wb") as f:
-    f.write(data)
-print(f"saved {len(data)} bytes to dbWhoisWeekly.gz")
+import whoisfreaks
 
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesWHOISApi(client)
+
+    # db_whois_weekly parameters:
+    #   var_date (datetime.date, optional, keyword): yyyy-MM-dd; omit for latest
+    data = api.db_whois_weekly(var_date=date(2026, 10, 1))  # the file's raw bytes
+    path = "DbWhoisWeekly.csv"
+    with open(path, "wb") as f:
+        f.write(data)
+    print(f"Saved {len(data)} bytes to {os.path.abspath(path)}")
 ```
 
 </details>
@@ -141,20 +186,34 @@ print(f"saved {len(data)} bytes to dbWhoisWeekly.gz")
 <details><summary>TypeScript</summary>
 
 ```typescript
-// Runnable example: WHOIS Database Weekly (GET /v3.3/download/dbupdate/weekly/domains/whois)
-// Parameters for dbWhoisWeekly (GET /v3.3/download/dbupdate/weekly/domains/whois):
-//   - date (string, optional): yyyy-MM-dd; omit for latest
-import { Configuration, DatabasesWHOISApi } from "whoisfreaks";
+// WHOIS Database Weekly: GET https://files.whoisfreaks.com/v3.3/download/dbupdate/weekly/domains/whois
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbWhoisWeekly.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesWHOISApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesWHOISApi(config);
 
-async function main() {
-  const result = await api.dbWhoisWeekly({ date: new Date(Date.now()-86400000).toISOString().slice(0,10) });
-  console.log(result);
+// dbWhoisWeekly({ date? })
+//   date (Date, optional): yyyy-MM-dd; omit for latest
+async function main(): Promise<void> {
+  const blob = await api.dbWhoisWeekly({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
+  const file = "DbWhoisWeekly.csv";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 </details>
@@ -163,29 +222,48 @@ main().catch(console.error);
 
 ```go
 // Runnable example: WHOIS Database Weekly (GET /v3.3/download/dbupdate/weekly/domains/whois)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbWhoisWeekly (GET /v3.3/download/dbupdate/weekly/domains/whois):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
+
 package main
 
 import (
-    "context"
-    "fmt"
-    "os"
-    "time"
-    wf "github.com/WhoisFreaks/whoisfreaks-go"
+	"context"
+	"fmt"
+	"io"
+	"log"
+	"os"
+	"path/filepath"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
 )
 
 func main() {
-    cfg := wf.NewConfiguration()
-    client := wf.NewAPIClient(cfg)
-    // apiKey is set once via the request context
-    ctx := context.WithValue(context.Background(), wf.ContextAPIKeys,
-        map[string]wf.APIKey{"ApiKeyAuth": {Key: "YOUR_API_KEY"}})
-    // returns raw bytes (compressed/binary file) -- write to disk
-    data, _, err := client.DatabasesWHOISAPI.DbWhoisWeekly(ctx).Date(time.Now().AddDate(0,0,-1).Format("2006-01-02")).Execute()
-    if err != nil { panic(err) }
-    if err := os.WriteFile("dbWhoisWeekly.gz", data, 0644); err != nil { panic(err) }
-    fmt.Printf("saved %d bytes to dbWhoisWeekly.gz\n", len(data))
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	file, _, err := client.DatabasesWHOISAPI.DbWhoisWeekly(ctx).Date("2026-10-01").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	// The SDK saves the response to a temporary file: copy it to its destination.
+	defer os.Remove(file.Name())
+	defer file.Close()
+
+	out, err := os.Create("DbWhoisWeekly.csv")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer out.Close()
+	n, err := io.Copy(out, file)
+	if err != nil {
+		log.Fatal(err)
+	}
+	path, _ := filepath.Abs(out.Name())
+	fmt.Printf("Saved %d bytes to %s\n", n, path)
 }
 
 ```
@@ -196,38 +274,44 @@ func main() {
 
 ## WHOIS Database Monthly
 
-`GET /v3.3/download/dbupdate/monthly/domains/whois`
+`GET https://files.whoisfreaks.com/v3.3/download/dbupdate/monthly/domains/whois`
 
 WHOIS Database Monthly. Returns the file/snapshot described by this operation.
 
 **Parameters**
 
-| Parameter | In | Required | Type | Description |
-|-----------|----|----------|------|-------------|
-| `date` | query | no | string | yyyy-MM-dd; omit for latest |
+| Parameter | In | Required | Type | Default | Description |
+|-----------|----|----------|------|---------|-------------|
+| `date` | query | no | string (date) |  | yyyy-MM-dd; omit for latest |
 
 **Usage**
 
 <details><summary>Python</summary>
 
 ```python
-"""Runnable example: WHOIS Database Monthly (GET /v3.3/download/dbupdate/monthly/domains/whois).
-Returns raw bytes (a compressed/binary file) -- write to disk, do not print."""
-from datetime import date, timedelta
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.databases_whois_api import DatabasesWHOISApi
+"""WHOIS Database Monthly: GET https://files.whoisfreaks.com/v3.3/download/dbupdate/monthly/domains/whois
 
-# Parameters for dbWhoisMonthly (GET /v3.3/download/dbupdate/monthly/domains/whois):
-#   - date (string, optional): yyyy-MM-dd; omit for latest
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = DatabasesWHOISApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python DbWhoisMonthly.py
+"""
+import os
+from datetime import date
 
-data = api.db_whois_monthly(var_date=str(date.today() - timedelta(days=1)))   # bytes
-with open("dbWhoisMonthly.gz", "wb") as f:
-    f.write(data)
-print(f"saved {len(data)} bytes to dbWhoisMonthly.gz")
+import whoisfreaks
 
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesWHOISApi(client)
+
+    # db_whois_monthly parameters:
+    #   var_date (datetime.date, optional, keyword): yyyy-MM-dd; omit for latest
+    data = api.db_whois_monthly(var_date=date(2026, 10, 1))  # the file's raw bytes
+    path = "DbWhoisMonthly.csv"
+    with open(path, "wb") as f:
+        f.write(data)
+    print(f"Saved {len(data)} bytes to {os.path.abspath(path)}")
 ```
 
 </details>
@@ -235,20 +319,34 @@ print(f"saved {len(data)} bytes to dbWhoisMonthly.gz")
 <details><summary>TypeScript</summary>
 
 ```typescript
-// Runnable example: WHOIS Database Monthly (GET /v3.3/download/dbupdate/monthly/domains/whois)
-// Parameters for dbWhoisMonthly (GET /v3.3/download/dbupdate/monthly/domains/whois):
-//   - date (string, optional): yyyy-MM-dd; omit for latest
-import { Configuration, DatabasesWHOISApi } from "whoisfreaks";
+// WHOIS Database Monthly: GET https://files.whoisfreaks.com/v3.3/download/dbupdate/monthly/domains/whois
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DbWhoisMonthly.ts
+import { writeFile } from "node:fs/promises";
+import { resolve } from "node:path";
+import { Configuration, DatabasesWHOISApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesWHOISApi(config);
 
-async function main() {
-  const result = await api.dbWhoisMonthly({ date: new Date(Date.now()-86400000).toISOString().slice(0,10) });
-  console.log(result);
+// dbWhoisMonthly({ date? })
+//   date (Date, optional): yyyy-MM-dd; omit for latest
+async function main(): Promise<void> {
+  const blob = await api.dbWhoisMonthly({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
+  const file = "DbWhoisMonthly.csv";
+  await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
+  console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 </details>
@@ -257,29 +355,48 @@ main().catch(console.error);
 
 ```go
 // Runnable example: WHOIS Database Monthly (GET /v3.3/download/dbupdate/monthly/domains/whois)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbWhoisMonthly (GET /v3.3/download/dbupdate/monthly/domains/whois):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
+
 package main
 
 import (
-    "context"
-    "fmt"
-    "os"
-    "time"
-    wf "github.com/WhoisFreaks/whoisfreaks-go"
+	"context"
+	"fmt"
+	"io"
+	"log"
+	"os"
+	"path/filepath"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
 )
 
 func main() {
-    cfg := wf.NewConfiguration()
-    client := wf.NewAPIClient(cfg)
-    // apiKey is set once via the request context
-    ctx := context.WithValue(context.Background(), wf.ContextAPIKeys,
-        map[string]wf.APIKey{"ApiKeyAuth": {Key: "YOUR_API_KEY"}})
-    // returns raw bytes (compressed/binary file) -- write to disk
-    data, _, err := client.DatabasesWHOISAPI.DbWhoisMonthly(ctx).Date(time.Now().AddDate(0,0,-1).Format("2006-01-02")).Execute()
-    if err != nil { panic(err) }
-    if err := os.WriteFile("dbWhoisMonthly.gz", data, 0644); err != nil { panic(err) }
-    fmt.Printf("saved %d bytes to dbWhoisMonthly.gz\n", len(data))
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	file, _, err := client.DatabasesWHOISAPI.DbWhoisMonthly(ctx).Date("2026-10-01").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	// The SDK saves the response to a temporary file: copy it to its destination.
+	defer os.Remove(file.Name())
+	defer file.Close()
+
+	out, err := os.Create("DbWhoisMonthly.csv")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer out.Close()
+	n, err := io.Copy(out, file)
+	if err != nil {
+		log.Fatal(err)
+	}
+	path, _ := filepath.Abs(out.Name())
+	fmt.Printf("Saved %d bytes to %s\n", n, path)
 }
 
 ```

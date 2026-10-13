@@ -2,22 +2,22 @@
 
 ## About
 
-The official **WhoisFreaks PHP SDK** — a complete client for WHOIS, DNS, SSL, domain availability, subdomain, IP geolocation, IP reputation, ASN, typosquatting, and domain reputation lookups, plus bulk database downloads. Query real-time and historical domain data, reverse WHOIS, and threat intelligence from PHP with a single API key. Generated from the WhoisFreaks OpenAPI specification and published to Packagist.
+The official **WhoisFreaks PHP SDK**: a complete client for WHOIS, DNS, SSL, domain availability, subdomain, IP geolocation, IP reputation, ASN, typosquatting, and domain reputation lookups, plus bulk database downloads. Query real-time and historical domain data, reverse WHOIS, and threat intelligence from PHP with a single API key. Generated from the WhoisFreaks OpenAPI specification and published to Packagist.
 
 **Keywords:** php whois api, php whois sdk, whoisfreaks php, php domain lookup, php dns api, whois api, whois lookup, domain api, dns api, dns lookup, reverse whois, historical whois, domain availability api, ssl certificate api, ip geolocation api, ip reputation api, asn lookup, subdomain finder, typosquatting api, domain reputation, threat intelligence api, domain data api, whois sdk, domain monitoring, brand protection api
 
 - **Registry:** Packagist
-- **Package:** `WhoisFreaks/whoisfreaks-php`
+- **Package:** `whoisfreaks/whoisfreaks-php`
 
 ## Install
 
 ```bash
-composer require WhoisFreaks/whoisfreaks-php
+composer require whoisfreaks/whoisfreaks-php
 ```
 
 ## Build from Source
 
-Prefer to build the SDK yourself instead of installing from Packagist? Clone the monorepo and build the PHP package locally:
+Prefer to build the SDK yourself instead of installing from Packagist? Clone the PHP SDK repository and build it locally:
 
 ```bash
 git clone https://github.com/WhoisFreaks/whoisfreaks-php
@@ -29,28 +29,41 @@ composer install
 
 A complete walkthrough from an empty directory to a running program:
 
+You need PHP 7.4 or later (PHP 8 supported) and [Composer](https://getcomposer.org).
+
+1. Create a project and install the SDK:
+
 ```bash
 mkdir whoisfreaks-test && cd whoisfreaks-test
-composer init --no-interaction
-composer require WhoisFreaks/whoisfreaks-php
+composer require whoisfreaks/whoisfreaks-php
 ```
 
-Create `main.php`:
+2. Create `main.php`:
 
 ```php
 <?php
-require 'vendor/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");   // set once
-$api = new WhoisFreaks\Api\WhoisApi(new GuzzleHttp\Client(), $config);
-$result = $api->whoisLive("example.com");
-print_r($result);
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\WHOISApi;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$whois = new WHOISApi(new Client(), $config);
+$record = $whois->whoisLive('whoisfreaks.com');
+
+echo 'Registrar: ', $record->getDomainRegistrar()->getRegistrarName(), PHP_EOL;
+echo 'Created:   ', $record->getCreateDate(), PHP_EOL;
+echo 'Expires:   ', $record->getExpiryDate(), PHP_EOL;
 ```
 
-Run it:
+3. Set your API key and run it:
 
 ```bash
+export WHOISFREAKS_API_KEY="your_api_key"
 php main.php
 ```
 
@@ -60,17 +73,32 @@ See [Authentication](../authentication.md) for how to obtain a key. Minimal setu
 
 ```php
 <?php
-// Runnable example: Live WHOIS Lookup (GET /v2.0/whois/live)
+// Live WHOIS Lookup
+//
 // Parameters for whoisLive (GET /v2.0/whois/live):
 //   - domainName (string, required)
 //   - format (string (one of: json, xml), optional)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\WHOISApi(new GuzzleHttp\Client(), $config);
-$result = $api->whoisLive("example.com", null);
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\WHOISApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new WHOISApi(new Client(), $config);
+
+try {
+    $result = $api->whoisLive('whoisfreaks.com');
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -86,17 +114,32 @@ All 60 endpoints are shown below, grouped by category. Each includes its method,
 
 ```php
 <?php
-// Runnable example: Live WHOIS Lookup (GET /v2.0/whois/live)
+// Live WHOIS Lookup
+//
 // Parameters for whoisLive (GET /v2.0/whois/live):
 //   - domainName (string, required)
 //   - format (string (one of: json, xml), optional)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\WHOISApi(new GuzzleHttp\Client(), $config);
-$result = $api->whoisLive("example.com", null);
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\WHOISApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new WHOISApi(new Client(), $config);
+
+try {
+    $result = $api->whoisLive('whoisfreaks.com');
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -106,17 +149,37 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Bulk WHOIS Lookup (POST /v2.0/bulkwhois/live)
+// Bulk WHOIS Lookup
+//
 // Parameters for bulkWhois (POST /v2.0/bulkwhois/live):
 //   - format (string (one of: json, xml), optional)
-//   - body: BulkWhoisRequest (required) -- request body object
-require 'vendor/autoload.php';
+//   - body: BulkWhoisRequest (required): request body object
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\WHOISApi(new GuzzleHttp\Client(), $config);
-$result = $api->bulkWhois(new WhoisFreaks\Model\BulkWhoisRequest(), null);
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\WHOISApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+use WhoisFreaks\Model\BulkWhoisRequest;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new WHOISApi(new Client(), $config);
+
+$request = new BulkWhoisRequest([
+    'domainNames' => ['whoisfreaks.com', 'jfreaks.com'],
+]);
+
+try {
+    $result = $api->bulkWhois($request);
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -126,18 +189,32 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Historical WHOIS records for a domain (GET /v2.0/whois/history)
+// Historical WHOIS records for a domain
+//
 // Parameters for whoisHistory (GET /v2.0/whois/history):
 //   - domainName (string, required): Domain to fetch historical WHOIS records for
-//   - page (integer, optional): Page number
 //   - format (string (one of: json, xml), optional)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\WHOISApi(new GuzzleHttp\Client(), $config);
-$result = $api->whoisHistory("example.com", null, null);
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\WHOISApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new WHOISApi(new Client(), $config);
+
+try {
+    $result = $api->whoisHistory('whoisfreaks.com');
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -147,18 +224,33 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Reverse WHOIS lookup by keyword (GET /v2.0/whois/reverse)
+// Reverse WHOIS lookup by keyword
+//
 // Parameters for whoisReverse (GET /v2.0/whois/reverse):
 //   - keyword (string, required): Keyword to search across WHOIS records
 //   - page (integer, optional): Page number
 //   - format (string (one of: json, xml), optional)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\WHOISApi(new GuzzleHttp\Client(), $config);
-$result = $api->whoisReverse("value", null, null);
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\WHOISApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new WHOISApi(new Client(), $config);
+
+try {
+    $result = $api->whoisReverse('whoisfreaks', 1);  // keyword, page
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -170,19 +262,34 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Live DNS Lookup (GET /v2.0/dns/live)
+// Live DNS Lookup
+//
 // Parameters for dnsLive (GET /v2.0/dns/live):
-//   - domainName (string, required)
-//   - ipAddress (string, required): Use for PTR lookups
+//   - domainName (string, optional)
+//   - ipAddress (string, optional): Use for PTR lookups
 //   - type (string, required): all or comma-separated: A,MX,NS,TXT,SOA,SPF,AAAA,CNAME
 //   - format (string (one of: json, xml), optional)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DNSApi(new GuzzleHttp\Client(), $config);
-$result = $api->dnsLive("example.com", "8.8.8.8", "value", null);
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DNSApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DNSApi(new Client(), $config);
+
+try {
+    $result = $api->dnsLive('A,MX,TXT', 'whoisfreaks.com');  // type, domainName
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -192,19 +299,34 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Historical DNS Lookup (GET /v2.0/dns/historical)
+// Historical DNS Lookup
+//
 // Parameters for dnsHistorical (GET /v2.0/dns/historical):
 //   - domainName (string, required)
 //   - type (string, required)
 //   - page (integer, optional)
 //   - format (string (one of: json, xml), optional)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DNSApi(new GuzzleHttp\Client(), $config);
-$result = $api->dnsHistorical("example.com", "value", null, null);
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DNSApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DNSApi(new Client(), $config);
+
+try {
+    $result = $api->dnsHistorical('whoisfreaks.com', 'A,MX,TXT', 1);  // domainName, type, page
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -214,20 +336,35 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Reverse DNS Lookup (GET /v2.1/dns/reverse)
+// Reverse DNS Lookup
+//
 // Parameters for dnsReverse (GET /v2.1/dns/reverse):
 //   - value (string, required): IP, CIDR, or record value
 //   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
 //   - exact (boolean, optional)
 //   - page (integer, optional)
 //   - format (string (one of: json, xml), optional)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DNSApi(new GuzzleHttp\Client(), $config);
-$result = $api->dnsReverse("value", "a", true, null, null);
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DNSApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DNSApi(new Client(), $config);
+
+try {
+    $result = $api->dnsReverse('8.8.8.8', 'a', true, 1);  // value, type, exact, page
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -237,18 +374,38 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Bulk DNS Lookup (POST /v2.0/dns/bulk/live)
+// Bulk DNS Lookup
+//
 // Parameters for dnsBulk (POST /v2.0/dns/bulk/live):
 //   - type (string, required)
 //   - format (string (one of: json, xml), optional)
-//   - body: DnsBulkRequest (required) -- request body object
-require 'vendor/autoload.php';
+//   - body: DnsBulkRequest (required): request body object
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DNSApi(new GuzzleHttp\Client(), $config);
-$result = $api->dnsBulk("value", new WhoisFreaks\Model\DnsBulkRequest(), null);
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DNSApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+use WhoisFreaks\Model\DnsBulkRequest;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DNSApi(new Client(), $config);
+
+$request = new DnsBulkRequest([
+    'domainNames' => ['whoisfreaks.com', 'example.com'],
+]);
+
+try {
+    $result = $api->dnsBulk('A,MX,TXT', $request);  // type, dnsBulkRequest
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -260,19 +417,34 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Domain Availability Check with Suggestions (GET /v2.0/domain/availability)
+// Domain Availability Check with Suggestions
+//
 // Parameters for domainAvailabilityV2 (GET /v2.0/domain/availability):
 //   - domain (string, required): The domain name to check
 //   - sug (boolean, optional): Whether to return TLD suggestions alongside the queried domain.
 //   - count (integer, optional): Number of TLD suggestions to return when sug=true. Maximum is 100.
 //   - format (string (one of: json, xml), optional)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DomainAvailabilityApi(new GuzzleHttp\Client(), $config);
-$result = $api->domainAvailabilityV2("example.com", null, null, null);
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DomainAvailabilityApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DomainAvailabilityApi(new Client(), $config);
+
+try {
+    $result = $api->domainAvailabilityV2('google.com', true, 5);  // domain, sug, count
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -282,18 +454,38 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Bulk Domain Availability Check (POST /v2.0/domain/availability)
+// Bulk Domain Availability Check
+//
 // Parameters for bulkDomainAvailabilityV2 (POST /v2.0/domain/availability):
 //   - domain (string, optional): Required for TLD-mode bulk check (base domain).
 //   - format (string (one of: json, xml), optional)
-//   - body: BulkDomainAvailabilityRequest (required) -- request body object
-require 'vendor/autoload.php';
+//   - body: BulkDomainAvailabilityRequest (required): request body object
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DomainAvailabilityApi(new GuzzleHttp\Client(), $config);
-$result = $api->bulkDomainAvailabilityV2(new WhoisFreaks\Model\BulkDomainAvailabilityRequest(), null, null);
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DomainAvailabilityApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+use WhoisFreaks\Model\BulkDomainAvailabilityRequest;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DomainAvailabilityApi(new Client(), $config);
+
+$request = new BulkDomainAvailabilityRequest([
+    'domainNames' => ['whoisfreaks.com', 'example.com'],
+]);
+
+try {
+    $result = $api->bulkDomainAvailabilityV2($request);
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -305,18 +497,33 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Typosquatting Lookup (GET /v3.0/domain/typos)
+// Typosquatting Lookup
+//
 // Parameters for typosquatting (GET /v3.0/domain/typos):
 //   - keyword (string, optional)
 //   - pattern (string, optional)
 //   - pageToken (string, optional)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\TyposquattingApi(new GuzzleHttp\Client(), $config);
-$result = $api->typosquatting(null, null, null);
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\TyposquattingApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new TyposquattingApi(new Client(), $config);
+
+try {
+    $result = $api->typosquatting('whoisfreaks');
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -328,19 +535,34 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: SSL Certificate Lookup (GET /v1.0/ssl/live)
+// SSL Certificate Lookup
+//
 // Parameters for sslLookup (GET /v1.0/ssl/live):
 //   - domainName (string, required)
 //   - chain (boolean, optional)
 //   - sslRaw (boolean, optional)
 //   - format (string (one of: json, xml), optional)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\SSLApi(new GuzzleHttp\Client(), $config);
-$result = $api->sslLookup("example.com", null, null, null);
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\SSLApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new SSLApi(new Client(), $config);
+
+try {
+    $result = $api->sslLookup('whoisfreaks.com');
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -352,16 +574,31 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: IP Geolocation Lookup (GET /v1.0/geolocation)
+// IP Geolocation Lookup
+//
 // Parameters for geolocation (GET /v1.0/geolocation):
 //   - ip (string, required)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\GeolocationApi(new GuzzleHttp\Client(), $config);
-$result = $api->geolocation("8.8.8.8");
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\GeolocationApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new GeolocationApi(new Client(), $config);
+
+try {
+    $result = $api->geolocation('8.8.8.8');
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -371,16 +608,38 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Bulk IP Geolocation (POST /v1.0/geolocation)
+// Bulk IP Geolocation
+//
 // Parameters for bulkGeolocation (POST /v1.0/geolocation):
-//   - body: BulkGeolocationRequest (required) -- request body object
-require 'vendor/autoload.php';
+//   - body: BulkGeolocationRequest (required): request body object
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\GeolocationApi(new GuzzleHttp\Client(), $config);
-$result = $api->bulkGeolocation(new WhoisFreaks\Model\BulkGeolocationRequest());
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\GeolocationApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+use WhoisFreaks\Model\BulkGeolocationRequest;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new GeolocationApi(new Client(), $config);
+
+$request = new BulkGeolocationRequest([
+    'ips' => ['8.8.8.8', '1.1.1.1'],
+]);
+
+try {
+    $results = $api->bulkGeolocation($request);
+    foreach ($results as $result) {
+        echo $result, PHP_EOL;  // models print as JSON
+    }
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -392,7 +651,8 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Subdomains Lookup (GET /v1.0/subdomains)
+// Subdomains Lookup
+//
 // Parameters for subdomains (GET /v1.0/subdomains):
 //   - domain (string, required)
 //   - after (string, optional)
@@ -400,13 +660,27 @@ print_r($result);
 //   - status (string (one of: active, inactive), optional)
 //   - page (integer, optional)
 //   - format (string (one of: json, xml), optional)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\SubdomainsApi(new GuzzleHttp\Client(), $config);
-$result = $api->subdomains("example.com", "2000-01-01", (new DateTime("today"))->format("Y-m-d"), null, null, null);
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\SubdomainsApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new SubdomainsApi(new Client(), $config);
+
+try {
+    $result = $api->subdomains('whoisfreaks.com', null, null, null, 1);  // domain, after, before, status, page
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -418,16 +692,31 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: IP Reputation Lookup (GET /v1.0/security)
+// IP Reputation Lookup
+//
 // Parameters for ipReputation (GET /v1.0/security):
 //   - ip (string, required)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\IPReputationApi(new GuzzleHttp\Client(), $config);
-$result = $api->ipReputation("8.8.8.8");
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\IPReputationApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new IPReputationApi(new Client(), $config);
+
+try {
+    $result = $api->ipReputation('8.8.8.8');
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -437,16 +726,38 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Bulk IP Reputation (POST /v1.0/security)
+// Bulk IP Reputation
+//
 // Parameters for bulkIpReputation (POST /v1.0/security):
-//   - body: BulkIpReputationRequest (required) -- request body object
-require 'vendor/autoload.php';
+//   - body: BulkGeolocationRequest (required): request body object
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\IPReputationApi(new GuzzleHttp\Client(), $config);
-$result = $api->bulkIpReputation(new WhoisFreaks\Model\BulkIpReputationRequest());
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\IPReputationApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+use WhoisFreaks\Model\BulkGeolocationRequest;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new IPReputationApi(new Client(), $config);
+
+$request = new BulkGeolocationRequest([
+    'ips' => ['8.8.8.8', '1.1.1.1'],
+]);
+
+try {
+    $results = $api->bulkIpReputation($request);
+    foreach ($results as $result) {
+        echo $result, PHP_EOL;  // models print as JSON
+    }
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -458,17 +769,32 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Domain Reputation Lookup (GET /v1/domain/security)
+// Domain Reputation Lookup
+//
 // Parameters for domainReputation (GET /v1/domain/security):
 //   - domainName (string, required): The domain name to assess
 //   - format (string (one of: json, xml), optional)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DomainReputationApi(new GuzzleHttp\Client(), $config);
-$result = $api->domainReputation("example.com", null);
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DomainReputationApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DomainReputationApi(new Client(), $config);
+
+try {
+    $result = $api->domainReputation('amazon.com');
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -480,17 +806,32 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: ASN WHOIS Lookup (GET /v2.0/asn-whois)
+// ASN WHOIS Lookup
+//
 // Parameters for asnWhois (GET /v2.0/asn-whois):
 //   - asn (string, required)
 //   - format (string (one of: json, xml), optional)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\ASNWHOISApi(new GuzzleHttp\Client(), $config);
-$result = $api->asnWhois("AS15169", null);
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\ASNWHOISApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new ASNWHOISApi(new Client(), $config);
+
+try {
+    $result = $api->asnWhois('as15169');
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -502,17 +843,32 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: IP WHOIS Lookup (GET /v1.0/ip-whois)
+// IP WHOIS Lookup
+//
 // Parameters for ipWhois (GET /v1.0/ip-whois):
 //   - ip (string, required)
 //   - format (string (one of: json, xml), optional)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\IPWHOISApi(new GuzzleHttp\Client(), $config);
-$result = $api->ipWhois("8.8.8.8", null);
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\IPWHOISApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new IPWHOISApi(new Client(), $config);
+
+try {
+    $result = $api->ipWhois('8.8.8.8');
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -524,16 +880,32 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Rotate API Key (GET /v1.0/api-key/rotate)
+// Rotate API Key
+//
 // Parameters for rotateApiKey (GET /v1.0/api-key/rotate):
 //   (no parameters; the API key is set on the client)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\AccountApi(new GuzzleHttp\Client(), $config);
-$result = $api->rotateApiKey();
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\AccountApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new AccountApi(new Client(), $config);
+
+try {
+    $newKey = $api->rotateApiKey();
+    // The old key stops working now: store the new one before making more calls.
+    echo 'New API key: ', $newKey, PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -543,16 +915,31 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Account Usage (GET /v1.0/whoisapi/usage)
+// Account Usage
+//
 // Parameters for accountUsage (GET /v1.0/whoisapi/usage):
 //   (no parameters; the API key is set on the client)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\AccountApi(new GuzzleHttp\Client(), $config);
-$result = $api->accountUsage();
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\AccountApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new AccountApi(new Client(), $config);
+
+try {
+    $result = $api->accountUsage();
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -562,16 +949,32 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Database File Status (Public) (GET /v3.4/status)
+// Database File Status (Public)
+//
 // Parameters for databaseFileStatus (GET /v3.4/status):
-//   (no parameters; the API key is set on the client)
-require 'vendor/autoload.php';
+//   (no parameters; no API key required)
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\AccountApi(new GuzzleHttp\Client(), $config);
-$result = $api->databaseFileStatus();
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\AccountApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+// (This endpoint is public, so the key is not sent with this request.)
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new AccountApi(new Client(), $config);
+
+try {
+    $result = $api->databaseFileStatus();
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -583,18 +986,36 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Newly Registered gTLD (CSV) (GET /v3.1/download/domainer/gtld)
+// Newly Registered gTLD (CSV)
+//
 // Parameters for dbNewlyGtld (GET /v3.1/download/domainer/gtld):
 //   - whois (boolean, required)
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 //   - tlds (string, optional)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesNewlyRegisteredApi(new GuzzleHttp\Client(), $config);
-$result = $api->dbNewlyGtld(false, (new DateTime("yesterday"))->format("Y-m-d"), null);
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesNewlyRegisteredApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesNewlyRegisteredApi(new Client(), $config);
+
+try {
+    $file = $api->dbNewlyGtld(true, '2026-10-01');  // whois, date
+    // The SDK streams the download into a temporary file: copy it somewhere permanent.
+    $saveAs = 'DbNewlyGtld.csv';
+    copy($file->getPathname(), $saveAs);
+    echo 'Saved ', realpath($saveAs), ' (', filesize($saveAs), ' bytes)', PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -604,18 +1025,36 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Newly Registered ccTLD (CSV) (GET /v3.1/download/domainer/cctld)
+// Newly Registered ccTLD (CSV)
+//
 // Parameters for dbNewlyCctld (GET /v3.1/download/domainer/cctld):
 //   - whois (boolean, required)
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 //   - tlds (string, optional)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesNewlyRegisteredApi(new GuzzleHttp\Client(), $config);
-$result = $api->dbNewlyCctld(false, (new DateTime("yesterday"))->format("Y-m-d"), null);
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesNewlyRegisteredApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesNewlyRegisteredApi(new Client(), $config);
+
+try {
+    $file = $api->dbNewlyCctld(true, '2026-10-01');  // whois, date
+    // The SDK streams the download into a temporary file: copy it somewhere permanent.
+    $saveAs = 'DbNewlyCctld.csv';
+    copy($file->getPathname(), $saveAs);
+    echo 'Saved ', realpath($saveAs), ' (', filesize($saveAs), ' bytes)', PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -625,16 +1064,34 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Newly Registered gTLD Cleaned WHOIS (CSV) (GET /v3.1/download/domainer/gtld/cleaned)
+// Newly Registered gTLD Cleaned WHOIS (CSV)
+//
 // Parameters for dbNewlyGtldCleaned (GET /v3.1/download/domainer/gtld/cleaned):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesNewlyRegisteredApi(new GuzzleHttp\Client(), $config);
-$result = $api->dbNewlyGtldCleaned((new DateTime("yesterday"))->format("Y-m-d"));
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesNewlyRegisteredApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesNewlyRegisteredApi(new Client(), $config);
+
+try {
+    $file = $api->dbNewlyGtldCleaned('2026-10-01');
+    // The SDK streams the download into a temporary file: copy it somewhere permanent.
+    $saveAs = 'DbNewlyGtldCleaned.csv';
+    copy($file->getPathname(), $saveAs);
+    echo 'Saved ', realpath($saveAs), ' (', filesize($saveAs), ' bytes)', PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -644,16 +1101,34 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Newly Registered ccTLD Cleaned WHOIS (CSV) (GET /v3.1/download/domainer/cctld/cleaned)
+// Newly Registered ccTLD Cleaned WHOIS (CSV)
+//
 // Parameters for dbNewlyCctldCleaned (GET /v3.1/download/domainer/cctld/cleaned):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesNewlyRegisteredApi(new GuzzleHttp\Client(), $config);
-$result = $api->dbNewlyCctldCleaned((new DateTime("yesterday"))->format("Y-m-d"));
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesNewlyRegisteredApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesNewlyRegisteredApi(new Client(), $config);
+
+try {
+    $file = $api->dbNewlyCctldCleaned('2026-10-01');
+    // The SDK streams the download into a temporary file: copy it somewhere permanent.
+    $saveAs = 'DbNewlyCctldCleaned.csv';
+    copy($file->getPathname(), $saveAs);
+    echo 'Saved ', realpath($saveAs), ' (', filesize($saveAs), ' bytes)', PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -663,17 +1138,32 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Newly Registered gTLD (JSON) (GET /v3.1/domains/newly/gtld)
+// Newly Registered gTLD (JSON)
+//
 // Parameters for dbNewlyGtldJson (GET /v3.1/domains/newly/gtld):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 //   - tlds (string, optional)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesNewlyRegisteredApi(new GuzzleHttp\Client(), $config);
-$result = $api->dbNewlyGtldJson((new DateTime("yesterday"))->format("Y-m-d"), null);
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesNewlyRegisteredApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesNewlyRegisteredApi(new Client(), $config);
+
+try {
+    $domains = $api->dbNewlyGtldJson('2026-10-01');
+    echo implode(PHP_EOL, $domains), PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -683,17 +1173,32 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Newly Registered ccTLD (JSON) (GET /v3.1/domains/newly/cctld)
+// Newly Registered ccTLD (JSON)
+//
 // Parameters for dbNewlyCctldJson (GET /v3.1/domains/newly/cctld):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 //   - tlds (string, optional)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesNewlyRegisteredApi(new GuzzleHttp\Client(), $config);
-$result = $api->dbNewlyCctldJson((new DateTime("yesterday"))->format("Y-m-d"), null);
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesNewlyRegisteredApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesNewlyRegisteredApi(new Client(), $config);
+
+try {
+    $domains = $api->dbNewlyCctldJson('2026-10-01');
+    echo implode(PHP_EOL, $domains), PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -703,16 +1208,34 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Newly Registered With DNS (GET /v3.1/download/domainer/newly/dns)
+// Newly Registered With DNS
+//
 // Parameters for dbNewlyDns (GET /v3.1/download/domainer/newly/dns):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesNewlyRegisteredApi(new GuzzleHttp\Client(), $config);
-$result = $api->dbNewlyDns((new DateTime("yesterday"))->format("Y-m-d"));
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesNewlyRegisteredApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesNewlyRegisteredApi(new Client(), $config);
+
+try {
+    $file = $api->dbNewlyDns('2026-10-01');
+    // The SDK streams the download into a temporary file: copy it somewhere permanent.
+    $saveAs = 'DbNewlyDns.json';
+    copy($file->getPathname(), $saveAs);
+    echo 'Saved ', realpath($saveAs), ' (', filesize($saveAs), ' bytes)', PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -724,17 +1247,35 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Expiring Domains (GET /v3.1/download/domainer/expired)
+// Expiring Domains
+//
 // Parameters for dbExpired (GET /v3.1/download/domainer/expired):
 //   - whois (boolean, required)
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesExpiringDroppedApi(new GuzzleHttp\Client(), $config);
-$result = $api->dbExpired(false, (new DateTime("yesterday"))->format("Y-m-d"));
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesExpiringDroppedApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesExpiringDroppedApi(new Client(), $config);
+
+try {
+    $file = $api->dbExpired(true, '2026-10-01');  // whois, date
+    // The SDK streams the download into a temporary file: copy it somewhere permanent.
+    $saveAs = 'DbExpired.csv';
+    copy($file->getPathname(), $saveAs);
+    echo 'Saved ', realpath($saveAs), ' (', filesize($saveAs), ' bytes)', PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -744,16 +1285,34 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Expiring Cleaned WHOIS (GET /v3.1/download/domainer/expired/cleaned)
+// Expiring Cleaned WHOIS
+//
 // Parameters for dbExpiredCleaned (GET /v3.1/download/domainer/expired/cleaned):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesExpiringDroppedApi(new GuzzleHttp\Client(), $config);
-$result = $api->dbExpiredCleaned((new DateTime("yesterday"))->format("Y-m-d"));
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesExpiringDroppedApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesExpiringDroppedApi(new Client(), $config);
+
+try {
+    $file = $api->dbExpiredCleaned('2026-10-01');
+    // The SDK streams the download into a temporary file: copy it somewhere permanent.
+    $saveAs = 'DbExpiredCleaned.csv';
+    copy($file->getPathname(), $saveAs);
+    echo 'Saved ', realpath($saveAs), ' (', filesize($saveAs), ' bytes)', PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -763,17 +1322,35 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Dropped Domains (GET /v3.1/download/domainer/dropped)
+// Dropped Domains
+//
 // Parameters for dbDropped (GET /v3.1/download/domainer/dropped):
 //   - whois (boolean, required)
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesExpiringDroppedApi(new GuzzleHttp\Client(), $config);
-$result = $api->dbDropped(false, (new DateTime("yesterday"))->format("Y-m-d"));
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesExpiringDroppedApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesExpiringDroppedApi(new Client(), $config);
+
+try {
+    $file = $api->dbDropped(true, '2026-10-01');  // whois, date
+    // The SDK streams the download into a temporary file: copy it somewhere permanent.
+    $saveAs = 'DbDropped.csv';
+    copy($file->getPathname(), $saveAs);
+    echo 'Saved ', realpath($saveAs), ' (', filesize($saveAs), ' bytes)', PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -783,17 +1360,32 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Dropped Domains (JSON) (GET /v3.1/domains/dropped)
+// Dropped Domains (JSON)
+//
 // Parameters for dbDroppedJson (GET /v3.1/domains/dropped):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 //   - tlds (string, optional)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesExpiringDroppedApi(new GuzzleHttp\Client(), $config);
-$result = $api->dbDroppedJson((new DateTime("yesterday"))->format("Y-m-d"), null);
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesExpiringDroppedApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesExpiringDroppedApi(new Client(), $config);
+
+try {
+    $domains = $api->dbDroppedJson('2026-10-01');
+    echo implode(PHP_EOL, $domains), PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -803,17 +1395,35 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Dropped With Backlinks (GET /v3.3/download/domainer/dropped/backlinks)
+// Dropped With Backlinks
+//
 // Parameters for dbDroppedBacklinks (GET /v3.3/download/domainer/dropped/backlinks):
 //   - whois (boolean, optional)
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesExpiringDroppedApi(new GuzzleHttp\Client(), $config);
-$result = $api->dbDroppedBacklinks(false, (new DateTime("yesterday"))->format("Y-m-d"));
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesExpiringDroppedApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesExpiringDroppedApi(new Client(), $config);
+
+try {
+    $file = $api->dbDroppedBacklinks(null, '2026-10-01');  // whois, date
+    // The SDK streams the download into a temporary file: copy it somewhere permanent.
+    $saveAs = 'DbDroppedBacklinks.csv';
+    copy($file->getPathname(), $saveAs);
+    echo 'Saved ', realpath($saveAs), ' (', filesize($saveAs), ' bytes)', PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -825,16 +1435,34 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: WHOIS Database Daily (GET /v3.3/download/dbupdate/daily/domains/whois)
+// WHOIS Database Daily
+//
 // Parameters for dbWhoisDaily (GET /v3.3/download/dbupdate/daily/domains/whois):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesWHOISApi(new GuzzleHttp\Client(), $config);
-$result = $api->dbWhoisDaily((new DateTime("yesterday"))->format("Y-m-d"));
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesWHOISApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesWHOISApi(new Client(), $config);
+
+try {
+    $file = $api->dbWhoisDaily('2026-10-01');
+    // The SDK streams the download into a temporary file: copy it somewhere permanent.
+    $saveAs = 'DbWhoisDaily.csv';
+    copy($file->getPathname(), $saveAs);
+    echo 'Saved ', realpath($saveAs), ' (', filesize($saveAs), ' bytes)', PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -844,16 +1472,34 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: WHOIS Database Weekly (GET /v3.3/download/dbupdate/weekly/domains/whois)
+// WHOIS Database Weekly
+//
 // Parameters for dbWhoisWeekly (GET /v3.3/download/dbupdate/weekly/domains/whois):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesWHOISApi(new GuzzleHttp\Client(), $config);
-$result = $api->dbWhoisWeekly((new DateTime("yesterday"))->format("Y-m-d"));
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesWHOISApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesWHOISApi(new Client(), $config);
+
+try {
+    $file = $api->dbWhoisWeekly('2026-10-01');
+    // The SDK streams the download into a temporary file: copy it somewhere permanent.
+    $saveAs = 'DbWhoisWeekly.csv';
+    copy($file->getPathname(), $saveAs);
+    echo 'Saved ', realpath($saveAs), ' (', filesize($saveAs), ' bytes)', PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -863,16 +1509,34 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: WHOIS Database Monthly (GET /v3.3/download/dbupdate/monthly/domains/whois)
+// WHOIS Database Monthly
+//
 // Parameters for dbWhoisMonthly (GET /v3.3/download/dbupdate/monthly/domains/whois):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesWHOISApi(new GuzzleHttp\Client(), $config);
-$result = $api->dbWhoisMonthly((new DateTime("yesterday"))->format("Y-m-d"));
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesWHOISApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesWHOISApi(new Client(), $config);
+
+try {
+    $file = $api->dbWhoisMonthly('2026-10-01');
+    // The SDK streams the download into a temporary file: copy it somewhere permanent.
+    $saveAs = 'DbWhoisMonthly.csv';
+    copy($file->getPathname(), $saveAs);
+    echo 'Saved ', realpath($saveAs), ' (', filesize($saveAs), ' bytes)', PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -884,16 +1548,34 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: DNS Database Daily (GET /v3.2/download/dbupdate/daily/dns)
+// DNS Database Daily
+//
 // Parameters for dbDnsDaily (GET /v3.2/download/dbupdate/daily/dns):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesDNSApi(new GuzzleHttp\Client(), $config);
-$result = $api->dbDnsDaily((new DateTime("yesterday"))->format("Y-m-d"));
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesDNSApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesDNSApi(new Client(), $config);
+
+try {
+    $file = $api->dbDnsDaily('2026-10-01');
+    // The SDK streams the download into a temporary file: copy it somewhere permanent.
+    $saveAs = 'DbDnsDaily.csv';
+    copy($file->getPathname(), $saveAs);
+    echo 'Saved ', realpath($saveAs), ' (', filesize($saveAs), ' bytes)', PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -903,16 +1585,34 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: DNS Database Weekly (GET /v3.2/download/dbupdate/weekly/dns)
+// DNS Database Weekly
+//
 // Parameters for dbDnsWeekly (GET /v3.2/download/dbupdate/weekly/dns):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesDNSApi(new GuzzleHttp\Client(), $config);
-$result = $api->dbDnsWeekly((new DateTime("yesterday"))->format("Y-m-d"));
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesDNSApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesDNSApi(new Client(), $config);
+
+try {
+    $file = $api->dbDnsWeekly('2026-10-01');
+    // The SDK streams the download into a temporary file: copy it somewhere permanent.
+    $saveAs = 'DbDnsWeekly.csv';
+    copy($file->getPathname(), $saveAs);
+    echo 'Saved ', realpath($saveAs), ' (', filesize($saveAs), ' bytes)', PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -922,16 +1622,34 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: DNS Database Monthly (GET /v3.2/download/dbupdate/monthly/dns)
+// DNS Database Monthly
+//
 // Parameters for dbDnsMonthly (GET /v3.2/download/dbupdate/monthly/dns):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesDNSApi(new GuzzleHttp\Client(), $config);
-$result = $api->dbDnsMonthly((new DateTime("yesterday"))->format("Y-m-d"));
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesDNSApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesDNSApi(new Client(), $config);
+
+try {
+    $file = $api->dbDnsMonthly('2026-10-01');
+    // The SDK streams the download into a temporary file: copy it somewhere permanent.
+    $saveAs = 'DbDnsMonthly.csv';
+    copy($file->getPathname(), $saveAs);
+    echo 'Saved ', realpath($saveAs), ' (', filesize($saveAs), ' bytes)', PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -943,16 +1661,34 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Subdomains Daily (GET /v3.2/download/dbupdate/daily/subdomains)
+// Subdomains Daily
+//
 // Parameters for dbSubdomainsDaily (GET /v3.2/download/dbupdate/daily/subdomains):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesSubdomainsApi(new GuzzleHttp\Client(), $config);
-$result = $api->dbSubdomainsDaily((new DateTime("yesterday"))->format("Y-m-d"));
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesSubdomainsApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesSubdomainsApi(new Client(), $config);
+
+try {
+    $file = $api->dbSubdomainsDaily('2026-10-01');
+    // The SDK streams the download into a temporary file: copy it somewhere permanent.
+    $saveAs = 'DbSubdomainsDaily.csv';
+    copy($file->getPathname(), $saveAs);
+    echo 'Saved ', realpath($saveAs), ' (', filesize($saveAs), ' bytes)', PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -962,16 +1698,34 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Subdomains Weekly (GET /v3.2/download/dbupdate/weekly/subdomains)
+// Subdomains Weekly
+//
 // Parameters for dbSubdomainsWeekly (GET /v3.2/download/dbupdate/weekly/subdomains):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesSubdomainsApi(new GuzzleHttp\Client(), $config);
-$result = $api->dbSubdomainsWeekly((new DateTime("yesterday"))->format("Y-m-d"));
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesSubdomainsApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesSubdomainsApi(new Client(), $config);
+
+try {
+    $file = $api->dbSubdomainsWeekly('2026-10-01');
+    // The SDK streams the download into a temporary file: copy it somewhere permanent.
+    $saveAs = 'DbSubdomainsWeekly.csv';
+    copy($file->getPathname(), $saveAs);
+    echo 'Saved ', realpath($saveAs), ' (', filesize($saveAs), ' bytes)', PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -981,16 +1735,34 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Subdomains Monthly (GET /v3.2/download/dbupdate/monthly/subdomains)
+// Subdomains Monthly
+//
 // Parameters for dbSubdomainsMonthly (GET /v3.2/download/dbupdate/monthly/subdomains):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesSubdomainsApi(new GuzzleHttp\Client(), $config);
-$result = $api->dbSubdomainsMonthly((new DateTime("yesterday"))->format("Y-m-d"));
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesSubdomainsApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesSubdomainsApi(new Client(), $config);
+
+try {
+    $file = $api->dbSubdomainsMonthly('2026-10-01');
+    // The SDK streams the download into a temporary file: copy it somewhere permanent.
+    $saveAs = 'DbSubdomainsMonthly.csv';
+    copy($file->getPathname(), $saveAs);
+    echo 'Saved ', realpath($saveAs), ' (', filesize($saveAs), ' bytes)', PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -1002,16 +1774,31 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: IP to Country Snapshot Status (GET /v3.3/status/snapshot/ip/country)
+// IP to Country Snapshot Status
+//
 // Parameters for dbIpCountryStatus (GET /v3.3/status/snapshot/ip/country):
 //   (no parameters; the API key is set on the client)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesIPGeolocationApi(new GuzzleHttp\Client(), $config);
-$result = $api->dbIpCountryStatus();
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesIPGeolocationApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesIPGeolocationApi(new Client(), $config);
+
+try {
+    $result = $api->dbIpCountryStatus();
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -1021,16 +1808,34 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: IP to Country Snapshot (GET /v3.3/download/snapshot/ip/country)
+// IP to Country Snapshot
+//
 // Parameters for dbIpCountry (GET /v3.3/download/snapshot/ip/country):
 //   - date (string, required)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesIPGeolocationApi(new GuzzleHttp\Client(), $config);
-$result = $api->dbIpCountry((new DateTime("yesterday"))->format("Y-m-d"));
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesIPGeolocationApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesIPGeolocationApi(new Client(), $config);
+
+try {
+    $file = $api->dbIpCountry('2026-10-01');
+    // The SDK streams the download into a temporary file: copy it somewhere permanent.
+    $saveAs = 'DbIpCountry.zip';
+    copy($file->getPathname(), $saveAs);
+    echo 'Saved ', realpath($saveAs), ' (', filesize($saveAs), ' bytes)', PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -1040,16 +1845,31 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: IP to City Snapshot Status (GET /v3.3/status/snapshot/ip/city)
+// IP to City Snapshot Status
+//
 // Parameters for dbIpCityStatus (GET /v3.3/status/snapshot/ip/city):
 //   (no parameters; the API key is set on the client)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesIPGeolocationApi(new GuzzleHttp\Client(), $config);
-$result = $api->dbIpCityStatus();
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesIPGeolocationApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesIPGeolocationApi(new Client(), $config);
+
+try {
+    $result = $api->dbIpCityStatus();
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -1059,16 +1879,34 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: IP to City Snapshot (GET /v3.3/download/snapshot/ip/city)
+// IP to City Snapshot
+//
 // Parameters for dbIpCity (GET /v3.3/download/snapshot/ip/city):
 //   - date (string, required)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesIPGeolocationApi(new GuzzleHttp\Client(), $config);
-$result = $api->dbIpCity((new DateTime("yesterday"))->format("Y-m-d"));
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesIPGeolocationApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesIPGeolocationApi(new Client(), $config);
+
+try {
+    $file = $api->dbIpCity('2026-10-01');
+    // The SDK streams the download into a temporary file: copy it somewhere permanent.
+    $saveAs = 'DbIpCity.zip';
+    copy($file->getPathname(), $saveAs);
+    echo 'Saved ', realpath($saveAs), ' (', filesize($saveAs), ' bytes)', PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -1080,16 +1918,34 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: ASN WHOIS Snapshot (GET /v3.3/download/snapshot/asn/whois)
+// ASN WHOIS Snapshot
+//
 // Parameters for dbAsnWhois (GET /v3.3/download/snapshot/asn/whois):
 //   - date (string, required)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesASNWHOISApi(new GuzzleHttp\Client(), $config);
-$result = $api->dbAsnWhois((new DateTime("yesterday"))->format("Y-m-d"));
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesASNWHOISApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesASNWHOISApi(new Client(), $config);
+
+try {
+    $file = $api->dbAsnWhois('2026-10-01');
+    // The SDK streams the download into a temporary file: copy it somewhere permanent.
+    $saveAs = 'DbAsnWhois.json.gz';
+    copy($file->getPathname(), $saveAs);
+    echo 'Saved ', realpath($saveAs), ' (', filesize($saveAs), ' bytes)', PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -1099,16 +1955,31 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: ASN WHOIS Snapshot Status (GET /v3.3/status/snapshot/asn/whois)
+// ASN WHOIS Snapshot Status
+//
 // Parameters for dbAsnWhoisStatus (GET /v3.3/status/snapshot/asn/whois):
 //   (no parameters; the API key is set on the client)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesASNWHOISApi(new GuzzleHttp\Client(), $config);
-$result = $api->dbAsnWhoisStatus();
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesASNWHOISApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesASNWHOISApi(new Client(), $config);
+
+try {
+    $result = $api->dbAsnWhoisStatus();
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -1120,16 +1991,34 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: IP WHOIS Snapshot (GET /v3.3/download/snapshot/ip/whois)
+// IP WHOIS Snapshot
+//
 // Parameters for dbIpWhois (GET /v3.3/download/snapshot/ip/whois):
 //   - date (string, required)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesIPWHOISApi(new GuzzleHttp\Client(), $config);
-$result = $api->dbIpWhois((new DateTime("yesterday"))->format("Y-m-d"));
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesIPWHOISApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesIPWHOISApi(new Client(), $config);
+
+try {
+    $file = $api->dbIpWhois('2026-10-01');
+    // The SDK streams the download into a temporary file: copy it somewhere permanent.
+    $saveAs = 'DbIpWhois.json.gz';
+    copy($file->getPathname(), $saveAs);
+    echo 'Saved ', realpath($saveAs), ' (', filesize($saveAs), ' bytes)', PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -1139,16 +2028,31 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: IP WHOIS Snapshot Status (GET /v3.3/status/snapshot/ip/whois)
+// IP WHOIS Snapshot Status
+//
 // Parameters for dbIpWhoisStatus (GET /v3.3/status/snapshot/ip/whois):
 //   (no parameters; the API key is set on the client)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesIPWHOISApi(new GuzzleHttp\Client(), $config);
-$result = $api->dbIpWhoisStatus();
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesIPWHOISApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesIPWHOISApi(new Client(), $config);
+
+try {
+    $result = $api->dbIpWhoisStatus();
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -1160,16 +2064,34 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: IP Security Snapshot (GET /v3.3/download/snapshot/ip/security)
+// IP Security Snapshot
+//
 // Parameters for dbIpSecurity (GET /v3.3/download/snapshot/ip/security):
 //   - date (string, required)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesIPSecurityApi(new GuzzleHttp\Client(), $config);
-$result = $api->dbIpSecurity((new DateTime("yesterday"))->format("Y-m-d"));
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesIPSecurityApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesIPSecurityApi(new Client(), $config);
+
+try {
+    $file = $api->dbIpSecurity('2026-10-01');
+    // The SDK streams the download into a temporary file: copy it somewhere permanent.
+    $saveAs = 'DbIpSecurity.csv';
+    copy($file->getPathname(), $saveAs);
+    echo 'Saved ', realpath($saveAs), ' (', filesize($saveAs), ' bytes)', PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -1179,16 +2101,31 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: IP Security Snapshot Status (GET /v3.3/status/snapshot/ip/security)
+// IP Security Snapshot Status
+//
 // Parameters for dbIpSecurityStatus (GET /v3.3/status/snapshot/ip/security):
 //   (no parameters; the API key is set on the client)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesIPSecurityApi(new GuzzleHttp\Client(), $config);
-$result = $api->dbIpSecurityStatus();
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesIPSecurityApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesIPSecurityApi(new Client(), $config);
+
+try {
+    $result = $api->dbIpSecurityStatus();
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -1200,16 +2137,34 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Download the daily phishing threat feed (CSV) (GET /v3.4/download/threat-feed/phishing)
+// Download the daily phishing threat feed (CSV)
+//
 // Parameters for downloadThreatFeedPhishing (GET /v3.4/download/threat-feed/phishing):
-//   - date (string, optional): Feed date (yyyy-MM-dd); defaults to latest available
-require 'vendor/autoload.php';
+//   - date (string, optional): Feed date (yyyy-MM-dd); omit for the full dump of the feed
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesThreatFeedApi(new GuzzleHttp\Client(), $config);
-$result = $api->downloadThreatFeedPhishing((new DateTime("yesterday"))->format("Y-m-d"));
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesThreatFeedApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesThreatFeedApi(new Client(), $config);
+
+try {
+    $file = $api->downloadThreatFeedPhishing('2026-10-01');
+    // The SDK streams the download into a temporary file: copy it somewhere permanent.
+    $saveAs = 'DownloadThreatFeedPhishing.csv';
+    copy($file->getPathname(), $saveAs);
+    echo 'Saved ', realpath($saveAs), ' (', filesize($saveAs), ' bytes)', PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -1219,16 +2174,34 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Download a sample of the phishing threat feed (CSV) (GET /v3.4/download/threat-feed/phishing/sample)
+// Download a sample of the phishing threat feed (CSV)
+//
 // Parameters for downloadThreatFeedPhishingSample (GET /v3.4/download/threat-feed/phishing/sample):
 //   (no parameters; the API key is set on the client)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesThreatFeedApi(new GuzzleHttp\Client(), $config);
-$result = $api->downloadThreatFeedPhishingSample();
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesThreatFeedApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesThreatFeedApi(new Client(), $config);
+
+try {
+    $file = $api->downloadThreatFeedPhishingSample();
+    // The SDK streams the download into a temporary file: copy it somewhere permanent.
+    $saveAs = 'DownloadThreatFeedPhishingSample.csv';
+    copy($file->getPathname(), $saveAs);
+    echo 'Saved ', realpath($saveAs), ' (', filesize($saveAs), ' bytes)', PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -1238,16 +2211,34 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Download the daily malware threat feed (CSV) (GET /v3.4/download/threat-feed/malware)
+// Download the daily malware threat feed (CSV)
+//
 // Parameters for downloadThreatFeedMalware (GET /v3.4/download/threat-feed/malware):
-//   - date (string, optional): Feed date (yyyy-MM-dd); defaults to latest available
-require 'vendor/autoload.php';
+//   - date (string, optional): Feed date (yyyy-MM-dd); omit for the full dump of the feed
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesThreatFeedApi(new GuzzleHttp\Client(), $config);
-$result = $api->downloadThreatFeedMalware((new DateTime("yesterday"))->format("Y-m-d"));
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesThreatFeedApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesThreatFeedApi(new Client(), $config);
+
+try {
+    $file = $api->downloadThreatFeedMalware('2026-10-01');
+    // The SDK streams the download into a temporary file: copy it somewhere permanent.
+    $saveAs = 'DownloadThreatFeedMalware.csv';
+    copy($file->getPathname(), $saveAs);
+    echo 'Saved ', realpath($saveAs), ' (', filesize($saveAs), ' bytes)', PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -1257,16 +2248,34 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Download a sample of the malware threat feed (CSV) (GET /v3.4/download/threat-feed/malware/sample)
+// Download a sample of the malware threat feed (CSV)
+//
 // Parameters for downloadThreatFeedMalwareSample (GET /v3.4/download/threat-feed/malware/sample):
 //   (no parameters; the API key is set on the client)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesThreatFeedApi(new GuzzleHttp\Client(), $config);
-$result = $api->downloadThreatFeedMalwareSample();
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesThreatFeedApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesThreatFeedApi(new Client(), $config);
+
+try {
+    $file = $api->downloadThreatFeedMalwareSample();
+    // The SDK streams the download into a temporary file: copy it somewhere permanent.
+    $saveAs = 'DownloadThreatFeedMalwareSample.csv';
+    copy($file->getPathname(), $saveAs);
+    echo 'Saved ', realpath($saveAs), ' (', filesize($saveAs), ' bytes)', PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -1276,16 +2285,34 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Download the daily spam threat feed (CSV) (GET /v3.4/download/threat-feed/spam)
+// Download the daily spam threat feed (CSV)
+//
 // Parameters for downloadThreatFeedSpam (GET /v3.4/download/threat-feed/spam):
-//   - date (string, optional): Feed date (yyyy-MM-dd); defaults to latest available
-require 'vendor/autoload.php';
+//   - date (string, optional): Feed date (yyyy-MM-dd); omit for the full dump of the feed
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesThreatFeedApi(new GuzzleHttp\Client(), $config);
-$result = $api->downloadThreatFeedSpam((new DateTime("yesterday"))->format("Y-m-d"));
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesThreatFeedApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesThreatFeedApi(new Client(), $config);
+
+try {
+    $file = $api->downloadThreatFeedSpam('2026-10-01');
+    // The SDK streams the download into a temporary file: copy it somewhere permanent.
+    $saveAs = 'DownloadThreatFeedSpam.csv';
+    copy($file->getPathname(), $saveAs);
+    echo 'Saved ', realpath($saveAs), ' (', filesize($saveAs), ' bytes)', PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```
 
@@ -1295,15 +2322,33 @@ print_r($result);
 
 ```php
 <?php
-// Runnable example: Download a sample of the spam threat feed (CSV) (GET /v3.4/download/threat-feed/spam/sample)
+// Download a sample of the spam threat feed (CSV)
+//
 // Parameters for downloadThreatFeedSpamSample (GET /v3.4/download/threat-feed/spam/sample):
 //   (no parameters; the API key is set on the client)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\DatabasesThreatFeedApi(new GuzzleHttp\Client(), $config);
-$result = $api->downloadThreatFeedSpamSample();
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DatabasesThreatFeedApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DatabasesThreatFeedApi(new Client(), $config);
+
+try {
+    $file = $api->downloadThreatFeedSpamSample();
+    // The SDK streams the download into a temporary file: copy it somewhere permanent.
+    $saveAs = 'DownloadThreatFeedSpamSample.csv';
+    copy($file->getPathname(), $saveAs);
+    echo 'Saved ', realpath($saveAs), ' (', filesize($saveAs), ' bytes)', PHP_EOL;
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```

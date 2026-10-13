@@ -1,14 +1,21 @@
-"""Runnable example: Bulk IP Reputation (POST /v1.0/security)."""
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.ip_reputation_api import IPReputationApi
-from whoisfreaks.models.bulk_ip_reputation_request import BulkIpReputationRequest
+"""Bulk IP Reputation: POST https://api.whoisfreaks.com/v1.0/security
 
-# Parameters for bulkIpReputation (POST /v1.0/security):
-#   - body: BulkIpReputationRequest (required) -- request body object
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = IPReputationApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python BulkIpReputation.py
+"""
+import json
+import os
 
-bulk_ip_reputation_request = BulkIpReputationRequest()  # populate fields as needed
-result = api.bulk_ip_reputation(bulk_ip_reputation_request=bulk_ip_reputation_request)
-print(result)
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.IPReputationApi(client)
+
+    # bulk_ip_reputation parameters:
+    #   bulk_geolocation_request (BulkGeolocationRequest, required): request body
+    body = whoisfreaks.BulkGeolocationRequest(ips=["8.8.8.8", "1.1.1.1"])
+    results = api.bulk_ip_reputation(body)
+    print(json.dumps([item.to_dict() for item in results], indent=2))

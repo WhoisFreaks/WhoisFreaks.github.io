@@ -1,16 +1,24 @@
 // Runnable example: WHOIS Database Daily (GET /v3.3/download/dbupdate/daily/domains/whois)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbWhoisDaily (GET /v3.3/download/dbupdate/daily/domains/whois):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 using System;
+using System.IO;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DbWhoisDaily {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesWHOISApi(config);
-        var result = api.DbWhoisDaily(DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd"));
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesWHOISApi(config);
+
+FileParameter download = api.DbWhoisDaily(date: new DateOnly(2026, 10, 1));
+// The SDK returns the response body as a stream: copy it to a file.
+var path = Path.GetFullPath("DbWhoisDaily.csv");
+using (Stream input = download.Content)
+using (FileStream output = File.Create(path))
+{
+    input.CopyTo(output);
 }
+Console.WriteLine($"Saved {new FileInfo(path).Length} bytes to {path}");

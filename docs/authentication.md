@@ -1,8 +1,9 @@
 # Authentication
 
-Every WhoisFreaks API request requires an **API key**, passed as the `apiKey`
-query parameter. Each SDK exposes a configuration hook so you set the key once
-and it is attached to every request automatically.
+Every WhoisFreaks API request needs an **API key**, passed as the `apiKey`
+query parameter. The one exception is the public database file status check
+(`GET /v3.4/status`). Each SDK exposes a configuration hook so you set the key
+once and it is attached to every request automatically.
 
 ## Get an API key
 
@@ -12,98 +13,126 @@ In short:
 
 1. Sign in at <https://billing.whoisfreaks.com>.
 2. Copy your API key from the dashboard.
-3. Keep it secret — do **not** commit it to source control. Prefer an
-   environment variable (e.g. `WHOISFREAKS_API_KEY`).
+3. Keep it secret. Do **not** commit it to source control; the examples read it
+   from the `WHOISFREAKS_API_KEY` environment variable.
 
 ## Base URLs
 
 | Purpose | Base URL |
 |---------|----------|
-| Live API lookups | `https://api.whoisfreaks.com` |
-| Database file downloads | `https://files.whoisfreaks.com` |
+| Live lookups, bulk lookups and account | `https://api.whoisfreaks.com` |
+| Database downloads, threat feeds and database file status | `https://files.whoisfreaks.com` |
+
+The SDKs pick the right host for each endpoint; every endpoint page shows its full URL.
 
 ## Setting the key per language
 
 ### Python
 
 ```python
-"""Runnable example: Live WHOIS Lookup (GET /v2.0/whois/live)."""
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.whois_api import WHOISApi
+"""Live WHOIS Lookup: GET https://api.whoisfreaks.com/v2.0/whois/live
 
-# Parameters for whoisLive (GET /v2.0/whois/live):
-#   - domainName (string, required)
-#   - format (string (one of: json, xml), optional)
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = WHOISApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python WhoisLive.py
+"""
+import json
+import os
 
-result = api.whois_live(domain_name="example.com")
-print(result)
+import whoisfreaks
 
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.WHOISApi(client)
+
+    # whois_live parameters:
+    #   domain_name (str, required)
+    #   format (str, optional, keyword): one of json, xml; default "json"
+    result = api.whois_live("whoisfreaks.com")
+    print(json.dumps(result.to_dict(), indent=2))
 ```
 
 ### JavaScript
 
 ```javascript
-// Runnable example: Live WHOIS Lookup (GET /v2.0/whois/live)
-// Parameters for whoisLive (GET /v2.0/whois/live):
-//   - domainName (string, required)
-//   - format (string (one of: json, xml), optional)
-// whoisfreaks-js is CommonJS; apiKey is set once on the ApiClient
-import pkg from "whoisfreaks-js";
-const { ApiClient, WHOISApi } = pkg;
-// or:  const { ApiClient, WHOISApi } = require("whoisfreaks-js");
+// Live WHOIS Lookup: GET https://api.whoisfreaks.com/v2.0/whois/live
+// Run: WHOISFREAKS_API_KEY=your_api_key node WhoisLive.js
+const { ApiClient, WHOISApi } = require("whoisfreaks-js");
 
+// Set the API key once; the client adds it to every request.
 const client = ApiClient.instance;
-client.authentications["ApiKeyAuth"].apiKey = "YOUR_API_KEY";  // set once
+client.authentications["ApiKeyAuth"].apiKey = process.env.WHOISFREAKS_API_KEY;
 const api = new WHOISApi(client);
 
-api.whoisLive("example.com")
-  .then(data => console.log(data))
-  .catch(err => console.error(err));
+// whoisLive(domainName, opts)
+//   domainName (string, required)
+//   opts.format (string, optional): one of json, xml; default "json"
+async function main() {
+  const result = await api.whoisLive("whoisfreaks.com");
+  console.log(JSON.stringify(result, null, 2));
+}
 
+main().catch((err) => {
+  // API errors carry the HTTP status and the parsed error body
+  console.error(err.status ? `HTTP ${err.status}: ${JSON.stringify(err.body)}` : err);
+  process.exitCode = 1;
+});
 ```
 
 ### TypeScript
 
 ```typescript
-// Runnable example: Live WHOIS Lookup (GET /v2.0/whois/live)
-// Parameters for whoisLive (GET /v2.0/whois/live):
-//   - domainName (string, required)
-//   - format (string (one of: json, xml), optional)
-import { Configuration, WHOISApi } from "whoisfreaks";
+// Live WHOIS Lookup: GET https://api.whoisfreaks.com/v2.0/whois/live
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx WhoisLive.ts
+import { Configuration, WHOISApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new WHOISApi(config);
 
-async function main() {
-  const result = await api.whoisLive({ domainName: "example.com", format: undefined });
-  console.log(result);
+// whoisLive({ domainName, format? })
+//   domainName (string, required)
+//   format ("json" | "xml", optional): default "json"
+async function main(): Promise<void> {
+  const result = await api.whoisLive({ domainName: "whoisfreaks.com" });
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 ### Java
 
 ```java
 // Runnable example: Live WHOIS Lookup (GET /v2.0/whois/live)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=WhoisLive
 // Parameters for whoisLive (GET /v2.0/whois/live):
 //   - domainName (string, required)
 //   - format (string (one of: json, xml), optional)
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
-import com.whoisfreaks.client.auth.ApiKeyAuth;
 import com.whoisfreaks.client.api.WhoisApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.WhoisResponse;
 
 public class WhoisLive {
     public static void main(String[] args) throws Exception {
         ApiClient client = Configuration.getDefaultApiClient();
-        client.setBasePath("https://api.whoisfreaks.com");
-        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
         WhoisApi api = new WhoisApi(client);
-        var result = api.whoisLive("example.com", null);
+
+        // whoisLive(domainName, format); null leaves an optional parameter unset
+        WhoisResponse result = api.whoisLive("whoisfreaks.com", null);
         System.out.println(result);
     }
 }
@@ -114,6 +143,7 @@ public class WhoisLive {
 
 ```kotlin
 // Runnable example: Live WHOIS Lookup (GET /v2.0/whois/live)
+// Run it from the Getting Started project: gradle run -PmainClass=WhoisLiveKt
 // Parameters for whoisLive (GET /v2.0/whois/live):
 //   - domainName (string, required)
 //   - format (string (one of: json, xml), optional)
@@ -121,9 +151,10 @@ import com.whoisfreaks.client.apis.WHOISApi
 import com.whoisfreaks.client.infrastructure.ApiClient
 
 fun main() {
-    ApiClient.apiKey["apiKey"] = "YOUR_API_KEY"  // set once
+    ApiClient.apiKey["apiKey"] = System.getenv("WHOISFREAKS_API_KEY")  // set once, sent with every call
     val api = WHOISApi()
-    val result = api.whoisLive("example.com", null)
+
+    val result = api.whoisLive("whoisfreaks.com")
     println(result)
 }
 
@@ -133,41 +164,52 @@ fun main() {
 
 ```csharp
 // Runnable example: Live WHOIS Lookup (GET /v2.0/whois/live)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for whoisLive (GET /v2.0/whois/live):
 //   - domainName (string, required)
 //   - format (string (one of: json, xml), optional)
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
+using WhoisFreaks.Model;
 
-class WhoisLive {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new WHOISApi(config);
-        var result = api.WhoisLive("example.com", null);
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new WHOISApi(config);
+
+WhoisResponse result = api.WhoisLive("whoisfreaks.com");
+Console.WriteLine(result.ToJson());
 
 ```
 
 ### Ruby
 
 ```ruby
-# Runnable example: Live WHOIS Lookup (GET /v2.0/whois/live)
+# Live WHOIS Lookup
+#
 # Parameters for whoisLive (GET /v2.0/whois/live):
-#   - domainName (string, required)
+#   - domain_name (string, required)
 #   - format (string (one of: json, xml), optional)
-require 'whoisfreaks'
 
+require "json"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
 WhoisFreaks.configure do |config|
-  config.api_key["apiKey"] = "YOUR_API_KEY"   # set once
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
 end
 
 api = WhoisFreaks::WHOISApi.new
-result = api.whois_live("example.com")
-puts result
+
+begin
+  result = api.whois_live("whoisfreaks.com")
+  puts JSON.pretty_generate(result.to_hash)
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
 
 ```
 
@@ -175,28 +217,35 @@ puts result
 
 ```go
 // Runnable example: Live WHOIS Lookup (GET /v2.0/whois/live)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for whoisLive (GET /v2.0/whois/live):
 //   - domainName (string, required)
 //   - format (string (one of: json, xml), optional)
+
 package main
 
 import (
-    "context"
-    "encoding/json"
-    "fmt"
-    wf "github.com/WhoisFreaks/whoisfreaks-go"
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
 )
 
 func main() {
-    cfg := wf.NewConfiguration()
-    client := wf.NewAPIClient(cfg)
-    // apiKey is set once via the request context
-    ctx := context.WithValue(context.Background(), wf.ContextAPIKeys,
-        map[string]wf.APIKey{"ApiKeyAuth": {Key: "YOUR_API_KEY"}})
-    result, _, err := client.WHOISAPI.WhoisLive(ctx).DomainName("example.com").Execute()
-    if err != nil { panic(err) }
-    b, _ := json.MarshalIndent(result, "", "  ")
-    fmt.Println(string(b))
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.WHOISAPI.WhoisLive(ctx).DomainName("whoisfreaks.com").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
 }
 
 ```
@@ -204,20 +253,30 @@ func main() {
 ### Swift
 
 ```swift
-// Runnable example: Live WHOIS Lookup (GET /v2.0/whois/live)
+// Live WHOIS Lookup
+//
 // Parameters for whoisLive (GET /v2.0/whois/live):
 //   - domainName (string, required)
 //   - format (string (one of: json, xml), optional)
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
 import WhoisFreaks
 
-// Set your API key once (applied to every request)
-WhoisFreaksAPI.apiKey = "YOUR_API_KEY"
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
 
 do {
-    let result = try await WHOISAPI.whoisLive(domainName: "example.com", format: nil)
-    print(result)
+    let result = try await WHOISAPI.whoisLive(domainName: "whoisfreaks.com")
+    print(String(decoding: try CodableHelper.jsonEncoder.encode(result), as: UTF8.self))
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
 } catch {
-    print(error)
+    print("Request failed: \(error)")
+    exit(1)
 }
 
 ```
@@ -226,16 +285,31 @@ do {
 
 ```php
 <?php
-// Runnable example: Live WHOIS Lookup (GET /v2.0/whois/live)
+// Live WHOIS Lookup
+//
 // Parameters for whoisLive (GET /v2.0/whois/live):
 //   - domainName (string, required)
 //   - format (string (one of: json, xml), optional)
-require 'vendor/autoload.php';
 
-$config = WhoisFreaks\Configuration::getDefaultConfiguration()
-    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once
-$api = new WhoisFreaks\Api\WHOISApi(new GuzzleHttp\Client(), $config);
-$result = $api->whoisLive("example.com", null);
-print_r($result);
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\WHOISApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new WHOISApi(new Client(), $config);
+
+try {
+    $result = $api->whoisLive('whoisfreaks.com');
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
 
 ```

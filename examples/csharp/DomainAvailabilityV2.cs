@@ -1,4 +1,5 @@
 // Runnable example: Domain Availability Check with Suggestions (GET /v2.0/domain/availability)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for domainAvailabilityV2 (GET /v2.0/domain/availability):
 //   - domain (string, required): The domain name to check
 //   - sug (boolean, optional): Whether to return TLD suggestions alongside the queried domain.
@@ -7,13 +8,13 @@
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
+using WhoisFreaks.Model;
 
-class DomainAvailabilityV2 {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DomainAvailabilityApi(config);
-        var result = api.DomainAvailabilityV2("example.com", null, null, null);
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DomainAvailabilityApi(config);
+
+DomainAvailabilityResponse result = api.DomainAvailabilityV2("google.com", sug: true, count: 5);
+Console.WriteLine(result.ToJson());

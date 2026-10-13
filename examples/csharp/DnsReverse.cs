@@ -1,4 +1,5 @@
 // Runnable example: Reverse DNS Lookup (GET /v2.1/dns/reverse)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dnsReverse (GET /v2.1/dns/reverse):
 //   - value (string, required): IP, CIDR, or record value
 //   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
@@ -8,13 +9,13 @@
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
+using WhoisFreaks.Model;
 
-class DnsReverse {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DNSApi(config);
-        var result = api.DnsReverse("value", "a", true, null, null);
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DNSApi(config);
+
+ReverseDnsResponse result = api.DnsReverse("8.8.8.8", "a", page: 1);
+Console.WriteLine(result.ToJson());

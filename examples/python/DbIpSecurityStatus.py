@@ -1,12 +1,19 @@
-"""Runnable example: IP Security Snapshot Status (GET /v3.3/status/snapshot/ip/security)."""
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.databases_ip_security_api import DatabasesIPSecurityApi
+"""IP Security Snapshot Status: GET https://files.whoisfreaks.com/v3.3/status/snapshot/ip/security
 
-# Parameters for dbIpSecurityStatus (GET /v3.3/status/snapshot/ip/security):
-#   (no parameters; the API key is set on the client)
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = DatabasesIPSecurityApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python DbIpSecurityStatus.py
+"""
+import json
+import os
 
-result = api.db_ip_security_status()
-print(result)
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesIPSecurityApi(client)
+
+    # db_ip_security_status takes no parameters.
+    result = api.db_ip_security_status()
+    print(json.dumps(result.to_dict(), indent=2))

@@ -1,7 +1,8 @@
 openapi: 3.0.3
 info:
   title: WhoisFreaks API
-  description: "Complete WhoisFreaks API \u2014 WHOIS, DNS, SSL, Geolocation, Typosquatting,\nIP Intelligence,\
+  description:
+    "Complete WhoisFreaks API: WHOIS, DNS, SSL, Geolocation, Typosquatting,\nIP Intelligence,\
     \ Domain Reputation, and bulk database downloads.\n\n## Authentication\nAll requests require an `apiKey`\
     \ query parameter.\n\n## Resources\n- Docs: https://whoisfreaks.com/documentation\n- Billing: https://billing.whoisfreaks.com\n\
     - Support: support@whoisfreaks.com\n"
@@ -14,93 +15,95 @@ info:
     name: MIT
     url: https://opensource.org/licenses/MIT
 servers:
-- url: https://api.whoisfreaks.com
-  description: API Solutions (live lookups)
-- url: https://files.whoisfreaks.com
-  description: Database file downloads
+  - url: https://api.whoisfreaks.com
+    description: API Solutions (live lookups)
+  - url: https://files.whoisfreaks.com
+    description: Database file downloads
 security:
-- ApiKeyAuth: []
+  - ApiKeyAuth: []
 tags:
-- name: WHOIS
-  description: WHOIS lookup APIs (live, historical, reverse, bulk)
-- name: DNS
-  description: DNS lookup APIs (live, historical, reverse, bulk)
-- name: Domain Availability
-  description: Check domain availability
-- name: Typosquatting
-  description: Detect typo variants of brand domains
-- name: SSL
-  description: SSL certificate lookup
-- name: Geolocation
-  description: IP geolocation lookup
-- name: Subdomains
-  description: Subdomain enumeration
-- name: IP Reputation
-  description: IP threat intelligence
-- name: Domain Reputation
-  description: Real-time domain threat assessment and trust scoring
-- name: ASN WHOIS
-  description: Autonomous System Number WHOIS
-- name: IP WHOIS
-  description: IP address WHOIS
-- name: Account
-  description: Account, API key, and usage utilities
-- name: Databases - Newly Registered
-  description: Newly registered domain downloads
-- name: Databases - Expiring & Dropped
-  description: Expiring and dropped domain downloads
-- name: Databases - WHOIS
-  description: WHOIS database snapshots
-- name: Databases - DNS
-  description: DNS database snapshots
-- name: Databases - Subdomains
-  description: Subdomain database snapshots
-- name: Databases - IP Geolocation
-  description: IP geolocation database snapshots
-- name: Databases - ASN WHOIS
-  description: ASN WHOIS database snapshots
-- name: Databases - IP WHOIS
-  description: IP WHOIS database snapshots
-- name: Databases - IP Security
-  description: IP security database snapshots
+  - name: WHOIS
+    description: WHOIS lookup APIs (live, historical, reverse, bulk)
+  - name: DNS
+    description: DNS lookup APIs (live, historical, reverse, bulk)
+  - name: Domain Availability
+    description: Check domain availability
+  - name: Typosquatting
+    description: Detect typo variants of brand domains
+  - name: SSL
+    description: SSL certificate lookup
+  - name: Geolocation
+    description: IP geolocation lookup
+  - name: Subdomains
+    description: Subdomain enumeration
+  - name: IP Reputation
+    description: IP threat intelligence
+  - name: Domain Reputation
+    description: Real-time domain threat assessment and trust scoring
+  - name: ASN WHOIS
+    description: Autonomous System Number WHOIS
+  - name: IP WHOIS
+    description: IP address WHOIS
+  - name: Account
+    description: Account, API key, and usage utilities
+  - name: Databases - Newly Registered
+    description: Newly registered domain downloads
+  - name: Databases - Expiring & Dropped
+    description: Expiring and dropped domain downloads
+  - name: Databases - WHOIS
+    description: WHOIS database snapshots
+  - name: Databases - DNS
+    description: DNS database snapshots
+  - name: Databases - Subdomains
+    description: Subdomain database snapshots
+  - name: Databases - IP Geolocation
+    description: IP geolocation database snapshots
+  - name: Databases - ASN WHOIS
+    description: ASN WHOIS database snapshots
+  - name: Databases - IP WHOIS
+    description: IP WHOIS database snapshots
+  - name: Databases - IP Security
+    description: IP security database snapshots
+  - name: Databases - Threat Feed
+    description: Daily phishing, malware and spam threat feeds
 paths:
   /v2.0/whois/live:
     get:
       tags:
-      - WHOIS
+        - WHOIS
       summary: Live WHOIS Lookup
       description: Real-time WHOIS lookup from authoritative servers. Cost 1 credit.
       operationId: whoisLive
       parameters:
-      - name: domainName
-        in: query
-        schema:
-          type: string
-        required: true
-        example: whoisfreaks.com
-      - $ref: '#/components/parameters/Format'
+        - name: domainName
+          in: query
+          schema:
+            type: string
+          required: true
+          example: whoisfreaks.com
+        - $ref: "#/components/parameters/Format"
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/WhoisResponse'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '429':
-          $ref: '#/components/responses/RateLimited'
+                $ref: "#/components/schemas/WhoisResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/RateLimited"
   /v2.0/bulkwhois/live:
     post:
       tags:
-      - WHOIS
+        - WHOIS
       summary: Bulk WHOIS Lookup
       description: Up to 100 domains in one request. 1 credit per successful domain.
       operationId: bulkWhois
       parameters:
-      - $ref: '#/components/parameters/Format'
+        - $ref: "#/components/parameters/Format"
       requestBody:
         required: true
         content:
@@ -108,7 +111,7 @@ paths:
             schema:
               type: object
               required:
-              - domainNames
+                - domainNames
               properties:
                 domainNames:
                   type: array
@@ -117,149 +120,158 @@ paths:
                   maxItems: 100
               example:
                 domainNames:
-                - whoisfreaks.com
-                - jfreaks.com
+                  - whoisfreaks.com
+                  - jfreaks.com
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BulkWhoisResponse'
+                $ref: "#/components/schemas/BulkWhoisResponse"
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
   /v2.0/dns/live:
     get:
       tags:
-      - DNS
+        - DNS
       summary: Live DNS Lookup
       description: Real-time DNS record lookup. 1 credit per query.
       operationId: dnsLive
       parameters:
-      - name: domainName
-        in: query
-        schema:
-          type: string
-      - name: ipAddress
-        in: query
-        schema:
-          type: string
-        description: Use for PTR lookups
-      - name: type
-        in: query
-        schema:
-          type: string
-          default: all
-        required: true
-        description: 'all or comma-separated: A,MX,NS,TXT,SOA,SPF,AAAA,CNAME'
-      - $ref: '#/components/parameters/Format'
+        - name: domainName
+          in: query
+          schema:
+            type: string
+          example: whoisfreaks.com
+        - name: ipAddress
+          in: query
+          schema:
+            type: string
+          description: Use for PTR lookups
+          example: 8.8.8.8
+        - name: type
+          in: query
+          schema:
+            type: string
+            default: all
+          required: true
+          description: "all or comma-separated: A,MX,NS,TXT,SOA,SPF,AAAA,CNAME"
+          example: "A,MX,TXT"
+        - $ref: "#/components/parameters/Format"
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DnsResponse'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '429':
-          $ref: '#/components/responses/RateLimited'
+                $ref: "#/components/schemas/DnsResponse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "429":
+          $ref: "#/components/responses/RateLimited"
   /v2.0/dns/historical:
     get:
       tags:
-      - DNS
+        - DNS
       summary: Historical DNS Lookup
       description: All historical DNS records. 2 credits per page (100 records/page).
       operationId: dnsHistorical
       parameters:
-      - name: domainName
-        in: query
-        schema:
-          type: string
-        required: true
-      - name: type
-        in: query
-        schema:
-          type: string
-          default: all
-        required: true
-      - name: page
-        in: query
-        schema:
-          type: integer
-          default: 1
-      - $ref: '#/components/parameters/Format'
+        - name: domainName
+          in: query
+          schema:
+            type: string
+          required: true
+          example: whoisfreaks.com
+        - name: type
+          in: query
+          schema:
+            type: string
+            default: all
+          required: true
+          example: "A,MX,TXT"
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+          example: 1
+        - $ref: "#/components/parameters/Format"
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HistoricalDnsResponse'
+                $ref: "#/components/schemas/HistoricalDnsResponse"
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
   /v2.1/dns/reverse:
     get:
       tags:
-      - DNS
+        - DNS
       summary: Reverse DNS Lookup
       description: Search domains by IP or DNS value. 5 credits per page.
       operationId: dnsReverse
       parameters:
-      - name: value
-        in: query
-        schema:
-          type: string
-        required: true
-        description: IP, CIDR, or record value
-      - name: type
-        in: query
-        schema:
-          type: string
-          enum:
-          - a
-          - mx
-          - cname
-          - ns
-          - aaaa
-          - txt
-          - soa
-        required: true
-      - name: exact
-        in: query
-        schema:
-          type: boolean
-          default: true
-      - name: page
-        in: query
-        schema:
-          type: integer
-          default: 1
-      - $ref: '#/components/parameters/Format'
+        - name: value
+          in: query
+          schema:
+            type: string
+          required: true
+          description: IP, CIDR, or record value
+          example: 8.8.8.8
+        - name: type
+          in: query
+          schema:
+            type: string
+            enum:
+              - a
+              - mx
+              - cname
+              - ns
+              - aaaa
+              - txt
+              - soa
+          required: true
+        - name: exact
+          in: query
+          schema:
+            type: boolean
+            default: true
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+          example: 1
+        - $ref: "#/components/parameters/Format"
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReverseDnsResponse'
+                $ref: "#/components/schemas/ReverseDnsResponse"
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
   /v2.0/dns/bulk/live:
     post:
       tags:
-      - DNS
+        - DNS
       summary: Bulk DNS Lookup
       description: Up to 100 domains + 100 IPs in one request.
       operationId: dnsBulk
       parameters:
-      - name: type
-        in: query
-        schema:
-          type: string
-          default: all
-        required: true
-      - $ref: '#/components/parameters/Format'
+        - name: type
+          in: query
+          schema:
+            type: string
+            default: all
+          required: true
+          example: "A,MX,TXT"
+        - $ref: "#/components/parameters/Format"
       requestBody:
         required: true
         content:
@@ -276,182 +288,188 @@ paths:
                   items:
                     type: string
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BulkDnsResponse'
+                $ref: "#/components/schemas/BulkDnsResponse"
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
   /v2.0/domain/availability:
     get:
       tags:
-      - Domain Availability
+        - Domain Availability
       summary: Domain Availability Check with Suggestions
-      description: Check availability of a single domain and optionally get suggestions across multiple
+      description:
+        Check availability of a single domain and optionally get suggestions across multiple
         TLDs. 1 credit per domain checked. sug=false checks only the queried domain; sug=true returns
         up to `count` (max 100) TLD suggestions.
       operationId: domainAvailabilityV2
       parameters:
-      - name: domain
-        in: query
-        schema:
-          type: string
-        required: true
-        description: The domain name to check
-        example: google.com
-      - name: sug
-        in: query
-        schema:
-          type: boolean
-          default: false
-        description: Whether to return TLD suggestions alongside the queried domain.
-      - name: count
-        in: query
-        schema:
-          type: integer
-          default: 5
-          minimum: 1
-          maximum: 100
-        description: Number of TLD suggestions to return when sug=true. Maximum is 100.
-      - $ref: '#/components/parameters/Format'
+        - name: domain
+          in: query
+          schema:
+            type: string
+          required: true
+          description: The domain name to check
+          example: google.com
+        - name: sug
+          in: query
+          schema:
+            type: boolean
+            default: false
+          description: Whether to return TLD suggestions alongside the queried domain.
+        - name: count
+          in: query
+          schema:
+            type: integer
+            default: 5
+            minimum: 1
+            maximum: 100
+          description: Number of TLD suggestions to return when sug=true. Maximum is 100.
+        - $ref: "#/components/parameters/Format"
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DomainAvailabilityResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '429':
-          $ref: '#/components/responses/RateLimited'
+                $ref: "#/components/schemas/DomainAvailabilityResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "429":
+          $ref: "#/components/responses/RateLimited"
     post:
       tags:
-      - Domain Availability
+        - Domain Availability
       summary: Bulk Domain Availability Check
-      description: 'Two bulk modes. Mode 1: POST domainNames array. Mode 2: POST tld array plus domain
-        query param. Max 100 domains per request. 1 credit per domain checked.'
+      description:
+        "Two bulk modes. Mode 1: POST domainNames array. Mode 2: POST tld array plus domain
+        query param. Max 100 domains per request. 1 credit per domain checked."
       operationId: bulkDomainAvailabilityV2
       parameters:
-      - name: domain
-        in: query
-        schema:
-          type: string
-        description: Required for TLD-mode bulk check (base domain).
-        example: google.com
-      - $ref: '#/components/parameters/Format'
+        - name: domain
+          in: query
+          schema:
+            type: string
+          description: Required for TLD-mode bulk check (base domain).
+          example: google.com
+        - $ref: "#/components/parameters/Format"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/BulkDomainAvailabilityRequest'
+              $ref: "#/components/schemas/BulkDomainAvailabilityRequest"
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/BulkDomainAvailabilityResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '429':
-          $ref: '#/components/responses/RateLimited'
+                $ref: "#/components/schemas/BulkDomainAvailabilityResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "429":
+          $ref: "#/components/responses/RateLimited"
   /v3.0/domain/typos:
     get:
       tags:
-      - Typosquatting
+        - Typosquatting
       summary: Typosquatting Lookup
       description: Find typo variants of a brand. 5 credits per page.
       operationId: typosquatting
       parameters:
-      - name: keyword
-        in: query
-        schema:
-          type: string
-      - name: pattern
-        in: query
-        schema:
-          type: string
-      - name: pageToken
-        in: query
-        schema:
-          type: string
+        - name: keyword
+          in: query
+          schema:
+            type: string
+          example: whoisfreaks
+        - name: pattern
+          in: query
+          schema:
+            type: string
+          example: "whois*"
+        - name: pageToken
+          in: query
+          schema:
+            type: string
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TyposquattingResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
+                $ref: "#/components/schemas/TyposquattingResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
   /v1.0/ssl/live:
     get:
       tags:
-      - SSL
+        - SSL
       summary: SSL Certificate Lookup
       description: Real-time SSL cert with optional chain.
       operationId: sslLookup
       parameters:
-      - name: domainName
-        in: query
-        schema:
-          type: string
-        required: true
-      - name: chain
-        in: query
-        schema:
-          type: boolean
-          default: false
-      - name: sslRaw
-        in: query
-        schema:
-          type: boolean
-          default: false
-      - $ref: '#/components/parameters/Format'
+        - name: domainName
+          in: query
+          schema:
+            type: string
+          required: true
+          example: whoisfreaks.com
+        - name: chain
+          in: query
+          schema:
+            type: boolean
+            default: false
+        - name: sslRaw
+          in: query
+          schema:
+            type: boolean
+            default: false
+        - $ref: "#/components/parameters/Format"
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SslResponse'
+                $ref: "#/components/schemas/SslResponse"
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
   /v1.0/geolocation:
     get:
       tags:
-      - Geolocation
+        - Geolocation
       summary: IP Geolocation Lookup
       description: Get location, ASN, currency for an IP. 1 credit.
       operationId: geolocation
       parameters:
-      - name: ip
-        in: query
-        schema:
-          type: string
-        required: true
+        - name: ip
+          in: query
+          schema:
+            type: string
+          required: true
+          example: 8.8.8.8
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/GeolocationResponse'
+                $ref: "#/components/schemas/GeolocationResponse"
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
     post:
       tags:
-      - Geolocation
+        - Geolocation
       summary: Bulk IP Geolocation
       description: Up to 100 IPs.
       operationId: bulkGeolocation
@@ -463,7 +481,7 @@ paths:
             schema:
               type: object
               required:
-              - ips
+                - ips
               properties:
                 ips:
                   type: array
@@ -471,86 +489,91 @@ paths:
                     type: string
                   maxItems: 100
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/GeolocationResponse'
+                  $ref: "#/components/schemas/GeolocationResponse"
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
   /v1.0/subdomains:
     get:
       tags:
-      - Subdomains
+        - Subdomains
       summary: Subdomains Lookup
       description: All subdomains including nested. 2 credits per query.
       operationId: subdomains
       parameters:
-      - name: domain
-        in: query
-        schema:
-          type: string
-        required: true
-      - name: after
-        in: query
-        schema:
-          type: string
-          format: date
-      - name: before
-        in: query
-        schema:
-          type: string
-          format: date
-      - name: status
-        in: query
-        schema:
-          type: string
-          enum:
-          - active
-          - inactive
-      - name: page
-        in: query
-        schema:
-          type: integer
-          default: 1
-      - $ref: '#/components/parameters/Format'
+        - name: domain
+          in: query
+          schema:
+            type: string
+          required: true
+          example: whoisfreaks.com
+        - name: after
+          in: query
+          schema:
+            type: string
+            format: date
+          example: "2026-01-01"
+        - name: before
+          in: query
+          schema:
+            type: string
+            format: date
+          example: "2026-10-01"
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum:
+              - active
+              - inactive
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+          example: 1
+        - $ref: "#/components/parameters/Format"
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SubdomainsResponse'
+                $ref: "#/components/schemas/SubdomainsResponse"
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
   /v1.0/security:
     get:
       tags:
-      - IP Reputation
+        - IP Reputation
       summary: IP Reputation Lookup
-      description: "Threat intel for IP \u2014 VPN, proxy, Tor, bots. 1 credit."
+      description: "Threat intel for IP: VPN, proxy, Tor, bots. 1 credit."
       operationId: ipReputation
       parameters:
-      - name: ip
-        in: query
-        schema:
-          type: string
-        required: true
+        - name: ip
+          in: query
+          schema:
+            type: string
+          required: true
+          example: 8.8.8.8
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/IpReputationResponse'
+                $ref: "#/components/schemas/IpReputationResponse"
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
     post:
       tags:
-      - IP Reputation
+        - IP Reputation
       summary: Bulk IP Reputation
       description: Up to 100 IPs.
       operationId: bulkIpReputation
@@ -562,7 +585,7 @@ paths:
             schema:
               type: object
               required:
-              - ips
+                - ips
               properties:
                 ips:
                   type: array
@@ -570,110 +593,112 @@ paths:
                     type: string
                   maxItems: 100
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/IpReputationResponse'
+                  $ref: "#/components/schemas/IpReputationResponse"
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
   /v1/domain/security:
     get:
       tags:
-      - Domain Reputation
+        - Domain Reputation
       summary: Domain Reputation Lookup
-      description: Real-time domain threat assessment. Returns risk verdict, trust score, DGA analysis,
+      description:
+        Real-time domain threat assessment. Returns risk verdict, trust score, DGA analysis,
         threat intelligence matches, and security signals. 1 credit.
       operationId: domainReputation
       parameters:
-      - name: domainName
-        in: query
-        schema:
-          type: string
-        required: true
-        description: The domain name to assess
-        example: amazon.com
-      - $ref: '#/components/parameters/Format'
+        - name: domainName
+          in: query
+          schema:
+            type: string
+          required: true
+          description: The domain name to assess
+          example: amazon.com
+        - $ref: "#/components/parameters/Format"
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DomainReputationResponse'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '429':
-          $ref: '#/components/responses/RateLimited'
+                $ref: "#/components/schemas/DomainReputationResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/RateLimited"
   /v2.0/asn-whois:
     get:
       tags:
-      - ASN WHOIS
+        - ASN WHOIS
       summary: ASN WHOIS Lookup
       description: WHOIS for an ASN. 1 credit.
       operationId: asnWhois
       parameters:
-      - name: asn
-        in: query
-        schema:
-          type: string
-        required: true
-        example: as15169
-      - $ref: '#/components/parameters/Format'
+        - name: asn
+          in: query
+          schema:
+            type: string
+          required: true
+          example: as15169
+        - $ref: "#/components/parameters/Format"
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AsnWhoisResponse'
+                $ref: "#/components/schemas/AsnWhoisResponse"
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
   /v1.0/ip-whois:
     get:
       tags:
-      - IP WHOIS
+        - IP WHOIS
       summary: IP WHOIS Lookup
       description: WHOIS for an IP address. 1 credit.
       operationId: ipWhois
       parameters:
-      - name: ip
-        in: query
-        schema:
-          type: string
-        required: true
-      - $ref: '#/components/parameters/Format'
+        - name: ip
+          in: query
+          schema:
+            type: string
+          required: true
+          example: 8.8.8.8
+        - $ref: "#/components/parameters/Format"
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/IpWhoisResponse'
+                $ref: "#/components/schemas/IpWhoisResponse"
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
   /v1.0/api-key/rotate:
     get:
       tags:
-      - Account
+        - Account
       summary: Rotate API Key
       operationId: rotateApiKey
       parameters: []
       responses:
-        '200':
+        "200":
           description: Key rotated
           content:
             text/plain:
               schema:
                 type: string
-        '401':
+        "401":
           description: Not allowed
           content:
             text/plain:
@@ -683,41 +708,43 @@ paths:
   /v1.0/whoisapi/usage:
     get:
       tags:
-      - Account
+        - Account
       summary: Account Usage
       operationId: accountUsage
       parameters: []
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/AccountUsageResponse'
+                $ref: "#/components/schemas/AccountUsageResponse"
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
       description: Account Usage. Returns the file/snapshot described by this operation.
   /v3.1/download/domainer/gtld:
     servers: &id001
-    - url: https://files.whoisfreaks.com
+      - url: https://files.whoisfreaks.com
     get:
       tags:
-      - Databases - Newly Registered
+        - Databases - Newly Registered
       summary: Newly Registered gTLD (CSV)
       operationId: dbNewlyGtld
       parameters:
-      - name: whois
-        in: query
-        schema:
-          type: boolean
-        required: true
-      - $ref: '#/components/parameters/DateParam'
-      - name: tlds
-        in: query
-        schema:
-          type: string
+        - name: whois
+          in: query
+          schema:
+            type: boolean
+          required: true
+          example: true
+        - $ref: "#/components/parameters/DateParam"
+        - name: tlds
+          in: query
+          schema:
+            type: string
+          example: "com,net"
       responses:
-        '200':
+        "200":
           description: CSV
           content:
             application/octet-stream:
@@ -725,28 +752,30 @@ paths:
                 type: string
                 format: binary
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
       description: Newly Registered gTLD (CSV). Returns the file/snapshot described by this operation.
   /v3.1/download/domainer/cctld:
     servers: *id001
     get:
       tags:
-      - Databases - Newly Registered
+        - Databases - Newly Registered
       summary: Newly Registered ccTLD (CSV)
       operationId: dbNewlyCctld
       parameters:
-      - name: whois
-        in: query
-        schema:
-          type: boolean
-        required: true
-      - $ref: '#/components/parameters/DateParam'
-      - name: tlds
-        in: query
-        schema:
-          type: string
+        - name: whois
+          in: query
+          schema:
+            type: boolean
+          required: true
+          example: true
+        - $ref: "#/components/parameters/DateParam"
+        - name: tlds
+          in: query
+          schema:
+            type: string
+          example: "com,net"
       responses:
-        '200':
+        "200":
           description: CSV
           content:
             application/octet-stream:
@@ -754,19 +783,19 @@ paths:
                 type: string
                 format: binary
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
       description: Newly Registered ccTLD (CSV). Returns the file/snapshot described by this operation.
   /v3.1/download/domainer/gtld/cleaned:
     servers: *id001
     get:
       tags:
-      - Databases - Newly Registered
+        - Databases - Newly Registered
       summary: Newly Registered gTLD Cleaned WHOIS (CSV)
       operationId: dbNewlyGtldCleaned
       parameters:
-      - $ref: '#/components/parameters/DateParam'
+        - $ref: "#/components/parameters/DateParam"
       responses:
-        '200':
+        "200":
           description: CSV
           content:
             application/octet-stream:
@@ -774,20 +803,21 @@ paths:
                 type: string
                 format: binary
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
-      description: Newly Registered gTLD Cleaned WHOIS (CSV). Returns the file/snapshot described by this
+          $ref: "#/components/responses/ErrorResponse"
+      description:
+        Newly Registered gTLD Cleaned WHOIS (CSV). Returns the file/snapshot described by this
         operation.
   /v3.1/download/domainer/cctld/cleaned:
     servers: *id001
     get:
       tags:
-      - Databases - Newly Registered
+        - Databases - Newly Registered
       summary: Newly Registered ccTLD Cleaned WHOIS (CSV)
       operationId: dbNewlyCctldCleaned
       parameters:
-      - $ref: '#/components/parameters/DateParam'
+        - $ref: "#/components/parameters/DateParam"
       responses:
-        '200':
+        "200":
           description: CSV
           content:
             application/octet-stream:
@@ -795,24 +825,26 @@ paths:
                 type: string
                 format: binary
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
-      description: Newly Registered ccTLD Cleaned WHOIS (CSV). Returns the file/snapshot described by
+          $ref: "#/components/responses/ErrorResponse"
+      description:
+        Newly Registered ccTLD Cleaned WHOIS (CSV). Returns the file/snapshot described by
         this operation.
   /v3.1/domains/newly/gtld:
     servers: *id001
     get:
       tags:
-      - Databases - Newly Registered
+        - Databases - Newly Registered
       summary: Newly Registered gTLD (JSON)
       operationId: dbNewlyGtldJson
       parameters:
-      - $ref: '#/components/parameters/DateParam'
-      - name: tlds
-        in: query
-        schema:
-          type: string
+        - $ref: "#/components/parameters/DateParam"
+        - name: tlds
+          in: query
+          schema:
+            type: string
+          example: "com,net"
       responses:
-        '200':
+        "200":
           description: JSON array of domains
           content:
             application/json:
@@ -821,23 +853,24 @@ paths:
                 items:
                   type: string
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
       description: Newly Registered gTLD (JSON). Returns the file/snapshot described by this operation.
   /v3.1/domains/newly/cctld:
     servers: *id001
     get:
       tags:
-      - Databases - Newly Registered
+        - Databases - Newly Registered
       summary: Newly Registered ccTLD (JSON)
       operationId: dbNewlyCctldJson
       parameters:
-      - $ref: '#/components/parameters/DateParam'
-      - name: tlds
-        in: query
-        schema:
-          type: string
+        - $ref: "#/components/parameters/DateParam"
+        - name: tlds
+          in: query
+          schema:
+            type: string
+          example: "com,net"
       responses:
-        '200':
+        "200":
           description: JSON array of domains
           content:
             application/json:
@@ -846,19 +879,19 @@ paths:
                 items:
                   type: string
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
       description: Newly Registered ccTLD (JSON). Returns the file/snapshot described by this operation.
   /v3.1/download/domainer/newly/dns:
     servers: *id001
     get:
       tags:
-      - Databases - Newly Registered
+        - Databases - Newly Registered
       summary: Newly Registered With DNS
       operationId: dbNewlyDns
       parameters:
-      - $ref: '#/components/parameters/DateParam'
+        - $ref: "#/components/parameters/DateParam"
       responses:
-        '200':
+        "200":
           description: JSON array of domains with DNS
           content:
             application/octet-stream:
@@ -866,24 +899,25 @@ paths:
                 type: string
                 format: binary
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
       description: Newly Registered With DNS. Returns the file/snapshot described by this operation.
   /v3.1/download/domainer/expired:
     servers: *id001
     get:
       tags:
-      - Databases - Expiring & Dropped
+        - Databases - Expiring & Dropped
       summary: Expiring Domains
       operationId: dbExpired
       parameters:
-      - name: whois
-        in: query
-        schema:
-          type: boolean
-        required: true
-      - $ref: '#/components/parameters/DateParam'
+        - name: whois
+          in: query
+          schema:
+            type: boolean
+          required: true
+          example: true
+        - $ref: "#/components/parameters/DateParam"
       responses:
-        '200':
+        "200":
           description: CSV
           content:
             application/octet-stream:
@@ -891,19 +925,19 @@ paths:
                 type: string
                 format: binary
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
       description: Expiring Domains. Returns the file/snapshot described by this operation.
   /v3.1/download/domainer/expired/cleaned:
     servers: *id001
     get:
       tags:
-      - Databases - Expiring & Dropped
+        - Databases - Expiring & Dropped
       summary: Expiring Cleaned WHOIS
       operationId: dbExpiredCleaned
       parameters:
-      - $ref: '#/components/parameters/DateParam'
+        - $ref: "#/components/parameters/DateParam"
       responses:
-        '200':
+        "200":
           description: CSV
           content:
             application/octet-stream:
@@ -911,24 +945,25 @@ paths:
                 type: string
                 format: binary
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
       description: Expiring Cleaned WHOIS. Returns the file/snapshot described by this operation.
   /v3.1/download/domainer/dropped:
     servers: *id001
     get:
       tags:
-      - Databases - Expiring & Dropped
+        - Databases - Expiring & Dropped
       summary: Dropped Domains
       operationId: dbDropped
       parameters:
-      - name: whois
-        in: query
-        schema:
-          type: boolean
-        required: true
-      - $ref: '#/components/parameters/DateParam'
+        - name: whois
+          in: query
+          schema:
+            type: boolean
+          required: true
+          example: true
+        - $ref: "#/components/parameters/DateParam"
       responses:
-        '200':
+        "200":
           description: CSV
           content:
             application/octet-stream:
@@ -936,23 +971,24 @@ paths:
                 type: string
                 format: binary
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
       description: Dropped Domains. Returns the file/snapshot described by this operation.
   /v3.1/domains/dropped:
     servers: *id001
     get:
       tags:
-      - Databases - Expiring & Dropped
+        - Databases - Expiring & Dropped
       summary: Dropped Domains (JSON)
       operationId: dbDroppedJson
       parameters:
-      - $ref: '#/components/parameters/DateParam'
-      - name: tlds
-        in: query
-        schema:
-          type: string
+        - $ref: "#/components/parameters/DateParam"
+        - name: tlds
+          in: query
+          schema:
+            type: string
+          example: "com,net"
       responses:
-        '200':
+        "200":
           description: JSON array of domains
           content:
             application/json:
@@ -961,23 +997,24 @@ paths:
                 items:
                   type: string
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
       description: Dropped Domains (JSON). Returns the file/snapshot described by this operation.
   /v3.3/download/domainer/dropped/backlinks:
     servers: *id001
     get:
       tags:
-      - Databases - Expiring & Dropped
+        - Databases - Expiring & Dropped
       summary: Dropped With Backlinks
       operationId: dbDroppedBacklinks
       parameters:
-      - name: whois
-        in: query
-        schema:
-          type: boolean
-      - $ref: '#/components/parameters/DateParam'
+        - name: whois
+          in: query
+          schema:
+            type: boolean
+          example: true
+        - $ref: "#/components/parameters/DateParam"
       responses:
-        '200':
+        "200":
           description: CSV
           content:
             application/octet-stream:
@@ -985,19 +1022,19 @@ paths:
                 type: string
                 format: binary
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
       description: Dropped With Backlinks. Returns the file/snapshot described by this operation.
   /v3.3/download/dbupdate/daily/domains/whois:
     servers: *id001
     get:
       tags:
-      - Databases - WHOIS
+        - Databases - WHOIS
       summary: WHOIS Database Daily
       operationId: dbWhoisDaily
       parameters:
-      - $ref: '#/components/parameters/DateParam'
+        - $ref: "#/components/parameters/DateParam"
       responses:
-        '200':
+        "200":
           description: CSV
           content:
             application/octet-stream:
@@ -1005,19 +1042,19 @@ paths:
                 type: string
                 format: binary
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
       description: WHOIS Database Daily. Returns the file/snapshot described by this operation.
   /v3.3/download/dbupdate/weekly/domains/whois:
     servers: *id001
     get:
       tags:
-      - Databases - WHOIS
+        - Databases - WHOIS
       summary: WHOIS Database Weekly
       operationId: dbWhoisWeekly
       parameters:
-      - $ref: '#/components/parameters/DateParam'
+        - $ref: "#/components/parameters/DateParam"
       responses:
-        '200':
+        "200":
           description: CSV
           content:
             application/octet-stream:
@@ -1025,19 +1062,19 @@ paths:
                 type: string
                 format: binary
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
       description: WHOIS Database Weekly. Returns the file/snapshot described by this operation.
   /v3.3/download/dbupdate/monthly/domains/whois:
     servers: *id001
     get:
       tags:
-      - Databases - WHOIS
+        - Databases - WHOIS
       summary: WHOIS Database Monthly
       operationId: dbWhoisMonthly
       parameters:
-      - $ref: '#/components/parameters/DateParam'
+        - $ref: "#/components/parameters/DateParam"
       responses:
-        '200':
+        "200":
           description: CSV
           content:
             application/octet-stream:
@@ -1045,19 +1082,19 @@ paths:
                 type: string
                 format: binary
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
       description: WHOIS Database Monthly. Returns the file/snapshot described by this operation.
   /v3.2/download/dbupdate/daily/dns:
     servers: *id001
     get:
       tags:
-      - Databases - DNS
+        - Databases - DNS
       summary: DNS Database Daily
       operationId: dbDnsDaily
       parameters:
-      - $ref: '#/components/parameters/DateParam'
+        - $ref: "#/components/parameters/DateParam"
       responses:
-        '200':
+        "200":
           description: CSV
           content:
             application/octet-stream:
@@ -1065,19 +1102,19 @@ paths:
                 type: string
                 format: binary
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
       description: DNS Database Daily. Returns the file/snapshot described by this operation.
   /v3.2/download/dbupdate/weekly/dns:
     servers: *id001
     get:
       tags:
-      - Databases - DNS
+        - Databases - DNS
       summary: DNS Database Weekly
       operationId: dbDnsWeekly
       parameters:
-      - $ref: '#/components/parameters/DateParam'
+        - $ref: "#/components/parameters/DateParam"
       responses:
-        '200':
+        "200":
           description: CSV
           content:
             application/octet-stream:
@@ -1085,19 +1122,19 @@ paths:
                 type: string
                 format: binary
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
       description: DNS Database Weekly. Returns the file/snapshot described by this operation.
   /v3.2/download/dbupdate/monthly/dns:
     servers: *id001
     get:
       tags:
-      - Databases - DNS
+        - Databases - DNS
       summary: DNS Database Monthly
       operationId: dbDnsMonthly
       parameters:
-      - $ref: '#/components/parameters/DateParam'
+        - $ref: "#/components/parameters/DateParam"
       responses:
-        '200':
+        "200":
           description: CSV
           content:
             application/octet-stream:
@@ -1105,19 +1142,19 @@ paths:
                 type: string
                 format: binary
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
       description: DNS Database Monthly. Returns the file/snapshot described by this operation.
   /v3.2/download/dbupdate/daily/subdomains:
     servers: *id001
     get:
       tags:
-      - Databases - Subdomains
+        - Databases - Subdomains
       summary: Subdomains Daily
       operationId: dbSubdomainsDaily
       parameters:
-      - $ref: '#/components/parameters/DateParam'
+        - $ref: "#/components/parameters/DateParam"
       responses:
-        '200':
+        "200":
           description: CSV
           content:
             application/octet-stream:
@@ -1125,19 +1162,19 @@ paths:
                 type: string
                 format: binary
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
       description: Subdomains Daily. Returns the file/snapshot described by this operation.
   /v3.2/download/dbupdate/weekly/subdomains:
     servers: *id001
     get:
       tags:
-      - Databases - Subdomains
+        - Databases - Subdomains
       summary: Subdomains Weekly
       operationId: dbSubdomainsWeekly
       parameters:
-      - $ref: '#/components/parameters/DateParam'
+        - $ref: "#/components/parameters/DateParam"
       responses:
-        '200':
+        "200":
           description: CSV
           content:
             application/octet-stream:
@@ -1145,19 +1182,19 @@ paths:
                 type: string
                 format: binary
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
       description: Subdomains Weekly. Returns the file/snapshot described by this operation.
   /v3.2/download/dbupdate/monthly/subdomains:
     servers: *id001
     get:
       tags:
-      - Databases - Subdomains
+        - Databases - Subdomains
       summary: Subdomains Monthly
       operationId: dbSubdomainsMonthly
       parameters:
-      - $ref: '#/components/parameters/DateParam'
+        - $ref: "#/components/parameters/DateParam"
       responses:
-        '200':
+        "200":
           description: CSV
           content:
             application/octet-stream:
@@ -1165,42 +1202,43 @@ paths:
                 type: string
                 format: binary
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
       description: Subdomains Monthly. Returns the file/snapshot described by this operation.
   /v3.3/status/snapshot/ip/country:
     servers: *id001
     get:
       tags:
-      - Databases - IP Geolocation
+        - Databases - IP Geolocation
       summary: IP to Country Snapshot Status
       operationId: dbIpCountryStatus
       parameters: []
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SnapshotStatus'
+                $ref: "#/components/schemas/SnapshotStatus"
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
       description: IP to Country Snapshot Status. Returns the file/snapshot described by this operation.
   /v3.3/download/snapshot/ip/country:
     servers: *id001
     get:
       tags:
-      - Databases - IP Geolocation
+        - Databases - IP Geolocation
       summary: IP to Country Snapshot
       operationId: dbIpCountry
       parameters:
-      - name: date
-        in: query
-        schema:
-          type: string
-          format: date
-        required: true
+        - name: date
+          in: query
+          schema:
+            type: string
+            format: date
+          required: true
+          example: "2026-10-01"
       responses:
-        '200':
+        "200":
           description: ZIP archive
           content:
             application/octet-stream:
@@ -1208,42 +1246,43 @@ paths:
                 type: string
                 format: binary
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
       description: IP to Country Snapshot. Returns the file/snapshot described by this operation.
   /v3.3/status/snapshot/ip/city:
     servers: *id001
     get:
       tags:
-      - Databases - IP Geolocation
+        - Databases - IP Geolocation
       summary: IP to City Snapshot Status
       operationId: dbIpCityStatus
       parameters: []
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SnapshotStatus'
+                $ref: "#/components/schemas/SnapshotStatus"
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
       description: IP to City Snapshot Status. Returns the file/snapshot described by this operation.
   /v3.3/download/snapshot/ip/city:
     servers: *id001
     get:
       tags:
-      - Databases - IP Geolocation
+        - Databases - IP Geolocation
       summary: IP to City Snapshot
       operationId: dbIpCity
       parameters:
-      - name: date
-        in: query
-        schema:
-          type: string
-          format: date
-        required: true
+        - name: date
+          in: query
+          schema:
+            type: string
+            format: date
+          required: true
+          example: "2026-10-01"
       responses:
-        '200':
+        "200":
           description: ZIP archive
           content:
             application/octet-stream:
@@ -1251,24 +1290,25 @@ paths:
                 type: string
                 format: binary
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
       description: IP to City Snapshot. Returns the file/snapshot described by this operation.
   /v3.3/download/snapshot/asn/whois:
     servers: *id001
     get:
       tags:
-      - Databases - ASN WHOIS
+        - Databases - ASN WHOIS
       summary: ASN WHOIS Snapshot
       operationId: dbAsnWhois
       parameters:
-      - name: date
-        in: query
-        schema:
-          type: string
-          format: date
-        required: true
+        - name: date
+          in: query
+          schema:
+            type: string
+            format: date
+          required: true
+          example: "2026-10-01"
       responses:
-        '200':
+        "200":
           description: JSON gzipped
           content:
             application/octet-stream:
@@ -1276,42 +1316,43 @@ paths:
                 type: string
                 format: binary
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
       description: ASN WHOIS Snapshot. Returns the file/snapshot described by this operation.
   /v3.3/status/snapshot/asn/whois:
     servers: *id001
     get:
       tags:
-      - Databases - ASN WHOIS
+        - Databases - ASN WHOIS
       summary: ASN WHOIS Snapshot Status
       operationId: dbAsnWhoisStatus
       parameters: []
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SnapshotStatus'
+                $ref: "#/components/schemas/SnapshotStatus"
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
       description: ASN WHOIS Snapshot Status. Returns the file/snapshot described by this operation.
   /v3.3/download/snapshot/ip/whois:
     servers: *id001
     get:
       tags:
-      - Databases - IP WHOIS
+        - Databases - IP WHOIS
       summary: IP WHOIS Snapshot
       operationId: dbIpWhois
       parameters:
-      - name: date
-        in: query
-        schema:
-          type: string
-          format: date
-        required: true
+        - name: date
+          in: query
+          schema:
+            type: string
+            format: date
+          required: true
+          example: "2026-10-01"
       responses:
-        '200':
+        "200":
           description: JSON gzipped
           content:
             application/octet-stream:
@@ -1319,42 +1360,43 @@ paths:
                 type: string
                 format: binary
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
       description: IP WHOIS Snapshot. Returns the file/snapshot described by this operation.
   /v3.3/status/snapshot/ip/whois:
     servers: *id001
     get:
       tags:
-      - Databases - IP WHOIS
+        - Databases - IP WHOIS
       summary: IP WHOIS Snapshot Status
       operationId: dbIpWhoisStatus
       parameters: []
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SnapshotStatus'
+                $ref: "#/components/schemas/SnapshotStatus"
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
       description: IP WHOIS Snapshot Status. Returns the file/snapshot described by this operation.
   /v3.3/download/snapshot/ip/security:
     servers: *id001
     get:
       tags:
-      - Databases - IP Security
+        - Databases - IP Security
       summary: IP Security Snapshot
       operationId: dbIpSecurity
       parameters:
-      - name: date
-        in: query
-        schema:
-          type: string
-          format: date
-        required: true
+        - name: date
+          in: query
+          schema:
+            type: string
+            format: date
+          required: true
+          example: "2026-10-01"
       responses:
-        '200':
+        "200":
           description: CSV
           content:
             application/octet-stream:
@@ -1362,220 +1404,239 @@ paths:
                 type: string
                 format: binary
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
       description: IP Security Snapshot. Returns the file/snapshot described by this operation.
   /v3.3/status/snapshot/ip/security:
     servers: *id001
     get:
       tags:
-      - Databases - IP Security
+        - Databases - IP Security
       summary: IP Security Snapshot Status
       operationId: dbIpSecurityStatus
       parameters: []
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SnapshotStatus'
+                $ref: "#/components/schemas/SnapshotStatus"
         4XX:
-          $ref: '#/components/responses/ErrorResponse'
+          $ref: "#/components/responses/ErrorResponse"
       description: IP Security Snapshot Status. Returns the file/snapshot described by this operation.
   /v2.0/whois/history:
     get:
       tags:
-      - WHOIS
+        - WHOIS
       operationId: whoisHistory
       summary: Historical WHOIS records for a domain
+      description: Every WHOIS record captured for the domain since 1986, in one response (no pagination). Cost 2 credits.
       parameters:
-      - name: domainName
-        in: query
-        required: true
-        schema:
-          type: string
-        description: Domain to fetch historical WHOIS records for
-      - name: page
-        in: query
-        required: false
-        schema:
-          type: integer
-        description: Page number
-      - name: format
-        in: query
-        required: false
-        schema:
-          type: string
-          enum:
-          - json
-          - xml
+        - name: domainName
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Domain to fetch historical WHOIS records for
+          example: whoisfreaks.com
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - json
+              - xml
       responses:
-        '200':
+        "200":
           description: Historical WHOIS records
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/WhoisHistoricalResponse'
+                $ref: "#/components/schemas/WhoisHistoricalResponse"
   /v2.0/whois/reverse:
     get:
       tags:
-      - WHOIS
+        - WHOIS
       operationId: whoisReverse
       summary: Reverse WHOIS lookup by keyword
       parameters:
-      - name: keyword
-        in: query
-        required: true
-        schema:
-          type: string
-        description: Keyword to search across WHOIS records
-      - name: page
-        in: query
-        required: false
-        schema:
-          type: integer
-        description: Page number
-      - name: format
-        in: query
-        required: false
-        schema:
-          type: string
-          enum:
-          - json
-          - xml
+        - name: keyword
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Keyword to search across WHOIS records
+          example: whoisfreaks
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: Page number
+          example: 1
+        - name: format
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - json
+              - xml
       responses:
-        '200':
+        "200":
           description: Reverse WHOIS results (paginated)
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ReverseWhoisResponse'
+                $ref: "#/components/schemas/ReverseWhoisResponse"
   /v3.4/download/threat-feed/phishing:
+    servers: *id001
     get:
       tags:
-      - Databases - Threat Feed
+        - Databases - Threat Feed
       operationId: downloadThreatFeedPhishing
       summary: Download the daily phishing threat feed (CSV)
       parameters:
-      - name: date
-        in: query
-        required: false
-        schema:
-          type: string
-        description: Feed date (yyyy-MM-dd); defaults to latest available
+        - name: date
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Feed date (yyyy-MM-dd); omit for the full dump of the feed
+          example: "2026-10-01"
       responses:
-        '200':
+        "200":
           description: Phishing threat feed as CSV (domain,threat_type,confidence,first_seen,last_seen,No_of_threat_matched_pivots)
           content:
             application/octet-stream:
               schema:
                 type: string
                 format: binary
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
   /v3.4/download/threat-feed/phishing/sample:
+    servers: *id001
     get:
       tags:
-      - Databases - Threat Feed
+        - Databases - Threat Feed
       operationId: downloadThreatFeedPhishingSample
       summary: Download a sample of the phishing threat feed (CSV)
       parameters: []
       responses:
-        '200':
+        "200":
           description: Sample phishing threat feed as CSV
           content:
             application/octet-stream:
               schema:
                 type: string
                 format: binary
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
   /v3.4/download/threat-feed/malware:
+    servers: *id001
     get:
       tags:
-      - Databases - Threat Feed
+        - Databases - Threat Feed
       operationId: downloadThreatFeedMalware
       summary: Download the daily malware threat feed (CSV)
       parameters:
-      - name: date
-        in: query
-        required: false
-        schema:
-          type: string
-        description: Feed date (yyyy-MM-dd); defaults to latest available
+        - name: date
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Feed date (yyyy-MM-dd); omit for the full dump of the feed
+          example: "2026-10-01"
       responses:
-        '200':
+        "200":
           description: Malware threat feed as CSV (domain,threat_type,confidence,first_seen,last_seen,No_of_threat_matched_pivots)
           content:
             application/octet-stream:
               schema:
                 type: string
                 format: binary
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
   /v3.4/download/threat-feed/malware/sample:
+    servers: *id001
     get:
       tags:
-      - Databases - Threat Feed
+        - Databases - Threat Feed
       operationId: downloadThreatFeedMalwareSample
       summary: Download a sample of the malware threat feed (CSV)
       parameters: []
       responses:
-        '200':
+        "200":
           description: Sample malware threat feed as CSV
           content:
             application/octet-stream:
               schema:
                 type: string
                 format: binary
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
   /v3.4/download/threat-feed/spam:
+    servers: *id001
     get:
       tags:
-      - Databases - Threat Feed
+        - Databases - Threat Feed
       operationId: downloadThreatFeedSpam
       summary: Download the daily spam threat feed (CSV)
       parameters:
-      - name: date
-        in: query
-        required: false
-        schema:
-          type: string
-        description: Feed date (yyyy-MM-dd); defaults to latest available
+        - name: date
+          in: query
+          required: false
+          schema:
+            type: string
+          description: Feed date (yyyy-MM-dd); omit for the full dump of the feed
+          example: "2026-10-01"
       responses:
-        '200':
+        "200":
           description: Spam threat feed as CSV (domain,threat_type,confidence,first_seen,last_seen,No_of_threat_matched_pivots)
           content:
             application/octet-stream:
               schema:
                 type: string
                 format: binary
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
   /v3.4/download/threat-feed/spam/sample:
+    servers: *id001
     get:
       tags:
-      - Databases - Threat Feed
+        - Databases - Threat Feed
       operationId: downloadThreatFeedSpamSample
       summary: Download a sample of the spam threat feed (CSV)
       parameters: []
       responses:
-        '200':
+        "200":
           description: Sample spam threat feed as CSV
           content:
             application/octet-stream:
               schema:
                 type: string
                 format: binary
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
   /v3.4/status:
     servers: *id001
     get:
       tags:
-      - Account
+        - Account
       summary: Database File Status (Public)
       description: No API key required. Returns freshness of all downloadable files.
       operationId: databaseFileStatus
       security: []
       responses:
-        '200':
+        "200":
           description: Successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DatabaseFileStatus'
-        '429':
-          $ref: '#/components/responses/RateLimited'
+                $ref: "#/components/schemas/DatabaseFileStatus"
+        "429":
+          $ref: "#/components/responses/RateLimited"
 components:
   securitySchemes:
     ApiKeyAuth:
@@ -1589,8 +1650,8 @@ components:
       schema:
         type: string
         enum:
-        - json
-        - xml
+          - json
+          - xml
         default: json
     DateParam:
       name: date
@@ -1599,37 +1660,38 @@ components:
         type: string
         format: date
       description: yyyy-MM-dd; omit for latest
+      example: "2026-10-01"
   responses:
     Unauthorized:
       description: Invalid API key
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ErrorResponse'
+            $ref: "#/components/schemas/ErrorResponse"
     NotFound:
       description: Not found
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ErrorResponse'
+            $ref: "#/components/schemas/ErrorResponse"
     BadRequest:
       description: Bad request
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ErrorResponse'
+            $ref: "#/components/schemas/ErrorResponse"
     RateLimited:
       description: Too many requests
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ErrorResponse'
+            $ref: "#/components/schemas/ErrorResponse"
     ErrorResponse:
       description: Error response (4XX)
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ErrorResponse'
+            $ref: "#/components/schemas/ErrorResponse"
   schemas:
     RegistrarInformation:
       type: object
@@ -1741,7 +1803,7 @@ components:
         expiry_date:
           type: string
         domain_registrar:
-          $ref: '#/components/schemas/RegistrarInformation'
+          $ref: "#/components/schemas/RegistrarInformation"
         name_servers:
           type: array
           items:
@@ -1750,8 +1812,9 @@ components:
           type: array
           items:
             type: string
-        whois_raw_domain:
+        whois_raw_registery:
           type: string
+          description: Raw registry WHOIS text (field name spelled as the API returns it)
       additionalProperties: true
     WhoisResponse:
       type: object
@@ -1777,21 +1840,21 @@ components:
         expiry_date:
           type: string
         domain_registrar:
-          $ref: '#/components/schemas/RegistrarInformation'
+          $ref: "#/components/schemas/RegistrarInformation"
         reseller_contact:
-          $ref: '#/components/schemas/ResellerContact'
+          $ref: "#/components/schemas/ResellerContact"
         registrant_contact:
-          $ref: '#/components/schemas/PersonalInformation'
+          $ref: "#/components/schemas/PersonalInformation"
         administrative_contact:
-          $ref: '#/components/schemas/PersonalInformation'
+          $ref: "#/components/schemas/PersonalInformation"
         technical_contact:
-          $ref: '#/components/schemas/PersonalInformation'
+          $ref: "#/components/schemas/PersonalInformation"
         billing_contact:
-          $ref: '#/components/schemas/PersonalInformation'
+          $ref: "#/components/schemas/PersonalInformation"
         eligibility_info:
-          $ref: '#/components/schemas/EligibilityInfo'
+          $ref: "#/components/schemas/EligibilityInfo"
         abuse_contact:
-          $ref: '#/components/schemas/RegistrarInformation'
+          $ref: "#/components/schemas/RegistrarInformation"
         name_servers:
           type: array
           items:
@@ -1803,7 +1866,7 @@ components:
         whois_raw_domain:
           type: string
         registry_data:
-          $ref: '#/components/schemas/RegistryData'
+          $ref: "#/components/schemas/RegistryData"
       additionalProperties: true
       description: Live WHOIS lookup response (DomainInfo).
     WhoisHistoricalItem:
@@ -1832,21 +1895,21 @@ components:
         expiry_date:
           type: string
         domain_registrar:
-          $ref: '#/components/schemas/RegistrarInformation'
+          $ref: "#/components/schemas/RegistrarInformation"
         reseller_contact:
-          $ref: '#/components/schemas/ResellerContact'
+          $ref: "#/components/schemas/ResellerContact"
         registrant_contact:
-          $ref: '#/components/schemas/PersonalInformation'
+          $ref: "#/components/schemas/PersonalInformation"
         administrative_contact:
-          $ref: '#/components/schemas/PersonalInformation'
+          $ref: "#/components/schemas/PersonalInformation"
         technical_contact:
-          $ref: '#/components/schemas/PersonalInformation'
+          $ref: "#/components/schemas/PersonalInformation"
         billing_contact:
-          $ref: '#/components/schemas/PersonalInformation'
+          $ref: "#/components/schemas/PersonalInformation"
         eligibility_info:
-          $ref: '#/components/schemas/EligibilityInfo'
+          $ref: "#/components/schemas/EligibilityInfo"
         abuse_contact:
-          $ref: '#/components/schemas/RegistrarInformation'
+          $ref: "#/components/schemas/RegistrarInformation"
         name_servers:
           type: array
           items:
@@ -1858,7 +1921,7 @@ components:
         whois_raw_domain:
           type: string
         registry_data:
-          $ref: '#/components/schemas/RegistryData'
+          $ref: "#/components/schemas/RegistryData"
       additionalProperties: true
     WhoisHistoricalResponse:
       type: object
@@ -1872,24 +1935,23 @@ components:
         whois_domains_historical:
           type: array
           items:
-            $ref: '#/components/schemas/WhoisHistoricalItem'
+            $ref: "#/components/schemas/WhoisHistoricalItem"
       additionalProperties: true
     ReverseWhoisResponse:
       type: object
       properties:
-        Total_Result:
+        total_Result:
           type: integer
-        Total_Pages:
+        total_Pages:
           type: integer
-        Current_Page:
+        current_Page:
           type: integer
         whois_domains_historical:
           type: array
           items:
-            $ref: '#/components/schemas/WhoisHistoricalItem'
+            $ref: "#/components/schemas/WhoisHistoricalItem"
       additionalProperties: true
-      description: Reverse WHOIS response. Pagination keys are capitalized (Total_Result/Total_Pages/Current_Page)
-        as returned by the API.
+      description: Reverse WHOIS response. Pagination keys (total_Result, total_Pages, current_Page) are spelled as the API returns them.
     BulkWhoisItem:
       type: object
       properties:
@@ -1899,25 +1961,81 @@ components:
           type: string
         error:
           type: string
+        query_time:
+          type: string
+        whois_server:
+          type: string
+        domain_registered:
+          type: string
+        secure_dns:
+          type: boolean
+        domain_handle:
+          type: string
+        create_date:
+          type: string
+        update_date:
+          type: string
+        expiry_date:
+          type: string
+        domain_registrar:
+          $ref: "#/components/schemas/RegistrarInformation"
+        reseller_contact:
+          $ref: "#/components/schemas/ResellerContact"
+        registrant_contact:
+          $ref: "#/components/schemas/PersonalInformation"
+        administrative_contact:
+          $ref: "#/components/schemas/PersonalInformation"
+        technical_contact:
+          $ref: "#/components/schemas/PersonalInformation"
+        billing_contact:
+          $ref: "#/components/schemas/PersonalInformation"
+        eligibility_info:
+          $ref: "#/components/schemas/EligibilityInfo"
+        abuse_contact:
+          $ref: "#/components/schemas/RegistrarInformation"
+        name_servers:
+          type: array
+          items:
+            type: string
+        domain_status:
+          type: array
+          items:
+            type: string
+        whois_raw_domain:
+          type: string
+        registry_data:
+          $ref: "#/components/schemas/RegistryData"
       additionalProperties: true
-      description: One bulk WHOIS result; success items also carry all WhoisResponse fields.
+      description: One bulk WHOIS result. Successful items carry the same fields as a live WHOIS lookup.
     BulkWhoisResponse:
       type: object
       properties:
         bulk_whois_response:
           type: array
           items:
-            $ref: '#/components/schemas/BulkWhoisItem'
+            $ref: "#/components/schemas/BulkWhoisItem"
       additionalProperties: true
     DnsRecord:
       type: object
       properties:
         type:
+          type: integer
+          description: "Numeric DNS record type: 1 A, 2 NS, 5 CNAME, 6 SOA, 12 PTR, 15 MX, 16 TXT, 28 AAAA, 99 SPF."
+        dnsType:
           type: string
+          description: Record type name, e.g. A, MX, TXT
         name:
           type: string
         ttl:
           type: integer
+        rawText:
+          type: string
+          description: The record in zone-file format
+        rRsetType:
+          type: integer
+        singleName:
+          type: string
+          description: Target host for NS, CNAME and PTR records
         address:
           type: string
         priority:
@@ -1936,6 +2054,8 @@ components:
           type: string
         serial:
           type: integer
+          format: int64
+          description: SOA serial; values above 2^31 are common, so it is 64-bit
         refresh:
           type: integer
         retry:
@@ -1964,7 +2084,7 @@ components:
         dnsRecords:
           type: array
           items:
-            $ref: '#/components/schemas/DnsRecord'
+            $ref: "#/components/schemas/DnsRecord"
       additionalProperties: true
       description: Live DNS response (DnsInfo).
     HistoricalDnsResponse:
@@ -1972,16 +2092,15 @@ components:
       properties:
         totalPages:
           type: integer
-        currenPage:
+        currentPage:
           type: integer
         totalRecords:
           type: integer
-        historicalDns:
+        historicalDnsRecords:
           type: array
           items:
-            $ref: '#/components/schemas/DnsResponse'
+            $ref: "#/components/schemas/DnsResponse"
       additionalProperties: true
-      description: 'Note: ''currenPage'' spelling matches the API.'
     ReverseDnsResponse:
       type: object
       properties:
@@ -1994,7 +2113,7 @@ components:
         reverseDnsRecords:
           type: array
           items:
-            $ref: '#/components/schemas/DnsResponse'
+            $ref: "#/components/schemas/DnsResponse"
       additionalProperties: true
     BulkDnsResponse:
       type: object
@@ -2002,7 +2121,7 @@ components:
         bulk_dns_info:
           type: array
           items:
-            $ref: '#/components/schemas/DnsResponse'
+            $ref: "#/components/schemas/DnsResponse"
       additionalProperties: true
     Subdomain:
       type: object
@@ -2016,7 +2135,7 @@ components:
         inactive_from:
           type: string
         dns_records:
-          $ref: '#/components/schemas/DnsResponse'
+          $ref: "#/components/schemas/DnsResponse"
       additionalProperties: true
     SubdomainsResponse:
       type: object
@@ -2036,7 +2155,7 @@ components:
         subdomains:
           type: array
           items:
-            $ref: '#/components/schemas/Subdomain'
+            $ref: "#/components/schemas/Subdomain"
       additionalProperties: true
     DomainAvailabilityItem:
       type: object
@@ -2060,7 +2179,7 @@ components:
         domain_available_response:
           type: array
           items:
-            $ref: '#/components/schemas/DomainAvailabilityItem'
+            $ref: "#/components/schemas/DomainAvailabilityItem"
       additionalProperties: true
     BulkDomainAvailabilityResponse:
       type: object
@@ -2068,7 +2187,7 @@ components:
         bulk_domain_availability_response:
           type: array
           items:
-            $ref: '#/components/schemas/DomainAvailabilityItem'
+            $ref: "#/components/schemas/DomainAvailabilityItem"
       additionalProperties: true
     TyposquattingDomain:
       type: object
@@ -2102,7 +2221,7 @@ components:
         domains:
           type: array
           items:
-            $ref: '#/components/schemas/TyposquattingDomain'
+            $ref: "#/components/schemas/TyposquattingDomain"
       additionalProperties: true
     SslUnitInfo:
       type: object
@@ -2202,13 +2321,13 @@ components:
           items:
             type: string
         authorityInfoAccess:
-          $ref: '#/components/schemas/SslAuthorityInfo'
+          $ref: "#/components/schemas/SslAuthorityInfo"
         subjectAlternativeNames:
-          $ref: '#/components/schemas/SslAlternateNames'
+          $ref: "#/components/schemas/SslAlternateNames"
         certificatePolicies:
           type: array
           items:
-            $ref: '#/components/schemas/SslCertificatePolicy'
+            $ref: "#/components/schemas/SslCertificatePolicy"
       additionalProperties: true
     SslCertificate:
       type: object
@@ -2226,13 +2345,13 @@ components:
         signatureAlgorithm:
           type: string
         subject:
-          $ref: '#/components/schemas/SslUnitInfo'
+          $ref: "#/components/schemas/SslUnitInfo"
         issuer:
-          $ref: '#/components/schemas/SslUnitInfo'
+          $ref: "#/components/schemas/SslUnitInfo"
         publicKey:
-          $ref: '#/components/schemas/SslPublicKeyInfo'
+          $ref: "#/components/schemas/SslPublicKeyInfo"
         extensions:
-          $ref: '#/components/schemas/SslExtensionsInfo'
+          $ref: "#/components/schemas/SslExtensionsInfo"
         pemRaw:
           type: string
       additionalProperties: true
@@ -2246,7 +2365,7 @@ components:
         sslCertificates:
           type: array
           items:
-            $ref: '#/components/schemas/SslCertificate'
+            $ref: "#/components/schemas/SslCertificate"
         sslRaw:
           type: string
       additionalProperties: true
@@ -2752,27 +2871,27 @@ components:
         inet_nums:
           type: array
           items:
-            $ref: '#/components/schemas/InetNum'
+            $ref: "#/components/schemas/InetNum"
         organization:
-          $ref: '#/components/schemas/WhoisOrganization'
+          $ref: "#/components/schemas/WhoisOrganization"
         irt:
-          $ref: '#/components/schemas/Irt'
+          $ref: "#/components/schemas/Irt"
         administrative_contacts:
           type: array
           items:
-            $ref: '#/components/schemas/WhoisPerson'
+            $ref: "#/components/schemas/WhoisPerson"
         technical_contacts:
           type: array
           items:
-            $ref: '#/components/schemas/WhoisPerson'
+            $ref: "#/components/schemas/WhoisPerson"
         abuse_contacts:
           type: array
           items:
-            $ref: '#/components/schemas/WhoisPerson'
+            $ref: "#/components/schemas/WhoisPerson"
         routes:
           type: array
           items:
-            $ref: '#/components/schemas/Route'
+            $ref: "#/components/schemas/Route"
       additionalProperties: true
     AsnPeer:
       type: object
@@ -2816,15 +2935,15 @@ components:
         downstreams:
           type: array
           items:
-            $ref: '#/components/schemas/AsnPeer'
+            $ref: "#/components/schemas/AsnPeer"
         upstreams:
           type: array
           items:
-            $ref: '#/components/schemas/AsnPeer'
+            $ref: "#/components/schemas/AsnPeer"
         peers:
           type: array
           items:
-            $ref: '#/components/schemas/AsnPeer'
+            $ref: "#/components/schemas/AsnPeer"
         whois_response:
           type: string
       additionalProperties: true
@@ -2832,9 +2951,9 @@ components:
       type: object
       properties:
         asn:
-          $ref: '#/components/schemas/AsnInfo'
+          $ref: "#/components/schemas/AsnInfo"
       additionalProperties: true
-      description: "ASN WHOIS v2 (/v2.0/asn-whois) \u2014 pass-through of ipgeolocation ASN data."
+      description: "ASN WHOIS v2 (/v2.0/asn-whois): pass-through of ipgeolocation ASN data."
     IpLocation:
       type: object
       properties:
@@ -2931,11 +3050,11 @@ components:
       type: object
       properties:
         asn:
-          $ref: '#/components/schemas/GeoAsn'
+          $ref: "#/components/schemas/GeoAsn"
         connection_type:
           type: string
         company:
-          $ref: '#/components/schemas/GeoCompany'
+          $ref: "#/components/schemas/GeoCompany"
       additionalProperties: true
     Currency:
       type: object
@@ -2953,13 +3072,13 @@ components:
         ip:
           type: string
         location:
-          $ref: '#/components/schemas/IpLocation'
+          $ref: "#/components/schemas/IpLocation"
         country_metadata:
-          $ref: '#/components/schemas/CountryMetadata'
+          $ref: "#/components/schemas/CountryMetadata"
         network:
-          $ref: '#/components/schemas/GeoNetwork'
+          $ref: "#/components/schemas/GeoNetwork"
         currency:
-          $ref: '#/components/schemas/Currency'
+          $ref: "#/components/schemas/Currency"
       additionalProperties: true
     IpSecurityNetwork:
       type: object
@@ -3041,13 +3160,13 @@ components:
         ip:
           type: string
         location:
-          $ref: '#/components/schemas/IpLocation'
+          $ref: "#/components/schemas/IpLocation"
         network:
-          $ref: '#/components/schemas/IpSecurityNetwork'
+          $ref: "#/components/schemas/IpSecurityNetwork"
         asn:
-          $ref: '#/components/schemas/IpSecurityAsn'
+          $ref: "#/components/schemas/IpSecurityAsn"
         security:
-          $ref: '#/components/schemas/IpSecurity'
+          $ref: "#/components/schemas/IpSecurity"
       additionalProperties: true
     DomainReputationInput:
       type: object
@@ -3101,11 +3220,11 @@ components:
         sources:
           type: array
           items:
-            $ref: '#/components/schemas/ThreatSource'
+            $ref: "#/components/schemas/ThreatSource"
         pivot_matches:
           type: array
           items:
-            $ref: '#/components/schemas/PivotMatch'
+            $ref: "#/components/schemas/PivotMatch"
       additionalProperties: true
     DgaFeatures:
       type: object
@@ -3135,7 +3254,7 @@ components:
         model:
           type: string
         features:
-          $ref: '#/components/schemas/DgaFeatures'
+          $ref: "#/components/schemas/DgaFeatures"
         interpretation:
           type: string
       additionalProperties: true
@@ -3161,15 +3280,15 @@ components:
         positive:
           type: array
           items:
-            $ref: '#/components/schemas/ReputationSignal'
+            $ref: "#/components/schemas/ReputationSignal"
         negative:
           type: array
           items:
-            $ref: '#/components/schemas/ReputationSignal'
+            $ref: "#/components/schemas/ReputationSignal"
         neutral:
           type: array
           items:
-            $ref: '#/components/schemas/ReputationSignal'
+            $ref: "#/components/schemas/ReputationSignal"
       additionalProperties: true
     ReputationIndicators:
       type: object
@@ -3205,9 +3324,9 @@ components:
         trust_band:
           type: string
         signals:
-          $ref: '#/components/schemas/ReputationSignals'
+          $ref: "#/components/schemas/ReputationSignals"
         indicators:
-          $ref: '#/components/schemas/ReputationIndicators'
+          $ref: "#/components/schemas/ReputationIndicators"
       additionalProperties: true
     RelatedIoc:
       type: object
@@ -3229,7 +3348,7 @@ components:
         related_iocs:
           type: array
           items:
-            $ref: '#/components/schemas/RelatedIoc'
+            $ref: "#/components/schemas/RelatedIoc"
         feed_tags:
           type: array
           items:
@@ -3255,7 +3374,7 @@ components:
       type: object
       properties:
         input:
-          $ref: '#/components/schemas/DomainReputationInput'
+          $ref: "#/components/schemas/DomainReputationInput"
         assessed_at:
           type: string
         version:
@@ -3263,15 +3382,15 @@ components:
         processing_time_ms:
           type: integer
         risk_category:
-          $ref: '#/components/schemas/RiskCategory'
+          $ref: "#/components/schemas/RiskCategory"
         dga_score:
-          $ref: '#/components/schemas/DgaScore'
+          $ref: "#/components/schemas/DgaScore"
         trust_signals:
-          $ref: '#/components/schemas/TrustSignals'
+          $ref: "#/components/schemas/TrustSignals"
         intelligence:
-          $ref: '#/components/schemas/ReputationIntelligence'
+          $ref: "#/components/schemas/ReputationIntelligence"
         evidence_summary:
-          $ref: '#/components/schemas/EvidenceSummary'
+          $ref: "#/components/schemas/EvidenceSummary"
         errors:
           type: array
           items:
@@ -3305,9 +3424,9 @@ components:
         apiKey:
           type: string
         apiCredits:
-          $ref: '#/components/schemas/ApiCredits'
+          $ref: "#/components/schemas/ApiCredits"
         apiSubscription:
-          $ref: '#/components/schemas/ApiSubscription'
+          $ref: "#/components/schemas/ApiSubscription"
       additionalProperties: true
     DateRangeStatus:
       type: object
@@ -3321,65 +3440,65 @@ components:
       type: object
       properties:
         gtld:
-          $ref: '#/components/schemas/DateRangeStatus'
+          $ref: "#/components/schemas/DateRangeStatus"
         cctld:
-          $ref: '#/components/schemas/DateRangeStatus'
+          $ref: "#/components/schemas/DateRangeStatus"
         dns:
-          $ref: '#/components/schemas/DateRangeStatus'
+          $ref: "#/components/schemas/DateRangeStatus"
         cleaned_gtld:
-          $ref: '#/components/schemas/DateRangeStatus'
+          $ref: "#/components/schemas/DateRangeStatus"
         cleaned_cctld:
-          $ref: '#/components/schemas/DateRangeStatus'
+          $ref: "#/components/schemas/DateRangeStatus"
       additionalProperties: true
     UpdateFrequencies:
       type: object
       properties:
         daily:
-          $ref: '#/components/schemas/DateRangeStatus'
+          $ref: "#/components/schemas/DateRangeStatus"
         weekly:
-          $ref: '#/components/schemas/DateRangeStatus'
+          $ref: "#/components/schemas/DateRangeStatus"
         monthly:
-          $ref: '#/components/schemas/DateRangeStatus'
+          $ref: "#/components/schemas/DateRangeStatus"
       additionalProperties: true
     DatabaseUpdates:
       type: object
       properties:
         domain_whois:
-          $ref: '#/components/schemas/UpdateFrequencies'
+          $ref: "#/components/schemas/UpdateFrequencies"
         dns:
-          $ref: '#/components/schemas/UpdateFrequencies'
+          $ref: "#/components/schemas/UpdateFrequencies"
         subdomains:
-          $ref: '#/components/schemas/UpdateFrequencies'
+          $ref: "#/components/schemas/UpdateFrequencies"
         ip_whois:
-          $ref: '#/components/schemas/UpdateFrequencies'
+          $ref: "#/components/schemas/UpdateFrequencies"
       additionalProperties: true
     ThreatFeedStatus:
       type: object
       properties:
         phishing:
-          $ref: '#/components/schemas/DateRangeStatus'
+          $ref: "#/components/schemas/DateRangeStatus"
         malware:
-          $ref: '#/components/schemas/DateRangeStatus'
+          $ref: "#/components/schemas/DateRangeStatus"
         spam:
-          $ref: '#/components/schemas/DateRangeStatus'
+          $ref: "#/components/schemas/DateRangeStatus"
       additionalProperties: true
     DatabaseFileStatus:
       type: object
       properties:
         newly:
-          $ref: '#/components/schemas/NewlyStatus'
+          $ref: "#/components/schemas/NewlyStatus"
         expired:
-          $ref: '#/components/schemas/DateRangeStatus'
+          $ref: "#/components/schemas/DateRangeStatus"
         cleaned_expired:
-          $ref: '#/components/schemas/DateRangeStatus'
+          $ref: "#/components/schemas/DateRangeStatus"
         dropped:
-          $ref: '#/components/schemas/DateRangeStatus'
+          $ref: "#/components/schemas/DateRangeStatus"
         dropped_with_backlinks:
-          $ref: '#/components/schemas/DateRangeStatus'
+          $ref: "#/components/schemas/DateRangeStatus"
         threat_feed:
-          $ref: '#/components/schemas/ThreatFeedStatus'
+          $ref: "#/components/schemas/ThreatFeedStatus"
         database_updates:
-          $ref: '#/components/schemas/DatabaseUpdates'
+          $ref: "#/components/schemas/DatabaseUpdates"
       additionalProperties: true
     SnapshotStatus:
       type: object
@@ -3410,7 +3529,8 @@ components:
         code:
           type: integer
       additionalProperties: true
-      description: Error response. `status` may be an integer (e.g. 401), boolean, or string depending
+      description:
+        Error response. `status` may be an integer (e.g. 401), boolean, or string depending
         on the endpoint, so it is intentionally untyped to avoid deserialization failures.
     BulkDomainAvailabilityRequest:
       type: object
@@ -3420,13 +3540,14 @@ components:
           items:
             type: string
           maxItems: 100
-          description: "Mode 1 \u2014 list of full domain names. Cannot be used with tld."
+          description: "Mode 1: list of full domain names. Cannot be used with tld."
         tld:
           type: array
           items:
             type: string
           maxItems: 100
-          description: "Mode 2 \u2014 TLDs to check against the domain query param. Cannot be used with\
+          description:
+            "Mode 2: TLDs to check against the domain query param. Cannot be used with\
             \ domainNames."
       description: Request body for POST /v2.0/domain/availability. Use domainNames OR tld.
       additionalProperties: true

@@ -4,24 +4,24 @@
 
 Subdomain enumeration
 
-1 endpoint(s). All requests require your API key — see [Authentication](../authentication.md).
+1 endpoint. Requests need your API key unless noted otherwise. See [Authentication](../authentication.md).
 
 ## Subdomains Lookup
 
-`GET /v1.0/subdomains`
+`GET https://api.whoisfreaks.com/v1.0/subdomains`
 
 All subdomains including nested. 2 credits per query.
 
 **Parameters**
 
-| Parameter | In | Required | Type | Description |
-|-----------|----|----------|------|-------------|
-| `domain` | query | yes | string |  |
-| `after` | query | no | string |  |
-| `before` | query | no | string |  |
-| `status` | query | no | string |  (one of: active, inactive) |
-| `page` | query | no | integer |  |
-| `format` | query | no | string |  (one of: json, xml) |
+| Parameter | In | Required | Type | Default | Description |
+|-----------|----|----------|------|---------|-------------|
+| `domain` | query | yes | string |  |  |
+| `after` | query | no | string (date) |  |  |
+| `before` | query | no | string (date) |  |  |
+| `status` | query | no | string |  |  (one of: active, inactive) |
+| `page` | query | no | integer | `1` |  |
+| `format` | query | no | string | `json` |  (one of: json, xml) |
 
 **Response** (`SubdomainsResponse`)
 
@@ -53,25 +53,31 @@ All subdomains including nested. 2 credits per query.
 <details><summary>Python</summary>
 
 ```python
-"""Runnable example: Subdomains Lookup (GET /v1.0/subdomains)."""
-from datetime import date, timedelta
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.subdomains_api import SubdomainsApi
+"""Subdomains Lookup: GET https://api.whoisfreaks.com/v1.0/subdomains
 
-# Parameters for subdomains (GET /v1.0/subdomains):
-#   - domain (string, required)
-#   - after (string, optional)
-#   - before (string, optional)
-#   - status (string (one of: active, inactive), optional)
-#   - page (integer, optional)
-#   - format (string (one of: json, xml), optional)
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = SubdomainsApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python Subdomains.py
+"""
+import json
+import os
 
-result = api.subdomains(domain="example.com", after="2000-01-01", before=str(date.today()))
-print(result)
+import whoisfreaks
 
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.SubdomainsApi(client)
+
+    # subdomains parameters:
+    #   domain (str, required)
+    #   after (datetime.date, optional, keyword)
+    #   before (datetime.date, optional, keyword)
+    #   status (str, optional, keyword): one of active, inactive
+    #   page (int, optional, keyword): default 1
+    #   format (str, optional, keyword): one of json, xml; default "json"
+    result = api.subdomains("whoisfreaks.com", page=1)
+    print(json.dumps(result.to_dict(), indent=2))
 ```
 
 </details>
@@ -79,25 +85,35 @@ print(result)
 <details><summary>TypeScript</summary>
 
 ```typescript
-// Runnable example: Subdomains Lookup (GET /v1.0/subdomains)
-// Parameters for subdomains (GET /v1.0/subdomains):
-//   - domain (string, required)
-//   - after (string, optional)
-//   - before (string, optional)
-//   - status (string (one of: active, inactive), optional)
-//   - page (integer, optional)
-//   - format (string (one of: json, xml), optional)
-import { Configuration, SubdomainsApi } from "whoisfreaks";
+// Subdomains Lookup: GET https://api.whoisfreaks.com/v1.0/subdomains
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx Subdomains.ts
+import { Configuration, SubdomainsApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new SubdomainsApi(config);
 
-async function main() {
-  const result = await api.subdomains({ domain: "example.com", after: "2000-01-01", before: new Date().toISOString().slice(0,10), status: undefined, page: undefined, format: undefined });
-  console.log(result);
+// subdomains({ domain, after?, before?, status?, page?, format? })
+//   domain (string, required)
+//   after (Date, optional)
+//   before (Date, optional)
+//   status ("active" | "inactive", optional)
+//   page (number, optional): default 1
+//   format ("json" | "xml", optional): default "json"
+async function main(): Promise<void> {
+  const result = await api.subdomains({ domain: "whoisfreaks.com", page: 1 });
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
 
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
 ```
 
 </details>
@@ -106,6 +122,7 @@ main().catch(console.error);
 
 ```go
 // Runnable example: Subdomains Lookup (GET /v1.0/subdomains)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for subdomains (GET /v1.0/subdomains):
 //   - domain (string, required)
 //   - after (string, optional)
@@ -113,26 +130,31 @@ main().catch(console.error);
 //   - status (string (one of: active, inactive), optional)
 //   - page (integer, optional)
 //   - format (string (one of: json, xml), optional)
+
 package main
 
 import (
-    "context"
-    "encoding/json"
-    "fmt"
-    "time"
-    wf "github.com/WhoisFreaks/whoisfreaks-go"
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
 )
 
 func main() {
-    cfg := wf.NewConfiguration()
-    client := wf.NewAPIClient(cfg)
-    // apiKey is set once via the request context
-    ctx := context.WithValue(context.Background(), wf.ContextAPIKeys,
-        map[string]wf.APIKey{"ApiKeyAuth": {Key: "YOUR_API_KEY"}})
-    result, _, err := client.SubdomainsAPI.Subdomains(ctx).Domain("example.com").After("2000-01-01").Before(time.Now().Format("2006-01-02")).Execute()
-    if err != nil { panic(err) }
-    b, _ := json.MarshalIndent(result, "", "  ")
-    fmt.Println(string(b))
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.SubdomainsAPI.Subdomains(ctx).Domain("whoisfreaks.com").Page(1).Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
 }
 
 ```

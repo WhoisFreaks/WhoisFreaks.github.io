@@ -1,16 +1,15 @@
 // Runnable example: Database File Status (Public) (GET /v3.4/status)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for databaseFileStatus (GET /v3.4/status):
-//   (no parameters; the API key is set on the client)
+//   (no parameters; no API key required)
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
+using WhoisFreaks.Model;
 
-class DatabaseFileStatus {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new AccountApi(config);
-        var result = api.DatabaseFileStatus();
-        Console.WriteLine(result);
-    }
-}
+var config = new Configuration();
+// Public endpoint: no API key needed.
+var api = new AccountApi(config);
+
+DatabaseFileStatus result = api.DatabaseFileStatus();
+Console.WriteLine(result.ToJson());

@@ -1,13 +1,23 @@
-# Runnable example: Domain Reputation Lookup (GET /v1/domain/security)
+# Domain Reputation Lookup
+#
 # Parameters for domainReputation (GET /v1/domain/security):
-#   - domainName (string, required): The domain name to assess
+#   - domain_name (string, required): The domain name to assess
 #   - format (string (one of: json, xml), optional)
-require 'whoisfreaks'
 
+require "json"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
 WhoisFreaks.configure do |config|
-  config.api_key["apiKey"] = "YOUR_API_KEY"   # set once
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
 end
 
 api = WhoisFreaks::DomainReputationApi.new
-result = api.domain_reputation("example.com")
-puts result
+
+begin
+  result = api.domain_reputation("amazon.com")
+  puts JSON.pretty_generate(result.to_hash)
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end

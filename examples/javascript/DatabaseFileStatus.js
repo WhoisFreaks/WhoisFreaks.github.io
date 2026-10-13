@@ -1,15 +1,18 @@
-// Runnable example: Database File Status (Public) (GET /v3.4/status)
-// Parameters for databaseFileStatus (GET /v3.4/status):
-//   (no parameters; the API key is set on the client)
-// whoisfreaks-js is CommonJS; apiKey is set once on the ApiClient
-import pkg from "whoisfreaks-js";
-const { ApiClient, AccountApi } = pkg;
-// or:  const { ApiClient, AccountApi } = require("whoisfreaks-js");
+// Database File Status (Public): GET https://files.whoisfreaks.com/v3.4/status
+// Run (public endpoint, no API key needed): node DatabaseFileStatus.js
+const { AccountApi } = require("whoisfreaks-js");
 
-const client = ApiClient.instance;
-client.authentications["ApiKeyAuth"].apiKey = "YOUR_API_KEY";  // set once
-const api = new AccountApi(client);
+// Public endpoint: no API key needed.
+const api = new AccountApi();
 
-api.databaseFileStatus()
-  .then(data => console.log(data))
-  .catch(err => console.error(err));
+// databaseFileStatus() takes no parameters.
+async function main() {
+  const result = await api.databaseFileStatus();
+  console.log(JSON.stringify(result, null, 2));
+}
+
+main().catch((err) => {
+  // API errors carry the HTTP status and the parsed error body
+  console.error(err.status ? `HTTP ${err.status}: ${JSON.stringify(err.body)}` : err);
+  process.exitCode = 1;
+});

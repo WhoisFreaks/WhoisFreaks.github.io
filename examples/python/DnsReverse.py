@@ -1,16 +1,24 @@
-"""Runnable example: Reverse DNS Lookup (GET /v2.1/dns/reverse)."""
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.dns_api import DNSApi
+"""Reverse DNS Lookup: GET https://api.whoisfreaks.com/v2.1/dns/reverse
 
-# Parameters for dnsReverse (GET /v2.1/dns/reverse):
-#   - value (string, required): IP, CIDR, or record value
-#   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
-#   - exact (boolean, optional)
-#   - page (integer, optional)
-#   - format (string (one of: json, xml), optional)
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = DNSApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python DnsReverse.py
+"""
+import json
+import os
 
-result = api.dns_reverse(value="value", var_type="a", exact=True)
-print(result)
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DNSApi(client)
+
+    # dns_reverse parameters:
+    #   value (str, required): IP, CIDR, or record value
+    #   type (str, required): one of a, mx, cname, ns, aaaa, txt, soa
+    #   exact (bool, optional, keyword): default True
+    #   page (int, optional, keyword): default 1
+    #   format (str, optional, keyword): one of json, xml; default "json"
+    result = api.dns_reverse("8.8.8.8", "a", page=1)
+    print(json.dumps(result.to_dict(), indent=2))

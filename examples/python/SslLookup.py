@@ -1,15 +1,23 @@
-"""Runnable example: SSL Certificate Lookup (GET /v1.0/ssl/live)."""
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.ssl_api import SSLApi
+"""SSL Certificate Lookup: GET https://api.whoisfreaks.com/v1.0/ssl/live
 
-# Parameters for sslLookup (GET /v1.0/ssl/live):
-#   - domainName (string, required)
-#   - chain (boolean, optional)
-#   - sslRaw (boolean, optional)
-#   - format (string (one of: json, xml), optional)
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = SSLApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python SslLookup.py
+"""
+import json
+import os
 
-result = api.ssl_lookup(domain_name="example.com")
-print(result)
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.SSLApi(client)
+
+    # ssl_lookup parameters:
+    #   domain_name (str, required)
+    #   chain (bool, optional, keyword): default False
+    #   ssl_raw (bool, optional, keyword): default False
+    #   format (str, optional, keyword): one of json, xml; default "json"
+    result = api.ssl_lookup("whoisfreaks.com")
+    print(json.dumps(result.to_dict(), indent=2))

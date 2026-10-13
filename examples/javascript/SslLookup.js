@@ -1,18 +1,24 @@
-// Runnable example: SSL Certificate Lookup (GET /v1.0/ssl/live)
-// Parameters for sslLookup (GET /v1.0/ssl/live):
-//   - domainName (string, required)
-//   - chain (boolean, optional)
-//   - sslRaw (boolean, optional)
-//   - format (string (one of: json, xml), optional)
-// whoisfreaks-js is CommonJS; apiKey is set once on the ApiClient
-import pkg from "whoisfreaks-js";
-const { ApiClient, SSLApi } = pkg;
-// or:  const { ApiClient, SSLApi } = require("whoisfreaks-js");
+// SSL Certificate Lookup: GET https://api.whoisfreaks.com/v1.0/ssl/live
+// Run: WHOISFREAKS_API_KEY=your_api_key node SslLookup.js
+const { ApiClient, SSLApi } = require("whoisfreaks-js");
 
+// Set the API key once; the client adds it to every request.
 const client = ApiClient.instance;
-client.authentications["ApiKeyAuth"].apiKey = "YOUR_API_KEY";  // set once
+client.authentications["ApiKeyAuth"].apiKey = process.env.WHOISFREAKS_API_KEY;
 const api = new SSLApi(client);
 
-api.sslLookup("example.com")
-  .then(data => console.log(data))
-  .catch(err => console.error(err));
+// sslLookup(domainName, opts)
+//   domainName (string, required)
+//   opts.chain (boolean, optional): default false
+//   opts.sslRaw (boolean, optional): default false
+//   opts.format (string, optional): one of json, xml; default "json"
+async function main() {
+  const result = await api.sslLookup("whoisfreaks.com");
+  console.log(JSON.stringify(result, null, 2));
+}
+
+main().catch((err) => {
+  // API errors carry the HTTP status and the parsed error body
+  console.error(err.status ? `HTTP ${err.status}: ${JSON.stringify(err.body)}` : err);
+  process.exitCode = 1;
+});

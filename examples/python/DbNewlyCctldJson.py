@@ -1,14 +1,22 @@
-"""Runnable example: Newly Registered ccTLD (JSON) (GET /v3.1/domains/newly/cctld)."""
-from datetime import date, timedelta
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.databases_newly_registered_api import DatabasesNewlyRegisteredApi
+"""Newly Registered ccTLD (JSON): GET https://files.whoisfreaks.com/v3.1/domains/newly/cctld
 
-# Parameters for dbNewlyCctldJson (GET /v3.1/domains/newly/cctld):
-#   - date (string, optional): yyyy-MM-dd; omit for latest
-#   - tlds (string, optional)
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = DatabasesNewlyRegisteredApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python DbNewlyCctldJson.py
+"""
+import os
+from datetime import date
 
-result = api.db_newly_cctld_json(var_date=str(date.today() - timedelta(days=1)))
-print(result)
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesNewlyRegisteredApi(client)
+
+    # db_newly_cctld_json parameters:
+    #   var_date (datetime.date, optional, keyword): yyyy-MM-dd; omit for latest
+    #   tlds (str, optional, keyword)
+    domains = api.db_newly_cctld_json(var_date=date(2026, 10, 1))
+    print(f"{len(domains)} domains")
+    print("\n".join(domains[:10]))

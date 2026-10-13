@@ -16,7 +16,10 @@ import os, re, sys, yaml, pathlib
 
 SPEC = sys.argv[1] if len(sys.argv) > 1 else "spec/whoisfreaks-openapi.yaml"
 OUT  = pathlib.Path(sys.argv[2] if len(sys.argv) > 2 else "docs-repo")
-OWNER = os.environ.get("OWNER", "whoisfreaks")
+# GitHub org that owns the SDK repos; Go module and Swift package paths use it.
+OWNER = os.environ.get("OWNER", "WhoisFreaks")
+# SDK release these docs describe; install lines pin to it.
+SDK_VERSION = os.environ.get("SDK_VERSION", "0.23.0")
 
 spec = yaml.safe_load(open(SPEC))
 comps = spec.get("components", {})
@@ -35,16 +38,16 @@ LANGS = {
     "javascript": {"label": "JavaScript", "registry": "npm",           "pkg": "whoisfreaks-js"},
     "typescript": {"label": "TypeScript", "registry": "npm",           "pkg": "whoisfreaks"},
     "java":       {"label": "Java",       "registry": "Maven Central",  "pkg": "com.whoisfreaks:whoisfreaks"},
-    "kotlin":     {"label": "Kotlin",     "registry": "Maven Central",  "pkg": "com.whoisfreaks:whoisfreaks"},
+    "kotlin":     {"label": "Kotlin",     "registry": "Maven Central",  "pkg": "com.whoisfreaks:whoisfreaks-kotlin"},
     "csharp":     {"label": "C# / .NET",  "registry": "NuGet",          "pkg": "WhoisFreaks"},
     "ruby":       {"label": "Ruby",       "registry": "RubyGems",       "pkg": "whoisfreaks"},
     "go":         {"label": "Go",         "registry": "Go modules",     "pkg": f"github.com/{OWNER}/whoisfreaks-go"},
     "swift":      {"label": "Swift",      "registry": "Swift PM",       "pkg": f"github.com/{OWNER}/whoisfreaks-swift"},
-    "php":        {"label": "PHP",        "registry": "Packagist",      "pkg": f"{OWNER}/whoisfreaks-php"},
+    "php":        {"label": "PHP",        "registry": "Packagist",      "pkg": "whoisfreaks/whoisfreaks-php"},  # Packagist names are lowercase
 }
 LANG_ORDER = list(LANGS.keys())
 
-def install_snippet(lang, version="LATEST"):
+def install_snippet(lang, version=SDK_VERSION):
     m = LANGS[lang]; pkg = m["pkg"]
     if lang == "python":
         return "bash", f"pip install {pkg}"
@@ -71,272 +74,6 @@ def install_snippet(lang, version="LATEST"):
     return "bash", ""
 
 # ---- per-language "create a new project" walkthrough ------------------------
-def getting_started(lang):
-    """Full copy-paste steps: make a fresh project, add the SDK, and run.
-    Written so someone with only the language's toolchain installed can go
-    from empty directory to a running program."""
-    m = LANGS[lang]; pkg = m["pkg"]
-    S = []  # list of (markdown) lines
-
-    if lang == "python":
-        S += [
-            "```bash",
-            "mkdir whoisfreaks-test && cd whoisfreaks-test",
-            "python3 -m venv .venv",
-            "source .venv/bin/activate        # Windows: .venv\\Scripts\\activate",
-            f"pip install {pkg}",
-            "```",
-            "",
-            "Create `main.py`:", "",
-            "```python",
-            "from whoisfreaks import Configuration, ApiClient",
-            "from whoisfreaks.api.whois_api import WHOISApi",
-            "",
-            "config = Configuration()",
-            'config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once',
-            "api = WHOISApi(ApiClient(config))",
-            "",
-            'result = api.whois_live(domain_name="example.com")',
-            "print(result)",
-            "```",
-            "",
-            "Run it:", "",
-            "```bash", "python main.py", "```",
-        ]
-    elif lang in ("javascript", "typescript"):
-        ext = "js" if lang == "javascript" else "ts"
-        S += [
-            "```bash",
-            "mkdir whoisfreaks-test && cd whoisfreaks-test",
-            "npm init -y",
-            f"npm install {pkg}",
-        ]
-        if lang == "typescript":
-            S += ["npm install -D typescript ts-node @types/node"]
-        S += ["```", ""]
-        if lang == "typescript":
-            # TS package is ESM
-            S += ["Set `\"type\": \"module\"` in `package.json`, then create "
-                  f"`main.{ext}`:", "", f"```{ext}",
-                  f'import {{ Configuration, WHOISApi }} from "{pkg}";', "",
-                  'const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once',
-                  "const api = new WHOISApi(config);", "",
-                  'const result = await api.whoisLive({ domainName: "example.com" });',
-                  "console.log(result);", "```", "", "Run it:", "",
-                  "```bash", f"npx ts-node main.{ext}", "```"]
-        else:
-            # JS package uses the `javascript` generator: apiKey set once on ApiClient.
-            S += [f"Create `main.{ext}`:", "", f"```{ext}",
-                  f'import pkg from "{pkg}";',
-                  "const { ApiClient, WHOISApi } = pkg;",
-                  f'// or:  const {{ ApiClient, WHOISApi }} = require("{pkg}");', "",
-                  "const client = ApiClient.instance;",
-                  'client.authentications["ApiKeyAuth"].apiKey = "YOUR_API_KEY";  // set once',
-                  "const api = new WHOISApi(client);", "",
-                  'api.whoisLive("example.com")',
-                  "  .then(data => console.log(data))",
-                  "  .catch(err => console.error(err));", "```", "", "Run it:", "",
-                  "```bash", f"node main.{ext}", "```"]
-    elif lang == "csharp":
-        S += [
-            "```bash",
-            "mkdir whoisfreaks-test && cd whoisfreaks-test",
-            "dotnet new console",
-            f"dotnet add package {pkg}",
-            "```",
-            "",
-            "Replace `Program.cs` with:", "",
-            "```csharp",
-            "using System;",
-            "using WhoisFreaks.Api;",
-            "using WhoisFreaks.Client;",
-            "",
-            "var config = new Configuration { BasePath = \"https://api.whoisfreaks.com\" };",
-            "config.AddApiKey(\"ApiKeyAuth\", \"YOUR_API_KEY\");   // set once",
-            "var api = new WHOISApi(config);",
-            "",
-            'var result = api.WhoisLive("example.com");',
-            "Console.WriteLine(result);",
-            "```",
-            "",
-            "Run it:", "",
-            "```bash", "dotnet run", "```",
-        ]
-    elif lang == "go":
-        mod = pkg  # github.com/<owner>/whoisfreaks-go
-        S += [
-            "```bash",
-            "mkdir whoisfreaks-test && cd whoisfreaks-test",
-            "go mod init whoisfreaks-test          # creates go.mod (required)",
-            f"go get {mod}",
-            "```",
-            "",
-            "> **Note:** `go get` only works inside a module. If you see "
-            "*'go.mod file not found'*, run `go mod init <name>` first (as above).",
-            "",
-            "Create `main.go`:", "",
-            "```go",
-            "package main",
-            "",
-            "import (",
-            "    \"context\"",
-            "    \"encoding/json\"",
-            "    \"fmt\"",
-            f"    wf \"{mod}\"",
-            ")",
-            "",
-            "func main() {",
-            "    cfg := wf.NewConfiguration()",
-            "    client := wf.NewAPIClient(cfg)",
-            "    // apiKey is set once via the request context",
-            "    ctx := context.WithValue(context.Background(), wf.ContextAPIKeys,",
-            "        map[string]wf.APIKey{\"ApiKeyAuth\": {Key: \"YOUR_API_KEY\"}})",
-            "    result, _, err := client.WHOISAPI.WhoisLive(ctx).DomainName(\"example.com\").Execute()",
-            "    if err != nil { panic(err) }",
-            "    b, _ := json.MarshalIndent(result, \"\", \"  \")",
-            "    fmt.Println(string(b))",
-            "}",
-            "```",
-            "",
-            "Run it:", "",
-            "```bash", "go mod tidy", "go run main.go", "```",
-        ]
-    elif lang == "java":
-        g, a = pkg.split(":")
-        S += [
-            "Create a Maven project and add the dependency to `pom.xml`:", "",
-            "```xml",
-            "<dependency>",
-            f"  <groupId>{g}</groupId>",
-            f"  <artifactId>{a}</artifactId>",
-            "  <version>LATEST</version>   <!-- pin to a real version, e.g. 1.0.0 -->",
-            "</dependency>",
-            "```",
-            "",
-            "`src/main/java/Main.java`:", "",
-            "```java",
-            "import com.whoisfreaks.client.ApiClient;",
-            "import com.whoisfreaks.client.Configuration;",
-            "import com.whoisfreaks.client.auth.ApiKeyAuth;",
-            "import com.whoisfreaks.client.api.WhoisApi;",
-            "",
-            "public class Main {",
-            "    public static void main(String[] args) throws Exception {",
-            "        ApiClient client = Configuration.getDefaultApiClient();",
-            "        client.setBasePath(\"https://api.whoisfreaks.com\");",
-            "        ((ApiKeyAuth) client.getAuthentication(\"ApiKeyAuth\")).setApiKey(\"YOUR_API_KEY\");  // set once",
-            "        WhoisApi api = new WhoisApi(client);",
-            "        var result = api.whoisLive(\"example.com\");",
-            "        System.out.println(result);",
-            "    }",
-            "}",
-            "```",
-            "",
-            "Build and run with `mvn compile exec:java -Dexec.mainClass=Main` "
-            "(or your IDE).",
-        ]
-    elif lang == "kotlin":
-        S += [
-            "In a Gradle project, add to `build.gradle.kts`:", "",
-            "```kotlin",
-            "repositories { mavenCentral() }",
-            "dependencies {",
-            f'    implementation("{pkg}:LATEST")   // pin to a real version, e.g. 1.0.0',
-            "}",
-            "```",
-            "",
-            "`src/main/kotlin/Main.kt`:", "",
-            "```kotlin",
-            "import com.whoisfreaks.client.apis.WhoisApi",
-            "import com.whoisfreaks.client.infrastructure.ApiClient",
-            "",
-            "fun main() {",
-            "    ApiClient.apiKey[\"apiKey\"] = \"YOUR_API_KEY\"  // set once",
-            "    val api = WhoisApi()",
-            "    val result = api.whoisLive(\"example.com\")",
-            "    println(result)",
-            "}",
-            "```",
-            "",
-            "Run with `./gradlew run` (with the application plugin) or your IDE.",
-        ]
-    elif lang == "ruby":
-        S += [
-            "```bash",
-            "mkdir whoisfreaks-test && cd whoisfreaks-test",
-            f"gem install {pkg}",
-            "```",
-            "",
-            "Create `main.rb`:", "",
-            "```ruby",
-            "require 'whoisfreaks'",
-            "",
-            "WhoisFreaks.configure do |config|",
-            "  config.api_key[\"apiKey\"] = \"YOUR_API_KEY\"   # set once",
-            "end",
-            "",
-            "api = WhoisFreaks::WhoisApi.new",
-            "result = api.whois_live(\"example.com\")",
-            "puts result",
-            "```",
-            "",
-            "Run it:", "",
-            "```bash", "ruby main.rb", "```",
-        ]
-    elif lang == "php":
-        S += [
-            "```bash",
-            "mkdir whoisfreaks-test && cd whoisfreaks-test",
-            "composer init --no-interaction",
-            f"composer require {pkg}",
-            "```",
-            "",
-            "Create `main.php`:", "",
-            "```php",
-            "<?php",
-            "require 'vendor/autoload.php';",
-            "",
-            "$config = WhoisFreaks\\Configuration::getDefaultConfiguration()",
-            "    ->setApiKey(\"apiKey\", \"YOUR_API_KEY\");   // set once",
-            "$api = new WhoisFreaks\\Api\\WhoisApi(new GuzzleHttp\\Client(), $config);",
-            "$result = $api->whoisLive(\"example.com\");",
-            "print_r($result);",
-            "```",
-            "",
-            "Run it:", "",
-            "```bash", "php main.php", "```",
-        ]
-    elif lang == "swift":
-        S += [
-            "```bash",
-            "mkdir whoisfreaks-test && cd whoisfreaks-test",
-            "swift package init --type executable",
-            "```",
-            "",
-            "Add the dependency to `Package.swift`:", "",
-            "```swift",
-            f'.package(url: "https://{pkg}.git", from: "1.0.0"),',
-            "```",
-            "",
-            "…and list `WhoisFreaks` as a target dependency. Then in "
-            "`Sources/.../main.swift`:", "",
-            "```swift",
-            "import WhoisFreaks",
-            "",
-            "WhoisFreaksAPI.apiKey = \"YOUR_API_KEY\"  // set once",
-            "",
-            "do {",
-            "    let result = try await WHOISAPI.whoisLive(domainName: \"example.com\")",
-            "    print(result)",
-            "} catch {",
-            "    print(error)",
-            "}",
-            "```",
-            "",
-            "Run it:", "",
-            "```bash", "swift run", "```",
-        ]
-    return S
 
 # ---- operationId -> per-language method name --------------------------------
 def split_words(op_id):
@@ -359,44 +96,30 @@ def method_name(op_id, lang):
     return op_id
 
 # ---- collect operations, grouped by tag -------------------------------------
-import subprocess, glob
+import json
 
-def _java_body_models():
-    """Authoritative operationId->bodyModel map, read from a generated Java SDK
-    if available (sdks/java). The generated code is the source of truth for the
-    exact model class name (e.g. bulkDomainAvailabilityV2 -> BulkDomainAvailabilityRequest,
-    NOT the spec-derived guess). Falls back to {} if no SDK present."""
-    mp = {}
-    roots = glob.glob("sdks/java/**/api/*.java", recursive=True)
-    pat = re.compile(r"public\s+\S+\s+([a-zA-Z0-9]+)\(String apiKey,\s+([A-Za-z0-9]+Request)\s")
-    for fp in roots:
-        try:
-            txt = open(fp).read()
-        except Exception:
-            continue
-        for mth, model in pat.findall(txt):
-            mp[mth] = model
-    return mp
-
-_BODY_MAP = _java_body_models()
-
+# Inline request bodies become models named <OperationId>Request, except that
+# openapi-generator reuses the first model when two inline schemas are identical
+# (bulkIpReputation's body is the same as bulkGeolocation's: BulkGeolocationRequest).
+_INLINE_BODY_NAMES = {}
 def _body_model(op):
     rb = op.get("requestBody")
     if not rb:
         return None
-    # 1) authoritative: name from generated Java SDK, keyed by operationId
-    oid = op.get("operationId") or ""
-    if oid in _BODY_MAP:
-        return _BODY_MAP[oid]
-    # 2) $ref in the spec
-    rb = deref(rb)
-    sch = ((rb.get("content") or {}).get("application/json") or {}).get("schema") or {}
+    sch = ((deref(rb).get("content") or {}).get("application/json") or {}).get("schema") or {}
     if sch.get("$ref"):
         return sch["$ref"].split("/")[-1]
-    # 3) last-resort synth (inline body, no generated SDK to consult)
-    words = re.sub(r"(.)([A-Z][a-z]+)", r"\1 \2", oid)
-    words = re.sub(r"([a-z0-9])([A-Z])", r"\1 \2", words)
-    return "".join(w.capitalize() for w in re.split(r"[\s_]+", words) if w) + "Request"
+    key = json.dumps({k: v for k, v in sch.items() if k != "example"}, sort_keys=True)
+    if key not in _INLINE_BODY_NAMES:
+        oid = op.get("operationId") or ""
+        _INLINE_BODY_NAMES[key] = oid[:1].upper() + oid[1:] + "Request"
+    return _INLINE_BODY_NAMES[key]
+
+def _body_schema(op):
+    rb = op.get("requestBody")
+    if not rb:
+        return None
+    return deref(((deref(rb).get("content") or {}).get("application/json") or {}).get("schema") or {})
 
 def collect():
     out = {}
@@ -416,6 +139,8 @@ def collect():
                     "type": sc.get("type", "string"),
                     "enum": sc.get("enum"),
                     "default": sc.get("default"),
+                    "format": sc.get("format"),
+                    "example": pa.get("example", sc.get("example")),
                     "desc": (pa.get("description") or "").strip(),
                 })
             # detect binary/file-download responses (application/octet-stream
@@ -429,6 +154,7 @@ def collect():
             )
             # resolve the 200 JSON response schema name (for a response-fields table)
             _resp_schema = None
+            _resp_is_array = False
             for _ct, _cv in _content.items():
                 if _ct.startswith("application/json"):
                     _sc = deref(_cv).get("schema") or {}
@@ -436,7 +162,9 @@ def collect():
                         _resp_schema = _sc["$ref"].split("/")[-1]
                     elif _sc.get("type") == "array" and "$ref" in (_sc.get("items") or {}):
                         _resp_schema = _sc["items"]["$ref"].split("/")[-1]
+                        _resp_is_array = True
                     break
+            _servers = op.get("servers") or item.get("servers") or spec["servers"]
             out.setdefault(tag, []).append({
                 "tag": tag,
                 "method": method.upper(),
@@ -447,8 +175,12 @@ def collect():
                 "params": params,
                 "request_body": bool(op.get("requestBody")),
                 "body_model": _body_model(op),
+                "body_schema": _body_schema(op),
                 "is_binary": _is_binary,
                 "response_schema": _resp_schema,
+                "response_is_array": _resp_is_array,
+                "server": _servers[0]["url"],
+                "public": op.get("security") == [],
             })
     return out
 
@@ -456,6 +188,54 @@ OPS = collect()
 
 def slug(tag):
     return re.sub(r"[^a-z0-9]+", "-", tag.lower()).strip("-")
+
+# ---- example values shared by the per-language renderers --------------------
+FALLBACK_EXAMPLES = {"domainName": "whoisfreaks.com", "domain": "whoisfreaks.com",
+                     "ip": "8.8.8.8", "ipAddress": "8.8.8.8", "asn": "AS15169",
+                     "keyword": "whoisfreaks", "value": "8.8.8.8"}
+def example_value(p):
+    """A realistic value for parameter p as a Python value: the spec example, else
+    the default, else a fallback by name/type. Dates are 'YYYY-MM-DD' strings;
+    p['format'] == 'date' tells a renderer to use the language's date type."""
+    if p.get("example") is not None:
+        return p["example"]
+    if p.get("default") is not None:
+        return p["default"]
+    if p["name"] in FALLBACK_EXAMPLES:
+        return FALLBACK_EXAMPLES[p["name"]]
+    if p.get("enum"):
+        return p["enum"][0]
+    if p.get("format") == "date":
+        return "2026-10-01"
+    return {"boolean": True, "integer": 1}.get(p["type"], "example")
+
+def download_name(op):
+    """File name a download example saves to: <OperationId> plus the extension the
+    spec's 200 response description names (CSV, ZIP archive, JSON, JSON gzipped)."""
+    r = deref(((spec["paths"][op["path"]][op["method"].lower()].get("responses") or {}).get("200")) or {})
+    d = (r.get("description") or "").lower()
+    if "gzip" in d:
+        ext = "json.gz" if "json" in d else "gz"
+    elif "zip" in d:
+        ext = "zip"
+    elif "json" in d:
+        ext = "json"
+    elif "csv" in d:
+        ext = "csv"
+    else:
+        ext = "bin"
+    return f"{_pascal(op['op_id'])}.{ext}"
+
+BODY_EXAMPLES = {"domainNames": ["whoisfreaks.com", "example.com"], "ips": ["8.8.8.8", "1.1.1.1"]}
+def body_example(op):
+    """Example request body as {jsonFieldName: value}: the spec example if any,
+    else the required fields (or the main list field) with sample values."""
+    sch = op.get("body_schema") or {}
+    if sch.get("example"):
+        return dict(sch["example"])
+    props = sch.get("properties") or {}
+    fields = sch.get("required") or [k for k in BODY_EXAMPLES if k in props][:1]
+    return {k: BODY_EXAMPLES.get(k, ["example"]) for k in fields}
 
 # ---- example call renderer (per language) -----------------------------------
 def api_class(tag, lang):
@@ -499,112 +279,11 @@ def py_module(cls):
     s = re.sub(r"([A-Z]+)([A-Z][a-z])", r"\1_\2", s)
     return s.lower()
 
-def py_param(name):
-    """Python parameter name as the generator emits it. openapi-generator
-    prefixes 'var_' when a param collides with a Python builtin/type/keyword
-    (e.g. 'date' -> 'var_date'). Used only for call keyword args, NOT for
-    module/model names."""
-    s = py_snake(name)
-    PY_RESERVED = {"date", "datetime", "time", "type", "id", "hash",
-                   "input", "list", "dict", "set", "str", "bytes", "object",
-                   "class", "def", "from", "import", "global", "property"}
-    return "var_" + s if s in PY_RESERVED else s
-
-def param_value(p):
-    name = p["name"]
-    # date-typed params get distinct sentinels resolved per-language:
-    #   date   -> yesterday (runtime)
-    #   after  -> 2000-01-01 (fixed lower bound)
-    #   before -> today (runtime)
-    if name == "after":
-        return "__DATE_2000__"
-    if name == "before":
-        return "__TODAY__"
-    if name == "date" or p.get("format") == "date":
-        return "__YESTERDAY__"
-    if name.lower() == "whois" and p["type"] == "boolean":
-        return "false"                      # whois flag defaults to false
-    if name.lower() == "exact" and p["type"] == "boolean":
-        return "true"                       # exact defaults to true
-    if "domain" in name.lower():
-        return "example.com"
-    if "ip" in name.lower():
-        return "8.8.8.8"
-    if name.lower() == "asn":
-        return "AS15169"
-    if p["enum"]:
-        return p["enum"][0]
-    if p["type"] == "boolean":
-        return "false"                      # all other booleans default false
-    if p["type"] == "integer":
-        return "1"
-    return "value"
 
 # yesterday-at-runtime expression + value literal per language ----------------
-YESTERDAY_EXPR = {
-    "python":     "str(date.today() - timedelta(days=1))",
-    "javascript": "new Date(Date.now()-86400000).toISOString().slice(0,10)",
-    "typescript": "new Date(Date.now()-86400000).toISOString().slice(0,10)",
-    "java":       "java.time.LocalDate.now().minusDays(1).toString()",
-    "kotlin":     "java.time.LocalDate.now().minusDays(1).toString()",
-    "csharp":     "DateTime.UtcNow.AddDays(-1).ToString(\"yyyy-MM-dd\")",
-    "ruby":       "(Date.today - 1).to_s",
-    "go":         "time.Now().AddDate(0,0,-1).Format(\"2006-01-02\")",
-    "php":        "(new DateTime(\"yesterday\"))->format(\"Y-m-d\")",
-    "swift":      "String(ISO8601DateFormatter().string(from: Calendar.current.date(byAdding: .day, value: -1, to: Date())!).prefix(10))",
-}
-TODAY_EXPR = {
-    "python":     "str(date.today())",
-    "javascript": "new Date().toISOString().slice(0,10)",
-    "typescript": "new Date().toISOString().slice(0,10)",
-    "java":       "java.time.LocalDate.now().toString()",
-    "kotlin":     "java.time.LocalDate.now().toString()",
-    "csharp":     "DateTime.UtcNow.ToString(\"yyyy-MM-dd\")",
-    "ruby":       "Date.today.to_s",
-    "go":         "time.Now().Format(\"2006-01-02\")",
-    "php":        "(new DateTime(\"today\"))->format(\"Y-m-d\")",
-    "swift":      "String(ISO8601DateFormatter().string(from: Date()).prefix(10))",
-}
 # fixed lower-bound date for `after`; a plain quoted literal in every language
-DATE_2000 = "2000-01-01"
 # languages whose date expressions need extra imports / the 'time' package
-YESTERDAY_IMPORT = {
-    "python": "from datetime import date, timedelta",
-    "ruby":   "require 'date'",
-    "go":     None,   # 'time' added to import block by the go renderer
-}
 
-def _uses_runtime_date(v):
-    return v in ("__YESTERDAY__", "__TODAY__")
-
-def lang_literal(lang, value, p):
-    """Render a param value as a code literal for the given language.
-    Handles date sentinels (yesterday/today/fixed-2000), booleans, strings."""
-    is_bool = p.get("type") == "boolean"
-    if value == "__YESTERDAY__":
-        return YESTERDAY_EXPR.get(lang, '"2000-01-01"'), True
-    if value == "__TODAY__":
-        return TODAY_EXPR.get(lang, '"2000-01-01"'), True
-    if value == "__DATE_2000__":
-        return f'"{DATE_2000}"', False      # fixed literal, quoted like a string
-    if is_bool:
-        truthy = str(value).lower() == "true"
-        if lang == "python":
-            return ("True" if truthy else "False"), True
-        return ("true" if truthy else "false"), True
-    return f'"{value}"', False
-
-def ordered_args(op, include_key=True):
-    """Ordered (name, value) for the call: required params first (incl apiKey)."""
-    out = []
-    for p in op["params"]:
-        if p["name"] == "apiKey":
-            if include_key:
-                out.append(("apiKey", "YOUR_API_KEY", p))
-            continue
-        if p["required"] or p["name"] in ("domainName", "ipAddress", "asn"):
-            out.append((p["name"], param_value(p), p))
-    return out
 
 COMMENT_PREFIX = {
     "python": "# ", "ruby": "# ", "go": "// ", "php": "// ",
@@ -619,7 +298,7 @@ def params_comment(lang, op):
     any_p = False
     for p in op["params"]:
         any_p = True
-        req = "required" if (p["required"] or p["name"] in ("apiKey","domainName","ipAddress","asn")) else "optional"
+        req = "required" if p["required"] else "optional"
         t = p.get("type") or "string"
         if p.get("enum"):
             t += " (one of: " + ", ".join(str(e) for e in p["enum"]) + ")"
@@ -629,331 +308,36 @@ def params_comment(lang, op):
         if desc: line += f": {desc}"
         lines.append(line)
     if op.get("body_model"):
-        lines.append(f"{pre}  - body: {op['body_model']} (required) -- request body object")
+        lines.append(f"{pre}  - body: {op['body_model']} (required): request body object")
     if not any_p and not op.get("body_model"):
-        lines.append(f"{pre}  (no parameters; the API key is set on the client)")
+        lines.append(f"{pre}  (no parameters" + ("; no API key required)" if op.get("public")
+                                                 else "; the API key is set on the client)"))
     return "\n".join(lines)
 
 def _pascal(op_id):
     return "".join(w.capitalize() for w in split_words(op_id)) or "Example"
 
-def _full_args(op):
-    """Every argument in the SDK method's positional order:
-       apiKey, required query/path params, requestBody (if any), then optionals.
-       Value is None for optional params (rendered as null/None)."""
-    required = []
-    optional = []
-    for p in op["params"]:
-        if p["name"] == "apiKey":
-            required.append(("apiKey", "YOUR_API_KEY", p)); continue
-        if p["required"] or p["name"] in ("domainName", "ipAddress", "asn"):
-            required.append((p["name"], param_value(p), p))
-        elif p["name"] in ("date", "after", "before") or p.get("format") == "date":
-            # date params are commonly the key input for download endpoints;
-            # always show them even when technically optional.
-            required.append((p["name"], param_value(p), p))
-        elif p["name"].lower() in ("whois", "exact") and p["type"] == "boolean":
-            # show these flags with their chosen defaults (whois=false, exact=true)
-            required.append((p["name"], param_value(p), p))
-        else:
-            optional.append((p["name"], None, p))
-    body = []
-    if op.get("body_model"):
-        # generator puts the body param right after apiKey & path/query requireds
-        bm = op["body_model"]
-        bname = bm[0].lower() + bm[1:]  # e.g. BulkWhoisRequest -> bulkWhoisRequest
-        body = [("__BODY__:" + bname, bm, {"in": "body", "required": True, "name": bname})]
-    return required + body + optional
 
-def _body_ctor(lang, model):
-    """A minimal request-body construction line, or (None,None)."""
-    if not model: return None
-    if lang=="python":      return f"{model}()"
-    if lang in ("javascript","typescript"): return "{}"
-    if lang=="java":        return f"new {model}()"
-    if lang=="kotlin":      return f"{model}()"
-    if lang=="csharp":      return f"new {model}()"
-    if lang=="ruby":        return f"WhoisFreaks::{model}.new"
-    if lang=="go":          return f"*wf.New{model}()"
-    if lang=="php":         return f"new WhoisFreaks\\Model\\{model}()"
-    if lang=="swift":       return f"{model}()"
-    return None
+# ---- per-language renderers: scripts/docs_lang/<lang>.py ---------------------
+# Each module defines example(op, ctx) and getting_started(ctx); ctx carries the
+# shared helpers below.
+import importlib, types
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+CTX = types.SimpleNamespace(
+    OWNER=OWNER, SDK_VERSION=SDK_VERSION, LANGS=LANGS, spec=spec, deref=deref,
+    install_snippet=install_snippet, method_name=method_name, api_class=api_class,
+    go_accessor=go_accessor, py_snake=py_snake, py_module=py_module,
+    params_comment=params_comment, pascal=_pascal, split_words=split_words,
+    example_value=example_value, body_example=body_example, download_name=download_name)
+
+def _lang_module(lang):
+    return importlib.import_module(f"docs_lang.{lang}")
 
 def runnable_example(lang, op):
-    m   = method_name(op["op_id"], lang)
-    cls = api_class(op["tag"], lang)
-    P   = _pascal(op["op_id"])
-    args = _full_args(op)                     # ordered (name, value, param)
-    bm  = op.get("body_model")
+    return _lang_module(lang).example(op, CTX)
 
-    def is_body(k): return k.startswith("__BODY__:")
-    def lit(v, p=None):
-        if v is None: return "null"
-        if p is not None:
-            code, _ = lang_literal(lang, v, p)
-            return code
-        return f'"{v}"'
-    # track whether any date/yesterday expr is used (for imports)
-    uses_yesterday = any(v in ("__YESTERDAY__","__TODAY__") for _, v, _ in args)
-    pcmt_all = params_comment(lang, op)
-
-    if lang == "python":
-        mod = py_module(cls)
-        parts=[]; pre=""; needs_date=False
-        for k,v,p in args:
-            if is_body(k):
-                var = py_snake(bm)
-                pre = f"{var} = {bm}()  # populate fields as needed\n"
-                parts.append(f"{py_snake(k.split(':')[1])}={var}")
-            elif v is None:
-                continue                       # optional -> omit (has default)
-            else:
-                lit_v, _isc = lang_literal("python", v, p)
-                if v in ("__YESTERDAY__","__TODAY__"): needs_date=True
-                parts.append(f"{py_param(k)}={lit_v}")
-        date_imp = (YESTERDAY_IMPORT["python"] + "\n") if needs_date else ""
-        pcmt = params_comment("python", op) + "\n"
-        imp = f"from whoisfreaks.models.{py_snake(bm)} import {bm}\n" if bm else ""
-        if op.get("is_binary"):
-            fname = (op["op_id"] or "download") + ".gz"
-            return (f'"""Runnable example: {op["summary"]} ({op["method"]} {op["path"]}).\n'
-                    f'Returns raw bytes (a compressed/binary file) -- write to disk, do not print."""\n'
-                    f"{date_imp}from whoisfreaks import Configuration, ApiClient\n"
-                    f"from whoisfreaks.api.{mod} import {cls}\n\n"
-                    f"{pcmt}"
-                    f"config = Configuration()\n"
-                    f'config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once\n'
-                    f"api = {cls}(ApiClient(config))\n\n"
-                    f"data = api.{m}({', '.join(parts)})   # bytes\n"
-                    f'with open("{fname}", "wb") as f:\n'
-                    f"    f.write(data)\n"
-                    f'print(f"saved {{len(data)}} bytes to {fname}")\n')
-        return (f'"""Runnable example: {op["summary"]} ({op["method"]} {op["path"]})."""\n'
-                f"{date_imp}from whoisfreaks import Configuration, ApiClient\n"
-                f"from whoisfreaks.api.{mod} import {cls}\n{imp}\n"
-                f"{pcmt}"
-                f"config = Configuration()\n"
-                f'config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once\n'
-                f"api = {cls}(ApiClient(config))\n\n"
-                f"{pre}result = api.{m}({', '.join(parts)})\n"
-                f"print(result)\n")
-
-    if lang in ("javascript","typescript"):
-        obj=[]
-        for k,v,p in args:
-            if is_body(k):
-                obj.append(f"{k.split(':')[1]}: {{}}")
-            elif v is None:
-                obj.append(f"{k}: undefined")
-            else:
-                cv,_=lang_literal(lang,v,p); obj.append(f'{k}: {cv}')
-        objs = ", ".join(obj)
-        if lang == "typescript":
-            # TS package is ESM: named imports work. apiKey set once in Configuration.
-            return (f'// Runnable example: {op["summary"]} ({op["method"]} {op["path"]})\n'
-                f"{pcmt_all}\n"
-                    f'import {{ Configuration, {cls} }} from "whoisfreaks";\n\n'
-                    f'const config = new Configuration({{ apiKey: "YOUR_API_KEY" }});  // set once\n'
-                    f'const api = new {cls}(config);\n\n'
-                    f"async function main() {{\n"
-                    f"  const result = await api.{m}({{ {objs} }});\n"
-                    f"  console.log(result);\n"
-                    f"}}\nmain().catch(console.error);\n")
-        # JavaScript package (whoisfreaks-js) uses the `javascript` generator:
-        # no Configuration class; apiKey is passed positionally; methods return
-        # Promises. Config/auth lives on ApiClient (ApiClient.instance by default).
-        # Build positional args: apiKey, required params, then an opts object for optionals.
-        pos = []
-        opts = []
-        for k, v, p in args:
-            if is_body(k):
-                pos.append("{}")
-            elif v is None:
-                cv = "undefined"
-                opts.append(f"{k}: undefined")
-            else:
-                cv, _ = lang_literal("javascript", v, p)
-                # first positional args are the required ones (apiKey/domain/etc.)
-                if p.get("required") or k in ("apiKey", "domainName", "ipAddress", "asn") \
-                   or k in ("date","after","before") or (p.get("type")=="boolean" and k.lower() in ("whois","exact")):
-                    pos.append(cv)
-                else:
-                    opts.append(f"{k}: {cv}")
-        pos_str = ", ".join(pos)
-        real_opts = [o for o in opts if not o.endswith(": undefined")]
-        opts_str = (", { " + ", ".join(real_opts) + " }") if real_opts else ""
-        return (f'// Runnable example: {op["summary"]} ({op["method"]} {op["path"]})\n'
-                f"{pcmt_all}\n"
-                f'// whoisfreaks-js is CommonJS; apiKey is set once on the ApiClient\n'
-                f'import pkg from "whoisfreaks-js";\n'
-                f"const {{ ApiClient, {cls} }} = pkg;\n"
-                f'// or:  const {{ ApiClient, {cls} }} = require("whoisfreaks-js");\n\n'
-                f"const client = ApiClient.instance;\n"
-                f'client.authentications["ApiKeyAuth"].apiKey = "YOUR_API_KEY";  // set once\n'
-                f"const api = new {cls}(client);\n\n"
-                f"api.{m}({pos_str}{opts_str})\n"
-                f"  .then(data => console.log(data))\n"
-                f"  .catch(err => console.error(err));\n")
-
-    if lang == "java":
-        pos=", ".join(f"new {bm}()" if is_body(k) else lit(v,p) for k,v,p in args)
-        imp = f"import com.whoisfreaks.client.model.{bm};\n" if bm else ""
-        return (f"// Runnable example: {op['summary']} ({op['method']} {op['path']})\n"
-                f"{pcmt_all}\n"
-                f"import com.whoisfreaks.client.ApiClient;\n"
-                f"import com.whoisfreaks.client.Configuration;\n"
-                f"import com.whoisfreaks.client.auth.ApiKeyAuth;\n"
-                f"import com.whoisfreaks.client.api.{cls};\n{imp}\n"
-                f"public class {P} {{\n"
-                f"    public static void main(String[] args) throws Exception {{\n"
-                f"        ApiClient client = Configuration.getDefaultApiClient();\n"
-                f'        client.setBasePath("https://api.whoisfreaks.com");\n'
-                f'        ((ApiKeyAuth) client.getAuthentication("ApiKeyAuth")).setApiKey("YOUR_API_KEY");  // set once\n'
-                f"        {cls} api = new {cls}(client);\n"
-                f"        var result = api.{m}({pos});\n"
-                f"        System.out.println(result);\n"
-                f"    }}\n}}\n")
-
-    if lang == "kotlin":
-        pos=", ".join(f"{bm}()" if is_body(k) else lit(v,p) for k,v,p in args)
-        imp = f"import com.whoisfreaks.client.models.{bm}\n" if bm else ""
-        return (f"// Runnable example: {op['summary']} ({op['method']} {op['path']})\n"
-                f"{pcmt_all}\n"
-                f"import com.whoisfreaks.client.apis.{cls}\n"
-                f"import com.whoisfreaks.client.infrastructure.ApiClient\n{imp}\n"
-                f"fun main() {{\n"
-                f'    ApiClient.apiKey["apiKey"] = "YOUR_API_KEY"  // set once\n'
-                f"    val api = {cls}()\n"
-                f"    val result = api.{m}({pos})\n"
-                f"    println(result)\n"
-                f"}}\n")
-
-    if lang == "csharp":
-        pos=", ".join(f"new {bm}()" if is_body(k) else lit(v,p) for k,v,p in args)
-        imp = "using WhoisFreaks.Model;\n" if bm else ""
-        return (f"// Runnable example: {op['summary']} ({op['method']} {op['path']})\n"
-                f"{pcmt_all}\n"
-                f"using System;\nusing WhoisFreaks.Api;\nusing WhoisFreaks.Client;\n{imp}\n"
-                f"class {P} {{\n"
-                f"    static void Main() {{\n"
-                f'        var config = new Configuration {{ BasePath = "https://api.whoisfreaks.com" }};\n'
-                f'        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once\n'
-                f"        var api = new {cls}(config);\n"
-                f"        var result = api.{m}({pos});\n"
-                f"        Console.WriteLine(result);\n"
-                f"    }}\n}}\n")
-
-    if lang == "ruby":
-        pos=[]; opts=[]
-        for k,v,p in args:
-            if is_body(k):
-                pos.append(f"WhoisFreaks::{bm}.new")
-            elif v is None:
-                continue
-            else:
-                cv,_=lang_literal('ruby',v,p)
-                # required params are positional; optional ones go in the opts hash
-                if p.get("required") or k in ("apiKey","domainName","ipAddress","asn") \
-                   or k in ("date","after","before") or (p.get("type")=="boolean" and k.lower() in ("whois","exact")):
-                    pos.append(cv)
-                else:
-                    opts.append(f"{py_snake(k)}: {cv}")
-        call = ", ".join(pos)
-        if opts:
-            call += ", { " + ", ".join(opts) + " }"
-        return (f"# Runnable example: {op['summary']} ({op['method']} {op['path']})\n"
-                f"{pcmt_all}\n"
-                + ("require 'date'\n" if uses_yesterday else "")
-                + f"require 'whoisfreaks'\n\n"
-                f"WhoisFreaks.configure do |config|\n"
-                f'  config.api_key["apiKey"] = "YOUR_API_KEY"   # set once\n'
-                f"end\n\n"
-                f"api = WhoisFreaks::{cls}.new\n"
-                f"result = api.{m}({call})\n"
-                f"puts result\n")
-
-    if lang == "go":
-        builder=""
-        for k,v,p in args:
-            if k=="apiKey": continue
-            if is_body(k):
-                builder+=f".{k.split(':')[1][0].upper()+k.split(':')[1][1:]}(*wf.New{bm}())"
-            elif v is None:
-                continue
-            else:
-                cv,_=lang_literal("go",v,p); builder+=f'.{k[0].upper()+k[1:]}({cv})'
-        _time_imp = '    "time"\n' if uses_yesterday else ''
-        call = (f'client.{go_accessor(op["tag"])}.{m}(ctx)'
-                f'{builder}.Execute()')
-        ctx_setup = ('    // apiKey is set once via the request context\n'
-                     '    ctx := context.WithValue(context.Background(), wf.ContextAPIKeys,\n'
-                     '        map[string]wf.APIKey{"ApiKeyAuth": {Key: "YOUR_API_KEY"}})\n')
-        if op.get("is_binary"):
-            fname = (op["op_id"] or "download") + ".gz"
-            return (f"// Runnable example: {op['summary']} ({op['method']} {op['path']})\n"
-                    f"{pcmt_all}\n"
-                    f"package main\n\n"
-                    f'import (\n    "context"\n    "fmt"\n    "os"\n{_time_imp}    wf "github.com/{OWNER}/whoisfreaks-go"\n)\n\n'
-                    f"func main() {{\n"
-                    f"    cfg := wf.NewConfiguration()\n"
-                    f"    client := wf.NewAPIClient(cfg)\n"
-                    f"{ctx_setup}"
-                    f"    // returns raw bytes (compressed/binary file) -- write to disk\n"
-                    f"    data, _, err := {call}\n"
-                    f"    if err != nil {{ panic(err) }}\n"
-                    f'    if err := os.WriteFile("{fname}", data, 0644); err != nil {{ panic(err) }}\n'
-                    f'    fmt.Printf("saved %d bytes to {fname}\\n", len(data))\n'
-                    f"}}\n")
-        return (f"// Runnable example: {op['summary']} ({op['method']} {op['path']})\n"
-                f"{pcmt_all}\n"
-                f"package main\n\n"
-                f'import (\n    "context"\n    "encoding/json"\n    "fmt"\n{_time_imp}    wf "github.com/{OWNER}/whoisfreaks-go"\n)\n\n'
-                f"func main() {{\n"
-                f"    cfg := wf.NewConfiguration()\n"
-                f"    client := wf.NewAPIClient(cfg)\n"
-                f"{ctx_setup}"
-                f"    result, _, err := {call}\n"
-                f"    if err != nil {{ panic(err) }}\n"
-                f'    b, _ := json.MarshalIndent(result, "", "  ")\n'
-                f"    fmt.Println(string(b))\n"
-                f"}}\n")
-
-    if lang == "php":
-        pos=", ".join(f"new WhoisFreaks\\Model\\{bm}()" if is_body(k) else lit(v,p) for k,v,p in args)
-        return (f"<?php\n// Runnable example: {op['summary']} ({op['method']} {op['path']})\n"
-                f"{pcmt_all}\n"
-                f"require 'vendor/autoload.php';\n\n"
-                f"$config = WhoisFreaks\\Configuration::getDefaultConfiguration()\n"
-                f'    ->setApiKey("apiKey", "YOUR_API_KEY");  // set once\n'
-                f"$api = new WhoisFreaks\\Api\\{cls}(new GuzzleHttp\\Client(), $config);\n"
-                f"$result = $api->{m}({pos});\n"
-                f"print_r($result);\n")
-
-    if lang == "swift":
-        parts=[]
-        for k,v,p in args:
-            if is_body(k):
-                parts.append(f"{k.split(':')[1]}: {bm}()")
-            elif v is None:
-                parts.append(f"{k}: nil")          # Swift uses nil, not null
-            else:
-                parts.append(f"{k}: {lit(v,p)}")
-        found_imp = "import Foundation\n" if uses_yesterday else ""
-        # The Swift SDK uses async/await (async throws). The apiKey (query security
-        # scheme) is configured once on the WhoisFreaksAPI client.
-        return (f"// Runnable example: {op['summary']} ({op['method']} {op['path']})\n"
-                f"{pcmt_all}\n"
-                f"{found_imp}import WhoisFreaks\n\n"
-                f'// Set your API key once (applied to every request)\n'
-                f'WhoisFreaksAPI.apiKey = "YOUR_API_KEY"\n\n'
-                f"do {{\n"
-                f"    let result = try await {cls}.{m}({', '.join(parts)})\n"
-                f"    print(result)\n"
-                f"}} catch {{\n"
-                f"    print(error)\n"
-                f"}}\n")
-
-    return "// unsupported\n"
+def getting_started(lang):
+    return _lang_module(lang).getting_started(CTX)
 
 # unify: doc snippets use the same full-signature renderer as runnable files
 # (render_example forwards to runnable_example; see its definition above)
@@ -975,14 +359,30 @@ def w(path, text):
     p.write_text(text.rstrip() + "\n")
 
 def param_table(params):
-    rows = ["| Parameter | In | Required | Type | Description |",
-            "|-----------|----|----------|------|-------------|"]
+    if not params:
+        return "None. The API key is set once on the client."
+    rows = ["| Parameter | In | Required | Type | Default | Description |",
+            "|-----------|----|----------|------|---------|-------------|"]
     for p in params:
         allowed = f" (one of: {', '.join(map(str, p['enum']))})" if p["enum"] else ""
         req = "yes" if p["required"] else "no"
-        rows.append(f"| `{p['name']}` | {p['in']} | {req} | {p['type']} | "
+        typ = p["type"] + (f" ({p['format']})" if p.get("format") else "")
+        default = "" if p.get("default") is None else f"`{str(p['default']).lower() if isinstance(p['default'], bool) else p['default']}`"
+        rows.append(f"| `{p['name']}` | {p['in']} | {req} | {typ} | {default} | "
                     f"{(p['desc'] or '').replace('|','\\|')}{allowed} |")
     return "\n".join(rows)
+
+def body_table(op):
+    sch = op.get("body_schema") or {}
+    req = set(sch.get("required") or [])
+    rows = ["| Field | Type | Required | Description |", "|-------|------|----------|-------------|"]
+    for k, v in (sch.get("properties") or {}).items():
+        t = v.get("type", "any")
+        if t == "array":
+            t = f"array<{(v.get('items') or {}).get('type', 'any')}>"
+        note = f"Up to {v['maxItems']} items." if v.get("maxItems") else ""
+        rows.append(f"| `{k}` | {t} | {'yes' if k in req else 'no'} | {(v.get('description') or note).strip()} |")
+    return "\n".join(rows) + "\n\nExample: `" + json.dumps(body_example(op)) + "`"
 
 TOTAL_OPS = sum(len(v) for v in OPS.values())
 INFO = spec["info"]
@@ -998,7 +398,7 @@ SECTIONS = [
       "Subdomains", "IP Reputation", "Domain Reputation", "ASN WHOIS", "IP WHOIS"]),
     ("Databases",
      "Bulk data feeds and downloadable database snapshots for large-scale "
-     "processing — newly registered, expiring/dropped, and full WHOIS/DNS/IP datasets.",
+     "processing: newly registered, expiring/dropped, and full WHOIS/DNS/IP datasets.",
      ["Databases - Newly Registered", "Databases - Expiring & Dropped",
       "Databases - WHOIS", "Databases - DNS", "Databases - Subdomains",
       "Databases - IP Geolocation", "Databases - ASN WHOIS",
@@ -1035,7 +435,8 @@ def response_fields_table(op):
     for k, v in schema["properties"].items():
         desc = (v.get("description") or "").replace("\n", " ").strip()
         rows.append(f"| `{k}` | {type_of(v)} | {desc} |")
-    out = [f"**Response** (`{name}`)", "", "\n".join(rows), ""]
+    label = f"array of `{name}`" if op.get("response_is_array") else f"`{name}`"
+    out = [f"**Response** ({label})", "", "\n".join(rows), ""]
     # expand nested object schemas one level (unique refs referenced above)
     nested = []
     seen = set()
@@ -1065,15 +466,20 @@ for tag, ops in OPS.items():
     body += [f"*Section: {section_of(tag)}*", ""]
     if TAG_DESC := next((t.get("description") for t in spec.get("tags", []) if t.get("name") == tag), None):
         body += [TAG_DESC, ""]
-    body += [f"{len(ops)} endpoint(s). All requests require your API key — see "
-             f"[Authentication](../authentication.md).", ""]
+    body += [f"{len(ops)} endpoint{'s' if len(ops) != 1 else ''}. Requests need your API key "
+             f"unless noted otherwise. See [Authentication](../authentication.md).", ""]
     for op in ops:
         anchor = op["op_id"] or op["path"]
         body += [f"## {op['summary'] or op['op_id']}", ""]
-        body += [f"`{op['method']} {op['path']}`", ""]
+        body += [f"`{op['method']} {op['server']}{op['path']}`", ""]
+        if op["public"]:
+            body += ["Public endpoint: no API key required.", ""]
         if op["description"]:
             body += [op["description"], ""]
         body += ["**Parameters**", "", param_table(op["params"]), ""]
+        if op.get("body_schema"):
+            body += [f"**Request body** (`application/json`, model `{op['body_model']}`)", "",
+                     body_table(op), ""]
         # response fields table (from the spec response schema), when not a binary download
         if not op.get("is_binary"):
             rt = response_fields_table(op)
@@ -1099,10 +505,12 @@ for sec_name, sec_desc, sec_tags in SECTIONS:
         continue
     total = sum(len(OPS[t]) for t in present)
     cat += [f"## {sec_name}", "", sec_desc, "",
-            f"{total} endpoints across {len(present)} categories "
-            f"— see the [{sec_name} overview]({slug(sec_name)}.md).", ""]
+            f"{total} endpoint{'s' if total != 1 else ''} across {len(present)} "
+            f"categor{'ies' if len(present) != 1 else 'y'}. See the "
+            f"[{sec_name} overview]({slug(sec_name)}.md).", ""]
     for t in present:
-        cat.append(f"- [{t}]({slug(t)}.md) — {len(OPS[t])} endpoint(s)")
+        n = len(OPS[t])
+        cat.append(f"- [{t}]({slug(t)}.md): {n} endpoint{'s' if n != 1 else ''}")
     cat.append("")
 cat += ["## Full endpoint list", "",
         "| Section | Category | Method | Path | Operation |",
@@ -1120,9 +528,9 @@ for sec_name, sec_desc, sec_tags in SECTIONS:
         continue
     total = sum(len(OPS[t]) for t in present)
     sb = [f"# {sec_name}", "", sec_desc, "",
-          f"**{total} endpoints** across **{len(present)} categories**. "
-          f"All requests require your API key — see "
-          f"[Authentication](../authentication.md).", "",
+          f"**{total} endpoint{'s' if total != 1 else ''}** across **{len(present)} "
+          f"categor{'ies' if len(present) != 1 else 'y'}**. Requests need your API key "
+          f"unless noted otherwise. See [Authentication](../authentication.md).", "",
           "## Categories", ""]
     for t in present:
         tag_desc = next((td.get("description") for td in spec.get("tags", [])
@@ -1131,9 +539,10 @@ for sec_name, sec_desc, sec_tags in SECTIONS:
         sb.append("")
         if tag_desc:
             sb += [tag_desc, ""]
-        sb += [f"{len(OPS[t])} endpoint(s):", ""]
+        n = len(OPS[t])
+        sb += [f"{n} endpoint{'s' if n != 1 else ''}:", ""]
         for op in OPS[t]:
-            sb.append(f"- **{op['summary'] or op['op_id']}** — "
+            sb.append(f"- **{op['summary'] or op['op_id']}**: "
                       f"`{op['method']} {op['path']}`")
         sb.append("")
     w(f"docs/endpoints/{slug(sec_name)}.md", "\n".join(sb))
@@ -1141,9 +550,10 @@ for sec_name, sec_desc, sec_tags in SECTIONS:
 # ---------- authentication.md ------------------------------------------------
 auth = f"""# Authentication
 
-Every WhoisFreaks API request requires an **API key**, passed as the `apiKey`
-query parameter. Each SDK exposes a configuration hook so you set the key once
-and it is attached to every request automatically.
+Every WhoisFreaks API request needs an **API key**, passed as the `apiKey`
+query parameter. The one exception is the public database file status check
+(`GET /v3.4/status`). Each SDK exposes a configuration hook so you set the key
+once and it is attached to every request automatically.
 
 ## Get an API key
 
@@ -1153,15 +563,17 @@ In short:
 
 1. Sign in at <https://billing.whoisfreaks.com>.
 2. Copy your API key from the dashboard.
-3. Keep it secret — do **not** commit it to source control. Prefer an
-   environment variable (e.g. `WHOISFREAKS_API_KEY`).
+3. Keep it secret. Do **not** commit it to source control; the examples read it
+   from the `WHOISFREAKS_API_KEY` environment variable.
 
 ## Base URLs
 
 | Purpose | Base URL |
 |---------|----------|
-| Live API lookups | `{spec['servers'][0]['url']}` |
-| Database file downloads | `{spec['servers'][1]['url']}` |
+| Live lookups, bulk lookups and account | `{spec['servers'][0]['url']}` |
+| Database downloads, threat feeds and database file status | `{spec['servers'][1]['url']}` |
+
+The SDKs pick the right host for each endpoint; every endpoint page shows its full URL.
 
 ## Setting the key per language
 
@@ -1176,7 +588,7 @@ w("docs/authentication.md", "\n".join(auth))
 # ---------- SEO metadata + build-from-source per language --------------------
 def _about(lang):
     label = LANGS[lang]["label"]
-    return (f"The official **WhoisFreaks {label} SDK** — a complete client for "
+    return (f"The official **WhoisFreaks {label} SDK**: a complete client for "
             f"WHOIS, DNS, SSL, domain availability, subdomain, IP geolocation, IP "
             f"reputation, ASN, typosquatting, and domain reputation lookups, plus "
             f"bulk database downloads. Query real-time and historical domain data, "
@@ -1240,8 +652,8 @@ for lang in LANG_ORDER:
             "## Install", "", f"```{fence_i}", inst, "```", "",
             "## Build from Source", "",
             "Prefer to build the SDK yourself instead of installing from "
-            f"{m['registry']}? Clone the monorepo and build the {m['label']} "
-            "package locally:", ""]
+            f"{m['registry']}? Clone the {m['label']} SDK repository and build it "
+            "locally:", ""]
     body += build_from_source(lang)
     body += ["",
             "## Getting Started", "",
@@ -1284,24 +696,24 @@ for _sn, _sd, _st in SECTIONS:
         continue
     _tot = sum(len(OPS[t]) for t in _present)
     _cats = ", ".join(f"[{t}](docs/endpoints/{slug(t)}.md)" for t in _present)
-    _sr.append(f"### [{_sn}](docs/endpoints/{slug(_sn)}.md) — {_tot} endpoints\n\n{_sd}\n\n{_cats}\n")
+    _sr.append(f"### [{_sn}](docs/endpoints/{slug(_sn)}.md) ({_tot} endpoints)\n\n{_sd}\n\n{_cats}\n")
 section_rows = "\n".join(_sr)
 
 readme = f"""# WhoisFreaks SDK Documentation
 
-Official documentation for the **WhoisFreaks** SDKs — one API, {len(LANGS)}
+Official documentation for the **WhoisFreaks** SDKs: one API, {len(LANGS)}
 languages, {TOTAL_OPS} endpoints. Every SDK is generated from the same
-[OpenAPI specification](https://whoisfreaks.com/documentation) and published to
+[OpenAPI specification](spec/whoisfreaks-openapi.yaml) and published to
 its language's standard registry.
 
-> {DESC1}
+> {DESC1.replace(" \u2014 ", ": ")}
 
 ## Contents
 
-- [Authentication](docs/authentication.md) — get and configure your API key
-- [Language guides](#language-guides) — install + usage for each SDK
-- [Endpoint reference](docs/endpoints/README.md) — all {TOTAL_OPS} endpoints, grouped by category
-- [Runnable examples](examples/README.md) — copy-paste, ready-to-run example for every endpoint in every language
+- [Authentication](docs/authentication.md): get and configure your API key
+- [Language guides](#language-guides): install + usage for each SDK
+- [Endpoint reference](docs/endpoints/README.md): all {TOTAL_OPS} endpoints, grouped by category
+- [Runnable examples](examples/README.md): copy-paste, ready-to-run example for every endpoint in every language
 
 ## Language guides
 
@@ -1319,45 +731,46 @@ pip install {LANGS['python']['pkg']}
 ```
 
 ```python
+import os
 import whoisfreaks
-from whoisfreaks import Configuration, ApiClient
 
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"
-client = ApiClient(config)
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]
 
-result = client.{method_name(first_op['op_id'], 'python')}(domainName="example.com")
-print(result)
+with whoisfreaks.ApiClient(config) as client:
+    record = whoisfreaks.WHOISApi(client).whois_live("example.com")
+    print(record.domain_registrar.registrar_name, record.expiry_date)
 ```
 
 The equivalent for every other language is in its [language guide](#language-guides).
 
 ## Endpoint sections
 
-The API is organized into three sections. See the [full endpoint reference](docs/endpoints/README.md) for every operation with parameters, response fields, and per-language examples.
+The API is organized into three sections. See the [full endpoint reference](docs/endpoints/README.md) for every operation with its URL, parameters, response fields and Python, TypeScript and Go examples. The [language guides](#language-guides) show every operation in all {len(LANGS)} languages.
 
 {section_rows}
 
 ## Authentication at a glance
 
-All requests require an `apiKey` query parameter. Get a key at
-<https://billing.whoisfreaks.com>, then configure it once via each SDK's
-configuration object — see [Authentication](docs/authentication.md).
+Every request except the public database file status check needs an `apiKey`
+query parameter. Get a key at <https://billing.whoisfreaks.com>, then configure it
+once via each SDK's configuration object. See [Authentication](docs/authentication.md).
 
 Base URLs:
 
 | Purpose | URL |
 |---------|-----|
-| Live lookups | `{spec['servers'][0]['url']}` |
-| Database downloads | `{spec['servers'][1]['url']}` |
+| Live lookups, bulk lookups and account | `{spec['servers'][0]['url']}` |
+| Database downloads, threat feeds and database file status | `{spec['servers'][1]['url']}` |
 
 ## About these docs
 
 These docs are generated from the OpenAPI spec by `scripts/gen_docs.py`, so they
-stay in sync with the API. To regenerate after a spec change:
+stay in sync with the API. To regenerate after a spec change or an SDK release
+(`SDK_VERSION` sets the version in install lines):
 
 ```bash
-python3 scripts/gen_docs.py path/to/whoisfreaks-openapi.yaml .
+SDK_VERSION={SDK_VERSION} python3 scripts/gen_docs.py spec/whoisfreaks-openapi.yaml .
 ```
 
 ## Support
@@ -1368,7 +781,7 @@ python3 scripts/gen_docs.py path/to/whoisfreaks-openapi.yaml .
 
 ## License
 
-{spec.get('info', {}).get('license', {}).get('name', 'MIT')} — see individual SDK repositories for details.
+{spec.get('info', {}).get('license', {}).get('name', 'MIT')}. See individual SDK repositories for details.
 """
 w("README.md", readme)
 
@@ -1386,19 +799,28 @@ EXT = {"python":"py","javascript":"js","typescript":"ts","java":"java",
 
 def write_examples():
     count=0
+    written=set()
     for tag, ops in OPS.items():
         for op in ops:
             P=_pascal(op["op_id"])
             for lang in LANG_ORDER:
                 code=runnable_example(lang, op)
                 w(f"examples/{lang}/{P}.{EXT[lang]}", code)
+                written.add(f"examples/{lang}/{P}.{EXT[lang]}")
                 count+=1
+    # drop examples for operations that no longer exist in the spec
+    for lang in LANG_ORDER:
+        for f in (OUT / "examples" / lang).glob(f"*.{EXT[lang]}"):
+            if f"examples/{lang}/{f.name}" not in written:
+                f.unlink()
+                print(f"removed stale example {f.relative_to(OUT)}")
     # index
     idx=["# Runnable Examples","",
          f"Copy-paste, ready-to-run examples for **every one of the {TOTAL_OPS} "
          f"endpoints** in **all {len(LANGS)} languages** ({count} files).","",
-         "Set `YOUR_API_KEY` to your key (from <https://billing.whoisfreaks.com>) "
-         "and run. Layout: `examples/<language>/<Operation>.<ext>`.","",
+         "Set the `WHOISFREAKS_API_KEY` environment variable to your key (from "
+         "<https://billing.whoisfreaks.com>) and run. Layout: "
+         "`examples/<language>/<Operation>.<ext>`.","",
          "| Endpoint | Operation | Example file (per language) |",
          "|----------|-----------|------------------------------|"]
     for tag, ops in OPS.items():
@@ -1408,14 +830,14 @@ def write_examples():
             idx.append(f"| {op['summary']} | `{op['op_id']}` | {links} |")
     # per-language example index
     for lang in LANG_ORDER:
-        li=[f"# {LANGS[lang]['label']} — Runnable Examples","",
+        li=[f"# {LANGS[lang]['label']} Runnable Examples","",
             f"Install: see the [{LANGS[lang]['label']} guide](../../docs/languages/{lang}.md). "
-            f"Set `YOUR_API_KEY` and run any file below.",""]
+            f"Set the `WHOISFREAKS_API_KEY` environment variable and run any file below.",""]
         for tag, ops in OPS.items():
             li.append(f"## {tag}")
             for op in ops:
                 P=_pascal(op["op_id"])
-                li.append(f"- [`{P}.{EXT[lang]}`]({P}.{EXT[lang]}) — {op['summary']} (`{op['method']} {op['path']}`)")
+                li.append(f"- [`{P}.{EXT[lang]}`]({P}.{EXT[lang]}): {op['summary']} (`{op['method']} {op['path']}`)")
             li.append("")
         w(f"examples/{lang}/README.md", "\n".join(li))
     w("examples/README.md","\n".join(idx))

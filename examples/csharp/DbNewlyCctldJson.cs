@@ -1,17 +1,21 @@
 // Runnable example: Newly Registered ccTLD (JSON) (GET /v3.1/domains/newly/cctld)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbNewlyCctldJson (GET /v3.1/domains/newly/cctld):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 //   - tlds (string, optional)
 using System;
+using System.Collections.Generic;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
 
-class DbNewlyCctldJson {
-    static void Main() {
-        var config = new Configuration { BasePath = "https://api.whoisfreaks.com" };
-        config.AddApiKey("ApiKeyAuth", "YOUR_API_KEY");  // set once
-        var api = new DatabasesNewlyRegisteredApi(config);
-        var result = api.DbNewlyCctldJson(DateTime.UtcNow.AddDays(-1).ToString("yyyy-MM-dd"), null);
-        Console.WriteLine(result);
-    }
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DatabasesNewlyRegisteredApi(config);
+
+List<string> result = api.DbNewlyCctldJson(date: new DateOnly(2026, 10, 1));
+foreach (var item in result)
+{
+    Console.WriteLine(item);
 }

@@ -1,15 +1,22 @@
-"""Runnable example: Bulk WHOIS Lookup (POST /v2.0/bulkwhois/live)."""
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.whois_api import WHOISApi
-from whoisfreaks.models.bulk_whois_request import BulkWhoisRequest
+"""Bulk WHOIS Lookup: POST https://api.whoisfreaks.com/v2.0/bulkwhois/live
 
-# Parameters for bulkWhois (POST /v2.0/bulkwhois/live):
-#   - format (string (one of: json, xml), optional)
-#   - body: BulkWhoisRequest (required) -- request body object
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = WHOISApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python BulkWhois.py
+"""
+import json
+import os
 
-bulk_whois_request = BulkWhoisRequest()  # populate fields as needed
-result = api.bulk_whois(bulk_whois_request=bulk_whois_request)
-print(result)
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.WHOISApi(client)
+
+    # bulk_whois parameters:
+    #   bulk_whois_request (BulkWhoisRequest, required): request body
+    #   format (str, optional, keyword): one of json, xml; default "json"
+    body = whoisfreaks.BulkWhoisRequest(domain_names=["whoisfreaks.com", "jfreaks.com"])
+    result = api.bulk_whois(body)
+    print(json.dumps(result.to_dict(), indent=2))

@@ -1,17 +1,24 @@
-"""Runnable example: Dropped Domains (GET /v3.1/download/domainer/dropped).
-Returns raw bytes (a compressed/binary file) -- write to disk, do not print."""
-from datetime import date, timedelta
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.databases_expiring_dropped_api import DatabasesExpiringDroppedApi
+"""Dropped Domains: GET https://files.whoisfreaks.com/v3.1/download/domainer/dropped
 
-# Parameters for dbDropped (GET /v3.1/download/domainer/dropped):
-#   - whois (boolean, required)
-#   - date (string, optional): yyyy-MM-dd; omit for latest
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = DatabasesExpiringDroppedApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python DbDropped.py
+"""
+import os
+from datetime import date
 
-data = api.db_dropped(whois=False, var_date=str(date.today() - timedelta(days=1)))   # bytes
-with open("dbDropped.gz", "wb") as f:
-    f.write(data)
-print(f"saved {len(data)} bytes to dbDropped.gz")
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesExpiringDroppedApi(client)
+
+    # db_dropped parameters:
+    #   whois (bool, required)
+    #   var_date (datetime.date, optional, keyword): yyyy-MM-dd; omit for latest
+    data = api.db_dropped(True, var_date=date(2026, 10, 1))  # the file's raw bytes
+    path = "DbDropped.csv"
+    with open(path, "wb") as f:
+        f.write(data)
+    print(f"Saved {len(data)} bytes to {os.path.abspath(path)}")

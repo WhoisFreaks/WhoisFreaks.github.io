@@ -1,15 +1,28 @@
-# Runnable example: Newly Registered ccTLD (CSV) (GET /v3.1/download/domainer/cctld)
+# Newly Registered ccTLD (CSV)
+#
 # Parameters for dbNewlyCctld (GET /v3.1/download/domainer/cctld):
 #   - whois (boolean, required)
 #   - date (string, optional): yyyy-MM-dd; omit for latest
 #   - tlds (string, optional)
-require 'date'
-require 'whoisfreaks'
 
+require "date"
+require "fileutils"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
 WhoisFreaks.configure do |config|
-  config.api_key["apiKey"] = "YOUR_API_KEY"   # set once
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
 end
 
 api = WhoisFreaks::DatabasesNewlyRegisteredApi.new
-result = api.db_newly_cctld(false, (Date.today - 1).to_s)
-puts result
+
+begin
+  file = api.db_newly_cctld(true, date: Date.parse("2026-10-01"))
+  # The SDK returns a Tempfile that is deleted when the program exits: copy it.
+  save_as = "DbNewlyCctld.csv"
+  FileUtils.cp(file.path, save_as)
+  puts "Saved #{File.expand_path(save_as)} (#{File.size(save_as)} bytes)"
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end

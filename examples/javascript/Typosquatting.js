@@ -1,17 +1,23 @@
-// Runnable example: Typosquatting Lookup (GET /v3.0/domain/typos)
-// Parameters for typosquatting (GET /v3.0/domain/typos):
-//   - keyword (string, optional)
-//   - pattern (string, optional)
-//   - pageToken (string, optional)
-// whoisfreaks-js is CommonJS; apiKey is set once on the ApiClient
-import pkg from "whoisfreaks-js";
-const { ApiClient, TyposquattingApi } = pkg;
-// or:  const { ApiClient, TyposquattingApi } = require("whoisfreaks-js");
+// Typosquatting Lookup: GET https://api.whoisfreaks.com/v3.0/domain/typos
+// Run: WHOISFREAKS_API_KEY=your_api_key node Typosquatting.js
+const { ApiClient, TyposquattingApi } = require("whoisfreaks-js");
 
+// Set the API key once; the client adds it to every request.
 const client = ApiClient.instance;
-client.authentications["ApiKeyAuth"].apiKey = "YOUR_API_KEY";  // set once
+client.authentications["ApiKeyAuth"].apiKey = process.env.WHOISFREAKS_API_KEY;
 const api = new TyposquattingApi(client);
 
-api.typosquatting()
-  .then(data => console.log(data))
-  .catch(err => console.error(err));
+// typosquatting(opts)
+//   opts.keyword (string, optional)
+//   opts.pattern (string, optional)
+//   opts.pageToken (string, optional)
+async function main() {
+  const result = await api.typosquatting({ keyword: "whoisfreaks" });
+  console.log(JSON.stringify(result, null, 2));
+}
+
+main().catch((err) => {
+  // API errors carry the HTTP status and the parsed error body
+  console.error(err.status ? `HTTP ${err.status}: ${JSON.stringify(err.body)}` : err);
+  process.exitCode = 1;
+});

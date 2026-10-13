@@ -1,16 +1,22 @@
-// Runnable example: IP WHOIS Lookup (GET /v1.0/ip-whois)
-// Parameters for ipWhois (GET /v1.0/ip-whois):
-//   - ip (string, required)
-//   - format (string (one of: json, xml), optional)
-// whoisfreaks-js is CommonJS; apiKey is set once on the ApiClient
-import pkg from "whoisfreaks-js";
-const { ApiClient, IPWHOISApi } = pkg;
-// or:  const { ApiClient, IPWHOISApi } = require("whoisfreaks-js");
+// IP WHOIS Lookup: GET https://api.whoisfreaks.com/v1.0/ip-whois
+// Run: WHOISFREAKS_API_KEY=your_api_key node IpWhois.js
+const { ApiClient, IPWHOISApi } = require("whoisfreaks-js");
 
+// Set the API key once; the client adds it to every request.
 const client = ApiClient.instance;
-client.authentications["ApiKeyAuth"].apiKey = "YOUR_API_KEY";  // set once
+client.authentications["ApiKeyAuth"].apiKey = process.env.WHOISFREAKS_API_KEY;
 const api = new IPWHOISApi(client);
 
-api.ipWhois("8.8.8.8")
-  .then(data => console.log(data))
-  .catch(err => console.error(err));
+// ipWhois(ip, opts)
+//   ip (string, required)
+//   opts.format (string, optional): one of json, xml; default "json"
+async function main() {
+  const result = await api.ipWhois("8.8.8.8");
+  console.log(JSON.stringify(result, null, 2));
+}
+
+main().catch((err) => {
+  // API errors carry the HTTP status and the parsed error body
+  console.error(err.status ? `HTTP ${err.status}: ${JSON.stringify(err.body)}` : err);
+  process.exitCode = 1;
+});

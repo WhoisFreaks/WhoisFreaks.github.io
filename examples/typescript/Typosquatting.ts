@@ -1,15 +1,26 @@
-// Runnable example: Typosquatting Lookup (GET /v3.0/domain/typos)
-// Parameters for typosquatting (GET /v3.0/domain/typos):
-//   - keyword (string, optional)
-//   - pattern (string, optional)
-//   - pageToken (string, optional)
-import { Configuration, TyposquattingApi } from "whoisfreaks";
+// Typosquatting Lookup: GET https://api.whoisfreaks.com/v3.0/domain/typos
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx Typosquatting.ts
+import { Configuration, TyposquattingApi, ResponseError } from "whoisfreaks";
 
-const config = new Configuration({ apiKey: "YOUR_API_KEY" });  // set once
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new TyposquattingApi(config);
 
-async function main() {
-  const result = await api.typosquatting({ keyword: undefined, pattern: undefined, pageToken: undefined });
-  console.log(result);
+// typosquatting({ keyword?, pattern?, pageToken? })
+//   keyword (string, optional)
+//   pattern (string, optional)
+//   pageToken (string, optional)
+async function main(): Promise<void> {
+  const result = await api.typosquatting({ keyword: "whoisfreaks" });
+  console.log(JSON.stringify(result, null, 2));
 }
-main().catch(console.error);
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});

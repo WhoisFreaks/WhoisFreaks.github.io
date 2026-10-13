@@ -1,14 +1,22 @@
-"""Runnable example: Typosquatting Lookup (GET /v3.0/domain/typos)."""
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.typosquatting_api import TyposquattingApi
+"""Typosquatting Lookup: GET https://api.whoisfreaks.com/v3.0/domain/typos
 
-# Parameters for typosquatting (GET /v3.0/domain/typos):
-#   - keyword (string, optional)
-#   - pattern (string, optional)
-#   - pageToken (string, optional)
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = TyposquattingApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python Typosquatting.py
+"""
+import json
+import os
 
-result = api.typosquatting()
-print(result)
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.TyposquattingApi(client)
+
+    # typosquatting parameters:
+    #   keyword (str, optional, keyword)
+    #   pattern (str, optional, keyword)
+    #   page_token (str, optional, keyword)
+    result = api.typosquatting(keyword="whoisfreaks")
+    print(json.dumps(result.to_dict(), indent=2))

@@ -1,12 +1,18 @@
-"""Runnable example: Rotate API Key (GET /v1.0/api-key/rotate)."""
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.account_api import AccountApi
+"""Rotate API Key: GET https://api.whoisfreaks.com/v1.0/api-key/rotate
 
-# Parameters for rotateApiKey (GET /v1.0/api-key/rotate):
-#   (no parameters; the API key is set on the client)
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = AccountApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python RotateApiKey.py
+"""
+import os
 
-result = api.rotate_api_key()
-print(result)
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.AccountApi(client)
+
+    # rotate_api_key takes no parameters.
+    new_key = api.rotate_api_key()  # use this key from now on
+    print("New API key:", new_key)

@@ -2,7 +2,7 @@
 
 Copy-paste, ready-to-run examples for **every one of the 60 endpoints** in **all 10 languages** (600 files).
 
-Set `YOUR_API_KEY` to your key (from <https://billing.whoisfreaks.com>) and run. Layout: `examples/<language>/<Operation>.<ext>`.
+Set the `WHOISFREAKS_API_KEY` environment variable to your key (from <https://billing.whoisfreaks.com>) and run. Layout: `examples/<language>/<Operation>.<ext>`.
 
 | Endpoint | Operation | Example file (per language) |
 |----------|-----------|------------------------------|

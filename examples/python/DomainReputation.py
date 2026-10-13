@@ -1,13 +1,21 @@
-"""Runnable example: Domain Reputation Lookup (GET /v1/domain/security)."""
-from whoisfreaks import Configuration, ApiClient
-from whoisfreaks.api.domain_reputation_api import DomainReputationApi
+"""Domain Reputation Lookup: GET https://api.whoisfreaks.com/v1/domain/security
 
-# Parameters for domainReputation (GET /v1/domain/security):
-#   - domainName (string, required): The domain name to assess
-#   - format (string (one of: json, xml), optional)
-config = Configuration()
-config.api_key["ApiKeyAuth"] = "YOUR_API_KEY"   # set once
-api = DomainReputationApi(ApiClient(config))
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python DomainReputation.py
+"""
+import json
+import os
 
-result = api.domain_reputation(domain_name="example.com")
-print(result)
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DomainReputationApi(client)
+
+    # domain_reputation parameters:
+    #   domain_name (str, required): The domain name to assess
+    #   format (str, optional, keyword): one of json, xml; default "json"
+    result = api.domain_reputation("amazon.com")
+    print(json.dumps(result.to_dict(), indent=2))

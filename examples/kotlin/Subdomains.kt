@@ -1,4 +1,5 @@
 // Runnable example: Subdomains Lookup (GET /v1.0/subdomains)
+// Run it from the Getting Started project: gradle run -PmainClass=SubdomainsKt
 // Parameters for subdomains (GET /v1.0/subdomains):
 //   - domain (string, required)
 //   - after (string, optional)
@@ -10,8 +11,9 @@ import com.whoisfreaks.client.apis.SubdomainsApi
 import com.whoisfreaks.client.infrastructure.ApiClient
 
 fun main() {
-    ApiClient.apiKey["apiKey"] = "YOUR_API_KEY"  // set once
+    ApiClient.apiKey["apiKey"] = System.getenv("WHOISFREAKS_API_KEY")  // set once, sent with every call
     val api = SubdomainsApi()
-    val result = api.subdomains("example.com", "2000-01-01", java.time.LocalDate.now().toString(), null, null, null)
+
+    val result = api.subdomains("whoisfreaks.com", page = 1)
     println(result)
 }
