@@ -43,7 +43,7 @@ mkdir whoisfreaks-test && cd whoisfreaks-test
 ```ruby
 source "https://rubygems.org"
 
-gem "whoisfreaks", "~> 0.23.0"
+gem "whoisfreaks", "~> 0.23.2"
 ```
 
 3. Install it:

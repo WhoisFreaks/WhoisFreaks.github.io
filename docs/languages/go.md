@@ -34,7 +34,7 @@ You need Go 1.18 or later. Create a module and add the SDK:
 ```bash
 mkdir whoisfreaks-test && cd whoisfreaks-test
 go mod init whoisfreaks-test
-go get github.com/WhoisFreaks/whoisfreaks-go@v0.23.0
+go get github.com/WhoisFreaks/whoisfreaks-go@v0.23.2
 ```
 
 Create `main.go`:
