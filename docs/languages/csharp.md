@@ -34,7 +34,7 @@ You need the .NET 8 SDK or later. Create a console app and add the package:
 ```bash
 dotnet new console -o whoisfreaks-test
 cd whoisfreaks-test
-dotnet add package WhoisFreaks --version 0.23.0
+dotnet add package WhoisFreaks --version 0.23.2
 ```
 
 Replace `Program.cs` with:

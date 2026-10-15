@@ -95,7 +95,7 @@ stay in sync with the API. To regenerate after a spec change or an SDK release
 (`SDK_VERSION` sets the version in install lines):
 
 ```bash
-SDK_VERSION=0.23.0 python3 scripts/gen_docs.py spec/whoisfreaks-openapi.yaml .
+SDK_VERSION=0.23.2 python3 scripts/gen_docs.py spec/whoisfreaks-openapi.yaml .
 ```
 
 ## Support

@@ -15,7 +15,7 @@ The official **WhoisFreaks Java SDK**: a complete client for WHOIS, DNS, SSL, do
 <dependency>
   <groupId>com.whoisfreaks</groupId>
   <artifactId>whoisfreaks</artifactId>
-  <version>0.23.0</version>
+  <version>0.23.2</version>
 </dependency>
 ```
 
@@ -62,7 +62,7 @@ Create `pom.xml`. The `exec.mainClass` property picks the class that `mvn exec:j
     <dependency>
       <groupId>com.whoisfreaks</groupId>
       <artifactId>whoisfreaks</artifactId>
-      <version>0.23.0</version>
+      <version>0.23.2</version>
     </dependency>
   </dependencies>
 
