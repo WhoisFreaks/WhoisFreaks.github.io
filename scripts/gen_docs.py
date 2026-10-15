@@ -18,8 +18,9 @@ SPEC = sys.argv[1] if len(sys.argv) > 1 else "spec/whoisfreaks-openapi.yaml"
 OUT  = pathlib.Path(sys.argv[2] if len(sys.argv) > 2 else "docs-repo")
 # GitHub org that owns the SDK repos; Go module and Swift package paths use it.
 OWNER = os.environ.get("OWNER", "WhoisFreaks")
-# SDK release these docs describe; install lines pin to it.
-SDK_VERSION = os.environ.get("SDK_VERSION", "0.23.0")
+# SDK release these docs describe; install lines pin to it. CI regenerates
+# with this default, so bump it with each release.
+SDK_VERSION = os.environ.get("SDK_VERSION", "0.23.2")
 
 spec = yaml.safe_load(open(SPEC))
 comps = spec.get("components", {})
@@ -368,8 +369,10 @@ def param_table(params):
         req = "yes" if p["required"] else "no"
         typ = p["type"] + (f" ({p['format']})" if p.get("format") else "")
         default = "" if p.get("default") is None else f"`{str(p['default']).lower() if isinstance(p['default'], bool) else p['default']}`"
+        # Escaped outside the f-string: Python < 3.12 rejects backslashes there.
+        desc = (p['desc'] or '').replace('|', '\\|')
         rows.append(f"| `{p['name']}` | {p['in']} | {req} | {typ} | {default} | "
-                    f"{(p['desc'] or '').replace('|','\\|')}{allowed} |")
+                    f"{desc}{allowed} |")
     return "\n".join(rows)
 
 def body_table(op):
@@ -698,6 +701,8 @@ for _sn, _sd, _st in SECTIONS:
     _cats = ", ".join(f"[{t}](docs/endpoints/{slug(t)}.md)" for t in _present)
     _sr.append(f"### [{_sn}](docs/endpoints/{slug(_sn)}.md) ({_tot} endpoints)\n\n{_sd}\n\n{_cats}\n")
 section_rows = "\n".join(_sr)
+# Kept out of the f-string below: Python < 3.12 rejects backslashes there.
+desc1_plain = DESC1.replace(" — ", ": ")
 
 readme = f"""# WhoisFreaks SDK Documentation
 
@@ -706,7 +711,7 @@ languages, {TOTAL_OPS} endpoints. Every SDK is generated from the same
 [OpenAPI specification](spec/whoisfreaks-openapi.yaml) and published to
 its language's standard registry.
 
-> {DESC1.replace(" \u2014 ", ": ")}
+> {desc1_plain}
 
 ## Contents
 
