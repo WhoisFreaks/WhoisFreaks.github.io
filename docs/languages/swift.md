@@ -12,7 +12,7 @@ The official **WhoisFreaks Swift SDK**: a complete client for WHOIS, DNS, SSL, d
 ## Install
 
 ```swift
-.package(url: "https://github.com/WhoisFreaks/whoisfreaks-swift.git", from: "0.23.2")
+.package(url: "https://github.com/WhoisFreaks/whoisfreaks-swift.git", from: "0.24.0")
 ```
 
 ## Build from Source
@@ -48,7 +48,7 @@ let package = Package(
     name: "WhoisFreaksTest",
     platforms: [.macOS(.v10_15)],
     dependencies: [
-        .package(url: "https://github.com/WhoisFreaks/whoisfreaks-swift.git", from: "0.23.2"),
+        .package(url: "https://github.com/WhoisFreaks/whoisfreaks-swift.git", from: "0.24.0"),
     ],
     targets: [
         .executableTarget(

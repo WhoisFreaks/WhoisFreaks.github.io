@@ -12,7 +12,7 @@ The official **WhoisFreaks Kotlin SDK**: a complete client for WHOIS, DNS, SSL, 
 ## Install
 
 ```kotlin
-implementation("com.whoisfreaks:whoisfreaks-kotlin:0.23.2")
+implementation("com.whoisfreaks:whoisfreaks-kotlin:0.24.0")
 ```
 
 ## Build from Source
@@ -54,7 +54,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.whoisfreaks:whoisfreaks-kotlin:0.23.2")
+    implementation("com.whoisfreaks:whoisfreaks-kotlin:0.24.0")
 }
 
 application {
