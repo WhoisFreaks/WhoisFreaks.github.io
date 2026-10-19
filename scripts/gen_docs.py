@@ -20,7 +20,7 @@ OUT  = pathlib.Path(sys.argv[2] if len(sys.argv) > 2 else "docs-repo")
 OWNER = os.environ.get("OWNER", "WhoisFreaks")
 # SDK release these docs describe; install lines pin to it. CI regenerates
 # with this default, so bump it with each release.
-SDK_VERSION = os.environ.get("SDK_VERSION", "0.23.2")
+SDK_VERSION = os.environ.get("SDK_VERSION", "0.24.0")
 
 spec = yaml.safe_load(open(SPEC))
 comps = spec.get("components", {})
