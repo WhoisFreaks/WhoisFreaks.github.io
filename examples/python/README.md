@@ -12,6 +12,10 @@ Install: see the [Python guide](../../docs/languages/python.md). Set the `WHOISF
 - [`DnsLive.py`](DnsLive.py): Live DNS Lookup (`GET /v2.0/dns/live`)
 - [`DnsHistorical.py`](DnsHistorical.py): Historical DNS Lookup (`GET /v2.0/dns/historical`)
 - [`DnsReverse.py`](DnsReverse.py): Reverse DNS Lookup (`GET /v2.1/dns/reverse`)
+- [`DnsHistoricalV22.py`](DnsHistoricalV22.py): Historical DNS Lookup (v2.2) (`GET /v2.2/dns/historical`)
+- [`DnsHistoricalV23.py`](DnsHistoricalV23.py): Historical DNS Lookup (v2.3) (`GET /v2.3/dns/historical`)
+- [`DnsReverseV22.py`](DnsReverseV22.py): Reverse DNS Lookup (v2.2) (`GET /v2.2/dns/reverse`)
+- [`DnsReverseV23.py`](DnsReverseV23.py): Reverse DNS Lookup (v2.3) (`GET /v2.3/dns/reverse`)
 - [`DnsBulk.py`](DnsBulk.py): Bulk DNS Lookup (`POST /v2.0/dns/bulk/live`)
 
 ## Domain Availability
@@ -34,6 +38,8 @@ Install: see the [Python guide](../../docs/languages/python.md). Set the `WHOISF
 ## IP Reputation
 - [`IpReputation.py`](IpReputation.py): IP Reputation Lookup (`GET /v1.0/security`)
 - [`BulkIpReputation.py`](BulkIpReputation.py): Bulk IP Reputation (`POST /v1.0/security`)
+- [`IpReputationV2.py`](IpReputationV2.py): IP Reputation Lookup (v2.0) (`GET /v2.0/security`)
+- [`BulkIpReputationV2.py`](BulkIpReputationV2.py): Bulk IP Reputation (v2.0) (`POST /v2.0/security`)
 
 ## Domain Reputation
 - [`DomainReputation.py`](DomainReputation.py): Domain Reputation Lookup (`GET /v1/domain/security`)

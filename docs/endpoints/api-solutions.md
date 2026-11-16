@@ -2,7 +2,7 @@
 
 Real-time and on-demand lookup APIs. Query a single domain, IP, or ASN and get structured JSON (or XML) back immediately.
 
-**20 endpoints** across **11 categories**. Requests need your API key unless noted otherwise. See [Authentication](../authentication.md).
+**26 endpoints** across **11 categories**. Requests need your API key unless noted otherwise. See [Authentication](../authentication.md).
 
 ## Categories
 
@@ -21,11 +21,15 @@ WHOIS lookup APIs (live, historical, reverse, bulk)
 
 DNS lookup APIs (live, historical, reverse, bulk)
 
-4 endpoints:
+8 endpoints:
 
 - **Live DNS Lookup**: `GET /v2.0/dns/live`
 - **Historical DNS Lookup**: `GET /v2.0/dns/historical`
 - **Reverse DNS Lookup**: `GET /v2.1/dns/reverse`
+- **Historical DNS Lookup (v2.2)**: `GET /v2.2/dns/historical`
+- **Historical DNS Lookup (v2.3)**: `GET /v2.3/dns/historical`
+- **Reverse DNS Lookup (v2.2)**: `GET /v2.2/dns/reverse`
+- **Reverse DNS Lookup (v2.3)**: `GET /v2.3/dns/reverse`
 - **Bulk DNS Lookup**: `POST /v2.0/dns/bulk/live`
 
 ### [Domain Availability](domain-availability.md)
@@ -74,10 +78,12 @@ Subdomain enumeration
 
 IP threat intelligence
 
-2 endpoints:
+4 endpoints:
 
 - **IP Reputation Lookup**: `GET /v1.0/security`
 - **Bulk IP Reputation**: `POST /v1.0/security`
+- **IP Reputation Lookup (v2.0)**: `GET /v2.0/security`
+- **Bulk IP Reputation (v2.0)**: `POST /v2.0/security`
 
 ### [Domain Reputation](domain-reputation.md)
 

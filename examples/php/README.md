@@ -12,6 +12,10 @@ Install: see the [PHP guide](../../docs/languages/php.md). Set the `WHOISFREAKS_
 - [`DnsLive.php`](DnsLive.php): Live DNS Lookup (`GET /v2.0/dns/live`)
 - [`DnsHistorical.php`](DnsHistorical.php): Historical DNS Lookup (`GET /v2.0/dns/historical`)
 - [`DnsReverse.php`](DnsReverse.php): Reverse DNS Lookup (`GET /v2.1/dns/reverse`)
+- [`DnsHistoricalV22.php`](DnsHistoricalV22.php): Historical DNS Lookup (v2.2) (`GET /v2.2/dns/historical`)
+- [`DnsHistoricalV23.php`](DnsHistoricalV23.php): Historical DNS Lookup (v2.3) (`GET /v2.3/dns/historical`)
+- [`DnsReverseV22.php`](DnsReverseV22.php): Reverse DNS Lookup (v2.2) (`GET /v2.2/dns/reverse`)
+- [`DnsReverseV23.php`](DnsReverseV23.php): Reverse DNS Lookup (v2.3) (`GET /v2.3/dns/reverse`)
 - [`DnsBulk.php`](DnsBulk.php): Bulk DNS Lookup (`POST /v2.0/dns/bulk/live`)
 
 ## Domain Availability
@@ -34,6 +38,8 @@ Install: see the [PHP guide](../../docs/languages/php.md). Set the `WHOISFREAKS_
 ## IP Reputation
 - [`IpReputation.php`](IpReputation.php): IP Reputation Lookup (`GET /v1.0/security`)
 - [`BulkIpReputation.php`](BulkIpReputation.php): Bulk IP Reputation (`POST /v1.0/security`)
+- [`IpReputationV2.php`](IpReputationV2.php): IP Reputation Lookup (v2.0) (`GET /v2.0/security`)
+- [`BulkIpReputationV2.php`](BulkIpReputationV2.php): Bulk IP Reputation (v2.0) (`POST /v2.0/security`)
 
 ## Domain Reputation
 - [`DomainReputation.php`](DomainReputation.php): Domain Reputation Lookup (`GET /v1/domain/security`)

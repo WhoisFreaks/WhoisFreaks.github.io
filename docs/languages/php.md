@@ -104,7 +104,7 @@ try {
 
 ## Endpoints
 
-All 60 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
+All 66 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
 
 ### WHOIS
 
@@ -360,6 +360,164 @@ $api = new DNSApi(new Client(), $config);
 
 try {
     $result = $api->dnsReverse('8.8.8.8', 'a', true, 1);  // value, type, exact, page
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
+
+```
+
+#### Historical DNS Lookup (v2.2)
+
+`GET /v2.2/dns/historical`
+
+```php
+<?php
+// Historical DNS Lookup (v2.2)
+//
+// Parameters for dnsHistoricalV22 (GET /v2.2/dns/historical):
+//   - domainName (string, required)
+//   - type (string, required)
+//   - page (integer, optional)
+//   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+//   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+//   - format (string (one of: json, xml), optional)
+
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DNSApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DNSApi(new Client(), $config);
+
+try {
+    $result = $api->dnsHistoricalV22('whoisfreaks.com', 'A,MX,TXT', 1);  // domainName, type, page
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
+
+```
+
+#### Historical DNS Lookup (v2.3)
+
+`GET /v2.3/dns/historical`
+
+```php
+<?php
+// Historical DNS Lookup (v2.3)
+//
+// Parameters for dnsHistoricalV23 (GET /v2.3/dns/historical):
+//   - domainName (string, required)
+//   - type (string, required)
+//   - page (integer, optional)
+//   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+//   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+//   - format (string (one of: json, xml), optional)
+
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DNSApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DNSApi(new Client(), $config);
+
+try {
+    $result = $api->dnsHistoricalV23('whoisfreaks.com', 'A,MX,TXT', 1);  // domainName, type, page
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
+
+```
+
+#### Reverse DNS Lookup (v2.2)
+
+`GET /v2.2/dns/reverse`
+
+```php
+<?php
+// Reverse DNS Lookup (v2.2)
+//
+// Parameters for dnsReverseV22 (GET /v2.2/dns/reverse):
+//   - value (string, required): IP, CIDR, or record value
+//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
+//   - exact (boolean, optional): When false the value is matched as a substring, which is far slower than an exact match...
+//   - page (integer, optional)
+//   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+//   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+//   - format (string (one of: json, xml), optional)
+
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DNSApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DNSApi(new Client(), $config);
+
+try {
+    $result = $api->dnsReverseV22('8.8.8.8', 'a', true, 1);  // value, type, exact, page
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
+
+```
+
+#### Reverse DNS Lookup (v2.3)
+
+`GET /v2.3/dns/reverse`
+
+```php
+<?php
+// Reverse DNS Lookup (v2.3)
+//
+// Parameters for dnsReverseV23 (GET /v2.3/dns/reverse):
+//   - value (string, required): IP, CIDR, or record value
+//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
+//   - exact (boolean, optional): When false the value is matched as a substring, which is far slower than an exact match...
+//   - page (integer, optional)
+//   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+//   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+//   - format (string (one of: json, xml), optional)
+
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\DNSApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new DNSApi(new Client(), $config);
+
+try {
+    $result = $api->dnsReverseV23('8.8.8.8', 'a', true, 1);  // value, type, exact, page
     echo $result, PHP_EOL;  // models print as JSON
 } catch (ApiException $e) {
     fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
@@ -751,6 +909,81 @@ $request = new BulkGeolocationRequest([
 
 try {
     $results = $api->bulkIpReputation($request);
+    foreach ($results as $result) {
+        echo $result, PHP_EOL;  // models print as JSON
+    }
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
+
+```
+
+#### IP Reputation Lookup (v2.0)
+
+`GET /v2.0/security`
+
+```php
+<?php
+// IP Reputation Lookup (v2.0)
+//
+// Parameters for ipReputationV2 (GET /v2.0/security):
+//   - ip (string, required)
+
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\IPReputationApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new IPReputationApi(new Client(), $config);
+
+try {
+    $result = $api->ipReputationV2('8.8.8.8');
+    echo $result, PHP_EOL;  // models print as JSON
+} catch (ApiException $e) {
+    fwrite(STDERR, 'Request failed: HTTP ' . $e->getCode() . ' ' . $e->getResponseBody() . PHP_EOL);
+    exit(1);
+}
+
+```
+
+#### Bulk IP Reputation (v2.0)
+
+`POST /v2.0/security`
+
+```php
+<?php
+// Bulk IP Reputation (v2.0)
+//
+// Parameters for bulkIpReputationV2 (POST /v2.0/security):
+//   - body: BulkGeolocationRequest (required): request body object
+
+require __DIR__ . '/vendor/autoload.php';
+
+use GuzzleHttp\Client;
+use WhoisFreaks\Api\IPReputationApi;
+use WhoisFreaks\ApiException;
+use WhoisFreaks\Configuration;
+use WhoisFreaks\Model\BulkGeolocationRequest;
+
+// Read the API key from the environment and set it once.
+$config = Configuration::getDefaultConfiguration()
+    ->setApiKey('apiKey', getenv('WHOISFREAKS_API_KEY'));
+
+$api = new IPReputationApi(new Client(), $config);
+
+$request = new BulkGeolocationRequest([
+    'ips' => ['1.1.1.1', '2.2.2.2', '8.8.8.8'],
+]);
+
+try {
+    $results = $api->bulkIpReputationV2($request);
     foreach ($results as $result) {
         echo $result, PHP_EOL;  // models print as JSON
     }

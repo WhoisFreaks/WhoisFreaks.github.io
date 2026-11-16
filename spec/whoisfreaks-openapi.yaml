@@ -256,6 +256,160 @@ paths:
                 $ref: "#/components/schemas/ReverseDnsResponse"
         4XX:
           $ref: "#/components/responses/ErrorResponse"
+  /v2.2/dns/historical:
+    get:
+      tags:
+        - DNS
+      summary: Historical DNS Lookup (v2.2)
+      description:
+        Same records as /v2.0/dns/historical, with two differences. Each entry reports firstSeen
+        and lastSeen instead of queryTime, and the results can be sorted. 2 credits per page (100
+        records/page).
+      operationId: dnsHistoricalV22
+      parameters:
+        - name: domainName
+          in: query
+          schema:
+            type: string
+          required: true
+          example: whoisfreaks.com
+        - name: type
+          in: query
+          schema:
+            type: string
+            default: all
+          required: true
+          example: "A,MX,TXT"
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+          example: 1
+        - $ref: "#/components/parameters/SortOrder"
+        - $ref: "#/components/parameters/SortBy"
+        - $ref: "#/components/parameters/Format"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HistoricalDnsResponseV2_2"
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
+  /v2.3/dns/historical:
+    get:
+      tags:
+        - DNS
+      summary: Historical DNS Lookup (v2.3)
+      description:
+        Same response as /v2.2/dns/historical. The difference is in error handling. Up to v2.2 a
+        query that failed or ran past the server time limit still returned HTTP 200 with
+        totalRecords 0, which was indistinguishable from a domain with no history. From v2.3 that
+        case returns HTTP 408 instead. 2 credits per page (100 records/page).
+      operationId: dnsHistoricalV23
+      parameters:
+        - name: domainName
+          in: query
+          schema:
+            type: string
+          required: true
+          example: whoisfreaks.com
+        - name: type
+          in: query
+          schema:
+            type: string
+            default: all
+          required: true
+          example: "A,MX,TXT"
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+          example: 1
+        - $ref: "#/components/parameters/SortOrder"
+        - $ref: "#/components/parameters/SortBy"
+        - $ref: "#/components/parameters/Format"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HistoricalDnsResponseV2_2"
+        "408":
+          $ref: "#/components/responses/RequestTimeout"
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
+  /v2.2/dns/reverse:
+    get:
+      tags:
+        - DNS
+      summary: Reverse DNS Lookup (v2.2)
+      description:
+        Same search as /v2.1/dns/reverse. Each entry reports firstSeen and lastSeen instead of
+        queryTime, and the results can be sorted. 5 credits per page.
+      operationId: dnsReverseV22
+      parameters:
+        - $ref: "#/components/parameters/ReverseValue"
+        - $ref: "#/components/parameters/ReverseType"
+        - $ref: "#/components/parameters/ReverseExact"
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+          example: 1
+        - $ref: "#/components/parameters/SortOrder"
+        - $ref: "#/components/parameters/SortBy"
+        - $ref: "#/components/parameters/Format"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReverseDnsResponseV2_2"
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
+  /v2.3/dns/reverse:
+    get:
+      tags:
+        - DNS
+      summary: Reverse DNS Lookup (v2.3)
+      description:
+        Same search as /v2.2/dns/reverse, with a bounded total. Counting every match of a broad
+        search can take minutes, so from v2.3 the count stops at 10,000 and totalRecordsCapped
+        reports whether it did. When totalRecordsCapped is true the real total is higher than
+        totalRecords and totalPages is capped with it. Earlier versions still return the exact
+        total. A query that runs past the server time limit returns HTTP 408. 5 credits per page.
+      operationId: dnsReverseV23
+      parameters:
+        - $ref: "#/components/parameters/ReverseValue"
+        - $ref: "#/components/parameters/ReverseType"
+        - $ref: "#/components/parameters/ReverseExact"
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+          example: 1
+        - $ref: "#/components/parameters/SortOrder"
+        - $ref: "#/components/parameters/SortBy"
+        - $ref: "#/components/parameters/Format"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ReverseDnsResponseV2_3"
+        "408":
+          $ref: "#/components/responses/RequestTimeout"
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
   /v2.0/dns/bulk/live:
     post:
       tags:
@@ -592,6 +746,73 @@ paths:
                   items:
                     type: string
                   maxItems: 100
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/IpReputationResponse"
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
+  /v2.0/security:
+    get:
+      tags:
+        - IP Reputation
+      summary: IP Reputation Lookup (v2.0)
+      description:
+        Same lookup as /v1.0/security, on the current data set. The response carries the full ASN
+        block, including asn_name, rir and the IPv4 and IPv6 route counts, and the security block
+        uses the newer field names with the added VPN, relay, residential proxy, bot and
+        corporate gateway signals. 1 credit.
+      operationId: ipReputationV2
+      parameters:
+        - name: ip
+          in: query
+          schema:
+            type: string
+          required: true
+          example: 8.8.8.8
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IpReputationResponse"
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
+    post:
+      tags:
+        - IP Reputation
+      summary: Bulk IP Reputation (v2.0)
+      description:
+        Up to 100 IPs, returning the same entry as GET /v2.0/security for each one. Unlike
+        POST /v1.0/security, this returns the full ASN block, including the IPv4 and IPv6 route
+        counts. 1 credit per IP.
+      operationId: bulkIpReputationV2
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - ips
+              properties:
+                ips:
+                  type: array
+                  items:
+                    type: string
+                  maxItems: 100
+              example:
+                ips:
+                  - 1.1.1.1
+                  - 2.2.2.2
+                  - 8.8.8.8
       responses:
         "200":
           description: Successful response
@@ -1661,6 +1882,56 @@ components:
         format: date
       description: yyyy-MM-dd; omit for latest
       example: "2026-10-01"
+    SortOrder:
+      name: sort
+      in: query
+      schema:
+        type: string
+        enum:
+          - asc
+          - desc
+      description: Sort direction. Omit to leave the results unsorted.
+    SortBy:
+      name: sortBy
+      in: query
+      schema:
+        type: string
+        enum:
+          - firstSeen
+          - lastSeen
+        default: lastSeen
+      description: Field to sort on. Only applies when sort is given.
+    ReverseValue:
+      name: value
+      in: query
+      schema:
+        type: string
+      required: true
+      description: IP, CIDR, or record value
+      example: 8.8.8.8
+    ReverseType:
+      name: type
+      in: query
+      schema:
+        type: string
+        enum:
+          - a
+          - mx
+          - cname
+          - ns
+          - aaaa
+          - txt
+          - soa
+      required: true
+    ReverseExact:
+      name: exact
+      in: query
+      schema:
+        type: boolean
+        default: true
+      description:
+        When false the value is matched as a substring, which is far slower than an exact match
+        on a large record type.
   responses:
     Unauthorized:
       description: Invalid API key
@@ -1682,6 +1953,12 @@ components:
             $ref: "#/components/schemas/ErrorResponse"
     RateLimited:
       description: Too many requests
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+    RequestTimeout:
+      description: The query ran past the server time limit and was cancelled
       content:
         application/json:
           schema:
@@ -2114,6 +2391,82 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/DnsResponse"
+      additionalProperties: true
+    DnsEntryV2_2:
+      type: object
+      properties:
+        domainName:
+          type: string
+        ipAddress:
+          type: string
+        firstSeen:
+          type: string
+          description: Date the record was first observed (yyyy-MM-dd)
+        lastSeen:
+          type: string
+          description: Date the record was last observed (yyyy-MM-dd)
+        status:
+          type: boolean
+        domainRegistered:
+          type: boolean
+        dnsTypes:
+          type: object
+        dnsRecords:
+          type: array
+          items:
+            $ref: "#/components/schemas/DnsRecord"
+      additionalProperties: true
+      description:
+        DNS entry as returned from v2.2 onwards. The single queryTime of earlier versions is
+        replaced by the firstSeen and lastSeen pair.
+    HistoricalDnsResponseV2_2:
+      type: object
+      properties:
+        totalRecords:
+          type: integer
+        totalPages:
+          type: integer
+        currentPage:
+          type: integer
+        historicalDnsRecords:
+          type: array
+          items:
+            $ref: "#/components/schemas/DnsEntryV2_2"
+      additionalProperties: true
+    ReverseDnsResponseV2_2:
+      type: object
+      properties:
+        totalRecords:
+          type: integer
+        totalPages:
+          type: integer
+        currentPage:
+          type: integer
+        reverseDnsRecords:
+          type: array
+          items:
+            $ref: "#/components/schemas/DnsEntryV2_2"
+      additionalProperties: true
+    ReverseDnsResponseV2_3:
+      type: object
+      properties:
+        totalRecords:
+          type: integer
+          description:
+            Matching records. When totalRecordsCapped is true this is the cap, not the real total.
+        totalRecordsCapped:
+          type: boolean
+          description:
+            True when counting stopped at the 10,000 cap, so the real total is higher. Present
+            from v2.3 only.
+        totalPages:
+          type: integer
+        currentPage:
+          type: integer
+        reverseDnsRecords:
+          type: array
+          items:
+            $ref: "#/components/schemas/DnsEntryV2_2"
       additionalProperties: true
     BulkDnsResponse:
       type: object

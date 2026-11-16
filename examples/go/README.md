@@ -12,6 +12,10 @@ Install: see the [Go guide](../../docs/languages/go.md). Set the `WHOISFREAKS_AP
 - [`DnsLive.go`](DnsLive.go): Live DNS Lookup (`GET /v2.0/dns/live`)
 - [`DnsHistorical.go`](DnsHistorical.go): Historical DNS Lookup (`GET /v2.0/dns/historical`)
 - [`DnsReverse.go`](DnsReverse.go): Reverse DNS Lookup (`GET /v2.1/dns/reverse`)
+- [`DnsHistoricalV22.go`](DnsHistoricalV22.go): Historical DNS Lookup (v2.2) (`GET /v2.2/dns/historical`)
+- [`DnsHistoricalV23.go`](DnsHistoricalV23.go): Historical DNS Lookup (v2.3) (`GET /v2.3/dns/historical`)
+- [`DnsReverseV22.go`](DnsReverseV22.go): Reverse DNS Lookup (v2.2) (`GET /v2.2/dns/reverse`)
+- [`DnsReverseV23.go`](DnsReverseV23.go): Reverse DNS Lookup (v2.3) (`GET /v2.3/dns/reverse`)
 - [`DnsBulk.go`](DnsBulk.go): Bulk DNS Lookup (`POST /v2.0/dns/bulk/live`)
 
 ## Domain Availability
@@ -34,6 +38,8 @@ Install: see the [Go guide](../../docs/languages/go.md). Set the `WHOISFREAKS_AP
 ## IP Reputation
 - [`IpReputation.go`](IpReputation.go): IP Reputation Lookup (`GET /v1.0/security`)
 - [`BulkIpReputation.go`](BulkIpReputation.go): Bulk IP Reputation (`POST /v1.0/security`)
+- [`IpReputationV2.go`](IpReputationV2.go): IP Reputation Lookup (v2.0) (`GET /v2.0/security`)
+- [`BulkIpReputationV2.go`](BulkIpReputationV2.go): Bulk IP Reputation (v2.0) (`POST /v2.0/security`)
 
 ## Domain Reputation
 - [`DomainReputation.go`](DomainReputation.go): Domain Reputation Lookup (`GET /v1/domain/security`)

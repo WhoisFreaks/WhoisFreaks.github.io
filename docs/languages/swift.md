@@ -117,7 +117,7 @@ do {
 
 ## Endpoints
 
-All 60 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
+All 66 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
 
 ### WHOIS
 
@@ -352,6 +352,156 @@ WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY
 
 do {
     let result = try await DNSAPI.dnsReverse(value: "8.8.8.8", type: .a, page: 1)
+    print(String(decoding: try CodableHelper.jsonEncoder.encode(result), as: UTF8.self))
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### Historical DNS Lookup (v2.2)
+
+`GET /v2.2/dns/historical`
+
+```swift
+// Historical DNS Lookup (v2.2)
+//
+// Parameters for dnsHistoricalV22 (GET /v2.2/dns/historical):
+//   - domainName (string, required)
+//   - type (string, required)
+//   - page (integer, optional)
+//   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+//   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+//   - format (string (one of: json, xml), optional)
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+
+do {
+    let result = try await DNSAPI.dnsHistoricalV22(domainName: "whoisfreaks.com", type: "A,MX,TXT", page: 1)
+    print(String(decoding: try CodableHelper.jsonEncoder.encode(result), as: UTF8.self))
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### Historical DNS Lookup (v2.3)
+
+`GET /v2.3/dns/historical`
+
+```swift
+// Historical DNS Lookup (v2.3)
+//
+// Parameters for dnsHistoricalV23 (GET /v2.3/dns/historical):
+//   - domainName (string, required)
+//   - type (string, required)
+//   - page (integer, optional)
+//   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+//   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+//   - format (string (one of: json, xml), optional)
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+
+do {
+    let result = try await DNSAPI.dnsHistoricalV23(domainName: "whoisfreaks.com", type: "A,MX,TXT", page: 1)
+    print(String(decoding: try CodableHelper.jsonEncoder.encode(result), as: UTF8.self))
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### Reverse DNS Lookup (v2.2)
+
+`GET /v2.2/dns/reverse`
+
+```swift
+// Reverse DNS Lookup (v2.2)
+//
+// Parameters for dnsReverseV22 (GET /v2.2/dns/reverse):
+//   - value (string, required): IP, CIDR, or record value
+//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
+//   - exact (boolean, optional): When false the value is matched as a substring, which is far slower than an exact match...
+//   - page (integer, optional)
+//   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+//   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+//   - format (string (one of: json, xml), optional)
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+
+do {
+    let result = try await DNSAPI.dnsReverseV22(value: "8.8.8.8", type: .a, page: 1)
+    print(String(decoding: try CodableHelper.jsonEncoder.encode(result), as: UTF8.self))
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### Reverse DNS Lookup (v2.3)
+
+`GET /v2.3/dns/reverse`
+
+```swift
+// Reverse DNS Lookup (v2.3)
+//
+// Parameters for dnsReverseV23 (GET /v2.3/dns/reverse):
+//   - value (string, required): IP, CIDR, or record value
+//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
+//   - exact (boolean, optional): When false the value is matched as a substring, which is far slower than an exact match...
+//   - page (integer, optional)
+//   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+//   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+//   - format (string (one of: json, xml), optional)
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+
+do {
+    let result = try await DNSAPI.dnsReverseV23(value: "8.8.8.8", type: .a, page: 1)
     print(String(decoding: try CodableHelper.jsonEncoder.encode(result), as: UTF8.self))
 } catch ErrorResponse.error(let status, let data, _, let underlying) {
     let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
@@ -709,6 +859,72 @@ let request = BulkGeolocationRequest(ips: ["8.8.8.8", "1.1.1.1"])
 
 do {
     let result = try await IPReputationAPI.bulkIpReputation(bulkGeolocationRequest: request)
+    print(String(decoding: try CodableHelper.jsonEncoder.encode(result), as: UTF8.self))
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### IP Reputation Lookup (v2.0)
+
+`GET /v2.0/security`
+
+```swift
+// IP Reputation Lookup (v2.0)
+//
+// Parameters for ipReputationV2 (GET /v2.0/security):
+//   - ip (string, required)
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+
+do {
+    let result = try await IPReputationAPI.ipReputationV2(ip: "8.8.8.8")
+    print(String(decoding: try CodableHelper.jsonEncoder.encode(result), as: UTF8.self))
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### Bulk IP Reputation (v2.0)
+
+`POST /v2.0/security`
+
+```swift
+// Bulk IP Reputation (v2.0)
+//
+// Parameters for bulkIpReputationV2 (POST /v2.0/security):
+//   - body: BulkGeolocationRequest (required): request body object
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+
+let request = BulkGeolocationRequest(ips: ["1.1.1.1", "2.2.2.2", "8.8.8.8"])
+
+do {
+    let result = try await IPReputationAPI.bulkIpReputationV2(bulkGeolocationRequest: request)
     print(String(decoding: try CodableHelper.jsonEncoder.encode(result), as: UTF8.self))
 } catch ErrorResponse.error(let status, let data, _, let underlying) {
     let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"

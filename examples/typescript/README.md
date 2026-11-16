@@ -12,6 +12,10 @@ Install: see the [TypeScript guide](../../docs/languages/typescript.md). Set the
 - [`DnsLive.ts`](DnsLive.ts): Live DNS Lookup (`GET /v2.0/dns/live`)
 - [`DnsHistorical.ts`](DnsHistorical.ts): Historical DNS Lookup (`GET /v2.0/dns/historical`)
 - [`DnsReverse.ts`](DnsReverse.ts): Reverse DNS Lookup (`GET /v2.1/dns/reverse`)
+- [`DnsHistoricalV22.ts`](DnsHistoricalV22.ts): Historical DNS Lookup (v2.2) (`GET /v2.2/dns/historical`)
+- [`DnsHistoricalV23.ts`](DnsHistoricalV23.ts): Historical DNS Lookup (v2.3) (`GET /v2.3/dns/historical`)
+- [`DnsReverseV22.ts`](DnsReverseV22.ts): Reverse DNS Lookup (v2.2) (`GET /v2.2/dns/reverse`)
+- [`DnsReverseV23.ts`](DnsReverseV23.ts): Reverse DNS Lookup (v2.3) (`GET /v2.3/dns/reverse`)
 - [`DnsBulk.ts`](DnsBulk.ts): Bulk DNS Lookup (`POST /v2.0/dns/bulk/live`)
 
 ## Domain Availability
@@ -34,6 +38,8 @@ Install: see the [TypeScript guide](../../docs/languages/typescript.md). Set the
 ## IP Reputation
 - [`IpReputation.ts`](IpReputation.ts): IP Reputation Lookup (`GET /v1.0/security`)
 - [`BulkIpReputation.ts`](BulkIpReputation.ts): Bulk IP Reputation (`POST /v1.0/security`)
+- [`IpReputationV2.ts`](IpReputationV2.ts): IP Reputation Lookup (v2.0) (`GET /v2.0/security`)
+- [`BulkIpReputationV2.ts`](BulkIpReputationV2.ts): Bulk IP Reputation (v2.0) (`POST /v2.0/security`)
 
 ## Domain Reputation
 - [`DomainReputation.ts`](DomainReputation.ts): Domain Reputation Lookup (`GET /v1/domain/security`)

@@ -12,6 +12,10 @@ Install: see the [JavaScript guide](../../docs/languages/javascript.md). Set the
 - [`DnsLive.js`](DnsLive.js): Live DNS Lookup (`GET /v2.0/dns/live`)
 - [`DnsHistorical.js`](DnsHistorical.js): Historical DNS Lookup (`GET /v2.0/dns/historical`)
 - [`DnsReverse.js`](DnsReverse.js): Reverse DNS Lookup (`GET /v2.1/dns/reverse`)
+- [`DnsHistoricalV22.js`](DnsHistoricalV22.js): Historical DNS Lookup (v2.2) (`GET /v2.2/dns/historical`)
+- [`DnsHistoricalV23.js`](DnsHistoricalV23.js): Historical DNS Lookup (v2.3) (`GET /v2.3/dns/historical`)
+- [`DnsReverseV22.js`](DnsReverseV22.js): Reverse DNS Lookup (v2.2) (`GET /v2.2/dns/reverse`)
+- [`DnsReverseV23.js`](DnsReverseV23.js): Reverse DNS Lookup (v2.3) (`GET /v2.3/dns/reverse`)
 - [`DnsBulk.js`](DnsBulk.js): Bulk DNS Lookup (`POST /v2.0/dns/bulk/live`)
 
 ## Domain Availability
@@ -34,6 +38,8 @@ Install: see the [JavaScript guide](../../docs/languages/javascript.md). Set the
 ## IP Reputation
 - [`IpReputation.js`](IpReputation.js): IP Reputation Lookup (`GET /v1.0/security`)
 - [`BulkIpReputation.js`](BulkIpReputation.js): Bulk IP Reputation (`POST /v1.0/security`)
+- [`IpReputationV2.js`](IpReputationV2.js): IP Reputation Lookup (v2.0) (`GET /v2.0/security`)
+- [`BulkIpReputationV2.js`](BulkIpReputationV2.js): Bulk IP Reputation (v2.0) (`POST /v2.0/security`)
 
 ## Domain Reputation
 - [`DomainReputation.js`](DomainReputation.js): Domain Reputation Lookup (`GET /v1/domain/security`)

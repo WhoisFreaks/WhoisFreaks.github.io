@@ -116,7 +116,7 @@ func main() {
 
 ## Endpoints
 
-All 60 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
+All 66 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
 
 ### WHOIS
 
@@ -397,6 +397,182 @@ func main() {
 	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
 
 	result, _, err := client.DNSAPI.DnsReverse(ctx).Value("8.8.8.8").Type_("a").Page(1).Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### Historical DNS Lookup (v2.2)
+
+`GET /v2.2/dns/historical`
+
+```go
+// Runnable example: Historical DNS Lookup (v2.2) (GET /v2.2/dns/historical)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for dnsHistoricalV22 (GET /v2.2/dns/historical):
+//   - domainName (string, required)
+//   - type (string, required)
+//   - page (integer, optional)
+//   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+//   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+//   - format (string (one of: json, xml), optional)
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DNSAPI.DnsHistoricalV22(ctx).
+		DomainName("whoisfreaks.com").Type_("A,MX,TXT").Page(1).Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### Historical DNS Lookup (v2.3)
+
+`GET /v2.3/dns/historical`
+
+```go
+// Runnable example: Historical DNS Lookup (v2.3) (GET /v2.3/dns/historical)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for dnsHistoricalV23 (GET /v2.3/dns/historical):
+//   - domainName (string, required)
+//   - type (string, required)
+//   - page (integer, optional)
+//   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+//   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+//   - format (string (one of: json, xml), optional)
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DNSAPI.DnsHistoricalV23(ctx).
+		DomainName("whoisfreaks.com").Type_("A,MX,TXT").Page(1).Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### Reverse DNS Lookup (v2.2)
+
+`GET /v2.2/dns/reverse`
+
+```go
+// Runnable example: Reverse DNS Lookup (v2.2) (GET /v2.2/dns/reverse)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for dnsReverseV22 (GET /v2.2/dns/reverse):
+//   - value (string, required): IP, CIDR, or record value
+//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
+//   - exact (boolean, optional): When false the value is matched as a substring, which is far slower than an exact match...
+//   - page (integer, optional)
+//   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+//   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+//   - format (string (one of: json, xml), optional)
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DNSAPI.DnsReverseV22(ctx).Value("8.8.8.8").Type_("a").Page(1).Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### Reverse DNS Lookup (v2.3)
+
+`GET /v2.3/dns/reverse`
+
+```go
+// Runnable example: Reverse DNS Lookup (v2.3) (GET /v2.3/dns/reverse)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for dnsReverseV23 (GET /v2.3/dns/reverse):
+//   - value (string, required): IP, CIDR, or record value
+//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
+//   - exact (boolean, optional): When false the value is matched as a substring, which is far slower than an exact match...
+//   - page (integer, optional)
+//   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+//   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+//   - format (string (one of: json, xml), optional)
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DNSAPI.DnsReverseV23(ctx).Value("8.8.8.8").Type_("a").Page(1).Execute()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -815,6 +991,84 @@ func main() {
 
 	body := whoisfreaks.NewBulkGeolocationRequest([]string{"8.8.8.8", "1.1.1.1"})
 	result, _, err := client.IPReputationAPI.BulkIpReputation(ctx).
+		BulkGeolocationRequest(*body).Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### IP Reputation Lookup (v2.0)
+
+`GET /v2.0/security`
+
+```go
+// Runnable example: IP Reputation Lookup (v2.0) (GET /v2.0/security)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for ipReputationV2 (GET /v2.0/security):
+//   - ip (string, required)
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.IPReputationAPI.IpReputationV2(ctx).Ip("8.8.8.8").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### Bulk IP Reputation (v2.0)
+
+`POST /v2.0/security`
+
+```go
+// Runnable example: Bulk IP Reputation (v2.0) (POST /v2.0/security)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for bulkIpReputationV2 (POST /v2.0/security):
+//   - body: BulkGeolocationRequest (required): request body object
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	body := whoisfreaks.NewBulkGeolocationRequest([]string{"1.1.1.1", "2.2.2.2", "8.8.8.8"})
+	result, _, err := client.IPReputationAPI.BulkIpReputationV2(ctx).
 		BulkGeolocationRequest(*body).Execute()
 	if err != nil {
 		log.Fatal(err)

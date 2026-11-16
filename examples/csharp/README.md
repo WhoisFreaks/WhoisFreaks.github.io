@@ -12,6 +12,10 @@ Install: see the [C# / .NET guide](../../docs/languages/csharp.md). Set the `WHO
 - [`DnsLive.cs`](DnsLive.cs): Live DNS Lookup (`GET /v2.0/dns/live`)
 - [`DnsHistorical.cs`](DnsHistorical.cs): Historical DNS Lookup (`GET /v2.0/dns/historical`)
 - [`DnsReverse.cs`](DnsReverse.cs): Reverse DNS Lookup (`GET /v2.1/dns/reverse`)
+- [`DnsHistoricalV22.cs`](DnsHistoricalV22.cs): Historical DNS Lookup (v2.2) (`GET /v2.2/dns/historical`)
+- [`DnsHistoricalV23.cs`](DnsHistoricalV23.cs): Historical DNS Lookup (v2.3) (`GET /v2.3/dns/historical`)
+- [`DnsReverseV22.cs`](DnsReverseV22.cs): Reverse DNS Lookup (v2.2) (`GET /v2.2/dns/reverse`)
+- [`DnsReverseV23.cs`](DnsReverseV23.cs): Reverse DNS Lookup (v2.3) (`GET /v2.3/dns/reverse`)
 - [`DnsBulk.cs`](DnsBulk.cs): Bulk DNS Lookup (`POST /v2.0/dns/bulk/live`)
 
 ## Domain Availability
@@ -34,6 +38,8 @@ Install: see the [C# / .NET guide](../../docs/languages/csharp.md). Set the `WHO
 ## IP Reputation
 - [`IpReputation.cs`](IpReputation.cs): IP Reputation Lookup (`GET /v1.0/security`)
 - [`BulkIpReputation.cs`](BulkIpReputation.cs): Bulk IP Reputation (`POST /v1.0/security`)
+- [`IpReputationV2.cs`](IpReputationV2.cs): IP Reputation Lookup (v2.0) (`GET /v2.0/security`)
+- [`BulkIpReputationV2.cs`](BulkIpReputationV2.cs): Bulk IP Reputation (v2.0) (`POST /v2.0/security`)
 
 ## Domain Reputation
 - [`DomainReputation.cs`](DomainReputation.cs): Domain Reputation Lookup (`GET /v1/domain/security`)

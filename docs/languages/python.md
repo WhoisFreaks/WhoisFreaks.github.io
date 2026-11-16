@@ -92,7 +92,7 @@ with whoisfreaks.ApiClient(config) as client:
 
 ## Endpoints
 
-All 60 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
+All 66 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
 
 ### WHOIS
 
@@ -300,6 +300,136 @@ with whoisfreaks.ApiClient(config) as client:
     #   page (int, optional, keyword): default 1
     #   format (str, optional, keyword): one of json, xml; default "json"
     result = api.dns_reverse("8.8.8.8", "a", page=1)
+    print(json.dumps(result.to_dict(), indent=2))
+```
+
+#### Historical DNS Lookup (v2.2)
+
+`GET /v2.2/dns/historical`
+
+```python
+"""Historical DNS Lookup (v2.2): GET https://api.whoisfreaks.com/v2.2/dns/historical
+
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python DnsHistoricalV22.py
+"""
+import json
+import os
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DNSApi(client)
+
+    # dns_historical_v22 parameters:
+    #   domain_name (str, required)
+    #   type (str, required): default "all"
+    #   page (int, optional, keyword): default 1
+    #   sort (str, optional, keyword): Sort direction. Omit to leave the results unsorted; one of asc, desc
+    #   sort_by (str, optional, keyword): Field to sort on. Only applies when sort is given; one of firstSeen, lastSeen; default "lastSeen"
+    #   format (str, optional, keyword): one of json, xml; default "json"
+    result = api.dns_historical_v22("whoisfreaks.com", "A,MX,TXT", page=1)
+    print(json.dumps(result.to_dict(), indent=2))
+```
+
+#### Historical DNS Lookup (v2.3)
+
+`GET /v2.3/dns/historical`
+
+```python
+"""Historical DNS Lookup (v2.3): GET https://api.whoisfreaks.com/v2.3/dns/historical
+
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python DnsHistoricalV23.py
+"""
+import json
+import os
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DNSApi(client)
+
+    # dns_historical_v23 parameters:
+    #   domain_name (str, required)
+    #   type (str, required): default "all"
+    #   page (int, optional, keyword): default 1
+    #   sort (str, optional, keyword): Sort direction. Omit to leave the results unsorted; one of asc, desc
+    #   sort_by (str, optional, keyword): Field to sort on. Only applies when sort is given; one of firstSeen, lastSeen; default "lastSeen"
+    #   format (str, optional, keyword): one of json, xml; default "json"
+    result = api.dns_historical_v23("whoisfreaks.com", "A,MX,TXT", page=1)
+    print(json.dumps(result.to_dict(), indent=2))
+```
+
+#### Reverse DNS Lookup (v2.2)
+
+`GET /v2.2/dns/reverse`
+
+```python
+"""Reverse DNS Lookup (v2.2): GET https://api.whoisfreaks.com/v2.2/dns/reverse
+
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python DnsReverseV22.py
+"""
+import json
+import os
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DNSApi(client)
+
+    # dns_reverse_v22 parameters:
+    #   value (str, required): IP, CIDR, or record value
+    #   type (str, required): one of a, mx, cname, ns, aaaa, txt, soa
+    #   exact (bool, optional, keyword): When false the value is matched as a substring, which is far slower than an e...; default True
+    #   page (int, optional, keyword): default 1
+    #   sort (str, optional, keyword): Sort direction. Omit to leave the results unsorted; one of asc, desc
+    #   sort_by (str, optional, keyword): Field to sort on. Only applies when sort is given; one of firstSeen, lastSeen; default "lastSeen"
+    #   format (str, optional, keyword): one of json, xml; default "json"
+    result = api.dns_reverse_v22("8.8.8.8", "a", page=1)
+    print(json.dumps(result.to_dict(), indent=2))
+```
+
+#### Reverse DNS Lookup (v2.3)
+
+`GET /v2.3/dns/reverse`
+
+```python
+"""Reverse DNS Lookup (v2.3): GET https://api.whoisfreaks.com/v2.3/dns/reverse
+
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python DnsReverseV23.py
+"""
+import json
+import os
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DNSApi(client)
+
+    # dns_reverse_v23 parameters:
+    #   value (str, required): IP, CIDR, or record value
+    #   type (str, required): one of a, mx, cname, ns, aaaa, txt, soa
+    #   exact (bool, optional, keyword): When false the value is matched as a substring, which is far slower than an e...; default True
+    #   page (int, optional, keyword): default 1
+    #   sort (str, optional, keyword): Sort direction. Omit to leave the results unsorted; one of asc, desc
+    #   sort_by (str, optional, keyword): Field to sort on. Only applies when sort is given; one of firstSeen, lastSeen; default "lastSeen"
+    #   format (str, optional, keyword): one of json, xml; default "json"
+    result = api.dns_reverse_v23("8.8.8.8", "a", page=1)
     print(json.dumps(result.to_dict(), indent=2))
 ```
 
@@ -603,6 +733,61 @@ with whoisfreaks.ApiClient(config) as client:
     #   bulk_geolocation_request (BulkGeolocationRequest, required): request body
     body = whoisfreaks.BulkGeolocationRequest(ips=["8.8.8.8", "1.1.1.1"])
     results = api.bulk_ip_reputation(body)
+    print(json.dumps([item.to_dict() for item in results], indent=2))
+```
+
+#### IP Reputation Lookup (v2.0)
+
+`GET /v2.0/security`
+
+```python
+"""IP Reputation Lookup (v2.0): GET https://api.whoisfreaks.com/v2.0/security
+
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python IpReputationV2.py
+"""
+import json
+import os
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.IPReputationApi(client)
+
+    # ip_reputation_v2 parameters:
+    #   ip (str, required)
+    result = api.ip_reputation_v2("8.8.8.8")
+    print(json.dumps(result.to_dict(), indent=2))
+```
+
+#### Bulk IP Reputation (v2.0)
+
+`POST /v2.0/security`
+
+```python
+"""Bulk IP Reputation (v2.0): POST https://api.whoisfreaks.com/v2.0/security
+
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python BulkIpReputationV2.py
+"""
+import json
+import os
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.IPReputationApi(client)
+
+    # bulk_ip_reputation_v2 parameters:
+    #   bulk_geolocation_request (BulkGeolocationRequest, required): request body
+    body = whoisfreaks.BulkGeolocationRequest(ips=["1.1.1.1", "2.2.2.2", "8.8.8.8"])
+    results = api.bulk_ip_reputation_v2(body)
     print(json.dumps([item.to_dict() for item in results], indent=2))
 ```
 

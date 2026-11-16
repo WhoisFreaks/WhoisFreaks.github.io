@@ -113,7 +113,7 @@ main().catch(async (err: unknown) => {
 
 ## Endpoints
 
-All 60 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
+All 66 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
 
 ### WHOIS
 
@@ -338,6 +338,152 @@ const api = new DNSApi(config);
 //   format ("json" | "xml", optional): default "json"
 async function main(): Promise<void> {
   const result = await api.dnsReverse({ value: "8.8.8.8", type: "a", page: 1 });
+  console.log(JSON.stringify(result, null, 2));
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Historical DNS Lookup (v2.2)
+
+`GET /v2.2/dns/historical`
+
+```typescript
+// Historical DNS Lookup (v2.2): GET https://api.whoisfreaks.com/v2.2/dns/historical
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DnsHistoricalV22.ts
+import { Configuration, DNSApi, ResponseError } from "whoisfreaks";
+
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
+const api = new DNSApi(config);
+
+// dnsHistoricalV22({ domainName, type, page?, sort?, sortBy?, format? })
+//   domainName (string, required)
+//   type (string, required): default "all"
+//   page (number, optional): default 1
+//   sort ("asc" | "desc", optional): Sort direction. Omit to leave the results unsorted
+//   sortBy ("firstSeen" | "lastSeen", optional): Field to sort on. Only applies when sort is given; default "lastSeen"
+//   format ("json" | "xml", optional): default "json"
+async function main(): Promise<void> {
+  const result = await api.dnsHistoricalV22({ domainName: "whoisfreaks.com", type: "A,MX,TXT", page: 1 });
+  console.log(JSON.stringify(result, null, 2));
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Historical DNS Lookup (v2.3)
+
+`GET /v2.3/dns/historical`
+
+```typescript
+// Historical DNS Lookup (v2.3): GET https://api.whoisfreaks.com/v2.3/dns/historical
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DnsHistoricalV23.ts
+import { Configuration, DNSApi, ResponseError } from "whoisfreaks";
+
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
+const api = new DNSApi(config);
+
+// dnsHistoricalV23({ domainName, type, page?, sort?, sortBy?, format? })
+//   domainName (string, required)
+//   type (string, required): default "all"
+//   page (number, optional): default 1
+//   sort ("asc" | "desc", optional): Sort direction. Omit to leave the results unsorted
+//   sortBy ("firstSeen" | "lastSeen", optional): Field to sort on. Only applies when sort is given; default "lastSeen"
+//   format ("json" | "xml", optional): default "json"
+async function main(): Promise<void> {
+  const result = await api.dnsHistoricalV23({ domainName: "whoisfreaks.com", type: "A,MX,TXT", page: 1 });
+  console.log(JSON.stringify(result, null, 2));
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Reverse DNS Lookup (v2.2)
+
+`GET /v2.2/dns/reverse`
+
+```typescript
+// Reverse DNS Lookup (v2.2): GET https://api.whoisfreaks.com/v2.2/dns/reverse
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DnsReverseV22.ts
+import { Configuration, DNSApi, ResponseError } from "whoisfreaks";
+
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
+const api = new DNSApi(config);
+
+// dnsReverseV22({ value, type, exact?, page?, sort?, sortBy?, format? })
+//   value (string, required): IP, CIDR, or record value
+//   type ("a" | "mx" | "cname" | "ns" | "aaaa" | "txt" | "soa", required)
+//   exact (boolean, optional): When false the value is matched as a substring, which is far slower than an e...; default true
+//   page (number, optional): default 1
+//   sort ("asc" | "desc", optional): Sort direction. Omit to leave the results unsorted
+//   sortBy ("firstSeen" | "lastSeen", optional): Field to sort on. Only applies when sort is given; default "lastSeen"
+//   format ("json" | "xml", optional): default "json"
+async function main(): Promise<void> {
+  const result = await api.dnsReverseV22({ value: "8.8.8.8", type: "a", page: 1 });
+  console.log(JSON.stringify(result, null, 2));
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Reverse DNS Lookup (v2.3)
+
+`GET /v2.3/dns/reverse`
+
+```typescript
+// Reverse DNS Lookup (v2.3): GET https://api.whoisfreaks.com/v2.3/dns/reverse
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DnsReverseV23.ts
+import { Configuration, DNSApi, ResponseError } from "whoisfreaks";
+
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
+const api = new DNSApi(config);
+
+// dnsReverseV23({ value, type, exact?, page?, sort?, sortBy?, format? })
+//   value (string, required): IP, CIDR, or record value
+//   type ("a" | "mx" | "cname" | "ns" | "aaaa" | "txt" | "soa", required)
+//   exact (boolean, optional): When false the value is matched as a substring, which is far slower than an e...; default true
+//   page (number, optional): default 1
+//   sort ("asc" | "desc", optional): Sort direction. Omit to leave the results unsorted
+//   sortBy ("firstSeen" | "lastSeen", optional): Field to sort on. Only applies when sort is given; default "lastSeen"
+//   format ("json" | "xml", optional): default "json"
+async function main(): Promise<void> {
+  const result = await api.dnsReverseV23({ value: "8.8.8.8", type: "a", page: 1 });
   console.log(JSON.stringify(result, null, 2));
 }
 
@@ -681,6 +827,69 @@ const api = new IPReputationApi(config);
 async function main(): Promise<void> {
   const body: BulkGeolocationRequest = { ips: ["8.8.8.8", "1.1.1.1"] };
   const results = await api.bulkIpReputation({ bulkGeolocationRequest: body });
+  console.log(JSON.stringify(results, null, 2));
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### IP Reputation Lookup (v2.0)
+
+`GET /v2.0/security`
+
+```typescript
+// IP Reputation Lookup (v2.0): GET https://api.whoisfreaks.com/v2.0/security
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx IpReputationV2.ts
+import { Configuration, IPReputationApi, ResponseError } from "whoisfreaks";
+
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
+const api = new IPReputationApi(config);
+
+// ipReputationV2({ ip })
+//   ip (string, required)
+async function main(): Promise<void> {
+  const result = await api.ipReputationV2({ ip: "8.8.8.8" });
+  console.log(JSON.stringify(result, null, 2));
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Bulk IP Reputation (v2.0)
+
+`POST /v2.0/security`
+
+```typescript
+// Bulk IP Reputation (v2.0): POST https://api.whoisfreaks.com/v2.0/security
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx BulkIpReputationV2.ts
+import { Configuration, IPReputationApi, ResponseError, type BulkGeolocationRequest } from "whoisfreaks";
+
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
+const api = new IPReputationApi(config);
+
+// bulkIpReputationV2({ bulkGeolocationRequest })
+//   bulkGeolocationRequest (BulkGeolocationRequest, required): request body
+async function main(): Promise<void> {
+  const body: BulkGeolocationRequest = { ips: ["1.1.1.1", "2.2.2.2", "8.8.8.8"] };
+  const results = await api.bulkIpReputationV2({ bulkGeolocationRequest: body });
   console.log(JSON.stringify(results, null, 2));
 }
 

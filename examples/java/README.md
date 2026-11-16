@@ -12,6 +12,10 @@ Install: see the [Java guide](../../docs/languages/java.md). Set the `WHOISFREAK
 - [`DnsLive.java`](DnsLive.java): Live DNS Lookup (`GET /v2.0/dns/live`)
 - [`DnsHistorical.java`](DnsHistorical.java): Historical DNS Lookup (`GET /v2.0/dns/historical`)
 - [`DnsReverse.java`](DnsReverse.java): Reverse DNS Lookup (`GET /v2.1/dns/reverse`)
+- [`DnsHistoricalV22.java`](DnsHistoricalV22.java): Historical DNS Lookup (v2.2) (`GET /v2.2/dns/historical`)
+- [`DnsHistoricalV23.java`](DnsHistoricalV23.java): Historical DNS Lookup (v2.3) (`GET /v2.3/dns/historical`)
+- [`DnsReverseV22.java`](DnsReverseV22.java): Reverse DNS Lookup (v2.2) (`GET /v2.2/dns/reverse`)
+- [`DnsReverseV23.java`](DnsReverseV23.java): Reverse DNS Lookup (v2.3) (`GET /v2.3/dns/reverse`)
 - [`DnsBulk.java`](DnsBulk.java): Bulk DNS Lookup (`POST /v2.0/dns/bulk/live`)
 
 ## Domain Availability
@@ -34,6 +38,8 @@ Install: see the [Java guide](../../docs/languages/java.md). Set the `WHOISFREAK
 ## IP Reputation
 - [`IpReputation.java`](IpReputation.java): IP Reputation Lookup (`GET /v1.0/security`)
 - [`BulkIpReputation.java`](BulkIpReputation.java): Bulk IP Reputation (`POST /v1.0/security`)
+- [`IpReputationV2.java`](IpReputationV2.java): IP Reputation Lookup (v2.0) (`GET /v2.0/security`)
+- [`BulkIpReputationV2.java`](BulkIpReputationV2.java): Bulk IP Reputation (v2.0) (`POST /v2.0/security`)
 
 ## Domain Reputation
 - [`DomainReputation.java`](DomainReputation.java): Domain Reputation Lookup (`GET /v1/domain/security`)

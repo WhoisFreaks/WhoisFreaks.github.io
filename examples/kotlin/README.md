@@ -12,6 +12,10 @@ Install: see the [Kotlin guide](../../docs/languages/kotlin.md). Set the `WHOISF
 - [`DnsLive.kt`](DnsLive.kt): Live DNS Lookup (`GET /v2.0/dns/live`)
 - [`DnsHistorical.kt`](DnsHistorical.kt): Historical DNS Lookup (`GET /v2.0/dns/historical`)
 - [`DnsReverse.kt`](DnsReverse.kt): Reverse DNS Lookup (`GET /v2.1/dns/reverse`)
+- [`DnsHistoricalV22.kt`](DnsHistoricalV22.kt): Historical DNS Lookup (v2.2) (`GET /v2.2/dns/historical`)
+- [`DnsHistoricalV23.kt`](DnsHistoricalV23.kt): Historical DNS Lookup (v2.3) (`GET /v2.3/dns/historical`)
+- [`DnsReverseV22.kt`](DnsReverseV22.kt): Reverse DNS Lookup (v2.2) (`GET /v2.2/dns/reverse`)
+- [`DnsReverseV23.kt`](DnsReverseV23.kt): Reverse DNS Lookup (v2.3) (`GET /v2.3/dns/reverse`)
 - [`DnsBulk.kt`](DnsBulk.kt): Bulk DNS Lookup (`POST /v2.0/dns/bulk/live`)
 
 ## Domain Availability
@@ -34,6 +38,8 @@ Install: see the [Kotlin guide](../../docs/languages/kotlin.md). Set the `WHOISF
 ## IP Reputation
 - [`IpReputation.kt`](IpReputation.kt): IP Reputation Lookup (`GET /v1.0/security`)
 - [`BulkIpReputation.kt`](BulkIpReputation.kt): Bulk IP Reputation (`POST /v1.0/security`)
+- [`IpReputationV2.kt`](IpReputationV2.kt): IP Reputation Lookup (v2.0) (`GET /v2.0/security`)
+- [`BulkIpReputationV2.kt`](BulkIpReputationV2.kt): Bulk IP Reputation (v2.0) (`POST /v2.0/security`)
 
 ## Domain Reputation
 - [`DomainReputation.kt`](DomainReputation.kt): Domain Reputation Lookup (`GET /v1/domain/security`)

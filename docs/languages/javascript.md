@@ -99,7 +99,7 @@ main().catch((err) => {
 
 ## Endpoints
 
-All 60 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
+All 66 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
 
 ### WHOIS
 
@@ -307,6 +307,140 @@ const api = new DNSApi(client);
 //   opts.format (string, optional): one of json, xml; default "json"
 async function main() {
   const result = await api.dnsReverse("8.8.8.8", "a", { page: 1 });
+  console.log(JSON.stringify(result, null, 2));
+}
+
+main().catch((err) => {
+  // API errors carry the HTTP status and the parsed error body
+  console.error(err.status ? `HTTP ${err.status}: ${JSON.stringify(err.body)}` : err);
+  process.exitCode = 1;
+});
+```
+
+#### Historical DNS Lookup (v2.2)
+
+`GET /v2.2/dns/historical`
+
+```javascript
+// Historical DNS Lookup (v2.2): GET https://api.whoisfreaks.com/v2.2/dns/historical
+// Run: WHOISFREAKS_API_KEY=your_api_key node DnsHistoricalV22.js
+const { ApiClient, DNSApi } = require("whoisfreaks-js");
+
+// Set the API key once; the client adds it to every request.
+const client = ApiClient.instance;
+client.authentications["ApiKeyAuth"].apiKey = process.env.WHOISFREAKS_API_KEY;
+const api = new DNSApi(client);
+
+// dnsHistoricalV22(domainName, type, opts)
+//   domainName (string, required)
+//   type (string, required): default "all"
+//   opts.page (number, optional): default 1
+//   opts.sort (string, optional): Sort direction. Omit to leave the results unsorted; one of asc, desc
+//   opts.sortBy (string, optional): Field to sort on. Only applies when sort is given; one of firstSeen, lastSeen; default "lastSeen"
+//   opts.format (string, optional): one of json, xml; default "json"
+async function main() {
+  const result = await api.dnsHistoricalV22("whoisfreaks.com", "A,MX,TXT", { page: 1 });
+  console.log(JSON.stringify(result, null, 2));
+}
+
+main().catch((err) => {
+  // API errors carry the HTTP status and the parsed error body
+  console.error(err.status ? `HTTP ${err.status}: ${JSON.stringify(err.body)}` : err);
+  process.exitCode = 1;
+});
+```
+
+#### Historical DNS Lookup (v2.3)
+
+`GET /v2.3/dns/historical`
+
+```javascript
+// Historical DNS Lookup (v2.3): GET https://api.whoisfreaks.com/v2.3/dns/historical
+// Run: WHOISFREAKS_API_KEY=your_api_key node DnsHistoricalV23.js
+const { ApiClient, DNSApi } = require("whoisfreaks-js");
+
+// Set the API key once; the client adds it to every request.
+const client = ApiClient.instance;
+client.authentications["ApiKeyAuth"].apiKey = process.env.WHOISFREAKS_API_KEY;
+const api = new DNSApi(client);
+
+// dnsHistoricalV23(domainName, type, opts)
+//   domainName (string, required)
+//   type (string, required): default "all"
+//   opts.page (number, optional): default 1
+//   opts.sort (string, optional): Sort direction. Omit to leave the results unsorted; one of asc, desc
+//   opts.sortBy (string, optional): Field to sort on. Only applies when sort is given; one of firstSeen, lastSeen; default "lastSeen"
+//   opts.format (string, optional): one of json, xml; default "json"
+async function main() {
+  const result = await api.dnsHistoricalV23("whoisfreaks.com", "A,MX,TXT", { page: 1 });
+  console.log(JSON.stringify(result, null, 2));
+}
+
+main().catch((err) => {
+  // API errors carry the HTTP status and the parsed error body
+  console.error(err.status ? `HTTP ${err.status}: ${JSON.stringify(err.body)}` : err);
+  process.exitCode = 1;
+});
+```
+
+#### Reverse DNS Lookup (v2.2)
+
+`GET /v2.2/dns/reverse`
+
+```javascript
+// Reverse DNS Lookup (v2.2): GET https://api.whoisfreaks.com/v2.2/dns/reverse
+// Run: WHOISFREAKS_API_KEY=your_api_key node DnsReverseV22.js
+const { ApiClient, DNSApi } = require("whoisfreaks-js");
+
+// Set the API key once; the client adds it to every request.
+const client = ApiClient.instance;
+client.authentications["ApiKeyAuth"].apiKey = process.env.WHOISFREAKS_API_KEY;
+const api = new DNSApi(client);
+
+// dnsReverseV22(value, type, opts)
+//   value (string, required): IP, CIDR, or record value
+//   type (string, required): one of a, mx, cname, ns, aaaa, txt, soa
+//   opts.exact (boolean, optional): When false the value is matched as a substring, which is far slower than an e...; default true
+//   opts.page (number, optional): default 1
+//   opts.sort (string, optional): Sort direction. Omit to leave the results unsorted; one of asc, desc
+//   opts.sortBy (string, optional): Field to sort on. Only applies when sort is given; one of firstSeen, lastSeen; default "lastSeen"
+//   opts.format (string, optional): one of json, xml; default "json"
+async function main() {
+  const result = await api.dnsReverseV22("8.8.8.8", "a", { page: 1 });
+  console.log(JSON.stringify(result, null, 2));
+}
+
+main().catch((err) => {
+  // API errors carry the HTTP status and the parsed error body
+  console.error(err.status ? `HTTP ${err.status}: ${JSON.stringify(err.body)}` : err);
+  process.exitCode = 1;
+});
+```
+
+#### Reverse DNS Lookup (v2.3)
+
+`GET /v2.3/dns/reverse`
+
+```javascript
+// Reverse DNS Lookup (v2.3): GET https://api.whoisfreaks.com/v2.3/dns/reverse
+// Run: WHOISFREAKS_API_KEY=your_api_key node DnsReverseV23.js
+const { ApiClient, DNSApi } = require("whoisfreaks-js");
+
+// Set the API key once; the client adds it to every request.
+const client = ApiClient.instance;
+client.authentications["ApiKeyAuth"].apiKey = process.env.WHOISFREAKS_API_KEY;
+const api = new DNSApi(client);
+
+// dnsReverseV23(value, type, opts)
+//   value (string, required): IP, CIDR, or record value
+//   type (string, required): one of a, mx, cname, ns, aaaa, txt, soa
+//   opts.exact (boolean, optional): When false the value is matched as a substring, which is far slower than an e...; default true
+//   opts.page (number, optional): default 1
+//   opts.sort (string, optional): Sort direction. Omit to leave the results unsorted; one of asc, desc
+//   opts.sortBy (string, optional): Field to sort on. Only applies when sort is given; one of firstSeen, lastSeen; default "lastSeen"
+//   opts.format (string, optional): one of json, xml; default "json"
+async function main() {
+  const result = await api.dnsReverseV23("8.8.8.8", "a", { page: 1 });
   console.log(JSON.stringify(result, null, 2));
 }
 
@@ -620,6 +754,63 @@ const api = new IPReputationApi(client);
 async function main() {
   const body = BulkGeolocationRequest.constructFromObject({ ips: ["8.8.8.8", "1.1.1.1"] });
   const results = await api.bulkIpReputation(body);
+  console.log(JSON.stringify(results, null, 2));
+}
+
+main().catch((err) => {
+  // API errors carry the HTTP status and the parsed error body
+  console.error(err.status ? `HTTP ${err.status}: ${JSON.stringify(err.body)}` : err);
+  process.exitCode = 1;
+});
+```
+
+#### IP Reputation Lookup (v2.0)
+
+`GET /v2.0/security`
+
+```javascript
+// IP Reputation Lookup (v2.0): GET https://api.whoisfreaks.com/v2.0/security
+// Run: WHOISFREAKS_API_KEY=your_api_key node IpReputationV2.js
+const { ApiClient, IPReputationApi } = require("whoisfreaks-js");
+
+// Set the API key once; the client adds it to every request.
+const client = ApiClient.instance;
+client.authentications["ApiKeyAuth"].apiKey = process.env.WHOISFREAKS_API_KEY;
+const api = new IPReputationApi(client);
+
+// ipReputationV2(ip)
+//   ip (string, required)
+async function main() {
+  const result = await api.ipReputationV2("8.8.8.8");
+  console.log(JSON.stringify(result, null, 2));
+}
+
+main().catch((err) => {
+  // API errors carry the HTTP status and the parsed error body
+  console.error(err.status ? `HTTP ${err.status}: ${JSON.stringify(err.body)}` : err);
+  process.exitCode = 1;
+});
+```
+
+#### Bulk IP Reputation (v2.0)
+
+`POST /v2.0/security`
+
+```javascript
+// Bulk IP Reputation (v2.0): POST https://api.whoisfreaks.com/v2.0/security
+// Run: WHOISFREAKS_API_KEY=your_api_key node BulkIpReputationV2.js
+const { ApiClient, IPReputationApi, BulkGeolocationRequest } = require("whoisfreaks-js");
+
+// Set the API key once; the client adds it to every request.
+const client = ApiClient.instance;
+client.authentications["ApiKeyAuth"].apiKey = process.env.WHOISFREAKS_API_KEY;
+const api = new IPReputationApi(client);
+
+// bulkIpReputationV2(bulkGeolocationRequest)
+//   bulkGeolocationRequest (BulkGeolocationRequest, required): request body
+async function main() {
+  const body = BulkGeolocationRequest.constructFromObject({ ips: ["1.1.1.1", "2.2.2.2", "8.8.8.8"] });
+  const results = await api.bulkIpReputationV2(body);
   console.log(JSON.stringify(results, null, 2));
 }
 

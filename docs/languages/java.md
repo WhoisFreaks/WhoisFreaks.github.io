@@ -144,7 +144,7 @@ public class WhoisLive {
 
 ## Endpoints
 
-All 60 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
+All 66 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
 
 ### WHOIS
 
@@ -374,6 +374,148 @@ public class DnsReverse {
 
         // dnsReverse(value, type, exact, page, format); null leaves an optional parameter unset
         ReverseDnsResponse result = api.dnsReverse("8.8.8.8", "a", null, 1, null);
+        System.out.println(result);
+    }
+}
+
+```
+
+#### Historical DNS Lookup (v2.2)
+
+`GET /v2.2/dns/historical`
+
+```java
+// Runnable example: Historical DNS Lookup (v2.2) (GET /v2.2/dns/historical)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DnsHistoricalV22
+// Parameters for dnsHistoricalV22 (GET /v2.2/dns/historical):
+//   - domainName (string, required)
+//   - type (string, required)
+//   - page (integer, optional)
+//   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+//   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+//   - format (string (one of: json, xml), optional)
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.DnsApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.HistoricalDnsResponseV2_2;
+
+public class DnsHistoricalV22 {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
+        DnsApi api = new DnsApi(client);
+
+        // dnsHistoricalV22(domainName, type, page, sort, sortBy, format); null leaves an optional parameter unset
+        HistoricalDnsResponseV2_2 result = api.dnsHistoricalV22("whoisfreaks.com", "A,MX,TXT", 1, null, null, null);
+        System.out.println(result);
+    }
+}
+
+```
+
+#### Historical DNS Lookup (v2.3)
+
+`GET /v2.3/dns/historical`
+
+```java
+// Runnable example: Historical DNS Lookup (v2.3) (GET /v2.3/dns/historical)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DnsHistoricalV23
+// Parameters for dnsHistoricalV23 (GET /v2.3/dns/historical):
+//   - domainName (string, required)
+//   - type (string, required)
+//   - page (integer, optional)
+//   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+//   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+//   - format (string (one of: json, xml), optional)
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.DnsApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.HistoricalDnsResponseV2_2;
+
+public class DnsHistoricalV23 {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
+        DnsApi api = new DnsApi(client);
+
+        // dnsHistoricalV23(domainName, type, page, sort, sortBy, format); null leaves an optional parameter unset
+        HistoricalDnsResponseV2_2 result = api.dnsHistoricalV23("whoisfreaks.com", "A,MX,TXT", 1, null, null, null);
+        System.out.println(result);
+    }
+}
+
+```
+
+#### Reverse DNS Lookup (v2.2)
+
+`GET /v2.2/dns/reverse`
+
+```java
+// Runnable example: Reverse DNS Lookup (v2.2) (GET /v2.2/dns/reverse)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DnsReverseV22
+// Parameters for dnsReverseV22 (GET /v2.2/dns/reverse):
+//   - value (string, required): IP, CIDR, or record value
+//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
+//   - exact (boolean, optional): When false the value is matched as a substring, which is far slower than an exact match...
+//   - page (integer, optional)
+//   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+//   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+//   - format (string (one of: json, xml), optional)
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.DnsApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.ReverseDnsResponseV2_2;
+
+public class DnsReverseV22 {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
+        DnsApi api = new DnsApi(client);
+
+        // dnsReverseV22(value, type, exact, page, sort, sortBy, format); null leaves an optional parameter unset
+        ReverseDnsResponseV2_2 result = api.dnsReverseV22("8.8.8.8", "a", null, 1, null, null, null);
+        System.out.println(result);
+    }
+}
+
+```
+
+#### Reverse DNS Lookup (v2.3)
+
+`GET /v2.3/dns/reverse`
+
+```java
+// Runnable example: Reverse DNS Lookup (v2.3) (GET /v2.3/dns/reverse)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DnsReverseV23
+// Parameters for dnsReverseV23 (GET /v2.3/dns/reverse):
+//   - value (string, required): IP, CIDR, or record value
+//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
+//   - exact (boolean, optional): When false the value is matched as a substring, which is far slower than an exact match...
+//   - page (integer, optional)
+//   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+//   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+//   - format (string (one of: json, xml), optional)
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.DnsApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.ReverseDnsResponseV2_3;
+
+public class DnsReverseV23 {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
+        DnsApi api = new DnsApi(client);
+
+        // dnsReverseV23(value, type, exact, page, sort, sortBy, format); null leaves an optional parameter unset
+        ReverseDnsResponseV2_3 result = api.dnsReverseV23("8.8.8.8", "a", null, 1, null, null, null);
         System.out.println(result);
     }
 }
@@ -721,6 +863,70 @@ public class BulkIpReputation {
         BulkGeolocationRequest body = new BulkGeolocationRequest()
             .ips(Arrays.asList("8.8.8.8", "1.1.1.1"));
         List<IpReputationResponse> result = api.bulkIpReputation(body);
+        System.out.println(result);
+    }
+}
+
+```
+
+#### IP Reputation Lookup (v2.0)
+
+`GET /v2.0/security`
+
+```java
+// Runnable example: IP Reputation Lookup (v2.0) (GET /v2.0/security)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=IpReputationV2
+// Parameters for ipReputationV2 (GET /v2.0/security):
+//   - ip (string, required)
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.IpReputationApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.IpReputationResponse;
+
+public class IpReputationV2 {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
+        IpReputationApi api = new IpReputationApi(client);
+
+        IpReputationResponse result = api.ipReputationV2("8.8.8.8");
+        System.out.println(result);
+    }
+}
+
+```
+
+#### Bulk IP Reputation (v2.0)
+
+`POST /v2.0/security`
+
+```java
+// Runnable example: Bulk IP Reputation (v2.0) (POST /v2.0/security)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=BulkIpReputationV2
+// Parameters for bulkIpReputationV2 (POST /v2.0/security):
+//   - body: BulkGeolocationRequest (required): request body object
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.IpReputationApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.BulkGeolocationRequest;
+import com.whoisfreaks.client.model.IpReputationResponse;
+
+import java.util.Arrays;
+import java.util.List;
+
+public class BulkIpReputationV2 {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
+        IpReputationApi api = new IpReputationApi(client);
+
+        BulkGeolocationRequest body = new BulkGeolocationRequest()
+            .ips(Arrays.asList("1.1.1.1", "2.2.2.2", "8.8.8.8"));
+        List<IpReputationResponse> result = api.bulkIpReputationV2(body);
         System.out.println(result);
     }
 }

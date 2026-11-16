@@ -93,7 +93,7 @@ Console.WriteLine(result.ToJson());
 
 ## Endpoints
 
-All 60 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
+All 66 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
 
 ### WHOIS
 
@@ -287,6 +287,128 @@ config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
 var api = new DNSApi(config);
 
 ReverseDnsResponse result = api.DnsReverse("8.8.8.8", "a", page: 1);
+Console.WriteLine(result.ToJson());
+
+```
+
+#### Historical DNS Lookup (v2.2)
+
+`GET /v2.2/dns/historical`
+
+```csharp
+// Runnable example: Historical DNS Lookup (v2.2) (GET /v2.2/dns/historical)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
+// Parameters for dnsHistoricalV22 (GET /v2.2/dns/historical):
+//   - domainName (string, required)
+//   - type (string, required)
+//   - page (integer, optional)
+//   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+//   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+//   - format (string (one of: json, xml), optional)
+using System;
+using WhoisFreaks.Api;
+using WhoisFreaks.Client;
+using WhoisFreaks.Model;
+
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DNSApi(config);
+
+HistoricalDnsResponseV2_2 result = api.DnsHistoricalV22("whoisfreaks.com", "A,MX,TXT", page: 1);
+Console.WriteLine(result.ToJson());
+
+```
+
+#### Historical DNS Lookup (v2.3)
+
+`GET /v2.3/dns/historical`
+
+```csharp
+// Runnable example: Historical DNS Lookup (v2.3) (GET /v2.3/dns/historical)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
+// Parameters for dnsHistoricalV23 (GET /v2.3/dns/historical):
+//   - domainName (string, required)
+//   - type (string, required)
+//   - page (integer, optional)
+//   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+//   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+//   - format (string (one of: json, xml), optional)
+using System;
+using WhoisFreaks.Api;
+using WhoisFreaks.Client;
+using WhoisFreaks.Model;
+
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DNSApi(config);
+
+HistoricalDnsResponseV2_2 result = api.DnsHistoricalV23("whoisfreaks.com", "A,MX,TXT", page: 1);
+Console.WriteLine(result.ToJson());
+
+```
+
+#### Reverse DNS Lookup (v2.2)
+
+`GET /v2.2/dns/reverse`
+
+```csharp
+// Runnable example: Reverse DNS Lookup (v2.2) (GET /v2.2/dns/reverse)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
+// Parameters for dnsReverseV22 (GET /v2.2/dns/reverse):
+//   - value (string, required): IP, CIDR, or record value
+//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
+//   - exact (boolean, optional): When false the value is matched as a substring, which is far slower than an exact match...
+//   - page (integer, optional)
+//   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+//   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+//   - format (string (one of: json, xml), optional)
+using System;
+using WhoisFreaks.Api;
+using WhoisFreaks.Client;
+using WhoisFreaks.Model;
+
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DNSApi(config);
+
+ReverseDnsResponseV2_2 result = api.DnsReverseV22("8.8.8.8", "a", page: 1);
+Console.WriteLine(result.ToJson());
+
+```
+
+#### Reverse DNS Lookup (v2.3)
+
+`GET /v2.3/dns/reverse`
+
+```csharp
+// Runnable example: Reverse DNS Lookup (v2.3) (GET /v2.3/dns/reverse)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
+// Parameters for dnsReverseV23 (GET /v2.3/dns/reverse):
+//   - value (string, required): IP, CIDR, or record value
+//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
+//   - exact (boolean, optional): When false the value is matched as a substring, which is far slower than an exact match...
+//   - page (integer, optional)
+//   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+//   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+//   - format (string (one of: json, xml), optional)
+using System;
+using WhoisFreaks.Api;
+using WhoisFreaks.Client;
+using WhoisFreaks.Model;
+
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new DNSApi(config);
+
+ReverseDnsResponseV2_3 result = api.DnsReverseV23("8.8.8.8", "a", page: 1);
 Console.WriteLine(result.ToJson());
 
 ```
@@ -577,6 +699,61 @@ var api = new IPReputationApi(config);
 
 var body = new BulkGeolocationRequest(ips: new List<string> { "8.8.8.8", "1.1.1.1" });
 List<IpReputationResponse> result = api.BulkIpReputation(body);
+foreach (var item in result)
+{
+    Console.WriteLine(item.ToJson());
+}
+
+```
+
+#### IP Reputation Lookup (v2.0)
+
+`GET /v2.0/security`
+
+```csharp
+// Runnable example: IP Reputation Lookup (v2.0) (GET /v2.0/security)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
+// Parameters for ipReputationV2 (GET /v2.0/security):
+//   - ip (string, required)
+using System;
+using WhoisFreaks.Api;
+using WhoisFreaks.Client;
+using WhoisFreaks.Model;
+
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new IPReputationApi(config);
+
+IpReputationResponse result = api.IpReputationV2("8.8.8.8");
+Console.WriteLine(result.ToJson());
+
+```
+
+#### Bulk IP Reputation (v2.0)
+
+`POST /v2.0/security`
+
+```csharp
+// Runnable example: Bulk IP Reputation (v2.0) (POST /v2.0/security)
+// Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
+// Parameters for bulkIpReputationV2 (POST /v2.0/security):
+//   - body: BulkGeolocationRequest (required): request body object
+using System;
+using System.Collections.Generic;
+using WhoisFreaks.Api;
+using WhoisFreaks.Client;
+using WhoisFreaks.Model;
+
+var config = new Configuration();
+var apiKey = Environment.GetEnvironmentVariable("WHOISFREAKS_API_KEY")
+    ?? throw new InvalidOperationException("Set the WHOISFREAKS_API_KEY environment variable");
+config.AddApiKey("apiKey", apiKey);  // set once, sent with every call
+var api = new IPReputationApi(config);
+
+var body = new BulkGeolocationRequest(ips: new List<string> { "1.1.1.1", "2.2.2.2", "8.8.8.8" });
+List<IpReputationResponse> result = api.BulkIpReputationV2(body);
 foreach (var item in result)
 {
     Console.WriteLine(item.ToJson());

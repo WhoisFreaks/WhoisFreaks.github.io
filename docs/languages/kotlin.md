@@ -111,7 +111,7 @@ fun main() {
 
 ## Endpoints
 
-All 60 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
+All 66 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
 
 ### WHOIS
 
@@ -283,6 +283,116 @@ fun main() {
     val api = DNSApi()
 
     val result = api.dnsReverse("8.8.8.8", DNSApi.TypeDnsReverse.a, page = 1)
+    println(result)
+}
+
+```
+
+#### Historical DNS Lookup (v2.2)
+
+`GET /v2.2/dns/historical`
+
+```kotlin
+// Runnable example: Historical DNS Lookup (v2.2) (GET /v2.2/dns/historical)
+// Run it from the Getting Started project: gradle run -PmainClass=DnsHistoricalV22Kt
+// Parameters for dnsHistoricalV22 (GET /v2.2/dns/historical):
+//   - domainName (string, required)
+//   - type (string, required)
+//   - page (integer, optional)
+//   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+//   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+//   - format (string (one of: json, xml), optional)
+import com.whoisfreaks.client.apis.DNSApi
+import com.whoisfreaks.client.infrastructure.ApiClient
+
+fun main() {
+    ApiClient.apiKey["apiKey"] = System.getenv("WHOISFREAKS_API_KEY")  // set once, sent with every call
+    val api = DNSApi()
+
+    val result = api.dnsHistoricalV22("whoisfreaks.com", "A,MX,TXT", page = 1)
+    println(result)
+}
+
+```
+
+#### Historical DNS Lookup (v2.3)
+
+`GET /v2.3/dns/historical`
+
+```kotlin
+// Runnable example: Historical DNS Lookup (v2.3) (GET /v2.3/dns/historical)
+// Run it from the Getting Started project: gradle run -PmainClass=DnsHistoricalV23Kt
+// Parameters for dnsHistoricalV23 (GET /v2.3/dns/historical):
+//   - domainName (string, required)
+//   - type (string, required)
+//   - page (integer, optional)
+//   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+//   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+//   - format (string (one of: json, xml), optional)
+import com.whoisfreaks.client.apis.DNSApi
+import com.whoisfreaks.client.infrastructure.ApiClient
+
+fun main() {
+    ApiClient.apiKey["apiKey"] = System.getenv("WHOISFREAKS_API_KEY")  // set once, sent with every call
+    val api = DNSApi()
+
+    val result = api.dnsHistoricalV23("whoisfreaks.com", "A,MX,TXT", page = 1)
+    println(result)
+}
+
+```
+
+#### Reverse DNS Lookup (v2.2)
+
+`GET /v2.2/dns/reverse`
+
+```kotlin
+// Runnable example: Reverse DNS Lookup (v2.2) (GET /v2.2/dns/reverse)
+// Run it from the Getting Started project: gradle run -PmainClass=DnsReverseV22Kt
+// Parameters for dnsReverseV22 (GET /v2.2/dns/reverse):
+//   - value (string, required): IP, CIDR, or record value
+//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
+//   - exact (boolean, optional): When false the value is matched as a substring, which is far slower than an exact match...
+//   - page (integer, optional)
+//   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+//   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+//   - format (string (one of: json, xml), optional)
+import com.whoisfreaks.client.apis.DNSApi
+import com.whoisfreaks.client.infrastructure.ApiClient
+
+fun main() {
+    ApiClient.apiKey["apiKey"] = System.getenv("WHOISFREAKS_API_KEY")  // set once, sent with every call
+    val api = DNSApi()
+
+    val result = api.dnsReverseV22("8.8.8.8", DNSApi.TypeDnsReverseV22.a, page = 1)
+    println(result)
+}
+
+```
+
+#### Reverse DNS Lookup (v2.3)
+
+`GET /v2.3/dns/reverse`
+
+```kotlin
+// Runnable example: Reverse DNS Lookup (v2.3) (GET /v2.3/dns/reverse)
+// Run it from the Getting Started project: gradle run -PmainClass=DnsReverseV23Kt
+// Parameters for dnsReverseV23 (GET /v2.3/dns/reverse):
+//   - value (string, required): IP, CIDR, or record value
+//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
+//   - exact (boolean, optional): When false the value is matched as a substring, which is far slower than an exact match...
+//   - page (integer, optional)
+//   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+//   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+//   - format (string (one of: json, xml), optional)
+import com.whoisfreaks.client.apis.DNSApi
+import com.whoisfreaks.client.infrastructure.ApiClient
+
+fun main() {
+    ApiClient.apiKey["apiKey"] = System.getenv("WHOISFREAKS_API_KEY")  // set once, sent with every call
+    val api = DNSApi()
+
+    val result = api.dnsReverseV23("8.8.8.8", DNSApi.TypeDnsReverseV23.a, page = 1)
     println(result)
 }
 
@@ -540,6 +650,52 @@ fun main() {
 
     val body = BulkGeolocationRequest(ips = listOf("8.8.8.8", "1.1.1.1"))
     val result = api.bulkIpReputation(body)
+    println(result)
+}
+
+```
+
+#### IP Reputation Lookup (v2.0)
+
+`GET /v2.0/security`
+
+```kotlin
+// Runnable example: IP Reputation Lookup (v2.0) (GET /v2.0/security)
+// Run it from the Getting Started project: gradle run -PmainClass=IpReputationV2Kt
+// Parameters for ipReputationV2 (GET /v2.0/security):
+//   - ip (string, required)
+import com.whoisfreaks.client.apis.IPReputationApi
+import com.whoisfreaks.client.infrastructure.ApiClient
+
+fun main() {
+    ApiClient.apiKey["apiKey"] = System.getenv("WHOISFREAKS_API_KEY")  // set once, sent with every call
+    val api = IPReputationApi()
+
+    val result = api.ipReputationV2("8.8.8.8")
+    println(result)
+}
+
+```
+
+#### Bulk IP Reputation (v2.0)
+
+`POST /v2.0/security`
+
+```kotlin
+// Runnable example: Bulk IP Reputation (v2.0) (POST /v2.0/security)
+// Run it from the Getting Started project: gradle run -PmainClass=BulkIpReputationV2Kt
+// Parameters for bulkIpReputationV2 (POST /v2.0/security):
+//   - body: BulkGeolocationRequest (required): request body object
+import com.whoisfreaks.client.apis.IPReputationApi
+import com.whoisfreaks.client.infrastructure.ApiClient
+import com.whoisfreaks.client.models.BulkGeolocationRequest
+
+fun main() {
+    ApiClient.apiKey["apiKey"] = System.getenv("WHOISFREAKS_API_KEY")  // set once, sent with every call
+    val api = IPReputationApi()
+
+    val body = BulkGeolocationRequest(ips = listOf("1.1.1.1", "2.2.2.2", "8.8.8.8"))
+    val result = api.bulkIpReputationV2(body)
     println(result)
 }
 

@@ -109,7 +109,7 @@ end
 
 ## Endpoints
 
-All 60 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
+All 66 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
 
 ### WHOIS
 
@@ -334,6 +334,148 @@ api = WhoisFreaks::DNSApi.new
 
 begin
   result = api.dns_reverse("8.8.8.8", "a", page: 1)
+  puts JSON.pretty_generate(result.to_hash)
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Historical DNS Lookup (v2.2)
+
+`GET /v2.2/dns/historical`
+
+```ruby
+# Historical DNS Lookup (v2.2)
+#
+# Parameters for dnsHistoricalV22 (GET /v2.2/dns/historical):
+#   - domain_name (string, required)
+#   - type (string, required)
+#   - page (integer, optional)
+#   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+#   - sort_by (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+#   - format (string (one of: json, xml), optional)
+
+require "json"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DNSApi.new
+
+begin
+  result = api.dns_historical_v22("whoisfreaks.com", "A,MX,TXT", page: 1)
+  puts JSON.pretty_generate(result.to_hash)
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Historical DNS Lookup (v2.3)
+
+`GET /v2.3/dns/historical`
+
+```ruby
+# Historical DNS Lookup (v2.3)
+#
+# Parameters for dnsHistoricalV23 (GET /v2.3/dns/historical):
+#   - domain_name (string, required)
+#   - type (string, required)
+#   - page (integer, optional)
+#   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+#   - sort_by (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+#   - format (string (one of: json, xml), optional)
+
+require "json"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DNSApi.new
+
+begin
+  result = api.dns_historical_v23("whoisfreaks.com", "A,MX,TXT", page: 1)
+  puts JSON.pretty_generate(result.to_hash)
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Reverse DNS Lookup (v2.2)
+
+`GET /v2.2/dns/reverse`
+
+```ruby
+# Reverse DNS Lookup (v2.2)
+#
+# Parameters for dnsReverseV22 (GET /v2.2/dns/reverse):
+#   - value (string, required): IP, CIDR, or record value
+#   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
+#   - exact (boolean, optional): When false the value is matched as a substring, which is far slower than an exact match...
+#   - page (integer, optional)
+#   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+#   - sort_by (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+#   - format (string (one of: json, xml), optional)
+
+require "json"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DNSApi.new
+
+begin
+  result = api.dns_reverse_v22("8.8.8.8", "a", page: 1)
+  puts JSON.pretty_generate(result.to_hash)
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Reverse DNS Lookup (v2.3)
+
+`GET /v2.3/dns/reverse`
+
+```ruby
+# Reverse DNS Lookup (v2.3)
+#
+# Parameters for dnsReverseV23 (GET /v2.3/dns/reverse):
+#   - value (string, required): IP, CIDR, or record value
+#   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
+#   - exact (boolean, optional): When false the value is matched as a substring, which is far slower than an exact match...
+#   - page (integer, optional)
+#   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+#   - sort_by (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+#   - format (string (one of: json, xml), optional)
+
+require "json"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DNSApi.new
+
+begin
+  result = api.dns_reverse_v23("8.8.8.8", "a", page: 1)
   puts JSON.pretty_generate(result.to_hash)
 rescue WhoisFreaks::ApiError => e
   warn "Request failed: HTTP #{e.code} #{e.response_body}"
@@ -671,6 +813,68 @@ request = WhoisFreaks::BulkGeolocationRequest.new(ips: ["8.8.8.8", "1.1.1.1"])
 
 begin
   results = api.bulk_ip_reputation(request)
+  puts JSON.pretty_generate(results.map(&:to_hash))
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### IP Reputation Lookup (v2.0)
+
+`GET /v2.0/security`
+
+```ruby
+# IP Reputation Lookup (v2.0)
+#
+# Parameters for ipReputationV2 (GET /v2.0/security):
+#   - ip (string, required)
+
+require "json"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::IPReputationApi.new
+
+begin
+  result = api.ip_reputation_v2("8.8.8.8")
+  puts JSON.pretty_generate(result.to_hash)
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Bulk IP Reputation (v2.0)
+
+`POST /v2.0/security`
+
+```ruby
+# Bulk IP Reputation (v2.0)
+#
+# Parameters for bulkIpReputationV2 (POST /v2.0/security):
+#   - body: BulkGeolocationRequest (required): request body object
+
+require "json"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::IPReputationApi.new
+
+request = WhoisFreaks::BulkGeolocationRequest.new(ips: ["1.1.1.1", "2.2.2.2", "8.8.8.8"])
+
+begin
+  results = api.bulk_ip_reputation_v2(request)
   puts JSON.pretty_generate(results.map(&:to_hash))
 rescue WhoisFreaks::ApiError => e
   warn "Request failed: HTTP #{e.code} #{e.response_body}"

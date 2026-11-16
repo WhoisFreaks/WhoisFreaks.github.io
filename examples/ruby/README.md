@@ -12,6 +12,10 @@ Install: see the [Ruby guide](../../docs/languages/ruby.md). Set the `WHOISFREAK
 - [`DnsLive.rb`](DnsLive.rb): Live DNS Lookup (`GET /v2.0/dns/live`)
 - [`DnsHistorical.rb`](DnsHistorical.rb): Historical DNS Lookup (`GET /v2.0/dns/historical`)
 - [`DnsReverse.rb`](DnsReverse.rb): Reverse DNS Lookup (`GET /v2.1/dns/reverse`)
+- [`DnsHistoricalV22.rb`](DnsHistoricalV22.rb): Historical DNS Lookup (v2.2) (`GET /v2.2/dns/historical`)
+- [`DnsHistoricalV23.rb`](DnsHistoricalV23.rb): Historical DNS Lookup (v2.3) (`GET /v2.3/dns/historical`)
+- [`DnsReverseV22.rb`](DnsReverseV22.rb): Reverse DNS Lookup (v2.2) (`GET /v2.2/dns/reverse`)
+- [`DnsReverseV23.rb`](DnsReverseV23.rb): Reverse DNS Lookup (v2.3) (`GET /v2.3/dns/reverse`)
 - [`DnsBulk.rb`](DnsBulk.rb): Bulk DNS Lookup (`POST /v2.0/dns/bulk/live`)
 
 ## Domain Availability
@@ -34,6 +38,8 @@ Install: see the [Ruby guide](../../docs/languages/ruby.md). Set the `WHOISFREAK
 ## IP Reputation
 - [`IpReputation.rb`](IpReputation.rb): IP Reputation Lookup (`GET /v1.0/security`)
 - [`BulkIpReputation.rb`](BulkIpReputation.rb): Bulk IP Reputation (`POST /v1.0/security`)
+- [`IpReputationV2.rb`](IpReputationV2.rb): IP Reputation Lookup (v2.0) (`GET /v2.0/security`)
+- [`BulkIpReputationV2.rb`](BulkIpReputationV2.rb): Bulk IP Reputation (v2.0) (`POST /v2.0/security`)
 
 ## Domain Reputation
 - [`DomainReputation.rb`](DomainReputation.rb): Domain Reputation Lookup (`GET /v1/domain/security`)

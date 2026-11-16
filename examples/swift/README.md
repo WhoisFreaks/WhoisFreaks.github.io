@@ -12,6 +12,10 @@ Install: see the [Swift guide](../../docs/languages/swift.md). Set the `WHOISFRE
 - [`DnsLive.swift`](DnsLive.swift): Live DNS Lookup (`GET /v2.0/dns/live`)
 - [`DnsHistorical.swift`](DnsHistorical.swift): Historical DNS Lookup (`GET /v2.0/dns/historical`)
 - [`DnsReverse.swift`](DnsReverse.swift): Reverse DNS Lookup (`GET /v2.1/dns/reverse`)
+- [`DnsHistoricalV22.swift`](DnsHistoricalV22.swift): Historical DNS Lookup (v2.2) (`GET /v2.2/dns/historical`)
+- [`DnsHistoricalV23.swift`](DnsHistoricalV23.swift): Historical DNS Lookup (v2.3) (`GET /v2.3/dns/historical`)
+- [`DnsReverseV22.swift`](DnsReverseV22.swift): Reverse DNS Lookup (v2.2) (`GET /v2.2/dns/reverse`)
+- [`DnsReverseV23.swift`](DnsReverseV23.swift): Reverse DNS Lookup (v2.3) (`GET /v2.3/dns/reverse`)
 - [`DnsBulk.swift`](DnsBulk.swift): Bulk DNS Lookup (`POST /v2.0/dns/bulk/live`)
 
 ## Domain Availability
@@ -34,6 +38,8 @@ Install: see the [Swift guide](../../docs/languages/swift.md). Set the `WHOISFRE
 ## IP Reputation
 - [`IpReputation.swift`](IpReputation.swift): IP Reputation Lookup (`GET /v1.0/security`)
 - [`BulkIpReputation.swift`](BulkIpReputation.swift): Bulk IP Reputation (`POST /v1.0/security`)
+- [`IpReputationV2.swift`](IpReputationV2.swift): IP Reputation Lookup (v2.0) (`GET /v2.0/security`)
+- [`BulkIpReputationV2.swift`](BulkIpReputationV2.swift): Bulk IP Reputation (v2.0) (`POST /v2.0/security`)
 
 ## Domain Reputation
 - [`DomainReputation.swift`](DomainReputation.swift): Domain Reputation Lookup (`GET /v1/domain/security`)
