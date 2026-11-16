@@ -62,6 +62,8 @@ Threat intel for IP: VPN, proxy, Tor, bots. 1 credit.
 | `connection_type` | string |  |
 | `route` | string |  |
 | `is_anycast` | boolean |  |
+| `is_cdn` | boolean |  |
+| `cdn_provider_name` | string |  |
 
 </details>
 
@@ -268,6 +270,8 @@ Example: `{"ips": ["8.8.8.8", "1.1.1.1"]}`
 | `connection_type` | string |  |
 | `route` | string |  |
 | `is_anycast` | boolean |  |
+| `is_cdn` | boolean |  |
+| `cdn_provider_name` | string |  |
 
 </details>
 
@@ -420,7 +424,7 @@ func main() {
 
 `GET https://api.whoisfreaks.com/v2.0/security`
 
-Same lookup as /v1.0/security, on the current data set. The response carries the full ASN block, including asn_name, rir and the IPv4 and IPv6 route counts, and the security block uses the newer field names with the added VPN, relay, residential proxy, bot and corporate gateway signals. 1 credit.
+Same lookup as /v1.0/security on a restructured response. The ASN block moves to the top level as asn, network gains the announced route prefix with the anycast and CDN flags, and the security block uses the newer field names with the added VPN, relay, residential proxy, bot and corporate gateway signals. Note that asn_name, allocation_status, num_of_ipv4_routes, num_of_ipv6_routes and network.company are only in v1.0. 1 credit.
 
 **Parameters**
 
@@ -472,6 +476,8 @@ Same lookup as /v1.0/security, on the current data set. The response carries the
 | `connection_type` | string |  |
 | `route` | string |  |
 | `is_anycast` | boolean |  |
+| `is_cdn` | boolean |  |
+| `cdn_provider_name` | string |  |
 
 </details>
 
@@ -620,7 +626,7 @@ func main() {
 
 `POST https://api.whoisfreaks.com/v2.0/security`
 
-Up to 100 IPs, returning the same entry as GET /v2.0/security for each one. Unlike POST /v1.0/security, this returns the full ASN block, including the IPv4 and IPv6 route counts. 1 credit per IP.
+Up to 100 IPs, returning the same entry as GET /v2.0/security for each one. An invalid IP returns an error object for that entry only; the rest are still returned. 1 credit per IP.
 
 **Parameters**
 
@@ -678,6 +684,8 @@ Example: `{"ips": ["1.1.1.1", "2.2.2.2", "8.8.8.8"]}`
 | `connection_type` | string |  |
 | `route` | string |  |
 | `is_anycast` | boolean |  |
+| `is_cdn` | boolean |  |
+| `cdn_provider_name` | string |  |
 
 </details>
 

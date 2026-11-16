@@ -765,10 +765,11 @@ paths:
         - IP Reputation
       summary: IP Reputation Lookup (v2.0)
       description:
-        Same lookup as /v1.0/security, on the current data set. The response carries the full ASN
-        block, including asn_name, rir and the IPv4 and IPv6 route counts, and the security block
-        uses the newer field names with the added VPN, relay, residential proxy, bot and
-        corporate gateway signals. 1 credit.
+        Same lookup as /v1.0/security on a restructured response. The ASN block moves to the top
+        level as asn, network gains the announced route prefix with the anycast and CDN flags, and
+        the security block uses the newer field names with the added VPN, relay, residential proxy,
+        bot and corporate gateway signals. Note that asn_name, allocation_status,
+        num_of_ipv4_routes, num_of_ipv6_routes and network.company are only in v1.0. 1 credit.
       operationId: ipReputationV2
       parameters:
         - name: ip
@@ -791,9 +792,8 @@ paths:
         - IP Reputation
       summary: Bulk IP Reputation (v2.0)
       description:
-        Up to 100 IPs, returning the same entry as GET /v2.0/security for each one. Unlike
-        POST /v1.0/security, this returns the full ASN block, including the IPv4 and IPv6 route
-        counts. 1 credit per IP.
+        Up to 100 IPs, returning the same entry as GET /v2.0/security for each one. An invalid IP
+        returns an error object for that entry only; the rest are still returned. 1 credit per IP.
       operationId: bulkIpReputationV2
       parameters: []
       requestBody:
@@ -4089,6 +4089,10 @@ components:
           type: string
         is_anycast:
           type: boolean
+        is_cdn:
+          type: boolean
+        cdn_provider_name:
+          type: string
       additionalProperties: true
     IpSecurityAsn:
       type: object
