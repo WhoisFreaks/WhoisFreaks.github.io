@@ -144,7 +144,7 @@ public class WhoisLive {
 
 ## Endpoints
 
-All 66 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
+All 94 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
 
 ### WHOIS
 
@@ -2483,6 +2483,899 @@ public class DownloadThreatFeedSpamSample {
         Path target = Paths.get("DownloadThreatFeedSpamSample.csv");
         Files.move(download.toPath(), target, StandardCopyOption.REPLACE_EXISTING);
         System.out.println("Saved " + Files.size(target) + " bytes to " + target.toAbsolutePath());
+    }
+}
+
+```
+
+### Databases - Streaming
+
+#### Stream the daily phishing threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/phishing`
+
+```java
+// Runnable example: Stream the daily phishing threat feed (CSV) (GET /v3.4/stream/threat-feed/phishing)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=StreamThreatFeedPhishing
+// Parameters for streamThreatFeedPhishing (GET /v3.4/stream/threat-feed/phishing):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.DatabasesStreamingApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.time.LocalDate;
+
+public class StreamThreatFeedPhishing {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
+        DatabasesStreamingApi api = new DatabasesStreamingApi(client);
+
+        // streamThreatFeedPhishing(date, offset, limit); null leaves an optional parameter unset
+        String result = api.streamThreatFeedPhishing(LocalDate.of(2026, 10, 1), null, null);
+        System.out.println(result);
+    }
+}
+
+```
+
+#### Stream a sample of the phishing threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/phishing/sample`
+
+```java
+// Runnable example: Stream a sample of the phishing threat feed (CSV) (GET /v3.4/stream/threat-feed/phishing/sample)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=StreamThreatFeedPhishingSample
+// Parameters for streamThreatFeedPhishingSample (GET /v3.4/stream/threat-feed/phishing/sample):
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.DatabasesStreamingApi;
+
+public class StreamThreatFeedPhishingSample {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        // Public endpoint: no API key needed.
+        DatabasesStreamingApi api = new DatabasesStreamingApi(client);
+
+        // streamThreatFeedPhishingSample(offset, limit); null leaves an optional parameter unset
+        String result = api.streamThreatFeedPhishingSample(null, null);
+        System.out.println(result);
+    }
+}
+
+```
+
+#### Stream the daily malware threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/malware`
+
+```java
+// Runnable example: Stream the daily malware threat feed (CSV) (GET /v3.4/stream/threat-feed/malware)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=StreamThreatFeedMalware
+// Parameters for streamThreatFeedMalware (GET /v3.4/stream/threat-feed/malware):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.DatabasesStreamingApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.time.LocalDate;
+
+public class StreamThreatFeedMalware {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
+        DatabasesStreamingApi api = new DatabasesStreamingApi(client);
+
+        // streamThreatFeedMalware(date, offset, limit); null leaves an optional parameter unset
+        String result = api.streamThreatFeedMalware(LocalDate.of(2026, 10, 1), null, null);
+        System.out.println(result);
+    }
+}
+
+```
+
+#### Stream a sample of the malware threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/malware/sample`
+
+```java
+// Runnable example: Stream a sample of the malware threat feed (CSV) (GET /v3.4/stream/threat-feed/malware/sample)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=StreamThreatFeedMalwareSample
+// Parameters for streamThreatFeedMalwareSample (GET /v3.4/stream/threat-feed/malware/sample):
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.DatabasesStreamingApi;
+
+public class StreamThreatFeedMalwareSample {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        // Public endpoint: no API key needed.
+        DatabasesStreamingApi api = new DatabasesStreamingApi(client);
+
+        // streamThreatFeedMalwareSample(offset, limit); null leaves an optional parameter unset
+        String result = api.streamThreatFeedMalwareSample(null, null);
+        System.out.println(result);
+    }
+}
+
+```
+
+#### Stream the daily spam threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/spam`
+
+```java
+// Runnable example: Stream the daily spam threat feed (CSV) (GET /v3.4/stream/threat-feed/spam)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=StreamThreatFeedSpam
+// Parameters for streamThreatFeedSpam (GET /v3.4/stream/threat-feed/spam):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.DatabasesStreamingApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.time.LocalDate;
+
+public class StreamThreatFeedSpam {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
+        DatabasesStreamingApi api = new DatabasesStreamingApi(client);
+
+        // streamThreatFeedSpam(date, offset, limit); null leaves an optional parameter unset
+        String result = api.streamThreatFeedSpam(LocalDate.of(2026, 10, 1), null, null);
+        System.out.println(result);
+    }
+}
+
+```
+
+#### Stream a sample of the spam threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/spam/sample`
+
+```java
+// Runnable example: Stream a sample of the spam threat feed (CSV) (GET /v3.4/stream/threat-feed/spam/sample)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=StreamThreatFeedSpamSample
+// Parameters for streamThreatFeedSpamSample (GET /v3.4/stream/threat-feed/spam/sample):
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.DatabasesStreamingApi;
+
+public class StreamThreatFeedSpamSample {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        // Public endpoint: no API key needed.
+        DatabasesStreamingApi api = new DatabasesStreamingApi(client);
+
+        // streamThreatFeedSpamSample(offset, limit); null leaves an optional parameter unset
+        String result = api.streamThreatFeedSpamSample(null, null);
+        System.out.println(result);
+    }
+}
+
+```
+
+#### Stream newly registered gTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/gtld`
+
+```java
+// Runnable example: Stream newly registered gTLD domains (CSV) (GET /v3.3/stream/domainer/gtld)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=StreamDomainerGtld
+// Parameters for streamDomainerGtld (GET /v3.3/stream/domainer/gtld):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.DatabasesStreamingApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.time.LocalDate;
+
+public class StreamDomainerGtld {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
+        DatabasesStreamingApi api = new DatabasesStreamingApi(client);
+
+        // streamDomainerGtld(date, whois, offset, limit); null leaves an optional parameter unset
+        String result = api.streamDomainerGtld(LocalDate.of(2026, 10, 1), null, null, null);
+        System.out.println(result);
+    }
+}
+
+```
+
+#### Stream cleaned newly registered gTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/gtld/cleaned`
+
+```java
+// Runnable example: Stream cleaned newly registered gTLD domains (CSV) (GET /v3.3/stream/domainer/gtld/cleaned)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=StreamDomainerGtldCleaned
+// Parameters for streamDomainerGtldCleaned (GET /v3.3/stream/domainer/gtld/cleaned):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.DatabasesStreamingApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.time.LocalDate;
+
+public class StreamDomainerGtldCleaned {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
+        DatabasesStreamingApi api = new DatabasesStreamingApi(client);
+
+        // streamDomainerGtldCleaned(date, whois, offset, limit); null leaves an optional parameter unset
+        String result = api.streamDomainerGtldCleaned(LocalDate.of(2026, 10, 1), null, null, null);
+        System.out.println(result);
+    }
+}
+
+```
+
+#### Stream cleaned newly registered gTLD domains with an email (CSV)
+
+`GET /v3.3/stream/domainer/gtld/cleaned/email`
+
+```java
+// Runnable example: Stream cleaned newly registered gTLD domains with an email (CSV) (GET /v3.3/stream/domainer/gtld/cleaned/email)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=StreamDomainerGtldCleanedEmail
+// Parameters for streamDomainerGtldCleanedEmail (GET /v3.3/stream/domainer/gtld/cleaned/email):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.DatabasesStreamingApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.time.LocalDate;
+
+public class StreamDomainerGtldCleanedEmail {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
+        DatabasesStreamingApi api = new DatabasesStreamingApi(client);
+
+        // streamDomainerGtldCleanedEmail(date, whois, offset, limit); null leaves an optional parameter unset
+        String result = api.streamDomainerGtldCleanedEmail(LocalDate.of(2026, 10, 1), null, null, null);
+        System.out.println(result);
+    }
+}
+
+```
+
+#### Stream cleaned newly registered gTLD domains with a phone (CSV)
+
+`GET /v3.3/stream/domainer/gtld/cleaned/phone`
+
+```java
+// Runnable example: Stream cleaned newly registered gTLD domains with a phone (CSV) (GET /v3.3/stream/domainer/gtld/cleaned/phone)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=StreamDomainerGtldCleanedPhone
+// Parameters for streamDomainerGtldCleanedPhone (GET /v3.3/stream/domainer/gtld/cleaned/phone):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.DatabasesStreamingApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.time.LocalDate;
+
+public class StreamDomainerGtldCleanedPhone {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
+        DatabasesStreamingApi api = new DatabasesStreamingApi(client);
+
+        // streamDomainerGtldCleanedPhone(date, whois, offset, limit); null leaves an optional parameter unset
+        String result = api.streamDomainerGtldCleanedPhone(LocalDate.of(2026, 10, 1), null, null, null);
+        System.out.println(result);
+    }
+}
+
+```
+
+#### Stream newly registered ccTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/cctld`
+
+```java
+// Runnable example: Stream newly registered ccTLD domains (CSV) (GET /v3.3/stream/domainer/cctld)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=StreamDomainerCctld
+// Parameters for streamDomainerCctld (GET /v3.3/stream/domainer/cctld):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.DatabasesStreamingApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.time.LocalDate;
+
+public class StreamDomainerCctld {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
+        DatabasesStreamingApi api = new DatabasesStreamingApi(client);
+
+        // streamDomainerCctld(date, whois, offset, limit); null leaves an optional parameter unset
+        String result = api.streamDomainerCctld(LocalDate.of(2026, 10, 1), null, null, null);
+        System.out.println(result);
+    }
+}
+
+```
+
+#### Stream cleaned newly registered ccTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/cctld/cleaned`
+
+```java
+// Runnable example: Stream cleaned newly registered ccTLD domains (CSV) (GET /v3.3/stream/domainer/cctld/cleaned)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=StreamDomainerCctldCleaned
+// Parameters for streamDomainerCctldCleaned (GET /v3.3/stream/domainer/cctld/cleaned):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.DatabasesStreamingApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.time.LocalDate;
+
+public class StreamDomainerCctldCleaned {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
+        DatabasesStreamingApi api = new DatabasesStreamingApi(client);
+
+        // streamDomainerCctldCleaned(date, whois, offset, limit); null leaves an optional parameter unset
+        String result = api.streamDomainerCctldCleaned(LocalDate.of(2026, 10, 1), null, null, null);
+        System.out.println(result);
+    }
+}
+
+```
+
+#### Stream cleaned newly registered ccTLD domains with an email (CSV)
+
+`GET /v3.3/stream/domainer/cctld/cleaned/email`
+
+```java
+// Runnable example: Stream cleaned newly registered ccTLD domains with an email (CSV) (GET /v3.3/stream/domainer/cctld/cleaned/email)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=StreamDomainerCctldCleanedEmail
+// Parameters for streamDomainerCctldCleanedEmail (GET /v3.3/stream/domainer/cctld/cleaned/email):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.DatabasesStreamingApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.time.LocalDate;
+
+public class StreamDomainerCctldCleanedEmail {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
+        DatabasesStreamingApi api = new DatabasesStreamingApi(client);
+
+        // streamDomainerCctldCleanedEmail(date, whois, offset, limit); null leaves an optional parameter unset
+        String result = api.streamDomainerCctldCleanedEmail(LocalDate.of(2026, 10, 1), null, null, null);
+        System.out.println(result);
+    }
+}
+
+```
+
+#### Stream cleaned newly registered ccTLD domains with a phone (CSV)
+
+`GET /v3.3/stream/domainer/cctld/cleaned/phone`
+
+```java
+// Runnable example: Stream cleaned newly registered ccTLD domains with a phone (CSV) (GET /v3.3/stream/domainer/cctld/cleaned/phone)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=StreamDomainerCctldCleanedPhone
+// Parameters for streamDomainerCctldCleanedPhone (GET /v3.3/stream/domainer/cctld/cleaned/phone):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.DatabasesStreamingApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.time.LocalDate;
+
+public class StreamDomainerCctldCleanedPhone {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
+        DatabasesStreamingApi api = new DatabasesStreamingApi(client);
+
+        // streamDomainerCctldCleanedPhone(date, whois, offset, limit); null leaves an optional parameter unset
+        String result = api.streamDomainerCctldCleanedPhone(LocalDate.of(2026, 10, 1), null, null, null);
+        System.out.println(result);
+    }
+}
+
+```
+
+#### Stream expiring domains (CSV)
+
+`GET /v3.3/stream/domainer/expired`
+
+```java
+// Runnable example: Stream expiring domains (CSV) (GET /v3.3/stream/domainer/expired)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=StreamDomainerExpired
+// Parameters for streamDomainerExpired (GET /v3.3/stream/domainer/expired):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.DatabasesStreamingApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.time.LocalDate;
+
+public class StreamDomainerExpired {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
+        DatabasesStreamingApi api = new DatabasesStreamingApi(client);
+
+        // streamDomainerExpired(date, whois, offset, limit); null leaves an optional parameter unset
+        String result = api.streamDomainerExpired(LocalDate.of(2026, 10, 1), null, null, null);
+        System.out.println(result);
+    }
+}
+
+```
+
+#### Stream cleaned expiring domains (CSV)
+
+`GET /v3.3/stream/domainer/expired/cleaned`
+
+```java
+// Runnable example: Stream cleaned expiring domains (CSV) (GET /v3.3/stream/domainer/expired/cleaned)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=StreamDomainerExpiredCleaned
+// Parameters for streamDomainerExpiredCleaned (GET /v3.3/stream/domainer/expired/cleaned):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.DatabasesStreamingApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.time.LocalDate;
+
+public class StreamDomainerExpiredCleaned {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
+        DatabasesStreamingApi api = new DatabasesStreamingApi(client);
+
+        // streamDomainerExpiredCleaned(date, whois, offset, limit); null leaves an optional parameter unset
+        String result = api.streamDomainerExpiredCleaned(LocalDate.of(2026, 10, 1), null, null, null);
+        System.out.println(result);
+    }
+}
+
+```
+
+#### Stream cleaned expiring domains with an email (CSV)
+
+`GET /v3.3/stream/domainer/expired/cleaned/email`
+
+```java
+// Runnable example: Stream cleaned expiring domains with an email (CSV) (GET /v3.3/stream/domainer/expired/cleaned/email)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=StreamDomainerExpiredCleanedEmail
+// Parameters for streamDomainerExpiredCleanedEmail (GET /v3.3/stream/domainer/expired/cleaned/email):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.DatabasesStreamingApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.time.LocalDate;
+
+public class StreamDomainerExpiredCleanedEmail {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
+        DatabasesStreamingApi api = new DatabasesStreamingApi(client);
+
+        // streamDomainerExpiredCleanedEmail(date, whois, offset, limit); null leaves an optional parameter unset
+        String result = api.streamDomainerExpiredCleanedEmail(LocalDate.of(2026, 10, 1), null, null, null);
+        System.out.println(result);
+    }
+}
+
+```
+
+#### Stream cleaned expiring domains with a phone (CSV)
+
+`GET /v3.3/stream/domainer/expired/cleaned/phone`
+
+```java
+// Runnable example: Stream cleaned expiring domains with a phone (CSV) (GET /v3.3/stream/domainer/expired/cleaned/phone)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=StreamDomainerExpiredCleanedPhone
+// Parameters for streamDomainerExpiredCleanedPhone (GET /v3.3/stream/domainer/expired/cleaned/phone):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.DatabasesStreamingApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.time.LocalDate;
+
+public class StreamDomainerExpiredCleanedPhone {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
+        DatabasesStreamingApi api = new DatabasesStreamingApi(client);
+
+        // streamDomainerExpiredCleanedPhone(date, whois, offset, limit); null leaves an optional parameter unset
+        String result = api.streamDomainerExpiredCleanedPhone(LocalDate.of(2026, 10, 1), null, null, null);
+        System.out.println(result);
+    }
+}
+
+```
+
+#### Stream dropped domains (CSV)
+
+`GET /v3.3/stream/domainer/dropped`
+
+```java
+// Runnable example: Stream dropped domains (CSV) (GET /v3.3/stream/domainer/dropped)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=StreamDomainerDropped
+// Parameters for streamDomainerDropped (GET /v3.3/stream/domainer/dropped):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.DatabasesStreamingApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.time.LocalDate;
+
+public class StreamDomainerDropped {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
+        DatabasesStreamingApi api = new DatabasesStreamingApi(client);
+
+        // streamDomainerDropped(date, whois, offset, limit); null leaves an optional parameter unset
+        String result = api.streamDomainerDropped(LocalDate.of(2026, 10, 1), null, null, null);
+        System.out.println(result);
+    }
+}
+
+```
+
+#### Stream dropped domains with backlinks (CSV)
+
+`GET /v3.3/stream/domainer/dropped/backlinks`
+
+```java
+// Runnable example: Stream dropped domains with backlinks (CSV) (GET /v3.3/stream/domainer/dropped/backlinks)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=StreamDomainerDroppedBacklinks
+// Parameters for streamDomainerDroppedBacklinks (GET /v3.3/stream/domainer/dropped/backlinks):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.DatabasesStreamingApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+
+import java.time.LocalDate;
+
+public class StreamDomainerDroppedBacklinks {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
+        DatabasesStreamingApi api = new DatabasesStreamingApi(client);
+
+        // streamDomainerDroppedBacklinks(date, whois, offset, limit); null leaves an optional parameter unset
+        String result = api.streamDomainerDroppedBacklinks(LocalDate.of(2026, 10, 1), null, null, null);
+        System.out.println(result);
+    }
+}
+
+```
+
+#### Stream a sample of newly registered gTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/gtld`
+
+```java
+// Runnable example: Stream a sample of newly registered gTLD domains (CSV) (GET /v3.3/stream/domainer/sample/gtld)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=StreamDomainerGtldSample
+// Parameters for streamDomainerGtldSample (GET /v3.3/stream/domainer/sample/gtld):
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.DatabasesStreamingApi;
+
+public class StreamDomainerGtldSample {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        // Public endpoint: no API key needed.
+        DatabasesStreamingApi api = new DatabasesStreamingApi(client);
+
+        // streamDomainerGtldSample(whois, offset, limit); null leaves an optional parameter unset
+        String result = api.streamDomainerGtldSample(null, null, null);
+        System.out.println(result);
+    }
+}
+
+```
+
+#### Stream a sample of cleaned newly registered gTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/gtld/cleaned`
+
+```java
+// Runnable example: Stream a sample of cleaned newly registered gTLD domains (CSV) (GET /v3.3/stream/domainer/sample/gtld/cleaned)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=StreamDomainerGtldCleanedSample
+// Parameters for streamDomainerGtldCleanedSample (GET /v3.3/stream/domainer/sample/gtld/cleaned):
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.DatabasesStreamingApi;
+
+public class StreamDomainerGtldCleanedSample {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        // Public endpoint: no API key needed.
+        DatabasesStreamingApi api = new DatabasesStreamingApi(client);
+
+        // streamDomainerGtldCleanedSample(whois, offset, limit); null leaves an optional parameter unset
+        String result = api.streamDomainerGtldCleanedSample(null, null, null);
+        System.out.println(result);
+    }
+}
+
+```
+
+#### Stream a sample of newly registered ccTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/cctld`
+
+```java
+// Runnable example: Stream a sample of newly registered ccTLD domains (CSV) (GET /v3.3/stream/domainer/sample/cctld)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=StreamDomainerCctldSample
+// Parameters for streamDomainerCctldSample (GET /v3.3/stream/domainer/sample/cctld):
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.DatabasesStreamingApi;
+
+public class StreamDomainerCctldSample {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        // Public endpoint: no API key needed.
+        DatabasesStreamingApi api = new DatabasesStreamingApi(client);
+
+        // streamDomainerCctldSample(whois, offset, limit); null leaves an optional parameter unset
+        String result = api.streamDomainerCctldSample(null, null, null);
+        System.out.println(result);
+    }
+}
+
+```
+
+#### Stream a sample of cleaned newly registered ccTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/cctld/cleaned`
+
+```java
+// Runnable example: Stream a sample of cleaned newly registered ccTLD domains (CSV) (GET /v3.3/stream/domainer/sample/cctld/cleaned)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=StreamDomainerCctldCleanedSample
+// Parameters for streamDomainerCctldCleanedSample (GET /v3.3/stream/domainer/sample/cctld/cleaned):
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.DatabasesStreamingApi;
+
+public class StreamDomainerCctldCleanedSample {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        // Public endpoint: no API key needed.
+        DatabasesStreamingApi api = new DatabasesStreamingApi(client);
+
+        // streamDomainerCctldCleanedSample(whois, offset, limit); null leaves an optional parameter unset
+        String result = api.streamDomainerCctldCleanedSample(null, null, null);
+        System.out.println(result);
+    }
+}
+
+```
+
+#### Stream a sample of expiring domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/expired`
+
+```java
+// Runnable example: Stream a sample of expiring domains (CSV) (GET /v3.3/stream/domainer/sample/expired)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=StreamDomainerExpiredSample
+// Parameters for streamDomainerExpiredSample (GET /v3.3/stream/domainer/sample/expired):
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.DatabasesStreamingApi;
+
+public class StreamDomainerExpiredSample {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        // Public endpoint: no API key needed.
+        DatabasesStreamingApi api = new DatabasesStreamingApi(client);
+
+        // streamDomainerExpiredSample(whois, offset, limit); null leaves an optional parameter unset
+        String result = api.streamDomainerExpiredSample(null, null, null);
+        System.out.println(result);
+    }
+}
+
+```
+
+#### Stream a sample of cleaned expiring domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/expired/cleaned`
+
+```java
+// Runnable example: Stream a sample of cleaned expiring domains (CSV) (GET /v3.3/stream/domainer/sample/expired/cleaned)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=StreamDomainerExpiredCleanedSample
+// Parameters for streamDomainerExpiredCleanedSample (GET /v3.3/stream/domainer/sample/expired/cleaned):
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.DatabasesStreamingApi;
+
+public class StreamDomainerExpiredCleanedSample {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        // Public endpoint: no API key needed.
+        DatabasesStreamingApi api = new DatabasesStreamingApi(client);
+
+        // streamDomainerExpiredCleanedSample(whois, offset, limit); null leaves an optional parameter unset
+        String result = api.streamDomainerExpiredCleanedSample(null, null, null);
+        System.out.println(result);
+    }
+}
+
+```
+
+#### Stream a sample of dropped domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/dropped`
+
+```java
+// Runnable example: Stream a sample of dropped domains (CSV) (GET /v3.3/stream/domainer/sample/dropped)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=StreamDomainerDroppedSample
+// Parameters for streamDomainerDroppedSample (GET /v3.3/stream/domainer/sample/dropped):
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.DatabasesStreamingApi;
+
+public class StreamDomainerDroppedSample {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        // Public endpoint: no API key needed.
+        DatabasesStreamingApi api = new DatabasesStreamingApi(client);
+
+        // streamDomainerDroppedSample(whois, offset, limit); null leaves an optional parameter unset
+        String result = api.streamDomainerDroppedSample(null, null, null);
+        System.out.println(result);
+    }
+}
+
+```
+
+#### Stream a sample of dropped domains with backlinks (CSV)
+
+`GET /v3.3/stream/domainer/sample/dropped/backlinks`
+
+```java
+// Runnable example: Stream a sample of dropped domains with backlinks (CSV) (GET /v3.3/stream/domainer/sample/dropped/backlinks)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=StreamDomainerDroppedBacklinksSample
+// Parameters for streamDomainerDroppedBacklinksSample (GET /v3.3/stream/domainer/sample/dropped/backlinks):
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.DatabasesStreamingApi;
+
+public class StreamDomainerDroppedBacklinksSample {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        // Public endpoint: no API key needed.
+        DatabasesStreamingApi api = new DatabasesStreamingApi(client);
+
+        // streamDomainerDroppedBacklinksSample(whois, offset, limit); null leaves an optional parameter unset
+        String result = api.streamDomainerDroppedBacklinksSample(null, null, null);
+        System.out.println(result);
     }
 }
 

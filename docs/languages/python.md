@@ -92,7 +92,7 @@ with whoisfreaks.ApiClient(config) as client:
 
 ## Endpoints
 
-All 66 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
+All 94 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
 
 ### WHOIS
 
@@ -2062,4 +2062,807 @@ with whoisfreaks.ApiClient(config) as client:
     with open(path, "wb") as f:
         f.write(data)
     print(f"Saved {len(data)} bytes to {os.path.abspath(path)}")
+```
+
+### Databases - Streaming
+
+#### Stream the daily phishing threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/phishing`
+
+```python
+"""Stream the daily phishing threat feed (CSV): GET https://files.whoisfreaks.com/v3.4/stream/threat-feed/phishing
+
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python StreamThreatFeedPhishing.py
+"""
+import os
+from datetime import date
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesStreamingApi(client)
+
+    # stream_threat_feed_phishing parameters:
+    #   var_date (datetime.date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+    #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
+    #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+    new_key = api.stream_threat_feed_phishing(date(2026, 10, 1))  # use this key from now on
+    print("New API key:", new_key)
+```
+
+#### Stream a sample of the phishing threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/phishing/sample`
+
+```python
+"""Stream a sample of the phishing threat feed (CSV): GET https://files.whoisfreaks.com/v3.4/stream/threat-feed/phishing/sample
+
+Run it (public endpoint, no API key needed):
+    python StreamThreatFeedPhishingSample.py
+"""
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+# Public endpoint: no API key needed.
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesStreamingApi(client)
+
+    # stream_threat_feed_phishing_sample parameters:
+    #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
+    #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+    new_key = api.stream_threat_feed_phishing_sample()  # use this key from now on
+    print("New API key:", new_key)
+```
+
+#### Stream the daily malware threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/malware`
+
+```python
+"""Stream the daily malware threat feed (CSV): GET https://files.whoisfreaks.com/v3.4/stream/threat-feed/malware
+
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python StreamThreatFeedMalware.py
+"""
+import os
+from datetime import date
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesStreamingApi(client)
+
+    # stream_threat_feed_malware parameters:
+    #   var_date (datetime.date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+    #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
+    #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+    new_key = api.stream_threat_feed_malware(date(2026, 10, 1))  # use this key from now on
+    print("New API key:", new_key)
+```
+
+#### Stream a sample of the malware threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/malware/sample`
+
+```python
+"""Stream a sample of the malware threat feed (CSV): GET https://files.whoisfreaks.com/v3.4/stream/threat-feed/malware/sample
+
+Run it (public endpoint, no API key needed):
+    python StreamThreatFeedMalwareSample.py
+"""
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+# Public endpoint: no API key needed.
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesStreamingApi(client)
+
+    # stream_threat_feed_malware_sample parameters:
+    #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
+    #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+    new_key = api.stream_threat_feed_malware_sample()  # use this key from now on
+    print("New API key:", new_key)
+```
+
+#### Stream the daily spam threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/spam`
+
+```python
+"""Stream the daily spam threat feed (CSV): GET https://files.whoisfreaks.com/v3.4/stream/threat-feed/spam
+
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python StreamThreatFeedSpam.py
+"""
+import os
+from datetime import date
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesStreamingApi(client)
+
+    # stream_threat_feed_spam parameters:
+    #   var_date (datetime.date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+    #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
+    #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+    new_key = api.stream_threat_feed_spam(date(2026, 10, 1))  # use this key from now on
+    print("New API key:", new_key)
+```
+
+#### Stream a sample of the spam threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/spam/sample`
+
+```python
+"""Stream a sample of the spam threat feed (CSV): GET https://files.whoisfreaks.com/v3.4/stream/threat-feed/spam/sample
+
+Run it (public endpoint, no API key needed):
+    python StreamThreatFeedSpamSample.py
+"""
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+# Public endpoint: no API key needed.
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesStreamingApi(client)
+
+    # stream_threat_feed_spam_sample parameters:
+    #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
+    #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+    new_key = api.stream_threat_feed_spam_sample()  # use this key from now on
+    print("New API key:", new_key)
+```
+
+#### Stream newly registered gTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/gtld`
+
+```python
+"""Stream newly registered gTLD domains (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/gtld
+
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python StreamDomainerGtld.py
+"""
+import os
+from datetime import date
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesStreamingApi(client)
+
+    # stream_domainer_gtld parameters:
+    #   var_date (datetime.date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+    #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
+    #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
+    #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+    new_key = api.stream_domainer_gtld(date(2026, 10, 1))  # use this key from now on
+    print("New API key:", new_key)
+```
+
+#### Stream cleaned newly registered gTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/gtld/cleaned`
+
+```python
+"""Stream cleaned newly registered gTLD domains (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/gtld/cleaned
+
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python StreamDomainerGtldCleaned.py
+"""
+import os
+from datetime import date
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesStreamingApi(client)
+
+    # stream_domainer_gtld_cleaned parameters:
+    #   var_date (datetime.date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+    #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
+    #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
+    #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+    new_key = api.stream_domainer_gtld_cleaned(date(2026, 10, 1))  # use this key from now on
+    print("New API key:", new_key)
+```
+
+#### Stream cleaned newly registered gTLD domains with an email (CSV)
+
+`GET /v3.3/stream/domainer/gtld/cleaned/email`
+
+```python
+"""Stream cleaned newly registered gTLD domains with an email (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/gtld/cleaned/email
+
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python StreamDomainerGtldCleanedEmail.py
+"""
+import os
+from datetime import date
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesStreamingApi(client)
+
+    # stream_domainer_gtld_cleaned_email parameters:
+    #   var_date (datetime.date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+    #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
+    #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
+    #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+    new_key = api.stream_domainer_gtld_cleaned_email(date(2026, 10, 1))  # use this key from now on
+    print("New API key:", new_key)
+```
+
+#### Stream cleaned newly registered gTLD domains with a phone (CSV)
+
+`GET /v3.3/stream/domainer/gtld/cleaned/phone`
+
+```python
+"""Stream cleaned newly registered gTLD domains with a phone (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/gtld/cleaned/phone
+
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python StreamDomainerGtldCleanedPhone.py
+"""
+import os
+from datetime import date
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesStreamingApi(client)
+
+    # stream_domainer_gtld_cleaned_phone parameters:
+    #   var_date (datetime.date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+    #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
+    #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
+    #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+    new_key = api.stream_domainer_gtld_cleaned_phone(date(2026, 10, 1))  # use this key from now on
+    print("New API key:", new_key)
+```
+
+#### Stream newly registered ccTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/cctld`
+
+```python
+"""Stream newly registered ccTLD domains (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/cctld
+
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python StreamDomainerCctld.py
+"""
+import os
+from datetime import date
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesStreamingApi(client)
+
+    # stream_domainer_cctld parameters:
+    #   var_date (datetime.date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+    #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
+    #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
+    #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+    new_key = api.stream_domainer_cctld(date(2026, 10, 1))  # use this key from now on
+    print("New API key:", new_key)
+```
+
+#### Stream cleaned newly registered ccTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/cctld/cleaned`
+
+```python
+"""Stream cleaned newly registered ccTLD domains (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/cctld/cleaned
+
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python StreamDomainerCctldCleaned.py
+"""
+import os
+from datetime import date
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesStreamingApi(client)
+
+    # stream_domainer_cctld_cleaned parameters:
+    #   var_date (datetime.date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+    #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
+    #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
+    #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+    new_key = api.stream_domainer_cctld_cleaned(date(2026, 10, 1))  # use this key from now on
+    print("New API key:", new_key)
+```
+
+#### Stream cleaned newly registered ccTLD domains with an email (CSV)
+
+`GET /v3.3/stream/domainer/cctld/cleaned/email`
+
+```python
+"""Stream cleaned newly registered ccTLD domains with an email (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/cctld/cleaned/email
+
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python StreamDomainerCctldCleanedEmail.py
+"""
+import os
+from datetime import date
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesStreamingApi(client)
+
+    # stream_domainer_cctld_cleaned_email parameters:
+    #   var_date (datetime.date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+    #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
+    #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
+    #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+    new_key = api.stream_domainer_cctld_cleaned_email(date(2026, 10, 1))  # use this key from now on
+    print("New API key:", new_key)
+```
+
+#### Stream cleaned newly registered ccTLD domains with a phone (CSV)
+
+`GET /v3.3/stream/domainer/cctld/cleaned/phone`
+
+```python
+"""Stream cleaned newly registered ccTLD domains with a phone (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/cctld/cleaned/phone
+
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python StreamDomainerCctldCleanedPhone.py
+"""
+import os
+from datetime import date
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesStreamingApi(client)
+
+    # stream_domainer_cctld_cleaned_phone parameters:
+    #   var_date (datetime.date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+    #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
+    #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
+    #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+    new_key = api.stream_domainer_cctld_cleaned_phone(date(2026, 10, 1))  # use this key from now on
+    print("New API key:", new_key)
+```
+
+#### Stream expiring domains (CSV)
+
+`GET /v3.3/stream/domainer/expired`
+
+```python
+"""Stream expiring domains (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/expired
+
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python StreamDomainerExpired.py
+"""
+import os
+from datetime import date
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesStreamingApi(client)
+
+    # stream_domainer_expired parameters:
+    #   var_date (datetime.date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+    #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
+    #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
+    #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+    new_key = api.stream_domainer_expired(date(2026, 10, 1))  # use this key from now on
+    print("New API key:", new_key)
+```
+
+#### Stream cleaned expiring domains (CSV)
+
+`GET /v3.3/stream/domainer/expired/cleaned`
+
+```python
+"""Stream cleaned expiring domains (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/expired/cleaned
+
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python StreamDomainerExpiredCleaned.py
+"""
+import os
+from datetime import date
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesStreamingApi(client)
+
+    # stream_domainer_expired_cleaned parameters:
+    #   var_date (datetime.date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+    #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
+    #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
+    #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+    new_key = api.stream_domainer_expired_cleaned(date(2026, 10, 1))  # use this key from now on
+    print("New API key:", new_key)
+```
+
+#### Stream cleaned expiring domains with an email (CSV)
+
+`GET /v3.3/stream/domainer/expired/cleaned/email`
+
+```python
+"""Stream cleaned expiring domains with an email (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/expired/cleaned/email
+
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python StreamDomainerExpiredCleanedEmail.py
+"""
+import os
+from datetime import date
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesStreamingApi(client)
+
+    # stream_domainer_expired_cleaned_email parameters:
+    #   var_date (datetime.date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+    #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
+    #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
+    #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+    new_key = api.stream_domainer_expired_cleaned_email(date(2026, 10, 1))  # use this key from now on
+    print("New API key:", new_key)
+```
+
+#### Stream cleaned expiring domains with a phone (CSV)
+
+`GET /v3.3/stream/domainer/expired/cleaned/phone`
+
+```python
+"""Stream cleaned expiring domains with a phone (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/expired/cleaned/phone
+
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python StreamDomainerExpiredCleanedPhone.py
+"""
+import os
+from datetime import date
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesStreamingApi(client)
+
+    # stream_domainer_expired_cleaned_phone parameters:
+    #   var_date (datetime.date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+    #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
+    #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
+    #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+    new_key = api.stream_domainer_expired_cleaned_phone(date(2026, 10, 1))  # use this key from now on
+    print("New API key:", new_key)
+```
+
+#### Stream dropped domains (CSV)
+
+`GET /v3.3/stream/domainer/dropped`
+
+```python
+"""Stream dropped domains (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/dropped
+
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python StreamDomainerDropped.py
+"""
+import os
+from datetime import date
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesStreamingApi(client)
+
+    # stream_domainer_dropped parameters:
+    #   var_date (datetime.date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+    #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
+    #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
+    #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+    new_key = api.stream_domainer_dropped(date(2026, 10, 1))  # use this key from now on
+    print("New API key:", new_key)
+```
+
+#### Stream dropped domains with backlinks (CSV)
+
+`GET /v3.3/stream/domainer/dropped/backlinks`
+
+```python
+"""Stream dropped domains with backlinks (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/dropped/backlinks
+
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python StreamDomainerDroppedBacklinks.py
+"""
+import os
+from datetime import date
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesStreamingApi(client)
+
+    # stream_domainer_dropped_backlinks parameters:
+    #   var_date (datetime.date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+    #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
+    #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
+    #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+    new_key = api.stream_domainer_dropped_backlinks(date(2026, 10, 1))  # use this key from now on
+    print("New API key:", new_key)
+```
+
+#### Stream a sample of newly registered gTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/gtld`
+
+```python
+"""Stream a sample of newly registered gTLD domains (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/sample/gtld
+
+Run it (public endpoint, no API key needed):
+    python StreamDomainerGtldSample.py
+"""
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+# Public endpoint: no API key needed.
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesStreamingApi(client)
+
+    # stream_domainer_gtld_sample parameters:
+    #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
+    #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
+    #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+    new_key = api.stream_domainer_gtld_sample()  # use this key from now on
+    print("New API key:", new_key)
+```
+
+#### Stream a sample of cleaned newly registered gTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/gtld/cleaned`
+
+```python
+"""Stream a sample of cleaned newly registered gTLD domains (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/sample/gtld/cleaned
+
+Run it (public endpoint, no API key needed):
+    python StreamDomainerGtldCleanedSample.py
+"""
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+# Public endpoint: no API key needed.
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesStreamingApi(client)
+
+    # stream_domainer_gtld_cleaned_sample parameters:
+    #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
+    #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
+    #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+    new_key = api.stream_domainer_gtld_cleaned_sample()  # use this key from now on
+    print("New API key:", new_key)
+```
+
+#### Stream a sample of newly registered ccTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/cctld`
+
+```python
+"""Stream a sample of newly registered ccTLD domains (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/sample/cctld
+
+Run it (public endpoint, no API key needed):
+    python StreamDomainerCctldSample.py
+"""
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+# Public endpoint: no API key needed.
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesStreamingApi(client)
+
+    # stream_domainer_cctld_sample parameters:
+    #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
+    #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
+    #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+    new_key = api.stream_domainer_cctld_sample()  # use this key from now on
+    print("New API key:", new_key)
+```
+
+#### Stream a sample of cleaned newly registered ccTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/cctld/cleaned`
+
+```python
+"""Stream a sample of cleaned newly registered ccTLD domains (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/sample/cctld/cleaned
+
+Run it (public endpoint, no API key needed):
+    python StreamDomainerCctldCleanedSample.py
+"""
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+# Public endpoint: no API key needed.
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesStreamingApi(client)
+
+    # stream_domainer_cctld_cleaned_sample parameters:
+    #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
+    #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
+    #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+    new_key = api.stream_domainer_cctld_cleaned_sample()  # use this key from now on
+    print("New API key:", new_key)
+```
+
+#### Stream a sample of expiring domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/expired`
+
+```python
+"""Stream a sample of expiring domains (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/sample/expired
+
+Run it (public endpoint, no API key needed):
+    python StreamDomainerExpiredSample.py
+"""
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+# Public endpoint: no API key needed.
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesStreamingApi(client)
+
+    # stream_domainer_expired_sample parameters:
+    #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
+    #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
+    #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+    new_key = api.stream_domainer_expired_sample()  # use this key from now on
+    print("New API key:", new_key)
+```
+
+#### Stream a sample of cleaned expiring domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/expired/cleaned`
+
+```python
+"""Stream a sample of cleaned expiring domains (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/sample/expired/cleaned
+
+Run it (public endpoint, no API key needed):
+    python StreamDomainerExpiredCleanedSample.py
+"""
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+# Public endpoint: no API key needed.
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesStreamingApi(client)
+
+    # stream_domainer_expired_cleaned_sample parameters:
+    #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
+    #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
+    #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+    new_key = api.stream_domainer_expired_cleaned_sample()  # use this key from now on
+    print("New API key:", new_key)
+```
+
+#### Stream a sample of dropped domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/dropped`
+
+```python
+"""Stream a sample of dropped domains (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/sample/dropped
+
+Run it (public endpoint, no API key needed):
+    python StreamDomainerDroppedSample.py
+"""
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+# Public endpoint: no API key needed.
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesStreamingApi(client)
+
+    # stream_domainer_dropped_sample parameters:
+    #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
+    #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
+    #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+    new_key = api.stream_domainer_dropped_sample()  # use this key from now on
+    print("New API key:", new_key)
+```
+
+#### Stream a sample of dropped domains with backlinks (CSV)
+
+`GET /v3.3/stream/domainer/sample/dropped/backlinks`
+
+```python
+"""Stream a sample of dropped domains with backlinks (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/sample/dropped/backlinks
+
+Run it (public endpoint, no API key needed):
+    python StreamDomainerDroppedBacklinksSample.py
+"""
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+# Public endpoint: no API key needed.
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.DatabasesStreamingApi(client)
+
+    # stream_domainer_dropped_backlinks_sample parameters:
+    #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
+    #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
+    #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+    new_key = api.stream_domainer_dropped_backlinks_sample()  # use this key from now on
+    print("New API key:", new_key)
 ```

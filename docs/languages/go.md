@@ -116,7 +116,7 @@ func main() {
 
 ## Endpoints
 
-All 66 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
+All 94 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
 
 ### WHOIS
 
@@ -3171,6 +3171,1134 @@ func main() {
 	}
 	path, _ := filepath.Abs(out.Name())
 	fmt.Printf("Saved %d bytes to %s\n", n, path)
+}
+
+```
+
+### Databases - Streaming
+
+#### Stream the daily phishing threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/phishing`
+
+```go
+// Runnable example: Stream the daily phishing threat feed (CSV) (GET /v3.4/stream/threat-feed/phishing)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for streamThreatFeedPhishing (GET /v3.4/stream/threat-feed/phishing):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DatabasesStreamingAPI.StreamThreatFeedPhishing(ctx).
+		Date("2026-10-01").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### Stream a sample of the phishing threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/phishing/sample`
+
+```go
+// Runnable example: Stream a sample of the phishing threat feed (CSV) (GET /v3.4/stream/threat-feed/phishing/sample)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for streamThreatFeedPhishingSample (GET /v3.4/stream/threat-feed/phishing/sample):
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Public endpoint: no API key needed.
+	ctx := context.Background()
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DatabasesStreamingAPI.StreamThreatFeedPhishingSample(ctx).Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### Stream the daily malware threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/malware`
+
+```go
+// Runnable example: Stream the daily malware threat feed (CSV) (GET /v3.4/stream/threat-feed/malware)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for streamThreatFeedMalware (GET /v3.4/stream/threat-feed/malware):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DatabasesStreamingAPI.StreamThreatFeedMalware(ctx).
+		Date("2026-10-01").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### Stream a sample of the malware threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/malware/sample`
+
+```go
+// Runnable example: Stream a sample of the malware threat feed (CSV) (GET /v3.4/stream/threat-feed/malware/sample)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for streamThreatFeedMalwareSample (GET /v3.4/stream/threat-feed/malware/sample):
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Public endpoint: no API key needed.
+	ctx := context.Background()
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DatabasesStreamingAPI.StreamThreatFeedMalwareSample(ctx).Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### Stream the daily spam threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/spam`
+
+```go
+// Runnable example: Stream the daily spam threat feed (CSV) (GET /v3.4/stream/threat-feed/spam)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for streamThreatFeedSpam (GET /v3.4/stream/threat-feed/spam):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DatabasesStreamingAPI.StreamThreatFeedSpam(ctx).
+		Date("2026-10-01").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### Stream a sample of the spam threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/spam/sample`
+
+```go
+// Runnable example: Stream a sample of the spam threat feed (CSV) (GET /v3.4/stream/threat-feed/spam/sample)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for streamThreatFeedSpamSample (GET /v3.4/stream/threat-feed/spam/sample):
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Public endpoint: no API key needed.
+	ctx := context.Background()
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DatabasesStreamingAPI.StreamThreatFeedSpamSample(ctx).Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### Stream newly registered gTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/gtld`
+
+```go
+// Runnable example: Stream newly registered gTLD domains (CSV) (GET /v3.3/stream/domainer/gtld)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for streamDomainerGtld (GET /v3.3/stream/domainer/gtld):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DatabasesStreamingAPI.StreamDomainerGtld(ctx).
+		Date("2026-10-01").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### Stream cleaned newly registered gTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/gtld/cleaned`
+
+```go
+// Runnable example: Stream cleaned newly registered gTLD domains (CSV) (GET /v3.3/stream/domainer/gtld/cleaned)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for streamDomainerGtldCleaned (GET /v3.3/stream/domainer/gtld/cleaned):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DatabasesStreamingAPI.StreamDomainerGtldCleaned(ctx).
+		Date("2026-10-01").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### Stream cleaned newly registered gTLD domains with an email (CSV)
+
+`GET /v3.3/stream/domainer/gtld/cleaned/email`
+
+```go
+// Runnable example: Stream cleaned newly registered gTLD domains with an email (CSV) (GET /v3.3/stream/domainer/gtld/cleaned/email)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for streamDomainerGtldCleanedEmail (GET /v3.3/stream/domainer/gtld/cleaned/email):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DatabasesStreamingAPI.StreamDomainerGtldCleanedEmail(ctx).
+		Date("2026-10-01").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### Stream cleaned newly registered gTLD domains with a phone (CSV)
+
+`GET /v3.3/stream/domainer/gtld/cleaned/phone`
+
+```go
+// Runnable example: Stream cleaned newly registered gTLD domains with a phone (CSV) (GET /v3.3/stream/domainer/gtld/cleaned/phone)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for streamDomainerGtldCleanedPhone (GET /v3.3/stream/domainer/gtld/cleaned/phone):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DatabasesStreamingAPI.StreamDomainerGtldCleanedPhone(ctx).
+		Date("2026-10-01").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### Stream newly registered ccTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/cctld`
+
+```go
+// Runnable example: Stream newly registered ccTLD domains (CSV) (GET /v3.3/stream/domainer/cctld)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for streamDomainerCctld (GET /v3.3/stream/domainer/cctld):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DatabasesStreamingAPI.StreamDomainerCctld(ctx).
+		Date("2026-10-01").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### Stream cleaned newly registered ccTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/cctld/cleaned`
+
+```go
+// Runnable example: Stream cleaned newly registered ccTLD domains (CSV) (GET /v3.3/stream/domainer/cctld/cleaned)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for streamDomainerCctldCleaned (GET /v3.3/stream/domainer/cctld/cleaned):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DatabasesStreamingAPI.StreamDomainerCctldCleaned(ctx).
+		Date("2026-10-01").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### Stream cleaned newly registered ccTLD domains with an email (CSV)
+
+`GET /v3.3/stream/domainer/cctld/cleaned/email`
+
+```go
+// Runnable example: Stream cleaned newly registered ccTLD domains with an email (CSV) (GET /v3.3/stream/domainer/cctld/cleaned/email)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for streamDomainerCctldCleanedEmail (GET /v3.3/stream/domainer/cctld/cleaned/email):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DatabasesStreamingAPI.StreamDomainerCctldCleanedEmail(ctx).
+		Date("2026-10-01").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### Stream cleaned newly registered ccTLD domains with a phone (CSV)
+
+`GET /v3.3/stream/domainer/cctld/cleaned/phone`
+
+```go
+// Runnable example: Stream cleaned newly registered ccTLD domains with a phone (CSV) (GET /v3.3/stream/domainer/cctld/cleaned/phone)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for streamDomainerCctldCleanedPhone (GET /v3.3/stream/domainer/cctld/cleaned/phone):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DatabasesStreamingAPI.StreamDomainerCctldCleanedPhone(ctx).
+		Date("2026-10-01").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### Stream expiring domains (CSV)
+
+`GET /v3.3/stream/domainer/expired`
+
+```go
+// Runnable example: Stream expiring domains (CSV) (GET /v3.3/stream/domainer/expired)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for streamDomainerExpired (GET /v3.3/stream/domainer/expired):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DatabasesStreamingAPI.StreamDomainerExpired(ctx).
+		Date("2026-10-01").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### Stream cleaned expiring domains (CSV)
+
+`GET /v3.3/stream/domainer/expired/cleaned`
+
+```go
+// Runnable example: Stream cleaned expiring domains (CSV) (GET /v3.3/stream/domainer/expired/cleaned)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for streamDomainerExpiredCleaned (GET /v3.3/stream/domainer/expired/cleaned):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DatabasesStreamingAPI.StreamDomainerExpiredCleaned(ctx).
+		Date("2026-10-01").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### Stream cleaned expiring domains with an email (CSV)
+
+`GET /v3.3/stream/domainer/expired/cleaned/email`
+
+```go
+// Runnable example: Stream cleaned expiring domains with an email (CSV) (GET /v3.3/stream/domainer/expired/cleaned/email)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for streamDomainerExpiredCleanedEmail (GET /v3.3/stream/domainer/expired/cleaned/email):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DatabasesStreamingAPI.StreamDomainerExpiredCleanedEmail(ctx).
+		Date("2026-10-01").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### Stream cleaned expiring domains with a phone (CSV)
+
+`GET /v3.3/stream/domainer/expired/cleaned/phone`
+
+```go
+// Runnable example: Stream cleaned expiring domains with a phone (CSV) (GET /v3.3/stream/domainer/expired/cleaned/phone)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for streamDomainerExpiredCleanedPhone (GET /v3.3/stream/domainer/expired/cleaned/phone):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DatabasesStreamingAPI.StreamDomainerExpiredCleanedPhone(ctx).
+		Date("2026-10-01").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### Stream dropped domains (CSV)
+
+`GET /v3.3/stream/domainer/dropped`
+
+```go
+// Runnable example: Stream dropped domains (CSV) (GET /v3.3/stream/domainer/dropped)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for streamDomainerDropped (GET /v3.3/stream/domainer/dropped):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DatabasesStreamingAPI.StreamDomainerDropped(ctx).
+		Date("2026-10-01").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### Stream dropped domains with backlinks (CSV)
+
+`GET /v3.3/stream/domainer/dropped/backlinks`
+
+```go
+// Runnable example: Stream dropped domains with backlinks (CSV) (GET /v3.3/stream/domainer/dropped/backlinks)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for streamDomainerDroppedBacklinks (GET /v3.3/stream/domainer/dropped/backlinks):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DatabasesStreamingAPI.StreamDomainerDroppedBacklinks(ctx).
+		Date("2026-10-01").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### Stream a sample of newly registered gTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/gtld`
+
+```go
+// Runnable example: Stream a sample of newly registered gTLD domains (CSV) (GET /v3.3/stream/domainer/sample/gtld)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for streamDomainerGtldSample (GET /v3.3/stream/domainer/sample/gtld):
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Public endpoint: no API key needed.
+	ctx := context.Background()
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DatabasesStreamingAPI.StreamDomainerGtldSample(ctx).Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### Stream a sample of cleaned newly registered gTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/gtld/cleaned`
+
+```go
+// Runnable example: Stream a sample of cleaned newly registered gTLD domains (CSV) (GET /v3.3/stream/domainer/sample/gtld/cleaned)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for streamDomainerGtldCleanedSample (GET /v3.3/stream/domainer/sample/gtld/cleaned):
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Public endpoint: no API key needed.
+	ctx := context.Background()
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DatabasesStreamingAPI.StreamDomainerGtldCleanedSample(ctx).Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### Stream a sample of newly registered ccTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/cctld`
+
+```go
+// Runnable example: Stream a sample of newly registered ccTLD domains (CSV) (GET /v3.3/stream/domainer/sample/cctld)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for streamDomainerCctldSample (GET /v3.3/stream/domainer/sample/cctld):
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Public endpoint: no API key needed.
+	ctx := context.Background()
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DatabasesStreamingAPI.StreamDomainerCctldSample(ctx).Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### Stream a sample of cleaned newly registered ccTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/cctld/cleaned`
+
+```go
+// Runnable example: Stream a sample of cleaned newly registered ccTLD domains (CSV) (GET /v3.3/stream/domainer/sample/cctld/cleaned)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for streamDomainerCctldCleanedSample (GET /v3.3/stream/domainer/sample/cctld/cleaned):
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Public endpoint: no API key needed.
+	ctx := context.Background()
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DatabasesStreamingAPI.StreamDomainerCctldCleanedSample(ctx).Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### Stream a sample of expiring domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/expired`
+
+```go
+// Runnable example: Stream a sample of expiring domains (CSV) (GET /v3.3/stream/domainer/sample/expired)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for streamDomainerExpiredSample (GET /v3.3/stream/domainer/sample/expired):
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Public endpoint: no API key needed.
+	ctx := context.Background()
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DatabasesStreamingAPI.StreamDomainerExpiredSample(ctx).Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### Stream a sample of cleaned expiring domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/expired/cleaned`
+
+```go
+// Runnable example: Stream a sample of cleaned expiring domains (CSV) (GET /v3.3/stream/domainer/sample/expired/cleaned)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for streamDomainerExpiredCleanedSample (GET /v3.3/stream/domainer/sample/expired/cleaned):
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Public endpoint: no API key needed.
+	ctx := context.Background()
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DatabasesStreamingAPI.StreamDomainerExpiredCleanedSample(ctx).Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### Stream a sample of dropped domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/dropped`
+
+```go
+// Runnable example: Stream a sample of dropped domains (CSV) (GET /v3.3/stream/domainer/sample/dropped)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for streamDomainerDroppedSample (GET /v3.3/stream/domainer/sample/dropped):
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Public endpoint: no API key needed.
+	ctx := context.Background()
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DatabasesStreamingAPI.StreamDomainerDroppedSample(ctx).Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
+#### Stream a sample of dropped domains with backlinks (CSV)
+
+`GET /v3.3/stream/domainer/sample/dropped/backlinks`
+
+```go
+// Runnable example: Stream a sample of dropped domains with backlinks (CSV) (GET /v3.3/stream/domainer/sample/dropped/backlinks)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for streamDomainerDroppedBacklinksSample (GET /v3.3/stream/domainer/sample/dropped/backlinks):
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Public endpoint: no API key needed.
+	ctx := context.Background()
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.DatabasesStreamingAPI.StreamDomainerDroppedBacklinksSample(ctx).Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
 }
 
 ```

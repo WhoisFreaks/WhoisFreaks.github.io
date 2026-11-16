@@ -1,6 +1,6 @@
 # Endpoint Reference
 
-The WhoisFreaks API exposes **66 endpoints** across **22 categories**, organized into 3 sections. Every endpoint is available in all 10 SDKs.
+The WhoisFreaks API exposes **94 endpoints** across **23 categories**, organized into 3 sections. Every endpoint is available in all 10 SDKs.
 
 ## API Solutions
 
@@ -115,3 +115,31 @@ Manage your account, monitor API usage and credits, and rotate your API key.
 | Databases | Databases - Threat Feed | GET | `/v3.4/download/threat-feed/malware/sample` | `downloadThreatFeedMalwareSample` |
 | Databases | Databases - Threat Feed | GET | `/v3.4/download/threat-feed/spam` | `downloadThreatFeedSpam` |
 | Databases | Databases - Threat Feed | GET | `/v3.4/download/threat-feed/spam/sample` | `downloadThreatFeedSpamSample` |
+| Other | Databases - Streaming | GET | `/v3.4/stream/threat-feed/phishing` | `streamThreatFeedPhishing` |
+| Other | Databases - Streaming | GET | `/v3.4/stream/threat-feed/phishing/sample` | `streamThreatFeedPhishingSample` |
+| Other | Databases - Streaming | GET | `/v3.4/stream/threat-feed/malware` | `streamThreatFeedMalware` |
+| Other | Databases - Streaming | GET | `/v3.4/stream/threat-feed/malware/sample` | `streamThreatFeedMalwareSample` |
+| Other | Databases - Streaming | GET | `/v3.4/stream/threat-feed/spam` | `streamThreatFeedSpam` |
+| Other | Databases - Streaming | GET | `/v3.4/stream/threat-feed/spam/sample` | `streamThreatFeedSpamSample` |
+| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/gtld` | `streamDomainerGtld` |
+| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/gtld/cleaned` | `streamDomainerGtldCleaned` |
+| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/gtld/cleaned/email` | `streamDomainerGtldCleanedEmail` |
+| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/gtld/cleaned/phone` | `streamDomainerGtldCleanedPhone` |
+| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/cctld` | `streamDomainerCctld` |
+| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/cctld/cleaned` | `streamDomainerCctldCleaned` |
+| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/cctld/cleaned/email` | `streamDomainerCctldCleanedEmail` |
+| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/cctld/cleaned/phone` | `streamDomainerCctldCleanedPhone` |
+| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/expired` | `streamDomainerExpired` |
+| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/expired/cleaned` | `streamDomainerExpiredCleaned` |
+| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/expired/cleaned/email` | `streamDomainerExpiredCleanedEmail` |
+| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/expired/cleaned/phone` | `streamDomainerExpiredCleanedPhone` |
+| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/dropped` | `streamDomainerDropped` |
+| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/dropped/backlinks` | `streamDomainerDroppedBacklinks` |
+| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/sample/gtld` | `streamDomainerGtldSample` |
+| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/sample/gtld/cleaned` | `streamDomainerGtldCleanedSample` |
+| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/sample/cctld` | `streamDomainerCctldSample` |
+| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/sample/cctld/cleaned` | `streamDomainerCctldCleanedSample` |
+| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/sample/expired` | `streamDomainerExpiredSample` |
+| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/sample/expired/cleaned` | `streamDomainerExpiredCleanedSample` |
+| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/sample/dropped` | `streamDomainerDroppedSample` |
+| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/sample/dropped/backlinks` | `streamDomainerDroppedBacklinksSample` |

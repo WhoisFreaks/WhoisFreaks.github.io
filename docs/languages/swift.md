@@ -117,7 +117,7 @@ do {
 
 ## Endpoints
 
-All 66 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
+All 94 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
 
 ### WHOIS
 
@@ -2461,6 +2461,982 @@ do {
     try? FileManager.default.removeItem(at: saveAs)
     try FileManager.default.moveItem(at: file, to: saveAs)
     print("Saved \(saveAs.path)")
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+### Databases - Streaming
+
+#### Stream the daily phishing threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/phishing`
+
+```swift
+// Stream the daily phishing threat feed (CSV)
+//
+// Parameters for streamThreatFeedPhishing (GET /v3.4/stream/threat-feed/phishing):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+
+do {
+    let result = try await DatabasesStreamingAPI.streamThreatFeedPhishing(date: OpenAPIDateWithoutTime(rawValue: "2026-10-01")!)
+    print(result)
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### Stream a sample of the phishing threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/phishing/sample`
+
+```swift
+// Stream a sample of the phishing threat feed (CSV)
+//
+// Parameters for streamThreatFeedPhishingSample (GET /v3.4/stream/threat-feed/phishing/sample):
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+// (This endpoint is public, so the key is not sent with this request.)
+
+do {
+    let result = try await DatabasesStreamingAPI.streamThreatFeedPhishingSample()
+    print(result)
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### Stream the daily malware threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/malware`
+
+```swift
+// Stream the daily malware threat feed (CSV)
+//
+// Parameters for streamThreatFeedMalware (GET /v3.4/stream/threat-feed/malware):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+
+do {
+    let result = try await DatabasesStreamingAPI.streamThreatFeedMalware(date: OpenAPIDateWithoutTime(rawValue: "2026-10-01")!)
+    print(result)
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### Stream a sample of the malware threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/malware/sample`
+
+```swift
+// Stream a sample of the malware threat feed (CSV)
+//
+// Parameters for streamThreatFeedMalwareSample (GET /v3.4/stream/threat-feed/malware/sample):
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+// (This endpoint is public, so the key is not sent with this request.)
+
+do {
+    let result = try await DatabasesStreamingAPI.streamThreatFeedMalwareSample()
+    print(result)
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### Stream the daily spam threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/spam`
+
+```swift
+// Stream the daily spam threat feed (CSV)
+//
+// Parameters for streamThreatFeedSpam (GET /v3.4/stream/threat-feed/spam):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+
+do {
+    let result = try await DatabasesStreamingAPI.streamThreatFeedSpam(date: OpenAPIDateWithoutTime(rawValue: "2026-10-01")!)
+    print(result)
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### Stream a sample of the spam threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/spam/sample`
+
+```swift
+// Stream a sample of the spam threat feed (CSV)
+//
+// Parameters for streamThreatFeedSpamSample (GET /v3.4/stream/threat-feed/spam/sample):
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+// (This endpoint is public, so the key is not sent with this request.)
+
+do {
+    let result = try await DatabasesStreamingAPI.streamThreatFeedSpamSample()
+    print(result)
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### Stream newly registered gTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/gtld`
+
+```swift
+// Stream newly registered gTLD domains (CSV)
+//
+// Parameters for streamDomainerGtld (GET /v3.3/stream/domainer/gtld):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+
+do {
+    let result = try await DatabasesStreamingAPI.streamDomainerGtld(date: OpenAPIDateWithoutTime(rawValue: "2026-10-01")!)
+    print(result)
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### Stream cleaned newly registered gTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/gtld/cleaned`
+
+```swift
+// Stream cleaned newly registered gTLD domains (CSV)
+//
+// Parameters for streamDomainerGtldCleaned (GET /v3.3/stream/domainer/gtld/cleaned):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+
+do {
+    let result = try await DatabasesStreamingAPI.streamDomainerGtldCleaned(date: OpenAPIDateWithoutTime(rawValue: "2026-10-01")!)
+    print(result)
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### Stream cleaned newly registered gTLD domains with an email (CSV)
+
+`GET /v3.3/stream/domainer/gtld/cleaned/email`
+
+```swift
+// Stream cleaned newly registered gTLD domains with an email (CSV)
+//
+// Parameters for streamDomainerGtldCleanedEmail (GET /v3.3/stream/domainer/gtld/cleaned/email):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+
+do {
+    let result = try await DatabasesStreamingAPI.streamDomainerGtldCleanedEmail(date: OpenAPIDateWithoutTime(rawValue: "2026-10-01")!)
+    print(result)
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### Stream cleaned newly registered gTLD domains with a phone (CSV)
+
+`GET /v3.3/stream/domainer/gtld/cleaned/phone`
+
+```swift
+// Stream cleaned newly registered gTLD domains with a phone (CSV)
+//
+// Parameters for streamDomainerGtldCleanedPhone (GET /v3.3/stream/domainer/gtld/cleaned/phone):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+
+do {
+    let result = try await DatabasesStreamingAPI.streamDomainerGtldCleanedPhone(date: OpenAPIDateWithoutTime(rawValue: "2026-10-01")!)
+    print(result)
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### Stream newly registered ccTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/cctld`
+
+```swift
+// Stream newly registered ccTLD domains (CSV)
+//
+// Parameters for streamDomainerCctld (GET /v3.3/stream/domainer/cctld):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+
+do {
+    let result = try await DatabasesStreamingAPI.streamDomainerCctld(date: OpenAPIDateWithoutTime(rawValue: "2026-10-01")!)
+    print(result)
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### Stream cleaned newly registered ccTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/cctld/cleaned`
+
+```swift
+// Stream cleaned newly registered ccTLD domains (CSV)
+//
+// Parameters for streamDomainerCctldCleaned (GET /v3.3/stream/domainer/cctld/cleaned):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+
+do {
+    let result = try await DatabasesStreamingAPI.streamDomainerCctldCleaned(date: OpenAPIDateWithoutTime(rawValue: "2026-10-01")!)
+    print(result)
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### Stream cleaned newly registered ccTLD domains with an email (CSV)
+
+`GET /v3.3/stream/domainer/cctld/cleaned/email`
+
+```swift
+// Stream cleaned newly registered ccTLD domains with an email (CSV)
+//
+// Parameters for streamDomainerCctldCleanedEmail (GET /v3.3/stream/domainer/cctld/cleaned/email):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+
+do {
+    let result = try await DatabasesStreamingAPI.streamDomainerCctldCleanedEmail(date: OpenAPIDateWithoutTime(rawValue: "2026-10-01")!)
+    print(result)
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### Stream cleaned newly registered ccTLD domains with a phone (CSV)
+
+`GET /v3.3/stream/domainer/cctld/cleaned/phone`
+
+```swift
+// Stream cleaned newly registered ccTLD domains with a phone (CSV)
+//
+// Parameters for streamDomainerCctldCleanedPhone (GET /v3.3/stream/domainer/cctld/cleaned/phone):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+
+do {
+    let result = try await DatabasesStreamingAPI.streamDomainerCctldCleanedPhone(date: OpenAPIDateWithoutTime(rawValue: "2026-10-01")!)
+    print(result)
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### Stream expiring domains (CSV)
+
+`GET /v3.3/stream/domainer/expired`
+
+```swift
+// Stream expiring domains (CSV)
+//
+// Parameters for streamDomainerExpired (GET /v3.3/stream/domainer/expired):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+
+do {
+    let result = try await DatabasesStreamingAPI.streamDomainerExpired(date: OpenAPIDateWithoutTime(rawValue: "2026-10-01")!)
+    print(result)
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### Stream cleaned expiring domains (CSV)
+
+`GET /v3.3/stream/domainer/expired/cleaned`
+
+```swift
+// Stream cleaned expiring domains (CSV)
+//
+// Parameters for streamDomainerExpiredCleaned (GET /v3.3/stream/domainer/expired/cleaned):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+
+do {
+    let result = try await DatabasesStreamingAPI.streamDomainerExpiredCleaned(date: OpenAPIDateWithoutTime(rawValue: "2026-10-01")!)
+    print(result)
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### Stream cleaned expiring domains with an email (CSV)
+
+`GET /v3.3/stream/domainer/expired/cleaned/email`
+
+```swift
+// Stream cleaned expiring domains with an email (CSV)
+//
+// Parameters for streamDomainerExpiredCleanedEmail (GET /v3.3/stream/domainer/expired/cleaned/email):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+
+do {
+    let result = try await DatabasesStreamingAPI.streamDomainerExpiredCleanedEmail(date: OpenAPIDateWithoutTime(rawValue: "2026-10-01")!)
+    print(result)
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### Stream cleaned expiring domains with a phone (CSV)
+
+`GET /v3.3/stream/domainer/expired/cleaned/phone`
+
+```swift
+// Stream cleaned expiring domains with a phone (CSV)
+//
+// Parameters for streamDomainerExpiredCleanedPhone (GET /v3.3/stream/domainer/expired/cleaned/phone):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+
+do {
+    let result = try await DatabasesStreamingAPI.streamDomainerExpiredCleanedPhone(date: OpenAPIDateWithoutTime(rawValue: "2026-10-01")!)
+    print(result)
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### Stream dropped domains (CSV)
+
+`GET /v3.3/stream/domainer/dropped`
+
+```swift
+// Stream dropped domains (CSV)
+//
+// Parameters for streamDomainerDropped (GET /v3.3/stream/domainer/dropped):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+
+do {
+    let result = try await DatabasesStreamingAPI.streamDomainerDropped(date: OpenAPIDateWithoutTime(rawValue: "2026-10-01")!)
+    print(result)
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### Stream dropped domains with backlinks (CSV)
+
+`GET /v3.3/stream/domainer/dropped/backlinks`
+
+```swift
+// Stream dropped domains with backlinks (CSV)
+//
+// Parameters for streamDomainerDroppedBacklinks (GET /v3.3/stream/domainer/dropped/backlinks):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+
+do {
+    let result = try await DatabasesStreamingAPI.streamDomainerDroppedBacklinks(date: OpenAPIDateWithoutTime(rawValue: "2026-10-01")!)
+    print(result)
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### Stream a sample of newly registered gTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/gtld`
+
+```swift
+// Stream a sample of newly registered gTLD domains (CSV)
+//
+// Parameters for streamDomainerGtldSample (GET /v3.3/stream/domainer/sample/gtld):
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+// (This endpoint is public, so the key is not sent with this request.)
+
+do {
+    let result = try await DatabasesStreamingAPI.streamDomainerGtldSample()
+    print(result)
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### Stream a sample of cleaned newly registered gTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/gtld/cleaned`
+
+```swift
+// Stream a sample of cleaned newly registered gTLD domains (CSV)
+//
+// Parameters for streamDomainerGtldCleanedSample (GET /v3.3/stream/domainer/sample/gtld/cleaned):
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+// (This endpoint is public, so the key is not sent with this request.)
+
+do {
+    let result = try await DatabasesStreamingAPI.streamDomainerGtldCleanedSample()
+    print(result)
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### Stream a sample of newly registered ccTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/cctld`
+
+```swift
+// Stream a sample of newly registered ccTLD domains (CSV)
+//
+// Parameters for streamDomainerCctldSample (GET /v3.3/stream/domainer/sample/cctld):
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+// (This endpoint is public, so the key is not sent with this request.)
+
+do {
+    let result = try await DatabasesStreamingAPI.streamDomainerCctldSample()
+    print(result)
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### Stream a sample of cleaned newly registered ccTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/cctld/cleaned`
+
+```swift
+// Stream a sample of cleaned newly registered ccTLD domains (CSV)
+//
+// Parameters for streamDomainerCctldCleanedSample (GET /v3.3/stream/domainer/sample/cctld/cleaned):
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+// (This endpoint is public, so the key is not sent with this request.)
+
+do {
+    let result = try await DatabasesStreamingAPI.streamDomainerCctldCleanedSample()
+    print(result)
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### Stream a sample of expiring domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/expired`
+
+```swift
+// Stream a sample of expiring domains (CSV)
+//
+// Parameters for streamDomainerExpiredSample (GET /v3.3/stream/domainer/sample/expired):
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+// (This endpoint is public, so the key is not sent with this request.)
+
+do {
+    let result = try await DatabasesStreamingAPI.streamDomainerExpiredSample()
+    print(result)
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### Stream a sample of cleaned expiring domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/expired/cleaned`
+
+```swift
+// Stream a sample of cleaned expiring domains (CSV)
+//
+// Parameters for streamDomainerExpiredCleanedSample (GET /v3.3/stream/domainer/sample/expired/cleaned):
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+// (This endpoint is public, so the key is not sent with this request.)
+
+do {
+    let result = try await DatabasesStreamingAPI.streamDomainerExpiredCleanedSample()
+    print(result)
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### Stream a sample of dropped domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/dropped`
+
+```swift
+// Stream a sample of dropped domains (CSV)
+//
+// Parameters for streamDomainerDroppedSample (GET /v3.3/stream/domainer/sample/dropped):
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+// (This endpoint is public, so the key is not sent with this request.)
+
+do {
+    let result = try await DatabasesStreamingAPI.streamDomainerDroppedSample()
+    print(result)
+} catch ErrorResponse.error(let status, let data, _, let underlying) {
+    let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
+    print("Request failed: HTTP \(status) \(body)")
+    exit(1)
+} catch {
+    print("Request failed: \(error)")
+    exit(1)
+}
+
+```
+
+#### Stream a sample of dropped domains with backlinks (CSV)
+
+`GET /v3.3/stream/domainer/sample/dropped/backlinks`
+
+```swift
+// Stream a sample of dropped domains with backlinks (CSV)
+//
+// Parameters for streamDomainerDroppedBacklinksSample (GET /v3.3/stream/domainer/sample/dropped/backlinks):
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+//
+// Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
+
+import Foundation
+import WhoisFreaks
+
+// Read the API key from the environment and set it once.
+WhoisFreaksAPI.apiKey = ProcessInfo.processInfo.environment["WHOISFREAKS_API_KEY"]
+// (This endpoint is public, so the key is not sent with this request.)
+
+do {
+    let result = try await DatabasesStreamingAPI.streamDomainerDroppedBacklinksSample()
+    print(result)
 } catch ErrorResponse.error(let status, let data, _, let underlying) {
     let body = data.map { String(decoding: $0, as: UTF8.self) } ?? "\(underlying)"
     print("Request failed: HTTP \(status) \(body)")

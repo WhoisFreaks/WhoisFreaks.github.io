@@ -66,6 +66,8 @@ tags:
     description: IP security database snapshots
   - name: Databases - Threat Feed
     description: Daily phishing, malware and spam threat feeds
+  - name: Databases - Streaming
+    description: Stream database files and threat feeds as plain CSV text instead of downloading a gzip file
 paths:
   /v2.0/whois/live:
     get:
@@ -1840,6 +1842,616 @@ paths:
                 format: binary
         4XX:
           $ref: "#/components/responses/ErrorResponse"
+  /v3.4/stream/threat-feed/phishing:
+    servers: *id001
+    get:
+      tags:
+        - Databases - Streaming
+      operationId: streamThreatFeedPhishing
+      summary: Stream the daily phishing threat feed (CSV)
+      description: Streams the daily phishing threat feed for a given date. Rows are streamed as plain uncompressed CSV text, so a parser can start on the first row while the rest is still arriving. Use offset and limit to walk the file in pages.
+      parameters:
+        - $ref: "#/components/parameters/StreamDateParam"
+        - $ref: "#/components/parameters/StreamOffset"
+        - $ref: "#/components/parameters/StreamLimit"
+      responses:
+        "200":
+          description: Plain CSV text, streamed as the file is read
+          content:
+            text/plain:
+              schema:
+                type: string
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
+  /v3.4/stream/threat-feed/phishing/sample:
+    servers: *id001
+    get:
+      tags:
+        - Databases - Streaming
+      operationId: streamThreatFeedPhishingSample
+      summary: Stream a sample of the phishing threat feed (CSV)
+      description: Streams a fixed sample of the phishing threat feed. No API key and no date are needed, so it is the quickest way to check the schema. Rows are streamed as plain uncompressed CSV text, so a parser can start on the first row while the rest is still arriving. Use offset and limit to walk the file in pages.
+      security: []
+      parameters:
+        - $ref: "#/components/parameters/StreamOffset"
+        - $ref: "#/components/parameters/StreamLimit"
+      responses:
+        "200":
+          description: Plain CSV text, streamed as the file is read
+          content:
+            text/plain:
+              schema:
+                type: string
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
+  /v3.4/stream/threat-feed/malware:
+    servers: *id001
+    get:
+      tags:
+        - Databases - Streaming
+      operationId: streamThreatFeedMalware
+      summary: Stream the daily malware threat feed (CSV)
+      description: Streams the daily malware threat feed for a given date. Rows are streamed as plain uncompressed CSV text, so a parser can start on the first row while the rest is still arriving. Use offset and limit to walk the file in pages.
+      parameters:
+        - $ref: "#/components/parameters/StreamDateParam"
+        - $ref: "#/components/parameters/StreamOffset"
+        - $ref: "#/components/parameters/StreamLimit"
+      responses:
+        "200":
+          description: Plain CSV text, streamed as the file is read
+          content:
+            text/plain:
+              schema:
+                type: string
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
+  /v3.4/stream/threat-feed/malware/sample:
+    servers: *id001
+    get:
+      tags:
+        - Databases - Streaming
+      operationId: streamThreatFeedMalwareSample
+      summary: Stream a sample of the malware threat feed (CSV)
+      description: Streams a fixed sample of the malware threat feed. No API key and no date are needed, so it is the quickest way to check the schema. Rows are streamed as plain uncompressed CSV text, so a parser can start on the first row while the rest is still arriving. Use offset and limit to walk the file in pages.
+      security: []
+      parameters:
+        - $ref: "#/components/parameters/StreamOffset"
+        - $ref: "#/components/parameters/StreamLimit"
+      responses:
+        "200":
+          description: Plain CSV text, streamed as the file is read
+          content:
+            text/plain:
+              schema:
+                type: string
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
+  /v3.4/stream/threat-feed/spam:
+    servers: *id001
+    get:
+      tags:
+        - Databases - Streaming
+      operationId: streamThreatFeedSpam
+      summary: Stream the daily spam threat feed (CSV)
+      description: Streams the daily spam threat feed for a given date. Rows are streamed as plain uncompressed CSV text, so a parser can start on the first row while the rest is still arriving. Use offset and limit to walk the file in pages.
+      parameters:
+        - $ref: "#/components/parameters/StreamDateParam"
+        - $ref: "#/components/parameters/StreamOffset"
+        - $ref: "#/components/parameters/StreamLimit"
+      responses:
+        "200":
+          description: Plain CSV text, streamed as the file is read
+          content:
+            text/plain:
+              schema:
+                type: string
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
+  /v3.4/stream/threat-feed/spam/sample:
+    servers: *id001
+    get:
+      tags:
+        - Databases - Streaming
+      operationId: streamThreatFeedSpamSample
+      summary: Stream a sample of the spam threat feed (CSV)
+      description: Streams a fixed sample of the spam threat feed. No API key and no date are needed, so it is the quickest way to check the schema. Rows are streamed as plain uncompressed CSV text, so a parser can start on the first row while the rest is still arriving. Use offset and limit to walk the file in pages.
+      security: []
+      parameters:
+        - $ref: "#/components/parameters/StreamOffset"
+        - $ref: "#/components/parameters/StreamLimit"
+      responses:
+        "200":
+          description: Plain CSV text, streamed as the file is read
+          content:
+            text/plain:
+              schema:
+                type: string
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
+  /v3.3/stream/domainer/gtld:
+    servers: *id001
+    get:
+      tags:
+        - Databases - Streaming
+      operationId: streamDomainerGtld
+      summary: Stream newly registered gTLD domains (CSV)
+      description: Streams the daily file of newly registered gTLD domains for a given date. Pass whois=true for the full WHOIS record with a CSV header, or whois=false for domain names only. Rows are streamed as plain uncompressed CSV text, so a parser can start on the first row while the rest is still arriving. Use offset and limit to walk the file in pages.
+      parameters:
+        - $ref: "#/components/parameters/StreamDateParam"
+        - $ref: "#/components/parameters/StreamWhois"
+        - $ref: "#/components/parameters/StreamOffset"
+        - $ref: "#/components/parameters/StreamLimit"
+      responses:
+        "200":
+          description: Plain CSV text, streamed as the file is read
+          content:
+            text/plain:
+              schema:
+                type: string
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
+  /v3.3/stream/domainer/gtld/cleaned:
+    servers: *id001
+    get:
+      tags:
+        - Databases - Streaming
+      operationId: streamDomainerGtldCleaned
+      summary: Stream cleaned newly registered gTLD domains (CSV)
+      description: Streams the daily file of cleaned newly registered gTLD domains for a given date. Pass whois=true for the full WHOIS record with a CSV header, or whois=false for domain names only. Rows are streamed as plain uncompressed CSV text, so a parser can start on the first row while the rest is still arriving. Use offset and limit to walk the file in pages.
+      parameters:
+        - $ref: "#/components/parameters/StreamDateParam"
+        - $ref: "#/components/parameters/StreamWhois"
+        - $ref: "#/components/parameters/StreamOffset"
+        - $ref: "#/components/parameters/StreamLimit"
+      responses:
+        "200":
+          description: Plain CSV text, streamed as the file is read
+          content:
+            text/plain:
+              schema:
+                type: string
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
+  /v3.3/stream/domainer/gtld/cleaned/email:
+    servers: *id001
+    get:
+      tags:
+        - Databases - Streaming
+      operationId: streamDomainerGtldCleanedEmail
+      summary: Stream cleaned newly registered gTLD domains with an email (CSV)
+      description: Streams the daily file of cleaned newly registered gTLD domains with an email for a given date. Pass whois=true for the full WHOIS record with a CSV header, or whois=false for domain names only. Rows are streamed as plain uncompressed CSV text, so a parser can start on the first row while the rest is still arriving. Use offset and limit to walk the file in pages.
+      parameters:
+        - $ref: "#/components/parameters/StreamDateParam"
+        - $ref: "#/components/parameters/StreamWhois"
+        - $ref: "#/components/parameters/StreamOffset"
+        - $ref: "#/components/parameters/StreamLimit"
+      responses:
+        "200":
+          description: Plain CSV text, streamed as the file is read
+          content:
+            text/plain:
+              schema:
+                type: string
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
+  /v3.3/stream/domainer/gtld/cleaned/phone:
+    servers: *id001
+    get:
+      tags:
+        - Databases - Streaming
+      operationId: streamDomainerGtldCleanedPhone
+      summary: Stream cleaned newly registered gTLD domains with a phone (CSV)
+      description: Streams the daily file of cleaned newly registered gTLD domains with a phone for a given date. Pass whois=true for the full WHOIS record with a CSV header, or whois=false for domain names only. Rows are streamed as plain uncompressed CSV text, so a parser can start on the first row while the rest is still arriving. Use offset and limit to walk the file in pages.
+      parameters:
+        - $ref: "#/components/parameters/StreamDateParam"
+        - $ref: "#/components/parameters/StreamWhois"
+        - $ref: "#/components/parameters/StreamOffset"
+        - $ref: "#/components/parameters/StreamLimit"
+      responses:
+        "200":
+          description: Plain CSV text, streamed as the file is read
+          content:
+            text/plain:
+              schema:
+                type: string
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
+  /v3.3/stream/domainer/cctld:
+    servers: *id001
+    get:
+      tags:
+        - Databases - Streaming
+      operationId: streamDomainerCctld
+      summary: Stream newly registered ccTLD domains (CSV)
+      description: Streams the daily file of newly registered ccTLD domains for a given date. Pass whois=true for the full WHOIS record with a CSV header, or whois=false for domain names only. Rows are streamed as plain uncompressed CSV text, so a parser can start on the first row while the rest is still arriving. Use offset and limit to walk the file in pages.
+      parameters:
+        - $ref: "#/components/parameters/StreamDateParam"
+        - $ref: "#/components/parameters/StreamWhois"
+        - $ref: "#/components/parameters/StreamOffset"
+        - $ref: "#/components/parameters/StreamLimit"
+      responses:
+        "200":
+          description: Plain CSV text, streamed as the file is read
+          content:
+            text/plain:
+              schema:
+                type: string
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
+  /v3.3/stream/domainer/cctld/cleaned:
+    servers: *id001
+    get:
+      tags:
+        - Databases - Streaming
+      operationId: streamDomainerCctldCleaned
+      summary: Stream cleaned newly registered ccTLD domains (CSV)
+      description: Streams the daily file of cleaned newly registered ccTLD domains for a given date. Pass whois=true for the full WHOIS record with a CSV header, or whois=false for domain names only. Rows are streamed as plain uncompressed CSV text, so a parser can start on the first row while the rest is still arriving. Use offset and limit to walk the file in pages.
+      parameters:
+        - $ref: "#/components/parameters/StreamDateParam"
+        - $ref: "#/components/parameters/StreamWhois"
+        - $ref: "#/components/parameters/StreamOffset"
+        - $ref: "#/components/parameters/StreamLimit"
+      responses:
+        "200":
+          description: Plain CSV text, streamed as the file is read
+          content:
+            text/plain:
+              schema:
+                type: string
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
+  /v3.3/stream/domainer/cctld/cleaned/email:
+    servers: *id001
+    get:
+      tags:
+        - Databases - Streaming
+      operationId: streamDomainerCctldCleanedEmail
+      summary: Stream cleaned newly registered ccTLD domains with an email (CSV)
+      description: Streams the daily file of cleaned newly registered ccTLD domains with an email for a given date. Pass whois=true for the full WHOIS record with a CSV header, or whois=false for domain names only. Rows are streamed as plain uncompressed CSV text, so a parser can start on the first row while the rest is still arriving. Use offset and limit to walk the file in pages.
+      parameters:
+        - $ref: "#/components/parameters/StreamDateParam"
+        - $ref: "#/components/parameters/StreamWhois"
+        - $ref: "#/components/parameters/StreamOffset"
+        - $ref: "#/components/parameters/StreamLimit"
+      responses:
+        "200":
+          description: Plain CSV text, streamed as the file is read
+          content:
+            text/plain:
+              schema:
+                type: string
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
+  /v3.3/stream/domainer/cctld/cleaned/phone:
+    servers: *id001
+    get:
+      tags:
+        - Databases - Streaming
+      operationId: streamDomainerCctldCleanedPhone
+      summary: Stream cleaned newly registered ccTLD domains with a phone (CSV)
+      description: Streams the daily file of cleaned newly registered ccTLD domains with a phone for a given date. Pass whois=true for the full WHOIS record with a CSV header, or whois=false for domain names only. Rows are streamed as plain uncompressed CSV text, so a parser can start on the first row while the rest is still arriving. Use offset and limit to walk the file in pages.
+      parameters:
+        - $ref: "#/components/parameters/StreamDateParam"
+        - $ref: "#/components/parameters/StreamWhois"
+        - $ref: "#/components/parameters/StreamOffset"
+        - $ref: "#/components/parameters/StreamLimit"
+      responses:
+        "200":
+          description: Plain CSV text, streamed as the file is read
+          content:
+            text/plain:
+              schema:
+                type: string
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
+  /v3.3/stream/domainer/expired:
+    servers: *id001
+    get:
+      tags:
+        - Databases - Streaming
+      operationId: streamDomainerExpired
+      summary: Stream expiring domains (CSV)
+      description: Streams the daily file of expiring domains for a given date. Pass whois=true for the full WHOIS record with a CSV header, or whois=false for domain names only. Rows are streamed as plain uncompressed CSV text, so a parser can start on the first row while the rest is still arriving. Use offset and limit to walk the file in pages.
+      parameters:
+        - $ref: "#/components/parameters/StreamDateParam"
+        - $ref: "#/components/parameters/StreamWhois"
+        - $ref: "#/components/parameters/StreamOffset"
+        - $ref: "#/components/parameters/StreamLimit"
+      responses:
+        "200":
+          description: Plain CSV text, streamed as the file is read
+          content:
+            text/plain:
+              schema:
+                type: string
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
+  /v3.3/stream/domainer/expired/cleaned:
+    servers: *id001
+    get:
+      tags:
+        - Databases - Streaming
+      operationId: streamDomainerExpiredCleaned
+      summary: Stream cleaned expiring domains (CSV)
+      description: Streams the daily file of cleaned expiring domains for a given date. Pass whois=true for the full WHOIS record with a CSV header, or whois=false for domain names only. Rows are streamed as plain uncompressed CSV text, so a parser can start on the first row while the rest is still arriving. Use offset and limit to walk the file in pages.
+      parameters:
+        - $ref: "#/components/parameters/StreamDateParam"
+        - $ref: "#/components/parameters/StreamWhois"
+        - $ref: "#/components/parameters/StreamOffset"
+        - $ref: "#/components/parameters/StreamLimit"
+      responses:
+        "200":
+          description: Plain CSV text, streamed as the file is read
+          content:
+            text/plain:
+              schema:
+                type: string
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
+  /v3.3/stream/domainer/expired/cleaned/email:
+    servers: *id001
+    get:
+      tags:
+        - Databases - Streaming
+      operationId: streamDomainerExpiredCleanedEmail
+      summary: Stream cleaned expiring domains with an email (CSV)
+      description: Streams the daily file of cleaned expiring domains with an email for a given date. Pass whois=true for the full WHOIS record with a CSV header, or whois=false for domain names only. Rows are streamed as plain uncompressed CSV text, so a parser can start on the first row while the rest is still arriving. Use offset and limit to walk the file in pages.
+      parameters:
+        - $ref: "#/components/parameters/StreamDateParam"
+        - $ref: "#/components/parameters/StreamWhois"
+        - $ref: "#/components/parameters/StreamOffset"
+        - $ref: "#/components/parameters/StreamLimit"
+      responses:
+        "200":
+          description: Plain CSV text, streamed as the file is read
+          content:
+            text/plain:
+              schema:
+                type: string
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
+  /v3.3/stream/domainer/expired/cleaned/phone:
+    servers: *id001
+    get:
+      tags:
+        - Databases - Streaming
+      operationId: streamDomainerExpiredCleanedPhone
+      summary: Stream cleaned expiring domains with a phone (CSV)
+      description: Streams the daily file of cleaned expiring domains with a phone for a given date. Pass whois=true for the full WHOIS record with a CSV header, or whois=false for domain names only. Rows are streamed as plain uncompressed CSV text, so a parser can start on the first row while the rest is still arriving. Use offset and limit to walk the file in pages.
+      parameters:
+        - $ref: "#/components/parameters/StreamDateParam"
+        - $ref: "#/components/parameters/StreamWhois"
+        - $ref: "#/components/parameters/StreamOffset"
+        - $ref: "#/components/parameters/StreamLimit"
+      responses:
+        "200":
+          description: Plain CSV text, streamed as the file is read
+          content:
+            text/plain:
+              schema:
+                type: string
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
+  /v3.3/stream/domainer/dropped:
+    servers: *id001
+    get:
+      tags:
+        - Databases - Streaming
+      operationId: streamDomainerDropped
+      summary: Stream dropped domains (CSV)
+      description: Streams the daily file of dropped domains for a given date. Pass whois=true for the full WHOIS record with a CSV header, or whois=false for domain names only. Rows are streamed as plain uncompressed CSV text, so a parser can start on the first row while the rest is still arriving. Use offset and limit to walk the file in pages.
+      parameters:
+        - $ref: "#/components/parameters/StreamDateParam"
+        - $ref: "#/components/parameters/StreamWhois"
+        - $ref: "#/components/parameters/StreamOffset"
+        - $ref: "#/components/parameters/StreamLimit"
+      responses:
+        "200":
+          description: Plain CSV text, streamed as the file is read
+          content:
+            text/plain:
+              schema:
+                type: string
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
+  /v3.3/stream/domainer/dropped/backlinks:
+    servers: *id001
+    get:
+      tags:
+        - Databases - Streaming
+      operationId: streamDomainerDroppedBacklinks
+      summary: Stream dropped domains with backlinks (CSV)
+      description: Streams the daily file of dropped domains with backlinks for a given date. Pass whois=true for the full WHOIS record with a CSV header, or whois=false for domain names only. Rows are streamed as plain uncompressed CSV text, so a parser can start on the first row while the rest is still arriving. Use offset and limit to walk the file in pages.
+      parameters:
+        - $ref: "#/components/parameters/StreamDateParam"
+        - $ref: "#/components/parameters/StreamWhois"
+        - $ref: "#/components/parameters/StreamOffset"
+        - $ref: "#/components/parameters/StreamLimit"
+      responses:
+        "200":
+          description: Plain CSV text, streamed as the file is read
+          content:
+            text/plain:
+              schema:
+                type: string
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
+  /v3.3/stream/domainer/sample/gtld:
+    servers: *id001
+    get:
+      tags:
+        - Databases - Streaming
+      operationId: streamDomainerGtldSample
+      summary: Stream a sample of newly registered gTLD domains (CSV)
+      description: Streams a fixed sample of newly registered gTLD domains. No API key and no date are needed, so it is the quickest way to check the schema. Rows are streamed as plain uncompressed CSV text, so a parser can start on the first row while the rest is still arriving. Use offset and limit to walk the file in pages.
+      security: []
+      parameters:
+        - $ref: "#/components/parameters/StreamWhois"
+        - $ref: "#/components/parameters/StreamOffset"
+        - $ref: "#/components/parameters/StreamLimit"
+      responses:
+        "200":
+          description: Plain CSV text, streamed as the file is read
+          content:
+            text/plain:
+              schema:
+                type: string
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
+  /v3.3/stream/domainer/sample/gtld/cleaned:
+    servers: *id001
+    get:
+      tags:
+        - Databases - Streaming
+      operationId: streamDomainerGtldCleanedSample
+      summary: Stream a sample of cleaned newly registered gTLD domains (CSV)
+      description: Streams a fixed sample of cleaned newly registered gTLD domains. No API key and no date are needed, so it is the quickest way to check the schema. Rows are streamed as plain uncompressed CSV text, so a parser can start on the first row while the rest is still arriving. Use offset and limit to walk the file in pages.
+      security: []
+      parameters:
+        - $ref: "#/components/parameters/StreamWhois"
+        - $ref: "#/components/parameters/StreamOffset"
+        - $ref: "#/components/parameters/StreamLimit"
+      responses:
+        "200":
+          description: Plain CSV text, streamed as the file is read
+          content:
+            text/plain:
+              schema:
+                type: string
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
+  /v3.3/stream/domainer/sample/cctld:
+    servers: *id001
+    get:
+      tags:
+        - Databases - Streaming
+      operationId: streamDomainerCctldSample
+      summary: Stream a sample of newly registered ccTLD domains (CSV)
+      description: Streams a fixed sample of newly registered ccTLD domains. No API key and no date are needed, so it is the quickest way to check the schema. Rows are streamed as plain uncompressed CSV text, so a parser can start on the first row while the rest is still arriving. Use offset and limit to walk the file in pages.
+      security: []
+      parameters:
+        - $ref: "#/components/parameters/StreamWhois"
+        - $ref: "#/components/parameters/StreamOffset"
+        - $ref: "#/components/parameters/StreamLimit"
+      responses:
+        "200":
+          description: Plain CSV text, streamed as the file is read
+          content:
+            text/plain:
+              schema:
+                type: string
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
+  /v3.3/stream/domainer/sample/cctld/cleaned:
+    servers: *id001
+    get:
+      tags:
+        - Databases - Streaming
+      operationId: streamDomainerCctldCleanedSample
+      summary: Stream a sample of cleaned newly registered ccTLD domains (CSV)
+      description: Streams a fixed sample of cleaned newly registered ccTLD domains. No API key and no date are needed, so it is the quickest way to check the schema. Rows are streamed as plain uncompressed CSV text, so a parser can start on the first row while the rest is still arriving. Use offset and limit to walk the file in pages.
+      security: []
+      parameters:
+        - $ref: "#/components/parameters/StreamWhois"
+        - $ref: "#/components/parameters/StreamOffset"
+        - $ref: "#/components/parameters/StreamLimit"
+      responses:
+        "200":
+          description: Plain CSV text, streamed as the file is read
+          content:
+            text/plain:
+              schema:
+                type: string
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
+  /v3.3/stream/domainer/sample/expired:
+    servers: *id001
+    get:
+      tags:
+        - Databases - Streaming
+      operationId: streamDomainerExpiredSample
+      summary: Stream a sample of expiring domains (CSV)
+      description: Streams a fixed sample of expiring domains. No API key and no date are needed, so it is the quickest way to check the schema. Rows are streamed as plain uncompressed CSV text, so a parser can start on the first row while the rest is still arriving. Use offset and limit to walk the file in pages.
+      security: []
+      parameters:
+        - $ref: "#/components/parameters/StreamWhois"
+        - $ref: "#/components/parameters/StreamOffset"
+        - $ref: "#/components/parameters/StreamLimit"
+      responses:
+        "200":
+          description: Plain CSV text, streamed as the file is read
+          content:
+            text/plain:
+              schema:
+                type: string
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
+  /v3.3/stream/domainer/sample/expired/cleaned:
+    servers: *id001
+    get:
+      tags:
+        - Databases - Streaming
+      operationId: streamDomainerExpiredCleanedSample
+      summary: Stream a sample of cleaned expiring domains (CSV)
+      description: Streams a fixed sample of cleaned expiring domains. No API key and no date are needed, so it is the quickest way to check the schema. Rows are streamed as plain uncompressed CSV text, so a parser can start on the first row while the rest is still arriving. Use offset and limit to walk the file in pages.
+      security: []
+      parameters:
+        - $ref: "#/components/parameters/StreamWhois"
+        - $ref: "#/components/parameters/StreamOffset"
+        - $ref: "#/components/parameters/StreamLimit"
+      responses:
+        "200":
+          description: Plain CSV text, streamed as the file is read
+          content:
+            text/plain:
+              schema:
+                type: string
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
+  /v3.3/stream/domainer/sample/dropped:
+    servers: *id001
+    get:
+      tags:
+        - Databases - Streaming
+      operationId: streamDomainerDroppedSample
+      summary: Stream a sample of dropped domains (CSV)
+      description: Streams a fixed sample of dropped domains. No API key and no date are needed, so it is the quickest way to check the schema. Rows are streamed as plain uncompressed CSV text, so a parser can start on the first row while the rest is still arriving. Use offset and limit to walk the file in pages.
+      security: []
+      parameters:
+        - $ref: "#/components/parameters/StreamWhois"
+        - $ref: "#/components/parameters/StreamOffset"
+        - $ref: "#/components/parameters/StreamLimit"
+      responses:
+        "200":
+          description: Plain CSV text, streamed as the file is read
+          content:
+            text/plain:
+              schema:
+                type: string
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
+  /v3.3/stream/domainer/sample/dropped/backlinks:
+    servers: *id001
+    get:
+      tags:
+        - Databases - Streaming
+      operationId: streamDomainerDroppedBacklinksSample
+      summary: Stream a sample of dropped domains with backlinks (CSV)
+      description: Streams a fixed sample of dropped domains with backlinks. No API key and no date are needed, so it is the quickest way to check the schema. Rows are streamed as plain uncompressed CSV text, so a parser can start on the first row while the rest is still arriving. Use offset and limit to walk the file in pages.
+      security: []
+      parameters:
+        - $ref: "#/components/parameters/StreamWhois"
+        - $ref: "#/components/parameters/StreamOffset"
+        - $ref: "#/components/parameters/StreamLimit"
+      responses:
+        "200":
+          description: Plain CSV text, streamed as the file is read
+          content:
+            text/plain:
+              schema:
+                type: string
+        4XX:
+          $ref: "#/components/responses/ErrorResponse"
   /v3.4/status:
     servers: *id001
     get:
@@ -1882,6 +2494,41 @@ components:
         format: date
       description: yyyy-MM-dd; omit for latest
       example: "2026-10-01"
+    StreamDateParam:
+      name: date
+      in: query
+      required: true
+      schema:
+        type: string
+        format: date
+      description: yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+      example: "2026-10-01"
+    StreamOffset:
+      name: offset
+      in: query
+      schema:
+        type: integer
+        format: int64
+        minimum: 0
+      description: Data rows to skip from the start of the file. The header row is never counted. Rows are skipped by reading forward, so a large offset costs more than a small one.
+      example: 0
+    StreamLimit:
+      name: limit
+      in: query
+      schema:
+        type: integer
+        format: int64
+        minimum: 0
+      description: Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on its own.
+      example: 100
+    StreamWhois:
+      name: whois
+      in: query
+      schema:
+        type: boolean
+        default: false
+      description: true streams the full WHOIS record per domain with a CSV header row; false streams only the domain names, one per line and with no header. The cleaned file types exist only in the WHOIS form, so pass true for those.
+      example: true
     SortOrder:
       name: sort
       in: query
