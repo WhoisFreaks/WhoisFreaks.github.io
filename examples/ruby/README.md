@@ -12,6 +12,10 @@ Install: see the [Ruby guide](../../docs/languages/ruby.md). Set the `WHOISFREAK
 - [`DnsLive.rb`](DnsLive.rb): Live DNS Lookup (`GET /v2.0/dns/live`)
 - [`DnsHistorical.rb`](DnsHistorical.rb): Historical DNS Lookup (`GET /v2.0/dns/historical`)
 - [`DnsReverse.rb`](DnsReverse.rb): Reverse DNS Lookup (`GET /v2.1/dns/reverse`)
+- [`DnsHistoricalV22.rb`](DnsHistoricalV22.rb): Historical DNS Lookup (v2.2) (`GET /v2.2/dns/historical`)
+- [`DnsHistoricalV23.rb`](DnsHistoricalV23.rb): Historical DNS Lookup (v2.3) (`GET /v2.3/dns/historical`)
+- [`DnsReverseV22.rb`](DnsReverseV22.rb): Reverse DNS Lookup (v2.2) (`GET /v2.2/dns/reverse`)
+- [`DnsReverseV23.rb`](DnsReverseV23.rb): Reverse DNS Lookup (v2.3) (`GET /v2.3/dns/reverse`)
 - [`DnsBulk.rb`](DnsBulk.rb): Bulk DNS Lookup (`POST /v2.0/dns/bulk/live`)
 
 ## Domain Availability
@@ -34,6 +38,8 @@ Install: see the [Ruby guide](../../docs/languages/ruby.md). Set the `WHOISFREAK
 ## IP Reputation
 - [`IpReputation.rb`](IpReputation.rb): IP Reputation Lookup (`GET /v1.0/security`)
 - [`BulkIpReputation.rb`](BulkIpReputation.rb): Bulk IP Reputation (`POST /v1.0/security`)
+- [`IpReputationV2.rb`](IpReputationV2.rb): IP Reputation Lookup (v2.0) (`GET /v2.0/security`)
+- [`BulkIpReputationV2.rb`](BulkIpReputationV2.rb): Bulk IP Reputation (v2.0) (`POST /v2.0/security`)
 
 ## Domain Reputation
 - [`DomainReputation.rb`](DomainReputation.rb): Domain Reputation Lookup (`GET /v1/domain/security`)
@@ -105,3 +111,33 @@ Install: see the [Ruby guide](../../docs/languages/ruby.md). Set the `WHOISFREAK
 - [`DownloadThreatFeedMalwareSample.rb`](DownloadThreatFeedMalwareSample.rb): Download a sample of the malware threat feed (CSV) (`GET /v3.4/download/threat-feed/malware/sample`)
 - [`DownloadThreatFeedSpam.rb`](DownloadThreatFeedSpam.rb): Download the daily spam threat feed (CSV) (`GET /v3.4/download/threat-feed/spam`)
 - [`DownloadThreatFeedSpamSample.rb`](DownloadThreatFeedSpamSample.rb): Download a sample of the spam threat feed (CSV) (`GET /v3.4/download/threat-feed/spam/sample`)
+
+## Databases - Streaming
+- [`StreamThreatFeedPhishing.rb`](StreamThreatFeedPhishing.rb): Stream the daily phishing threat feed (CSV) (`GET /v3.4/stream/threat-feed/phishing`)
+- [`StreamThreatFeedPhishingSample.rb`](StreamThreatFeedPhishingSample.rb): Stream a sample of the phishing threat feed (CSV) (`GET /v3.4/stream/threat-feed/phishing/sample`)
+- [`StreamThreatFeedMalware.rb`](StreamThreatFeedMalware.rb): Stream the daily malware threat feed (CSV) (`GET /v3.4/stream/threat-feed/malware`)
+- [`StreamThreatFeedMalwareSample.rb`](StreamThreatFeedMalwareSample.rb): Stream a sample of the malware threat feed (CSV) (`GET /v3.4/stream/threat-feed/malware/sample`)
+- [`StreamThreatFeedSpam.rb`](StreamThreatFeedSpam.rb): Stream the daily spam threat feed (CSV) (`GET /v3.4/stream/threat-feed/spam`)
+- [`StreamThreatFeedSpamSample.rb`](StreamThreatFeedSpamSample.rb): Stream a sample of the spam threat feed (CSV) (`GET /v3.4/stream/threat-feed/spam/sample`)
+- [`StreamDomainerGtld.rb`](StreamDomainerGtld.rb): Stream newly registered gTLD domains (CSV) (`GET /v3.3/stream/domainer/gtld`)
+- [`StreamDomainerGtldCleaned.rb`](StreamDomainerGtldCleaned.rb): Stream cleaned newly registered gTLD domains (CSV) (`GET /v3.3/stream/domainer/gtld/cleaned`)
+- [`StreamDomainerGtldCleanedEmail.rb`](StreamDomainerGtldCleanedEmail.rb): Stream cleaned newly registered gTLD domains with an email (CSV) (`GET /v3.3/stream/domainer/gtld/cleaned/email`)
+- [`StreamDomainerGtldCleanedPhone.rb`](StreamDomainerGtldCleanedPhone.rb): Stream cleaned newly registered gTLD domains with a phone (CSV) (`GET /v3.3/stream/domainer/gtld/cleaned/phone`)
+- [`StreamDomainerCctld.rb`](StreamDomainerCctld.rb): Stream newly registered ccTLD domains (CSV) (`GET /v3.3/stream/domainer/cctld`)
+- [`StreamDomainerCctldCleaned.rb`](StreamDomainerCctldCleaned.rb): Stream cleaned newly registered ccTLD domains (CSV) (`GET /v3.3/stream/domainer/cctld/cleaned`)
+- [`StreamDomainerCctldCleanedEmail.rb`](StreamDomainerCctldCleanedEmail.rb): Stream cleaned newly registered ccTLD domains with an email (CSV) (`GET /v3.3/stream/domainer/cctld/cleaned/email`)
+- [`StreamDomainerCctldCleanedPhone.rb`](StreamDomainerCctldCleanedPhone.rb): Stream cleaned newly registered ccTLD domains with a phone (CSV) (`GET /v3.3/stream/domainer/cctld/cleaned/phone`)
+- [`StreamDomainerExpired.rb`](StreamDomainerExpired.rb): Stream expiring domains (CSV) (`GET /v3.3/stream/domainer/expired`)
+- [`StreamDomainerExpiredCleaned.rb`](StreamDomainerExpiredCleaned.rb): Stream cleaned expiring domains (CSV) (`GET /v3.3/stream/domainer/expired/cleaned`)
+- [`StreamDomainerExpiredCleanedEmail.rb`](StreamDomainerExpiredCleanedEmail.rb): Stream cleaned expiring domains with an email (CSV) (`GET /v3.3/stream/domainer/expired/cleaned/email`)
+- [`StreamDomainerExpiredCleanedPhone.rb`](StreamDomainerExpiredCleanedPhone.rb): Stream cleaned expiring domains with a phone (CSV) (`GET /v3.3/stream/domainer/expired/cleaned/phone`)
+- [`StreamDomainerDropped.rb`](StreamDomainerDropped.rb): Stream dropped domains (CSV) (`GET /v3.3/stream/domainer/dropped`)
+- [`StreamDomainerDroppedBacklinks.rb`](StreamDomainerDroppedBacklinks.rb): Stream dropped domains with backlinks (CSV) (`GET /v3.3/stream/domainer/dropped/backlinks`)
+- [`StreamDomainerGtldSample.rb`](StreamDomainerGtldSample.rb): Stream a sample of newly registered gTLD domains (CSV) (`GET /v3.3/stream/domainer/sample/gtld`)
+- [`StreamDomainerGtldCleanedSample.rb`](StreamDomainerGtldCleanedSample.rb): Stream a sample of cleaned newly registered gTLD domains (CSV) (`GET /v3.3/stream/domainer/sample/gtld/cleaned`)
+- [`StreamDomainerCctldSample.rb`](StreamDomainerCctldSample.rb): Stream a sample of newly registered ccTLD domains (CSV) (`GET /v3.3/stream/domainer/sample/cctld`)
+- [`StreamDomainerCctldCleanedSample.rb`](StreamDomainerCctldCleanedSample.rb): Stream a sample of cleaned newly registered ccTLD domains (CSV) (`GET /v3.3/stream/domainer/sample/cctld/cleaned`)
+- [`StreamDomainerExpiredSample.rb`](StreamDomainerExpiredSample.rb): Stream a sample of expiring domains (CSV) (`GET /v3.3/stream/domainer/sample/expired`)
+- [`StreamDomainerExpiredCleanedSample.rb`](StreamDomainerExpiredCleanedSample.rb): Stream a sample of cleaned expiring domains (CSV) (`GET /v3.3/stream/domainer/sample/expired/cleaned`)
+- [`StreamDomainerDroppedSample.rb`](StreamDomainerDroppedSample.rb): Stream a sample of dropped domains (CSV) (`GET /v3.3/stream/domainer/sample/dropped`)
+- [`StreamDomainerDroppedBacklinksSample.rb`](StreamDomainerDroppedBacklinksSample.rb): Stream a sample of dropped domains with backlinks (CSV) (`GET /v3.3/stream/domainer/sample/dropped/backlinks`)

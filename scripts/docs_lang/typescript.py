@@ -58,7 +58,7 @@ def _lit(v, p=None):
 
 
 def _response_kind(op, ctx):
-    """binary | model | model_list | string_list | text"""
+    """binary | model | model_list | string_list | text | csv_stream"""
     if op.get("is_binary"):
         return "binary"
     if op.get("response_schema"):
@@ -67,7 +67,7 @@ def _response_kind(op, ctx):
                       .get("200")) or {})
     content = resp.get("content") or {}
     if "text/plain" in content:
-        return "text"
+        return "text" if op["op_id"] == "rotateApiKey" else "csv_stream"
     sch = ctx.deref((content.get("application/json") or {}).get("schema") or {})
     if sch.get("type") == "array":
         return "string_list"
@@ -175,6 +175,9 @@ def example(op, ctx):
         out += [f"{ind}const domains = await {call};",
                 f"{ind}console.log(`${{domains.length}} domains`);",
                 f'{ind}console.log(domains.slice(0, 10).join("\\n"));']
+    elif kind == "csv_stream":
+        out += [f"{ind}const csvText = await {call}; // plain CSV text, already decompressed",
+                f'{ind}console.log(csvText);']
     elif kind == "text":
         out += [f"{ind}const newKey = await {call}; // use this key from now on",
                 f'{ind}console.log("New API key:", newKey);']

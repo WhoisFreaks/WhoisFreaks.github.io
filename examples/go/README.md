@@ -12,6 +12,10 @@ Install: see the [Go guide](../../docs/languages/go.md). Set the `WHOISFREAKS_AP
 - [`DnsLive.go`](DnsLive.go): Live DNS Lookup (`GET /v2.0/dns/live`)
 - [`DnsHistorical.go`](DnsHistorical.go): Historical DNS Lookup (`GET /v2.0/dns/historical`)
 - [`DnsReverse.go`](DnsReverse.go): Reverse DNS Lookup (`GET /v2.1/dns/reverse`)
+- [`DnsHistoricalV22.go`](DnsHistoricalV22.go): Historical DNS Lookup (v2.2) (`GET /v2.2/dns/historical`)
+- [`DnsHistoricalV23.go`](DnsHistoricalV23.go): Historical DNS Lookup (v2.3) (`GET /v2.3/dns/historical`)
+- [`DnsReverseV22.go`](DnsReverseV22.go): Reverse DNS Lookup (v2.2) (`GET /v2.2/dns/reverse`)
+- [`DnsReverseV23.go`](DnsReverseV23.go): Reverse DNS Lookup (v2.3) (`GET /v2.3/dns/reverse`)
 - [`DnsBulk.go`](DnsBulk.go): Bulk DNS Lookup (`POST /v2.0/dns/bulk/live`)
 
 ## Domain Availability
@@ -34,6 +38,8 @@ Install: see the [Go guide](../../docs/languages/go.md). Set the `WHOISFREAKS_AP
 ## IP Reputation
 - [`IpReputation.go`](IpReputation.go): IP Reputation Lookup (`GET /v1.0/security`)
 - [`BulkIpReputation.go`](BulkIpReputation.go): Bulk IP Reputation (`POST /v1.0/security`)
+- [`IpReputationV2.go`](IpReputationV2.go): IP Reputation Lookup (v2.0) (`GET /v2.0/security`)
+- [`BulkIpReputationV2.go`](BulkIpReputationV2.go): Bulk IP Reputation (v2.0) (`POST /v2.0/security`)
 
 ## Domain Reputation
 - [`DomainReputation.go`](DomainReputation.go): Domain Reputation Lookup (`GET /v1/domain/security`)
@@ -105,3 +111,33 @@ Install: see the [Go guide](../../docs/languages/go.md). Set the `WHOISFREAKS_AP
 - [`DownloadThreatFeedMalwareSample.go`](DownloadThreatFeedMalwareSample.go): Download a sample of the malware threat feed (CSV) (`GET /v3.4/download/threat-feed/malware/sample`)
 - [`DownloadThreatFeedSpam.go`](DownloadThreatFeedSpam.go): Download the daily spam threat feed (CSV) (`GET /v3.4/download/threat-feed/spam`)
 - [`DownloadThreatFeedSpamSample.go`](DownloadThreatFeedSpamSample.go): Download a sample of the spam threat feed (CSV) (`GET /v3.4/download/threat-feed/spam/sample`)
+
+## Databases - Streaming
+- [`StreamThreatFeedPhishing.go`](StreamThreatFeedPhishing.go): Stream the daily phishing threat feed (CSV) (`GET /v3.4/stream/threat-feed/phishing`)
+- [`StreamThreatFeedPhishingSample.go`](StreamThreatFeedPhishingSample.go): Stream a sample of the phishing threat feed (CSV) (`GET /v3.4/stream/threat-feed/phishing/sample`)
+- [`StreamThreatFeedMalware.go`](StreamThreatFeedMalware.go): Stream the daily malware threat feed (CSV) (`GET /v3.4/stream/threat-feed/malware`)
+- [`StreamThreatFeedMalwareSample.go`](StreamThreatFeedMalwareSample.go): Stream a sample of the malware threat feed (CSV) (`GET /v3.4/stream/threat-feed/malware/sample`)
+- [`StreamThreatFeedSpam.go`](StreamThreatFeedSpam.go): Stream the daily spam threat feed (CSV) (`GET /v3.4/stream/threat-feed/spam`)
+- [`StreamThreatFeedSpamSample.go`](StreamThreatFeedSpamSample.go): Stream a sample of the spam threat feed (CSV) (`GET /v3.4/stream/threat-feed/spam/sample`)
+- [`StreamDomainerGtld.go`](StreamDomainerGtld.go): Stream newly registered gTLD domains (CSV) (`GET /v3.3/stream/domainer/gtld`)
+- [`StreamDomainerGtldCleaned.go`](StreamDomainerGtldCleaned.go): Stream cleaned newly registered gTLD domains (CSV) (`GET /v3.3/stream/domainer/gtld/cleaned`)
+- [`StreamDomainerGtldCleanedEmail.go`](StreamDomainerGtldCleanedEmail.go): Stream cleaned newly registered gTLD domains with an email (CSV) (`GET /v3.3/stream/domainer/gtld/cleaned/email`)
+- [`StreamDomainerGtldCleanedPhone.go`](StreamDomainerGtldCleanedPhone.go): Stream cleaned newly registered gTLD domains with a phone (CSV) (`GET /v3.3/stream/domainer/gtld/cleaned/phone`)
+- [`StreamDomainerCctld.go`](StreamDomainerCctld.go): Stream newly registered ccTLD domains (CSV) (`GET /v3.3/stream/domainer/cctld`)
+- [`StreamDomainerCctldCleaned.go`](StreamDomainerCctldCleaned.go): Stream cleaned newly registered ccTLD domains (CSV) (`GET /v3.3/stream/domainer/cctld/cleaned`)
+- [`StreamDomainerCctldCleanedEmail.go`](StreamDomainerCctldCleanedEmail.go): Stream cleaned newly registered ccTLD domains with an email (CSV) (`GET /v3.3/stream/domainer/cctld/cleaned/email`)
+- [`StreamDomainerCctldCleanedPhone.go`](StreamDomainerCctldCleanedPhone.go): Stream cleaned newly registered ccTLD domains with a phone (CSV) (`GET /v3.3/stream/domainer/cctld/cleaned/phone`)
+- [`StreamDomainerExpired.go`](StreamDomainerExpired.go): Stream expiring domains (CSV) (`GET /v3.3/stream/domainer/expired`)
+- [`StreamDomainerExpiredCleaned.go`](StreamDomainerExpiredCleaned.go): Stream cleaned expiring domains (CSV) (`GET /v3.3/stream/domainer/expired/cleaned`)
+- [`StreamDomainerExpiredCleanedEmail.go`](StreamDomainerExpiredCleanedEmail.go): Stream cleaned expiring domains with an email (CSV) (`GET /v3.3/stream/domainer/expired/cleaned/email`)
+- [`StreamDomainerExpiredCleanedPhone.go`](StreamDomainerExpiredCleanedPhone.go): Stream cleaned expiring domains with a phone (CSV) (`GET /v3.3/stream/domainer/expired/cleaned/phone`)
+- [`StreamDomainerDropped.go`](StreamDomainerDropped.go): Stream dropped domains (CSV) (`GET /v3.3/stream/domainer/dropped`)
+- [`StreamDomainerDroppedBacklinks.go`](StreamDomainerDroppedBacklinks.go): Stream dropped domains with backlinks (CSV) (`GET /v3.3/stream/domainer/dropped/backlinks`)
+- [`StreamDomainerGtldSample.go`](StreamDomainerGtldSample.go): Stream a sample of newly registered gTLD domains (CSV) (`GET /v3.3/stream/domainer/sample/gtld`)
+- [`StreamDomainerGtldCleanedSample.go`](StreamDomainerGtldCleanedSample.go): Stream a sample of cleaned newly registered gTLD domains (CSV) (`GET /v3.3/stream/domainer/sample/gtld/cleaned`)
+- [`StreamDomainerCctldSample.go`](StreamDomainerCctldSample.go): Stream a sample of newly registered ccTLD domains (CSV) (`GET /v3.3/stream/domainer/sample/cctld`)
+- [`StreamDomainerCctldCleanedSample.go`](StreamDomainerCctldCleanedSample.go): Stream a sample of cleaned newly registered ccTLD domains (CSV) (`GET /v3.3/stream/domainer/sample/cctld/cleaned`)
+- [`StreamDomainerExpiredSample.go`](StreamDomainerExpiredSample.go): Stream a sample of expiring domains (CSV) (`GET /v3.3/stream/domainer/sample/expired`)
+- [`StreamDomainerExpiredCleanedSample.go`](StreamDomainerExpiredCleanedSample.go): Stream a sample of cleaned expiring domains (CSV) (`GET /v3.3/stream/domainer/sample/expired/cleaned`)
+- [`StreamDomainerDroppedSample.go`](StreamDomainerDroppedSample.go): Stream a sample of dropped domains (CSV) (`GET /v3.3/stream/domainer/sample/dropped`)
+- [`StreamDomainerDroppedBacklinksSample.go`](StreamDomainerDroppedBacklinksSample.go): Stream a sample of dropped domains with backlinks (CSV) (`GET /v3.3/stream/domainer/sample/dropped/backlinks`)

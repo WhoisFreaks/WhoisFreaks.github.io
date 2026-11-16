@@ -1,7 +1,7 @@
 # WhoisFreaks SDK Documentation
 
 Official documentation for the **WhoisFreaks** SDKs: one API, 10
-languages, 60 endpoints. Every SDK is generated from the same
+languages, 94 endpoints. Every SDK is generated from the same
 [OpenAPI specification](spec/whoisfreaks-openapi.yaml) and published to
 its language's standard registry.
 
@@ -11,7 +11,7 @@ its language's standard registry.
 
 - [Authentication](docs/authentication.md): get and configure your API key
 - [Language guides](#language-guides): install + usage for each SDK
-- [Endpoint reference](docs/endpoints/README.md): all 60 endpoints, grouped by category
+- [Endpoint reference](docs/endpoints/README.md): all 94 endpoints, grouped by category
 - [Runnable examples](examples/README.md): copy-paste, ready-to-run example for every endpoint in every language
 
 ## Language guides
@@ -56,17 +56,17 @@ The equivalent for every other language is in its [language guide](#language-gui
 
 The API is organized into three sections. See the [full endpoint reference](docs/endpoints/README.md) for every operation with its URL, parameters, response fields and Python, TypeScript and Go examples. The [language guides](#language-guides) show every operation in all 10 languages.
 
-### [API Solutions](docs/endpoints/api-solutions.md) (20 endpoints)
+### [API Solutions](docs/endpoints/api-solutions.md) (26 endpoints)
 
 Real-time and on-demand lookup APIs. Query a single domain, IP, or ASN and get structured JSON (or XML) back immediately.
 
 [WHOIS](docs/endpoints/whois.md), [DNS](docs/endpoints/dns.md), [Domain Availability](docs/endpoints/domain-availability.md), [Typosquatting](docs/endpoints/typosquatting.md), [SSL](docs/endpoints/ssl.md), [Geolocation](docs/endpoints/geolocation.md), [Subdomains](docs/endpoints/subdomains.md), [IP Reputation](docs/endpoints/ip-reputation.md), [Domain Reputation](docs/endpoints/domain-reputation.md), [ASN WHOIS](docs/endpoints/asn-whois.md), [IP WHOIS](docs/endpoints/ip-whois.md)
 
-### [Databases](docs/endpoints/databases.md) (37 endpoints)
+### [Databases](docs/endpoints/databases.md) (65 endpoints)
 
 Bulk data feeds and downloadable database snapshots for large-scale processing: newly registered, expiring/dropped, and full WHOIS/DNS/IP datasets.
 
-[Databases - Newly Registered](docs/endpoints/databases-newly-registered.md), [Databases - Expiring & Dropped](docs/endpoints/databases-expiring-dropped.md), [Databases - WHOIS](docs/endpoints/databases-whois.md), [Databases - DNS](docs/endpoints/databases-dns.md), [Databases - Subdomains](docs/endpoints/databases-subdomains.md), [Databases - IP Geolocation](docs/endpoints/databases-ip-geolocation.md), [Databases - ASN WHOIS](docs/endpoints/databases-asn-whois.md), [Databases - IP WHOIS](docs/endpoints/databases-ip-whois.md), [Databases - IP Security](docs/endpoints/databases-ip-security.md), [Databases - Threat Feed](docs/endpoints/databases-threat-feed.md)
+[Databases - Newly Registered](docs/endpoints/databases-newly-registered.md), [Databases - Expiring & Dropped](docs/endpoints/databases-expiring-dropped.md), [Databases - WHOIS](docs/endpoints/databases-whois.md), [Databases - DNS](docs/endpoints/databases-dns.md), [Databases - Subdomains](docs/endpoints/databases-subdomains.md), [Databases - IP Geolocation](docs/endpoints/databases-ip-geolocation.md), [Databases - ASN WHOIS](docs/endpoints/databases-asn-whois.md), [Databases - IP WHOIS](docs/endpoints/databases-ip-whois.md), [Databases - IP Security](docs/endpoints/databases-ip-security.md), [Databases - Threat Feed](docs/endpoints/databases-threat-feed.md), [Databases - Streaming](docs/endpoints/databases-streaming.md)
 
 ### [Account & Utilities](docs/endpoints/account-utilities.md) (3 endpoints)
 

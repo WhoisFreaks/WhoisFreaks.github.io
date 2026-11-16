@@ -111,7 +111,7 @@ fun main() {
 
 ## Endpoints
 
-All 60 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
+All 94 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
 
 ### WHOIS
 
@@ -283,6 +283,116 @@ fun main() {
     val api = DNSApi()
 
     val result = api.dnsReverse("8.8.8.8", DNSApi.TypeDnsReverse.a, page = 1)
+    println(result)
+}
+
+```
+
+#### Historical DNS Lookup (v2.2)
+
+`GET /v2.2/dns/historical`
+
+```kotlin
+// Runnable example: Historical DNS Lookup (v2.2) (GET /v2.2/dns/historical)
+// Run it from the Getting Started project: gradle run -PmainClass=DnsHistoricalV22Kt
+// Parameters for dnsHistoricalV22 (GET /v2.2/dns/historical):
+//   - domainName (string, required)
+//   - type (string, required)
+//   - page (integer, optional)
+//   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+//   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+//   - format (string (one of: json, xml), optional)
+import com.whoisfreaks.client.apis.DNSApi
+import com.whoisfreaks.client.infrastructure.ApiClient
+
+fun main() {
+    ApiClient.apiKey["apiKey"] = System.getenv("WHOISFREAKS_API_KEY")  // set once, sent with every call
+    val api = DNSApi()
+
+    val result = api.dnsHistoricalV22("whoisfreaks.com", "A,MX,TXT", page = 1)
+    println(result)
+}
+
+```
+
+#### Historical DNS Lookup (v2.3)
+
+`GET /v2.3/dns/historical`
+
+```kotlin
+// Runnable example: Historical DNS Lookup (v2.3) (GET /v2.3/dns/historical)
+// Run it from the Getting Started project: gradle run -PmainClass=DnsHistoricalV23Kt
+// Parameters for dnsHistoricalV23 (GET /v2.3/dns/historical):
+//   - domainName (string, required)
+//   - type (string, required)
+//   - page (integer, optional)
+//   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+//   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+//   - format (string (one of: json, xml), optional)
+import com.whoisfreaks.client.apis.DNSApi
+import com.whoisfreaks.client.infrastructure.ApiClient
+
+fun main() {
+    ApiClient.apiKey["apiKey"] = System.getenv("WHOISFREAKS_API_KEY")  // set once, sent with every call
+    val api = DNSApi()
+
+    val result = api.dnsHistoricalV23("whoisfreaks.com", "A,MX,TXT", page = 1)
+    println(result)
+}
+
+```
+
+#### Reverse DNS Lookup (v2.2)
+
+`GET /v2.2/dns/reverse`
+
+```kotlin
+// Runnable example: Reverse DNS Lookup (v2.2) (GET /v2.2/dns/reverse)
+// Run it from the Getting Started project: gradle run -PmainClass=DnsReverseV22Kt
+// Parameters for dnsReverseV22 (GET /v2.2/dns/reverse):
+//   - value (string, required): IP, CIDR, or record value
+//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
+//   - exact (boolean, optional): When false the value is matched as a substring, which is far slower than an exact match...
+//   - page (integer, optional)
+//   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+//   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+//   - format (string (one of: json, xml), optional)
+import com.whoisfreaks.client.apis.DNSApi
+import com.whoisfreaks.client.infrastructure.ApiClient
+
+fun main() {
+    ApiClient.apiKey["apiKey"] = System.getenv("WHOISFREAKS_API_KEY")  // set once, sent with every call
+    val api = DNSApi()
+
+    val result = api.dnsReverseV22("8.8.8.8", DNSApi.TypeDnsReverseV22.a, page = 1)
+    println(result)
+}
+
+```
+
+#### Reverse DNS Lookup (v2.3)
+
+`GET /v2.3/dns/reverse`
+
+```kotlin
+// Runnable example: Reverse DNS Lookup (v2.3) (GET /v2.3/dns/reverse)
+// Run it from the Getting Started project: gradle run -PmainClass=DnsReverseV23Kt
+// Parameters for dnsReverseV23 (GET /v2.3/dns/reverse):
+//   - value (string, required): IP, CIDR, or record value
+//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
+//   - exact (boolean, optional): When false the value is matched as a substring, which is far slower than an exact match...
+//   - page (integer, optional)
+//   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+//   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+//   - format (string (one of: json, xml), optional)
+import com.whoisfreaks.client.apis.DNSApi
+import com.whoisfreaks.client.infrastructure.ApiClient
+
+fun main() {
+    ApiClient.apiKey["apiKey"] = System.getenv("WHOISFREAKS_API_KEY")  // set once, sent with every call
+    val api = DNSApi()
+
+    val result = api.dnsReverseV23("8.8.8.8", DNSApi.TypeDnsReverseV23.a, page = 1)
     println(result)
 }
 
@@ -540,6 +650,52 @@ fun main() {
 
     val body = BulkGeolocationRequest(ips = listOf("8.8.8.8", "1.1.1.1"))
     val result = api.bulkIpReputation(body)
+    println(result)
+}
+
+```
+
+#### IP Reputation Lookup (v2.0)
+
+`GET /v2.0/security`
+
+```kotlin
+// Runnable example: IP Reputation Lookup (v2.0) (GET /v2.0/security)
+// Run it from the Getting Started project: gradle run -PmainClass=IpReputationV2Kt
+// Parameters for ipReputationV2 (GET /v2.0/security):
+//   - ip (string, required)
+import com.whoisfreaks.client.apis.IPReputationApi
+import com.whoisfreaks.client.infrastructure.ApiClient
+
+fun main() {
+    ApiClient.apiKey["apiKey"] = System.getenv("WHOISFREAKS_API_KEY")  // set once, sent with every call
+    val api = IPReputationApi()
+
+    val result = api.ipReputationV2("8.8.8.8")
+    println(result)
+}
+
+```
+
+#### Bulk IP Reputation (v2.0)
+
+`POST /v2.0/security`
+
+```kotlin
+// Runnable example: Bulk IP Reputation (v2.0) (POST /v2.0/security)
+// Run it from the Getting Started project: gradle run -PmainClass=BulkIpReputationV2Kt
+// Parameters for bulkIpReputationV2 (POST /v2.0/security):
+//   - body: BulkGeolocationRequest (required): request body object
+import com.whoisfreaks.client.apis.IPReputationApi
+import com.whoisfreaks.client.infrastructure.ApiClient
+import com.whoisfreaks.client.models.BulkGeolocationRequest
+
+fun main() {
+    ApiClient.apiKey["apiKey"] = System.getenv("WHOISFREAKS_API_KEY")  // set once, sent with every call
+    val api = IPReputationApi()
+
+    val body = BulkGeolocationRequest(ips = listOf("1.1.1.1", "2.2.2.2", "8.8.8.8"))
+    val result = api.bulkIpReputationV2(body)
     println(result)
 }
 
@@ -1641,6 +1797,697 @@ fun main() {
     // The SDK saves the response to a temporary file that is deleted on exit: copy it.
     val target = download.copyTo(File("DownloadThreatFeedSpamSample.csv"), overwrite = true)
     println("Saved ${target.length()} bytes to ${target.absolutePath}")
+}
+
+```
+
+### Databases - Streaming
+
+#### Stream the daily phishing threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/phishing`
+
+```kotlin
+// Runnable example: Stream the daily phishing threat feed (CSV) (GET /v3.4/stream/threat-feed/phishing)
+// Run it from the Getting Started project: gradle run -PmainClass=StreamThreatFeedPhishingKt
+// Parameters for streamThreatFeedPhishing (GET /v3.4/stream/threat-feed/phishing):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.apis.DatabasesStreamingApi
+import com.whoisfreaks.client.infrastructure.ApiClient
+import java.time.LocalDate
+
+fun main() {
+    ApiClient.apiKey["apiKey"] = System.getenv("WHOISFREAKS_API_KEY")  // set once, sent with every call
+    val api = DatabasesStreamingApi()
+
+    val result = api.streamThreatFeedPhishing(LocalDate.of(2026, 10, 1))
+    println(result)
+}
+
+```
+
+#### Stream a sample of the phishing threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/phishing/sample`
+
+```kotlin
+// Runnable example: Stream a sample of the phishing threat feed (CSV) (GET /v3.4/stream/threat-feed/phishing/sample)
+// Run it from the Getting Started project: gradle run -PmainClass=StreamThreatFeedPhishingSampleKt
+// Parameters for streamThreatFeedPhishingSample (GET /v3.4/stream/threat-feed/phishing/sample):
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.apis.DatabasesStreamingApi
+
+fun main() {
+    // Public endpoint: no API key needed.
+    val api = DatabasesStreamingApi()
+
+    val result = api.streamThreatFeedPhishingSample()
+    println(result)
+}
+
+```
+
+#### Stream the daily malware threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/malware`
+
+```kotlin
+// Runnable example: Stream the daily malware threat feed (CSV) (GET /v3.4/stream/threat-feed/malware)
+// Run it from the Getting Started project: gradle run -PmainClass=StreamThreatFeedMalwareKt
+// Parameters for streamThreatFeedMalware (GET /v3.4/stream/threat-feed/malware):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.apis.DatabasesStreamingApi
+import com.whoisfreaks.client.infrastructure.ApiClient
+import java.time.LocalDate
+
+fun main() {
+    ApiClient.apiKey["apiKey"] = System.getenv("WHOISFREAKS_API_KEY")  // set once, sent with every call
+    val api = DatabasesStreamingApi()
+
+    val result = api.streamThreatFeedMalware(LocalDate.of(2026, 10, 1))
+    println(result)
+}
+
+```
+
+#### Stream a sample of the malware threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/malware/sample`
+
+```kotlin
+// Runnable example: Stream a sample of the malware threat feed (CSV) (GET /v3.4/stream/threat-feed/malware/sample)
+// Run it from the Getting Started project: gradle run -PmainClass=StreamThreatFeedMalwareSampleKt
+// Parameters for streamThreatFeedMalwareSample (GET /v3.4/stream/threat-feed/malware/sample):
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.apis.DatabasesStreamingApi
+
+fun main() {
+    // Public endpoint: no API key needed.
+    val api = DatabasesStreamingApi()
+
+    val result = api.streamThreatFeedMalwareSample()
+    println(result)
+}
+
+```
+
+#### Stream the daily spam threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/spam`
+
+```kotlin
+// Runnable example: Stream the daily spam threat feed (CSV) (GET /v3.4/stream/threat-feed/spam)
+// Run it from the Getting Started project: gradle run -PmainClass=StreamThreatFeedSpamKt
+// Parameters for streamThreatFeedSpam (GET /v3.4/stream/threat-feed/spam):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.apis.DatabasesStreamingApi
+import com.whoisfreaks.client.infrastructure.ApiClient
+import java.time.LocalDate
+
+fun main() {
+    ApiClient.apiKey["apiKey"] = System.getenv("WHOISFREAKS_API_KEY")  // set once, sent with every call
+    val api = DatabasesStreamingApi()
+
+    val result = api.streamThreatFeedSpam(LocalDate.of(2026, 10, 1))
+    println(result)
+}
+
+```
+
+#### Stream a sample of the spam threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/spam/sample`
+
+```kotlin
+// Runnable example: Stream a sample of the spam threat feed (CSV) (GET /v3.4/stream/threat-feed/spam/sample)
+// Run it from the Getting Started project: gradle run -PmainClass=StreamThreatFeedSpamSampleKt
+// Parameters for streamThreatFeedSpamSample (GET /v3.4/stream/threat-feed/spam/sample):
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.apis.DatabasesStreamingApi
+
+fun main() {
+    // Public endpoint: no API key needed.
+    val api = DatabasesStreamingApi()
+
+    val result = api.streamThreatFeedSpamSample()
+    println(result)
+}
+
+```
+
+#### Stream newly registered gTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/gtld`
+
+```kotlin
+// Runnable example: Stream newly registered gTLD domains (CSV) (GET /v3.3/stream/domainer/gtld)
+// Run it from the Getting Started project: gradle run -PmainClass=StreamDomainerGtldKt
+// Parameters for streamDomainerGtld (GET /v3.3/stream/domainer/gtld):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.apis.DatabasesStreamingApi
+import com.whoisfreaks.client.infrastructure.ApiClient
+import java.time.LocalDate
+
+fun main() {
+    ApiClient.apiKey["apiKey"] = System.getenv("WHOISFREAKS_API_KEY")  // set once, sent with every call
+    val api = DatabasesStreamingApi()
+
+    val result = api.streamDomainerGtld(LocalDate.of(2026, 10, 1))
+    println(result)
+}
+
+```
+
+#### Stream cleaned newly registered gTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/gtld/cleaned`
+
+```kotlin
+// Runnable example: Stream cleaned newly registered gTLD domains (CSV) (GET /v3.3/stream/domainer/gtld/cleaned)
+// Run it from the Getting Started project: gradle run -PmainClass=StreamDomainerGtldCleanedKt
+// Parameters for streamDomainerGtldCleaned (GET /v3.3/stream/domainer/gtld/cleaned):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.apis.DatabasesStreamingApi
+import com.whoisfreaks.client.infrastructure.ApiClient
+import java.time.LocalDate
+
+fun main() {
+    ApiClient.apiKey["apiKey"] = System.getenv("WHOISFREAKS_API_KEY")  // set once, sent with every call
+    val api = DatabasesStreamingApi()
+
+    val result = api.streamDomainerGtldCleaned(LocalDate.of(2026, 10, 1))
+    println(result)
+}
+
+```
+
+#### Stream cleaned newly registered gTLD domains with an email (CSV)
+
+`GET /v3.3/stream/domainer/gtld/cleaned/email`
+
+```kotlin
+// Runnable example: Stream cleaned newly registered gTLD domains with an email (CSV) (GET /v3.3/stream/domainer/gtld/cleaned/email)
+// Run it from the Getting Started project: gradle run -PmainClass=StreamDomainerGtldCleanedEmailKt
+// Parameters for streamDomainerGtldCleanedEmail (GET /v3.3/stream/domainer/gtld/cleaned/email):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.apis.DatabasesStreamingApi
+import com.whoisfreaks.client.infrastructure.ApiClient
+import java.time.LocalDate
+
+fun main() {
+    ApiClient.apiKey["apiKey"] = System.getenv("WHOISFREAKS_API_KEY")  // set once, sent with every call
+    val api = DatabasesStreamingApi()
+
+    val result = api.streamDomainerGtldCleanedEmail(LocalDate.of(2026, 10, 1))
+    println(result)
+}
+
+```
+
+#### Stream cleaned newly registered gTLD domains with a phone (CSV)
+
+`GET /v3.3/stream/domainer/gtld/cleaned/phone`
+
+```kotlin
+// Runnable example: Stream cleaned newly registered gTLD domains with a phone (CSV) (GET /v3.3/stream/domainer/gtld/cleaned/phone)
+// Run it from the Getting Started project: gradle run -PmainClass=StreamDomainerGtldCleanedPhoneKt
+// Parameters for streamDomainerGtldCleanedPhone (GET /v3.3/stream/domainer/gtld/cleaned/phone):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.apis.DatabasesStreamingApi
+import com.whoisfreaks.client.infrastructure.ApiClient
+import java.time.LocalDate
+
+fun main() {
+    ApiClient.apiKey["apiKey"] = System.getenv("WHOISFREAKS_API_KEY")  // set once, sent with every call
+    val api = DatabasesStreamingApi()
+
+    val result = api.streamDomainerGtldCleanedPhone(LocalDate.of(2026, 10, 1))
+    println(result)
+}
+
+```
+
+#### Stream newly registered ccTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/cctld`
+
+```kotlin
+// Runnable example: Stream newly registered ccTLD domains (CSV) (GET /v3.3/stream/domainer/cctld)
+// Run it from the Getting Started project: gradle run -PmainClass=StreamDomainerCctldKt
+// Parameters for streamDomainerCctld (GET /v3.3/stream/domainer/cctld):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.apis.DatabasesStreamingApi
+import com.whoisfreaks.client.infrastructure.ApiClient
+import java.time.LocalDate
+
+fun main() {
+    ApiClient.apiKey["apiKey"] = System.getenv("WHOISFREAKS_API_KEY")  // set once, sent with every call
+    val api = DatabasesStreamingApi()
+
+    val result = api.streamDomainerCctld(LocalDate.of(2026, 10, 1))
+    println(result)
+}
+
+```
+
+#### Stream cleaned newly registered ccTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/cctld/cleaned`
+
+```kotlin
+// Runnable example: Stream cleaned newly registered ccTLD domains (CSV) (GET /v3.3/stream/domainer/cctld/cleaned)
+// Run it from the Getting Started project: gradle run -PmainClass=StreamDomainerCctldCleanedKt
+// Parameters for streamDomainerCctldCleaned (GET /v3.3/stream/domainer/cctld/cleaned):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.apis.DatabasesStreamingApi
+import com.whoisfreaks.client.infrastructure.ApiClient
+import java.time.LocalDate
+
+fun main() {
+    ApiClient.apiKey["apiKey"] = System.getenv("WHOISFREAKS_API_KEY")  // set once, sent with every call
+    val api = DatabasesStreamingApi()
+
+    val result = api.streamDomainerCctldCleaned(LocalDate.of(2026, 10, 1))
+    println(result)
+}
+
+```
+
+#### Stream cleaned newly registered ccTLD domains with an email (CSV)
+
+`GET /v3.3/stream/domainer/cctld/cleaned/email`
+
+```kotlin
+// Runnable example: Stream cleaned newly registered ccTLD domains with an email (CSV) (GET /v3.3/stream/domainer/cctld/cleaned/email)
+// Run it from the Getting Started project: gradle run -PmainClass=StreamDomainerCctldCleanedEmailKt
+// Parameters for streamDomainerCctldCleanedEmail (GET /v3.3/stream/domainer/cctld/cleaned/email):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.apis.DatabasesStreamingApi
+import com.whoisfreaks.client.infrastructure.ApiClient
+import java.time.LocalDate
+
+fun main() {
+    ApiClient.apiKey["apiKey"] = System.getenv("WHOISFREAKS_API_KEY")  // set once, sent with every call
+    val api = DatabasesStreamingApi()
+
+    val result = api.streamDomainerCctldCleanedEmail(LocalDate.of(2026, 10, 1))
+    println(result)
+}
+
+```
+
+#### Stream cleaned newly registered ccTLD domains with a phone (CSV)
+
+`GET /v3.3/stream/domainer/cctld/cleaned/phone`
+
+```kotlin
+// Runnable example: Stream cleaned newly registered ccTLD domains with a phone (CSV) (GET /v3.3/stream/domainer/cctld/cleaned/phone)
+// Run it from the Getting Started project: gradle run -PmainClass=StreamDomainerCctldCleanedPhoneKt
+// Parameters for streamDomainerCctldCleanedPhone (GET /v3.3/stream/domainer/cctld/cleaned/phone):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.apis.DatabasesStreamingApi
+import com.whoisfreaks.client.infrastructure.ApiClient
+import java.time.LocalDate
+
+fun main() {
+    ApiClient.apiKey["apiKey"] = System.getenv("WHOISFREAKS_API_KEY")  // set once, sent with every call
+    val api = DatabasesStreamingApi()
+
+    val result = api.streamDomainerCctldCleanedPhone(LocalDate.of(2026, 10, 1))
+    println(result)
+}
+
+```
+
+#### Stream expiring domains (CSV)
+
+`GET /v3.3/stream/domainer/expired`
+
+```kotlin
+// Runnable example: Stream expiring domains (CSV) (GET /v3.3/stream/domainer/expired)
+// Run it from the Getting Started project: gradle run -PmainClass=StreamDomainerExpiredKt
+// Parameters for streamDomainerExpired (GET /v3.3/stream/domainer/expired):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.apis.DatabasesStreamingApi
+import com.whoisfreaks.client.infrastructure.ApiClient
+import java.time.LocalDate
+
+fun main() {
+    ApiClient.apiKey["apiKey"] = System.getenv("WHOISFREAKS_API_KEY")  // set once, sent with every call
+    val api = DatabasesStreamingApi()
+
+    val result = api.streamDomainerExpired(LocalDate.of(2026, 10, 1))
+    println(result)
+}
+
+```
+
+#### Stream cleaned expiring domains (CSV)
+
+`GET /v3.3/stream/domainer/expired/cleaned`
+
+```kotlin
+// Runnable example: Stream cleaned expiring domains (CSV) (GET /v3.3/stream/domainer/expired/cleaned)
+// Run it from the Getting Started project: gradle run -PmainClass=StreamDomainerExpiredCleanedKt
+// Parameters for streamDomainerExpiredCleaned (GET /v3.3/stream/domainer/expired/cleaned):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.apis.DatabasesStreamingApi
+import com.whoisfreaks.client.infrastructure.ApiClient
+import java.time.LocalDate
+
+fun main() {
+    ApiClient.apiKey["apiKey"] = System.getenv("WHOISFREAKS_API_KEY")  // set once, sent with every call
+    val api = DatabasesStreamingApi()
+
+    val result = api.streamDomainerExpiredCleaned(LocalDate.of(2026, 10, 1))
+    println(result)
+}
+
+```
+
+#### Stream cleaned expiring domains with an email (CSV)
+
+`GET /v3.3/stream/domainer/expired/cleaned/email`
+
+```kotlin
+// Runnable example: Stream cleaned expiring domains with an email (CSV) (GET /v3.3/stream/domainer/expired/cleaned/email)
+// Run it from the Getting Started project: gradle run -PmainClass=StreamDomainerExpiredCleanedEmailKt
+// Parameters for streamDomainerExpiredCleanedEmail (GET /v3.3/stream/domainer/expired/cleaned/email):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.apis.DatabasesStreamingApi
+import com.whoisfreaks.client.infrastructure.ApiClient
+import java.time.LocalDate
+
+fun main() {
+    ApiClient.apiKey["apiKey"] = System.getenv("WHOISFREAKS_API_KEY")  // set once, sent with every call
+    val api = DatabasesStreamingApi()
+
+    val result = api.streamDomainerExpiredCleanedEmail(LocalDate.of(2026, 10, 1))
+    println(result)
+}
+
+```
+
+#### Stream cleaned expiring domains with a phone (CSV)
+
+`GET /v3.3/stream/domainer/expired/cleaned/phone`
+
+```kotlin
+// Runnable example: Stream cleaned expiring domains with a phone (CSV) (GET /v3.3/stream/domainer/expired/cleaned/phone)
+// Run it from the Getting Started project: gradle run -PmainClass=StreamDomainerExpiredCleanedPhoneKt
+// Parameters for streamDomainerExpiredCleanedPhone (GET /v3.3/stream/domainer/expired/cleaned/phone):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.apis.DatabasesStreamingApi
+import com.whoisfreaks.client.infrastructure.ApiClient
+import java.time.LocalDate
+
+fun main() {
+    ApiClient.apiKey["apiKey"] = System.getenv("WHOISFREAKS_API_KEY")  // set once, sent with every call
+    val api = DatabasesStreamingApi()
+
+    val result = api.streamDomainerExpiredCleanedPhone(LocalDate.of(2026, 10, 1))
+    println(result)
+}
+
+```
+
+#### Stream dropped domains (CSV)
+
+`GET /v3.3/stream/domainer/dropped`
+
+```kotlin
+// Runnable example: Stream dropped domains (CSV) (GET /v3.3/stream/domainer/dropped)
+// Run it from the Getting Started project: gradle run -PmainClass=StreamDomainerDroppedKt
+// Parameters for streamDomainerDropped (GET /v3.3/stream/domainer/dropped):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.apis.DatabasesStreamingApi
+import com.whoisfreaks.client.infrastructure.ApiClient
+import java.time.LocalDate
+
+fun main() {
+    ApiClient.apiKey["apiKey"] = System.getenv("WHOISFREAKS_API_KEY")  // set once, sent with every call
+    val api = DatabasesStreamingApi()
+
+    val result = api.streamDomainerDropped(LocalDate.of(2026, 10, 1))
+    println(result)
+}
+
+```
+
+#### Stream dropped domains with backlinks (CSV)
+
+`GET /v3.3/stream/domainer/dropped/backlinks`
+
+```kotlin
+// Runnable example: Stream dropped domains with backlinks (CSV) (GET /v3.3/stream/domainer/dropped/backlinks)
+// Run it from the Getting Started project: gradle run -PmainClass=StreamDomainerDroppedBacklinksKt
+// Parameters for streamDomainerDroppedBacklinks (GET /v3.3/stream/domainer/dropped/backlinks):
+//   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.apis.DatabasesStreamingApi
+import com.whoisfreaks.client.infrastructure.ApiClient
+import java.time.LocalDate
+
+fun main() {
+    ApiClient.apiKey["apiKey"] = System.getenv("WHOISFREAKS_API_KEY")  // set once, sent with every call
+    val api = DatabasesStreamingApi()
+
+    val result = api.streamDomainerDroppedBacklinks(LocalDate.of(2026, 10, 1))
+    println(result)
+}
+
+```
+
+#### Stream a sample of newly registered gTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/gtld`
+
+```kotlin
+// Runnable example: Stream a sample of newly registered gTLD domains (CSV) (GET /v3.3/stream/domainer/sample/gtld)
+// Run it from the Getting Started project: gradle run -PmainClass=StreamDomainerGtldSampleKt
+// Parameters for streamDomainerGtldSample (GET /v3.3/stream/domainer/sample/gtld):
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.apis.DatabasesStreamingApi
+
+fun main() {
+    // Public endpoint: no API key needed.
+    val api = DatabasesStreamingApi()
+
+    val result = api.streamDomainerGtldSample()
+    println(result)
+}
+
+```
+
+#### Stream a sample of cleaned newly registered gTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/gtld/cleaned`
+
+```kotlin
+// Runnable example: Stream a sample of cleaned newly registered gTLD domains (CSV) (GET /v3.3/stream/domainer/sample/gtld/cleaned)
+// Run it from the Getting Started project: gradle run -PmainClass=StreamDomainerGtldCleanedSampleKt
+// Parameters for streamDomainerGtldCleanedSample (GET /v3.3/stream/domainer/sample/gtld/cleaned):
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.apis.DatabasesStreamingApi
+
+fun main() {
+    // Public endpoint: no API key needed.
+    val api = DatabasesStreamingApi()
+
+    val result = api.streamDomainerGtldCleanedSample()
+    println(result)
+}
+
+```
+
+#### Stream a sample of newly registered ccTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/cctld`
+
+```kotlin
+// Runnable example: Stream a sample of newly registered ccTLD domains (CSV) (GET /v3.3/stream/domainer/sample/cctld)
+// Run it from the Getting Started project: gradle run -PmainClass=StreamDomainerCctldSampleKt
+// Parameters for streamDomainerCctldSample (GET /v3.3/stream/domainer/sample/cctld):
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.apis.DatabasesStreamingApi
+
+fun main() {
+    // Public endpoint: no API key needed.
+    val api = DatabasesStreamingApi()
+
+    val result = api.streamDomainerCctldSample()
+    println(result)
+}
+
+```
+
+#### Stream a sample of cleaned newly registered ccTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/cctld/cleaned`
+
+```kotlin
+// Runnable example: Stream a sample of cleaned newly registered ccTLD domains (CSV) (GET /v3.3/stream/domainer/sample/cctld/cleaned)
+// Run it from the Getting Started project: gradle run -PmainClass=StreamDomainerCctldCleanedSampleKt
+// Parameters for streamDomainerCctldCleanedSample (GET /v3.3/stream/domainer/sample/cctld/cleaned):
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.apis.DatabasesStreamingApi
+
+fun main() {
+    // Public endpoint: no API key needed.
+    val api = DatabasesStreamingApi()
+
+    val result = api.streamDomainerCctldCleanedSample()
+    println(result)
+}
+
+```
+
+#### Stream a sample of expiring domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/expired`
+
+```kotlin
+// Runnable example: Stream a sample of expiring domains (CSV) (GET /v3.3/stream/domainer/sample/expired)
+// Run it from the Getting Started project: gradle run -PmainClass=StreamDomainerExpiredSampleKt
+// Parameters for streamDomainerExpiredSample (GET /v3.3/stream/domainer/sample/expired):
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.apis.DatabasesStreamingApi
+
+fun main() {
+    // Public endpoint: no API key needed.
+    val api = DatabasesStreamingApi()
+
+    val result = api.streamDomainerExpiredSample()
+    println(result)
+}
+
+```
+
+#### Stream a sample of cleaned expiring domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/expired/cleaned`
+
+```kotlin
+// Runnable example: Stream a sample of cleaned expiring domains (CSV) (GET /v3.3/stream/domainer/sample/expired/cleaned)
+// Run it from the Getting Started project: gradle run -PmainClass=StreamDomainerExpiredCleanedSampleKt
+// Parameters for streamDomainerExpiredCleanedSample (GET /v3.3/stream/domainer/sample/expired/cleaned):
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.apis.DatabasesStreamingApi
+
+fun main() {
+    // Public endpoint: no API key needed.
+    val api = DatabasesStreamingApi()
+
+    val result = api.streamDomainerExpiredCleanedSample()
+    println(result)
+}
+
+```
+
+#### Stream a sample of dropped domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/dropped`
+
+```kotlin
+// Runnable example: Stream a sample of dropped domains (CSV) (GET /v3.3/stream/domainer/sample/dropped)
+// Run it from the Getting Started project: gradle run -PmainClass=StreamDomainerDroppedSampleKt
+// Parameters for streamDomainerDroppedSample (GET /v3.3/stream/domainer/sample/dropped):
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.apis.DatabasesStreamingApi
+
+fun main() {
+    // Public endpoint: no API key needed.
+    val api = DatabasesStreamingApi()
+
+    val result = api.streamDomainerDroppedSample()
+    println(result)
+}
+
+```
+
+#### Stream a sample of dropped domains with backlinks (CSV)
+
+`GET /v3.3/stream/domainer/sample/dropped/backlinks`
+
+```kotlin
+// Runnable example: Stream a sample of dropped domains with backlinks (CSV) (GET /v3.3/stream/domainer/sample/dropped/backlinks)
+// Run it from the Getting Started project: gradle run -PmainClass=StreamDomainerDroppedBacklinksSampleKt
+// Parameters for streamDomainerDroppedBacklinksSample (GET /v3.3/stream/domainer/sample/dropped/backlinks):
+//   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+//   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+//   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+import com.whoisfreaks.client.apis.DatabasesStreamingApi
+
+fun main() {
+    // Public endpoint: no API key needed.
+    val api = DatabasesStreamingApi()
+
+    val result = api.streamDomainerDroppedBacklinksSample()
+    println(result)
 }
 
 ```

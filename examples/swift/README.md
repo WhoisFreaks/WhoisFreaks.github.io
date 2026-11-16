@@ -12,6 +12,10 @@ Install: see the [Swift guide](../../docs/languages/swift.md). Set the `WHOISFRE
 - [`DnsLive.swift`](DnsLive.swift): Live DNS Lookup (`GET /v2.0/dns/live`)
 - [`DnsHistorical.swift`](DnsHistorical.swift): Historical DNS Lookup (`GET /v2.0/dns/historical`)
 - [`DnsReverse.swift`](DnsReverse.swift): Reverse DNS Lookup (`GET /v2.1/dns/reverse`)
+- [`DnsHistoricalV22.swift`](DnsHistoricalV22.swift): Historical DNS Lookup (v2.2) (`GET /v2.2/dns/historical`)
+- [`DnsHistoricalV23.swift`](DnsHistoricalV23.swift): Historical DNS Lookup (v2.3) (`GET /v2.3/dns/historical`)
+- [`DnsReverseV22.swift`](DnsReverseV22.swift): Reverse DNS Lookup (v2.2) (`GET /v2.2/dns/reverse`)
+- [`DnsReverseV23.swift`](DnsReverseV23.swift): Reverse DNS Lookup (v2.3) (`GET /v2.3/dns/reverse`)
 - [`DnsBulk.swift`](DnsBulk.swift): Bulk DNS Lookup (`POST /v2.0/dns/bulk/live`)
 
 ## Domain Availability
@@ -34,6 +38,8 @@ Install: see the [Swift guide](../../docs/languages/swift.md). Set the `WHOISFRE
 ## IP Reputation
 - [`IpReputation.swift`](IpReputation.swift): IP Reputation Lookup (`GET /v1.0/security`)
 - [`BulkIpReputation.swift`](BulkIpReputation.swift): Bulk IP Reputation (`POST /v1.0/security`)
+- [`IpReputationV2.swift`](IpReputationV2.swift): IP Reputation Lookup (v2.0) (`GET /v2.0/security`)
+- [`BulkIpReputationV2.swift`](BulkIpReputationV2.swift): Bulk IP Reputation (v2.0) (`POST /v2.0/security`)
 
 ## Domain Reputation
 - [`DomainReputation.swift`](DomainReputation.swift): Domain Reputation Lookup (`GET /v1/domain/security`)
@@ -105,3 +111,33 @@ Install: see the [Swift guide](../../docs/languages/swift.md). Set the `WHOISFRE
 - [`DownloadThreatFeedMalwareSample.swift`](DownloadThreatFeedMalwareSample.swift): Download a sample of the malware threat feed (CSV) (`GET /v3.4/download/threat-feed/malware/sample`)
 - [`DownloadThreatFeedSpam.swift`](DownloadThreatFeedSpam.swift): Download the daily spam threat feed (CSV) (`GET /v3.4/download/threat-feed/spam`)
 - [`DownloadThreatFeedSpamSample.swift`](DownloadThreatFeedSpamSample.swift): Download a sample of the spam threat feed (CSV) (`GET /v3.4/download/threat-feed/spam/sample`)
+
+## Databases - Streaming
+- [`StreamThreatFeedPhishing.swift`](StreamThreatFeedPhishing.swift): Stream the daily phishing threat feed (CSV) (`GET /v3.4/stream/threat-feed/phishing`)
+- [`StreamThreatFeedPhishingSample.swift`](StreamThreatFeedPhishingSample.swift): Stream a sample of the phishing threat feed (CSV) (`GET /v3.4/stream/threat-feed/phishing/sample`)
+- [`StreamThreatFeedMalware.swift`](StreamThreatFeedMalware.swift): Stream the daily malware threat feed (CSV) (`GET /v3.4/stream/threat-feed/malware`)
+- [`StreamThreatFeedMalwareSample.swift`](StreamThreatFeedMalwareSample.swift): Stream a sample of the malware threat feed (CSV) (`GET /v3.4/stream/threat-feed/malware/sample`)
+- [`StreamThreatFeedSpam.swift`](StreamThreatFeedSpam.swift): Stream the daily spam threat feed (CSV) (`GET /v3.4/stream/threat-feed/spam`)
+- [`StreamThreatFeedSpamSample.swift`](StreamThreatFeedSpamSample.swift): Stream a sample of the spam threat feed (CSV) (`GET /v3.4/stream/threat-feed/spam/sample`)
+- [`StreamDomainerGtld.swift`](StreamDomainerGtld.swift): Stream newly registered gTLD domains (CSV) (`GET /v3.3/stream/domainer/gtld`)
+- [`StreamDomainerGtldCleaned.swift`](StreamDomainerGtldCleaned.swift): Stream cleaned newly registered gTLD domains (CSV) (`GET /v3.3/stream/domainer/gtld/cleaned`)
+- [`StreamDomainerGtldCleanedEmail.swift`](StreamDomainerGtldCleanedEmail.swift): Stream cleaned newly registered gTLD domains with an email (CSV) (`GET /v3.3/stream/domainer/gtld/cleaned/email`)
+- [`StreamDomainerGtldCleanedPhone.swift`](StreamDomainerGtldCleanedPhone.swift): Stream cleaned newly registered gTLD domains with a phone (CSV) (`GET /v3.3/stream/domainer/gtld/cleaned/phone`)
+- [`StreamDomainerCctld.swift`](StreamDomainerCctld.swift): Stream newly registered ccTLD domains (CSV) (`GET /v3.3/stream/domainer/cctld`)
+- [`StreamDomainerCctldCleaned.swift`](StreamDomainerCctldCleaned.swift): Stream cleaned newly registered ccTLD domains (CSV) (`GET /v3.3/stream/domainer/cctld/cleaned`)
+- [`StreamDomainerCctldCleanedEmail.swift`](StreamDomainerCctldCleanedEmail.swift): Stream cleaned newly registered ccTLD domains with an email (CSV) (`GET /v3.3/stream/domainer/cctld/cleaned/email`)
+- [`StreamDomainerCctldCleanedPhone.swift`](StreamDomainerCctldCleanedPhone.swift): Stream cleaned newly registered ccTLD domains with a phone (CSV) (`GET /v3.3/stream/domainer/cctld/cleaned/phone`)
+- [`StreamDomainerExpired.swift`](StreamDomainerExpired.swift): Stream expiring domains (CSV) (`GET /v3.3/stream/domainer/expired`)
+- [`StreamDomainerExpiredCleaned.swift`](StreamDomainerExpiredCleaned.swift): Stream cleaned expiring domains (CSV) (`GET /v3.3/stream/domainer/expired/cleaned`)
+- [`StreamDomainerExpiredCleanedEmail.swift`](StreamDomainerExpiredCleanedEmail.swift): Stream cleaned expiring domains with an email (CSV) (`GET /v3.3/stream/domainer/expired/cleaned/email`)
+- [`StreamDomainerExpiredCleanedPhone.swift`](StreamDomainerExpiredCleanedPhone.swift): Stream cleaned expiring domains with a phone (CSV) (`GET /v3.3/stream/domainer/expired/cleaned/phone`)
+- [`StreamDomainerDropped.swift`](StreamDomainerDropped.swift): Stream dropped domains (CSV) (`GET /v3.3/stream/domainer/dropped`)
+- [`StreamDomainerDroppedBacklinks.swift`](StreamDomainerDroppedBacklinks.swift): Stream dropped domains with backlinks (CSV) (`GET /v3.3/stream/domainer/dropped/backlinks`)
+- [`StreamDomainerGtldSample.swift`](StreamDomainerGtldSample.swift): Stream a sample of newly registered gTLD domains (CSV) (`GET /v3.3/stream/domainer/sample/gtld`)
+- [`StreamDomainerGtldCleanedSample.swift`](StreamDomainerGtldCleanedSample.swift): Stream a sample of cleaned newly registered gTLD domains (CSV) (`GET /v3.3/stream/domainer/sample/gtld/cleaned`)
+- [`StreamDomainerCctldSample.swift`](StreamDomainerCctldSample.swift): Stream a sample of newly registered ccTLD domains (CSV) (`GET /v3.3/stream/domainer/sample/cctld`)
+- [`StreamDomainerCctldCleanedSample.swift`](StreamDomainerCctldCleanedSample.swift): Stream a sample of cleaned newly registered ccTLD domains (CSV) (`GET /v3.3/stream/domainer/sample/cctld/cleaned`)
+- [`StreamDomainerExpiredSample.swift`](StreamDomainerExpiredSample.swift): Stream a sample of expiring domains (CSV) (`GET /v3.3/stream/domainer/sample/expired`)
+- [`StreamDomainerExpiredCleanedSample.swift`](StreamDomainerExpiredCleanedSample.swift): Stream a sample of cleaned expiring domains (CSV) (`GET /v3.3/stream/domainer/sample/expired/cleaned`)
+- [`StreamDomainerDroppedSample.swift`](StreamDomainerDroppedSample.swift): Stream a sample of dropped domains (CSV) (`GET /v3.3/stream/domainer/sample/dropped`)
+- [`StreamDomainerDroppedBacklinksSample.swift`](StreamDomainerDroppedBacklinksSample.swift): Stream a sample of dropped domains with backlinks (CSV) (`GET /v3.3/stream/domainer/sample/dropped/backlinks`)

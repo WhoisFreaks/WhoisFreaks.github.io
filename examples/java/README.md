@@ -12,6 +12,10 @@ Install: see the [Java guide](../../docs/languages/java.md). Set the `WHOISFREAK
 - [`DnsLive.java`](DnsLive.java): Live DNS Lookup (`GET /v2.0/dns/live`)
 - [`DnsHistorical.java`](DnsHistorical.java): Historical DNS Lookup (`GET /v2.0/dns/historical`)
 - [`DnsReverse.java`](DnsReverse.java): Reverse DNS Lookup (`GET /v2.1/dns/reverse`)
+- [`DnsHistoricalV22.java`](DnsHistoricalV22.java): Historical DNS Lookup (v2.2) (`GET /v2.2/dns/historical`)
+- [`DnsHistoricalV23.java`](DnsHistoricalV23.java): Historical DNS Lookup (v2.3) (`GET /v2.3/dns/historical`)
+- [`DnsReverseV22.java`](DnsReverseV22.java): Reverse DNS Lookup (v2.2) (`GET /v2.2/dns/reverse`)
+- [`DnsReverseV23.java`](DnsReverseV23.java): Reverse DNS Lookup (v2.3) (`GET /v2.3/dns/reverse`)
 - [`DnsBulk.java`](DnsBulk.java): Bulk DNS Lookup (`POST /v2.0/dns/bulk/live`)
 
 ## Domain Availability
@@ -34,6 +38,8 @@ Install: see the [Java guide](../../docs/languages/java.md). Set the `WHOISFREAK
 ## IP Reputation
 - [`IpReputation.java`](IpReputation.java): IP Reputation Lookup (`GET /v1.0/security`)
 - [`BulkIpReputation.java`](BulkIpReputation.java): Bulk IP Reputation (`POST /v1.0/security`)
+- [`IpReputationV2.java`](IpReputationV2.java): IP Reputation Lookup (v2.0) (`GET /v2.0/security`)
+- [`BulkIpReputationV2.java`](BulkIpReputationV2.java): Bulk IP Reputation (v2.0) (`POST /v2.0/security`)
 
 ## Domain Reputation
 - [`DomainReputation.java`](DomainReputation.java): Domain Reputation Lookup (`GET /v1/domain/security`)
@@ -105,3 +111,33 @@ Install: see the [Java guide](../../docs/languages/java.md). Set the `WHOISFREAK
 - [`DownloadThreatFeedMalwareSample.java`](DownloadThreatFeedMalwareSample.java): Download a sample of the malware threat feed (CSV) (`GET /v3.4/download/threat-feed/malware/sample`)
 - [`DownloadThreatFeedSpam.java`](DownloadThreatFeedSpam.java): Download the daily spam threat feed (CSV) (`GET /v3.4/download/threat-feed/spam`)
 - [`DownloadThreatFeedSpamSample.java`](DownloadThreatFeedSpamSample.java): Download a sample of the spam threat feed (CSV) (`GET /v3.4/download/threat-feed/spam/sample`)
+
+## Databases - Streaming
+- [`StreamThreatFeedPhishing.java`](StreamThreatFeedPhishing.java): Stream the daily phishing threat feed (CSV) (`GET /v3.4/stream/threat-feed/phishing`)
+- [`StreamThreatFeedPhishingSample.java`](StreamThreatFeedPhishingSample.java): Stream a sample of the phishing threat feed (CSV) (`GET /v3.4/stream/threat-feed/phishing/sample`)
+- [`StreamThreatFeedMalware.java`](StreamThreatFeedMalware.java): Stream the daily malware threat feed (CSV) (`GET /v3.4/stream/threat-feed/malware`)
+- [`StreamThreatFeedMalwareSample.java`](StreamThreatFeedMalwareSample.java): Stream a sample of the malware threat feed (CSV) (`GET /v3.4/stream/threat-feed/malware/sample`)
+- [`StreamThreatFeedSpam.java`](StreamThreatFeedSpam.java): Stream the daily spam threat feed (CSV) (`GET /v3.4/stream/threat-feed/spam`)
+- [`StreamThreatFeedSpamSample.java`](StreamThreatFeedSpamSample.java): Stream a sample of the spam threat feed (CSV) (`GET /v3.4/stream/threat-feed/spam/sample`)
+- [`StreamDomainerGtld.java`](StreamDomainerGtld.java): Stream newly registered gTLD domains (CSV) (`GET /v3.3/stream/domainer/gtld`)
+- [`StreamDomainerGtldCleaned.java`](StreamDomainerGtldCleaned.java): Stream cleaned newly registered gTLD domains (CSV) (`GET /v3.3/stream/domainer/gtld/cleaned`)
+- [`StreamDomainerGtldCleanedEmail.java`](StreamDomainerGtldCleanedEmail.java): Stream cleaned newly registered gTLD domains with an email (CSV) (`GET /v3.3/stream/domainer/gtld/cleaned/email`)
+- [`StreamDomainerGtldCleanedPhone.java`](StreamDomainerGtldCleanedPhone.java): Stream cleaned newly registered gTLD domains with a phone (CSV) (`GET /v3.3/stream/domainer/gtld/cleaned/phone`)
+- [`StreamDomainerCctld.java`](StreamDomainerCctld.java): Stream newly registered ccTLD domains (CSV) (`GET /v3.3/stream/domainer/cctld`)
+- [`StreamDomainerCctldCleaned.java`](StreamDomainerCctldCleaned.java): Stream cleaned newly registered ccTLD domains (CSV) (`GET /v3.3/stream/domainer/cctld/cleaned`)
+- [`StreamDomainerCctldCleanedEmail.java`](StreamDomainerCctldCleanedEmail.java): Stream cleaned newly registered ccTLD domains with an email (CSV) (`GET /v3.3/stream/domainer/cctld/cleaned/email`)
+- [`StreamDomainerCctldCleanedPhone.java`](StreamDomainerCctldCleanedPhone.java): Stream cleaned newly registered ccTLD domains with a phone (CSV) (`GET /v3.3/stream/domainer/cctld/cleaned/phone`)
+- [`StreamDomainerExpired.java`](StreamDomainerExpired.java): Stream expiring domains (CSV) (`GET /v3.3/stream/domainer/expired`)
+- [`StreamDomainerExpiredCleaned.java`](StreamDomainerExpiredCleaned.java): Stream cleaned expiring domains (CSV) (`GET /v3.3/stream/domainer/expired/cleaned`)
+- [`StreamDomainerExpiredCleanedEmail.java`](StreamDomainerExpiredCleanedEmail.java): Stream cleaned expiring domains with an email (CSV) (`GET /v3.3/stream/domainer/expired/cleaned/email`)
+- [`StreamDomainerExpiredCleanedPhone.java`](StreamDomainerExpiredCleanedPhone.java): Stream cleaned expiring domains with a phone (CSV) (`GET /v3.3/stream/domainer/expired/cleaned/phone`)
+- [`StreamDomainerDropped.java`](StreamDomainerDropped.java): Stream dropped domains (CSV) (`GET /v3.3/stream/domainer/dropped`)
+- [`StreamDomainerDroppedBacklinks.java`](StreamDomainerDroppedBacklinks.java): Stream dropped domains with backlinks (CSV) (`GET /v3.3/stream/domainer/dropped/backlinks`)
+- [`StreamDomainerGtldSample.java`](StreamDomainerGtldSample.java): Stream a sample of newly registered gTLD domains (CSV) (`GET /v3.3/stream/domainer/sample/gtld`)
+- [`StreamDomainerGtldCleanedSample.java`](StreamDomainerGtldCleanedSample.java): Stream a sample of cleaned newly registered gTLD domains (CSV) (`GET /v3.3/stream/domainer/sample/gtld/cleaned`)
+- [`StreamDomainerCctldSample.java`](StreamDomainerCctldSample.java): Stream a sample of newly registered ccTLD domains (CSV) (`GET /v3.3/stream/domainer/sample/cctld`)
+- [`StreamDomainerCctldCleanedSample.java`](StreamDomainerCctldCleanedSample.java): Stream a sample of cleaned newly registered ccTLD domains (CSV) (`GET /v3.3/stream/domainer/sample/cctld/cleaned`)
+- [`StreamDomainerExpiredSample.java`](StreamDomainerExpiredSample.java): Stream a sample of expiring domains (CSV) (`GET /v3.3/stream/domainer/sample/expired`)
+- [`StreamDomainerExpiredCleanedSample.java`](StreamDomainerExpiredCleanedSample.java): Stream a sample of cleaned expiring domains (CSV) (`GET /v3.3/stream/domainer/sample/expired/cleaned`)
+- [`StreamDomainerDroppedSample.java`](StreamDomainerDroppedSample.java): Stream a sample of dropped domains (CSV) (`GET /v3.3/stream/domainer/sample/dropped`)
+- [`StreamDomainerDroppedBacklinksSample.java`](StreamDomainerDroppedBacklinksSample.java): Stream a sample of dropped domains with backlinks (CSV) (`GET /v3.3/stream/domainer/sample/dropped/backlinks`)

@@ -113,7 +113,7 @@ main().catch(async (err: unknown) => {
 
 ## Endpoints
 
-All 60 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
+All 94 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
 
 ### WHOIS
 
@@ -338,6 +338,152 @@ const api = new DNSApi(config);
 //   format ("json" | "xml", optional): default "json"
 async function main(): Promise<void> {
   const result = await api.dnsReverse({ value: "8.8.8.8", type: "a", page: 1 });
+  console.log(JSON.stringify(result, null, 2));
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Historical DNS Lookup (v2.2)
+
+`GET /v2.2/dns/historical`
+
+```typescript
+// Historical DNS Lookup (v2.2): GET https://api.whoisfreaks.com/v2.2/dns/historical
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DnsHistoricalV22.ts
+import { Configuration, DNSApi, ResponseError } from "whoisfreaks";
+
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
+const api = new DNSApi(config);
+
+// dnsHistoricalV22({ domainName, type, page?, sort?, sortBy?, format? })
+//   domainName (string, required)
+//   type (string, required): default "all"
+//   page (number, optional): default 1
+//   sort ("asc" | "desc", optional): Sort direction. Omit to leave the results unsorted
+//   sortBy ("firstSeen" | "lastSeen", optional): Field to sort on. Only applies when sort is given; default "lastSeen"
+//   format ("json" | "xml", optional): default "json"
+async function main(): Promise<void> {
+  const result = await api.dnsHistoricalV22({ domainName: "whoisfreaks.com", type: "A,MX,TXT", page: 1 });
+  console.log(JSON.stringify(result, null, 2));
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Historical DNS Lookup (v2.3)
+
+`GET /v2.3/dns/historical`
+
+```typescript
+// Historical DNS Lookup (v2.3): GET https://api.whoisfreaks.com/v2.3/dns/historical
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DnsHistoricalV23.ts
+import { Configuration, DNSApi, ResponseError } from "whoisfreaks";
+
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
+const api = new DNSApi(config);
+
+// dnsHistoricalV23({ domainName, type, page?, sort?, sortBy?, format? })
+//   domainName (string, required)
+//   type (string, required): default "all"
+//   page (number, optional): default 1
+//   sort ("asc" | "desc", optional): Sort direction. Omit to leave the results unsorted
+//   sortBy ("firstSeen" | "lastSeen", optional): Field to sort on. Only applies when sort is given; default "lastSeen"
+//   format ("json" | "xml", optional): default "json"
+async function main(): Promise<void> {
+  const result = await api.dnsHistoricalV23({ domainName: "whoisfreaks.com", type: "A,MX,TXT", page: 1 });
+  console.log(JSON.stringify(result, null, 2));
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Reverse DNS Lookup (v2.2)
+
+`GET /v2.2/dns/reverse`
+
+```typescript
+// Reverse DNS Lookup (v2.2): GET https://api.whoisfreaks.com/v2.2/dns/reverse
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DnsReverseV22.ts
+import { Configuration, DNSApi, ResponseError } from "whoisfreaks";
+
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
+const api = new DNSApi(config);
+
+// dnsReverseV22({ value, type, exact?, page?, sort?, sortBy?, format? })
+//   value (string, required): IP, CIDR, or record value
+//   type ("a" | "mx" | "cname" | "ns" | "aaaa" | "txt" | "soa", required)
+//   exact (boolean, optional): When false the value is matched as a substring, which is far slower than an e...; default true
+//   page (number, optional): default 1
+//   sort ("asc" | "desc", optional): Sort direction. Omit to leave the results unsorted
+//   sortBy ("firstSeen" | "lastSeen", optional): Field to sort on. Only applies when sort is given; default "lastSeen"
+//   format ("json" | "xml", optional): default "json"
+async function main(): Promise<void> {
+  const result = await api.dnsReverseV22({ value: "8.8.8.8", type: "a", page: 1 });
+  console.log(JSON.stringify(result, null, 2));
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Reverse DNS Lookup (v2.3)
+
+`GET /v2.3/dns/reverse`
+
+```typescript
+// Reverse DNS Lookup (v2.3): GET https://api.whoisfreaks.com/v2.3/dns/reverse
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx DnsReverseV23.ts
+import { Configuration, DNSApi, ResponseError } from "whoisfreaks";
+
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
+const api = new DNSApi(config);
+
+// dnsReverseV23({ value, type, exact?, page?, sort?, sortBy?, format? })
+//   value (string, required): IP, CIDR, or record value
+//   type ("a" | "mx" | "cname" | "ns" | "aaaa" | "txt" | "soa", required)
+//   exact (boolean, optional): When false the value is matched as a substring, which is far slower than an e...; default true
+//   page (number, optional): default 1
+//   sort ("asc" | "desc", optional): Sort direction. Omit to leave the results unsorted
+//   sortBy ("firstSeen" | "lastSeen", optional): Field to sort on. Only applies when sort is given; default "lastSeen"
+//   format ("json" | "xml", optional): default "json"
+async function main(): Promise<void> {
+  const result = await api.dnsReverseV23({ value: "8.8.8.8", type: "a", page: 1 });
   console.log(JSON.stringify(result, null, 2));
 }
 
@@ -681,6 +827,69 @@ const api = new IPReputationApi(config);
 async function main(): Promise<void> {
   const body: BulkGeolocationRequest = { ips: ["8.8.8.8", "1.1.1.1"] };
   const results = await api.bulkIpReputation({ bulkGeolocationRequest: body });
+  console.log(JSON.stringify(results, null, 2));
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### IP Reputation Lookup (v2.0)
+
+`GET /v2.0/security`
+
+```typescript
+// IP Reputation Lookup (v2.0): GET https://api.whoisfreaks.com/v2.0/security
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx IpReputationV2.ts
+import { Configuration, IPReputationApi, ResponseError } from "whoisfreaks";
+
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
+const api = new IPReputationApi(config);
+
+// ipReputationV2({ ip })
+//   ip (string, required)
+async function main(): Promise<void> {
+  const result = await api.ipReputationV2({ ip: "8.8.8.8" });
+  console.log(JSON.stringify(result, null, 2));
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Bulk IP Reputation (v2.0)
+
+`POST /v2.0/security`
+
+```typescript
+// Bulk IP Reputation (v2.0): POST https://api.whoisfreaks.com/v2.0/security
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx BulkIpReputationV2.ts
+import { Configuration, IPReputationApi, ResponseError, type BulkGeolocationRequest } from "whoisfreaks";
+
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
+const api = new IPReputationApi(config);
+
+// bulkIpReputationV2({ bulkGeolocationRequest })
+//   bulkGeolocationRequest (BulkGeolocationRequest, required): request body
+async function main(): Promise<void> {
+  const body: BulkGeolocationRequest = { ips: ["1.1.1.1", "2.2.2.2", "8.8.8.8"] };
+  const results = await api.bulkIpReputationV2({ bulkGeolocationRequest: body });
   console.log(JSON.stringify(results, null, 2));
 }
 
@@ -2163,6 +2372,932 @@ async function main(): Promise<void> {
   const file = "DownloadThreatFeedSpamSample.csv";
   await writeFile(file, new Uint8Array(await blob.arrayBuffer()));
   console.log(`Saved ${blob.size} bytes to ${resolve(file)}`);
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+### Databases - Streaming
+
+#### Stream the daily phishing threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/phishing`
+
+```typescript
+// Stream the daily phishing threat feed (CSV): GET https://files.whoisfreaks.com/v3.4/stream/threat-feed/phishing
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx StreamThreatFeedPhishing.ts
+import { Configuration, DatabasesStreamingApi, ResponseError } from "whoisfreaks";
+
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
+const api = new DatabasesStreamingApi(config);
+
+// streamThreatFeedPhishing({ date, offset?, limit? })
+//   date (Date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+//   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
+//   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+async function main(): Promise<void> {
+  const csvText = await api.streamThreatFeedPhishing({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Stream a sample of the phishing threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/phishing/sample`
+
+```typescript
+// Stream a sample of the phishing threat feed (CSV): GET https://files.whoisfreaks.com/v3.4/stream/threat-feed/phishing/sample
+// Run (public endpoint, no API key needed): npx tsx StreamThreatFeedPhishingSample.ts
+import { DatabasesStreamingApi, ResponseError } from "whoisfreaks";
+
+// Public endpoint: no API key needed.
+const api = new DatabasesStreamingApi();
+
+// streamThreatFeedPhishingSample({ offset?, limit? })
+//   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
+//   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+async function main(): Promise<void> {
+  const csvText = await api.streamThreatFeedPhishingSample(); // plain CSV text, already decompressed
+  console.log(csvText);
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Stream the daily malware threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/malware`
+
+```typescript
+// Stream the daily malware threat feed (CSV): GET https://files.whoisfreaks.com/v3.4/stream/threat-feed/malware
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx StreamThreatFeedMalware.ts
+import { Configuration, DatabasesStreamingApi, ResponseError } from "whoisfreaks";
+
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
+const api = new DatabasesStreamingApi(config);
+
+// streamThreatFeedMalware({ date, offset?, limit? })
+//   date (Date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+//   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
+//   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+async function main(): Promise<void> {
+  const csvText = await api.streamThreatFeedMalware({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Stream a sample of the malware threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/malware/sample`
+
+```typescript
+// Stream a sample of the malware threat feed (CSV): GET https://files.whoisfreaks.com/v3.4/stream/threat-feed/malware/sample
+// Run (public endpoint, no API key needed): npx tsx StreamThreatFeedMalwareSample.ts
+import { DatabasesStreamingApi, ResponseError } from "whoisfreaks";
+
+// Public endpoint: no API key needed.
+const api = new DatabasesStreamingApi();
+
+// streamThreatFeedMalwareSample({ offset?, limit? })
+//   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
+//   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+async function main(): Promise<void> {
+  const csvText = await api.streamThreatFeedMalwareSample(); // plain CSV text, already decompressed
+  console.log(csvText);
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Stream the daily spam threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/spam`
+
+```typescript
+// Stream the daily spam threat feed (CSV): GET https://files.whoisfreaks.com/v3.4/stream/threat-feed/spam
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx StreamThreatFeedSpam.ts
+import { Configuration, DatabasesStreamingApi, ResponseError } from "whoisfreaks";
+
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
+const api = new DatabasesStreamingApi(config);
+
+// streamThreatFeedSpam({ date, offset?, limit? })
+//   date (Date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+//   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
+//   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+async function main(): Promise<void> {
+  const csvText = await api.streamThreatFeedSpam({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Stream a sample of the spam threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/spam/sample`
+
+```typescript
+// Stream a sample of the spam threat feed (CSV): GET https://files.whoisfreaks.com/v3.4/stream/threat-feed/spam/sample
+// Run (public endpoint, no API key needed): npx tsx StreamThreatFeedSpamSample.ts
+import { DatabasesStreamingApi, ResponseError } from "whoisfreaks";
+
+// Public endpoint: no API key needed.
+const api = new DatabasesStreamingApi();
+
+// streamThreatFeedSpamSample({ offset?, limit? })
+//   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
+//   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+async function main(): Promise<void> {
+  const csvText = await api.streamThreatFeedSpamSample(); // plain CSV text, already decompressed
+  console.log(csvText);
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Stream newly registered gTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/gtld`
+
+```typescript
+// Stream newly registered gTLD domains (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/gtld
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx StreamDomainerGtld.ts
+import { Configuration, DatabasesStreamingApi, ResponseError } from "whoisfreaks";
+
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
+const api = new DatabasesStreamingApi(config);
+
+// streamDomainerGtld({ date, whois?, offset?, limit? })
+//   date (Date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+//   whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false st...; default false
+//   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
+//   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+async function main(): Promise<void> {
+  const csvText = await api.streamDomainerGtld({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Stream cleaned newly registered gTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/gtld/cleaned`
+
+```typescript
+// Stream cleaned newly registered gTLD domains (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/gtld/cleaned
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx StreamDomainerGtldCleaned.ts
+import { Configuration, DatabasesStreamingApi, ResponseError } from "whoisfreaks";
+
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
+const api = new DatabasesStreamingApi(config);
+
+// streamDomainerGtldCleaned({ date, whois?, offset?, limit? })
+//   date (Date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+//   whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false st...; default false
+//   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
+//   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+async function main(): Promise<void> {
+  const csvText = await api.streamDomainerGtldCleaned({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Stream cleaned newly registered gTLD domains with an email (CSV)
+
+`GET /v3.3/stream/domainer/gtld/cleaned/email`
+
+```typescript
+// Stream cleaned newly registered gTLD domains with an email (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/gtld/cleaned/email
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx StreamDomainerGtldCleanedEmail.ts
+import { Configuration, DatabasesStreamingApi, ResponseError } from "whoisfreaks";
+
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
+const api = new DatabasesStreamingApi(config);
+
+// streamDomainerGtldCleanedEmail({ date, whois?, offset?, limit? })
+//   date (Date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+//   whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false st...; default false
+//   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
+//   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+async function main(): Promise<void> {
+  const csvText = await api.streamDomainerGtldCleanedEmail({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Stream cleaned newly registered gTLD domains with a phone (CSV)
+
+`GET /v3.3/stream/domainer/gtld/cleaned/phone`
+
+```typescript
+// Stream cleaned newly registered gTLD domains with a phone (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/gtld/cleaned/phone
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx StreamDomainerGtldCleanedPhone.ts
+import { Configuration, DatabasesStreamingApi, ResponseError } from "whoisfreaks";
+
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
+const api = new DatabasesStreamingApi(config);
+
+// streamDomainerGtldCleanedPhone({ date, whois?, offset?, limit? })
+//   date (Date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+//   whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false st...; default false
+//   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
+//   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+async function main(): Promise<void> {
+  const csvText = await api.streamDomainerGtldCleanedPhone({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Stream newly registered ccTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/cctld`
+
+```typescript
+// Stream newly registered ccTLD domains (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/cctld
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx StreamDomainerCctld.ts
+import { Configuration, DatabasesStreamingApi, ResponseError } from "whoisfreaks";
+
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
+const api = new DatabasesStreamingApi(config);
+
+// streamDomainerCctld({ date, whois?, offset?, limit? })
+//   date (Date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+//   whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false st...; default false
+//   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
+//   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+async function main(): Promise<void> {
+  const csvText = await api.streamDomainerCctld({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Stream cleaned newly registered ccTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/cctld/cleaned`
+
+```typescript
+// Stream cleaned newly registered ccTLD domains (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/cctld/cleaned
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx StreamDomainerCctldCleaned.ts
+import { Configuration, DatabasesStreamingApi, ResponseError } from "whoisfreaks";
+
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
+const api = new DatabasesStreamingApi(config);
+
+// streamDomainerCctldCleaned({ date, whois?, offset?, limit? })
+//   date (Date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+//   whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false st...; default false
+//   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
+//   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+async function main(): Promise<void> {
+  const csvText = await api.streamDomainerCctldCleaned({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Stream cleaned newly registered ccTLD domains with an email (CSV)
+
+`GET /v3.3/stream/domainer/cctld/cleaned/email`
+
+```typescript
+// Stream cleaned newly registered ccTLD domains with an email (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/cctld/cleaned/email
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx StreamDomainerCctldCleanedEmail.ts
+import { Configuration, DatabasesStreamingApi, ResponseError } from "whoisfreaks";
+
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
+const api = new DatabasesStreamingApi(config);
+
+// streamDomainerCctldCleanedEmail({ date, whois?, offset?, limit? })
+//   date (Date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+//   whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false st...; default false
+//   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
+//   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+async function main(): Promise<void> {
+  const csvText = await api.streamDomainerCctldCleanedEmail({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Stream cleaned newly registered ccTLD domains with a phone (CSV)
+
+`GET /v3.3/stream/domainer/cctld/cleaned/phone`
+
+```typescript
+// Stream cleaned newly registered ccTLD domains with a phone (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/cctld/cleaned/phone
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx StreamDomainerCctldCleanedPhone.ts
+import { Configuration, DatabasesStreamingApi, ResponseError } from "whoisfreaks";
+
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
+const api = new DatabasesStreamingApi(config);
+
+// streamDomainerCctldCleanedPhone({ date, whois?, offset?, limit? })
+//   date (Date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+//   whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false st...; default false
+//   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
+//   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+async function main(): Promise<void> {
+  const csvText = await api.streamDomainerCctldCleanedPhone({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Stream expiring domains (CSV)
+
+`GET /v3.3/stream/domainer/expired`
+
+```typescript
+// Stream expiring domains (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/expired
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx StreamDomainerExpired.ts
+import { Configuration, DatabasesStreamingApi, ResponseError } from "whoisfreaks";
+
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
+const api = new DatabasesStreamingApi(config);
+
+// streamDomainerExpired({ date, whois?, offset?, limit? })
+//   date (Date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+//   whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false st...; default false
+//   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
+//   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+async function main(): Promise<void> {
+  const csvText = await api.streamDomainerExpired({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Stream cleaned expiring domains (CSV)
+
+`GET /v3.3/stream/domainer/expired/cleaned`
+
+```typescript
+// Stream cleaned expiring domains (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/expired/cleaned
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx StreamDomainerExpiredCleaned.ts
+import { Configuration, DatabasesStreamingApi, ResponseError } from "whoisfreaks";
+
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
+const api = new DatabasesStreamingApi(config);
+
+// streamDomainerExpiredCleaned({ date, whois?, offset?, limit? })
+//   date (Date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+//   whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false st...; default false
+//   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
+//   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+async function main(): Promise<void> {
+  const csvText = await api.streamDomainerExpiredCleaned({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Stream cleaned expiring domains with an email (CSV)
+
+`GET /v3.3/stream/domainer/expired/cleaned/email`
+
+```typescript
+// Stream cleaned expiring domains with an email (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/expired/cleaned/email
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx StreamDomainerExpiredCleanedEmail.ts
+import { Configuration, DatabasesStreamingApi, ResponseError } from "whoisfreaks";
+
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
+const api = new DatabasesStreamingApi(config);
+
+// streamDomainerExpiredCleanedEmail({ date, whois?, offset?, limit? })
+//   date (Date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+//   whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false st...; default false
+//   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
+//   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+async function main(): Promise<void> {
+  const csvText = await api.streamDomainerExpiredCleanedEmail({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Stream cleaned expiring domains with a phone (CSV)
+
+`GET /v3.3/stream/domainer/expired/cleaned/phone`
+
+```typescript
+// Stream cleaned expiring domains with a phone (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/expired/cleaned/phone
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx StreamDomainerExpiredCleanedPhone.ts
+import { Configuration, DatabasesStreamingApi, ResponseError } from "whoisfreaks";
+
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
+const api = new DatabasesStreamingApi(config);
+
+// streamDomainerExpiredCleanedPhone({ date, whois?, offset?, limit? })
+//   date (Date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+//   whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false st...; default false
+//   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
+//   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+async function main(): Promise<void> {
+  const csvText = await api.streamDomainerExpiredCleanedPhone({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Stream dropped domains (CSV)
+
+`GET /v3.3/stream/domainer/dropped`
+
+```typescript
+// Stream dropped domains (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/dropped
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx StreamDomainerDropped.ts
+import { Configuration, DatabasesStreamingApi, ResponseError } from "whoisfreaks";
+
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
+const api = new DatabasesStreamingApi(config);
+
+// streamDomainerDropped({ date, whois?, offset?, limit? })
+//   date (Date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+//   whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false st...; default false
+//   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
+//   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+async function main(): Promise<void> {
+  const csvText = await api.streamDomainerDropped({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Stream dropped domains with backlinks (CSV)
+
+`GET /v3.3/stream/domainer/dropped/backlinks`
+
+```typescript
+// Stream dropped domains with backlinks (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/dropped/backlinks
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx StreamDomainerDroppedBacklinks.ts
+import { Configuration, DatabasesStreamingApi, ResponseError } from "whoisfreaks";
+
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
+const api = new DatabasesStreamingApi(config);
+
+// streamDomainerDroppedBacklinks({ date, whois?, offset?, limit? })
+//   date (Date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
+//   whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false st...; default false
+//   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
+//   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+async function main(): Promise<void> {
+  const csvText = await api.streamDomainerDroppedBacklinks({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Stream a sample of newly registered gTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/gtld`
+
+```typescript
+// Stream a sample of newly registered gTLD domains (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/sample/gtld
+// Run (public endpoint, no API key needed): npx tsx StreamDomainerGtldSample.ts
+import { DatabasesStreamingApi, ResponseError } from "whoisfreaks";
+
+// Public endpoint: no API key needed.
+const api = new DatabasesStreamingApi();
+
+// streamDomainerGtldSample({ whois?, offset?, limit? })
+//   whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false st...; default false
+//   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
+//   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+async function main(): Promise<void> {
+  const csvText = await api.streamDomainerGtldSample(); // plain CSV text, already decompressed
+  console.log(csvText);
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Stream a sample of cleaned newly registered gTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/gtld/cleaned`
+
+```typescript
+// Stream a sample of cleaned newly registered gTLD domains (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/sample/gtld/cleaned
+// Run (public endpoint, no API key needed): npx tsx StreamDomainerGtldCleanedSample.ts
+import { DatabasesStreamingApi, ResponseError } from "whoisfreaks";
+
+// Public endpoint: no API key needed.
+const api = new DatabasesStreamingApi();
+
+// streamDomainerGtldCleanedSample({ whois?, offset?, limit? })
+//   whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false st...; default false
+//   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
+//   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+async function main(): Promise<void> {
+  const csvText = await api.streamDomainerGtldCleanedSample(); // plain CSV text, already decompressed
+  console.log(csvText);
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Stream a sample of newly registered ccTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/cctld`
+
+```typescript
+// Stream a sample of newly registered ccTLD domains (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/sample/cctld
+// Run (public endpoint, no API key needed): npx tsx StreamDomainerCctldSample.ts
+import { DatabasesStreamingApi, ResponseError } from "whoisfreaks";
+
+// Public endpoint: no API key needed.
+const api = new DatabasesStreamingApi();
+
+// streamDomainerCctldSample({ whois?, offset?, limit? })
+//   whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false st...; default false
+//   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
+//   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+async function main(): Promise<void> {
+  const csvText = await api.streamDomainerCctldSample(); // plain CSV text, already decompressed
+  console.log(csvText);
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Stream a sample of cleaned newly registered ccTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/cctld/cleaned`
+
+```typescript
+// Stream a sample of cleaned newly registered ccTLD domains (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/sample/cctld/cleaned
+// Run (public endpoint, no API key needed): npx tsx StreamDomainerCctldCleanedSample.ts
+import { DatabasesStreamingApi, ResponseError } from "whoisfreaks";
+
+// Public endpoint: no API key needed.
+const api = new DatabasesStreamingApi();
+
+// streamDomainerCctldCleanedSample({ whois?, offset?, limit? })
+//   whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false st...; default false
+//   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
+//   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+async function main(): Promise<void> {
+  const csvText = await api.streamDomainerCctldCleanedSample(); // plain CSV text, already decompressed
+  console.log(csvText);
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Stream a sample of expiring domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/expired`
+
+```typescript
+// Stream a sample of expiring domains (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/sample/expired
+// Run (public endpoint, no API key needed): npx tsx StreamDomainerExpiredSample.ts
+import { DatabasesStreamingApi, ResponseError } from "whoisfreaks";
+
+// Public endpoint: no API key needed.
+const api = new DatabasesStreamingApi();
+
+// streamDomainerExpiredSample({ whois?, offset?, limit? })
+//   whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false st...; default false
+//   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
+//   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+async function main(): Promise<void> {
+  const csvText = await api.streamDomainerExpiredSample(); // plain CSV text, already decompressed
+  console.log(csvText);
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Stream a sample of cleaned expiring domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/expired/cleaned`
+
+```typescript
+// Stream a sample of cleaned expiring domains (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/sample/expired/cleaned
+// Run (public endpoint, no API key needed): npx tsx StreamDomainerExpiredCleanedSample.ts
+import { DatabasesStreamingApi, ResponseError } from "whoisfreaks";
+
+// Public endpoint: no API key needed.
+const api = new DatabasesStreamingApi();
+
+// streamDomainerExpiredCleanedSample({ whois?, offset?, limit? })
+//   whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false st...; default false
+//   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
+//   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+async function main(): Promise<void> {
+  const csvText = await api.streamDomainerExpiredCleanedSample(); // plain CSV text, already decompressed
+  console.log(csvText);
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Stream a sample of dropped domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/dropped`
+
+```typescript
+// Stream a sample of dropped domains (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/sample/dropped
+// Run (public endpoint, no API key needed): npx tsx StreamDomainerDroppedSample.ts
+import { DatabasesStreamingApi, ResponseError } from "whoisfreaks";
+
+// Public endpoint: no API key needed.
+const api = new DatabasesStreamingApi();
+
+// streamDomainerDroppedSample({ whois?, offset?, limit? })
+//   whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false st...; default false
+//   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
+//   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+async function main(): Promise<void> {
+  const csvText = await api.streamDomainerDroppedSample(); // plain CSV text, already decompressed
+  console.log(csvText);
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Stream a sample of dropped domains with backlinks (CSV)
+
+`GET /v3.3/stream/domainer/sample/dropped/backlinks`
+
+```typescript
+// Stream a sample of dropped domains with backlinks (CSV): GET https://files.whoisfreaks.com/v3.3/stream/domainer/sample/dropped/backlinks
+// Run (public endpoint, no API key needed): npx tsx StreamDomainerDroppedBacklinksSample.ts
+import { DatabasesStreamingApi, ResponseError } from "whoisfreaks";
+
+// Public endpoint: no API key needed.
+const api = new DatabasesStreamingApi();
+
+// streamDomainerDroppedBacklinksSample({ whois?, offset?, limit? })
+//   whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false st...; default false
+//   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
+//   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
+async function main(): Promise<void> {
+  const csvText = await api.streamDomainerDroppedBacklinksSample(); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch(async (err: unknown) => {

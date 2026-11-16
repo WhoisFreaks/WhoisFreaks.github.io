@@ -109,7 +109,7 @@ end
 
 ## Endpoints
 
-All 60 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
+All 94 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
 
 ### WHOIS
 
@@ -334,6 +334,148 @@ api = WhoisFreaks::DNSApi.new
 
 begin
   result = api.dns_reverse("8.8.8.8", "a", page: 1)
+  puts JSON.pretty_generate(result.to_hash)
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Historical DNS Lookup (v2.2)
+
+`GET /v2.2/dns/historical`
+
+```ruby
+# Historical DNS Lookup (v2.2)
+#
+# Parameters for dnsHistoricalV22 (GET /v2.2/dns/historical):
+#   - domain_name (string, required)
+#   - type (string, required)
+#   - page (integer, optional)
+#   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+#   - sort_by (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+#   - format (string (one of: json, xml), optional)
+
+require "json"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DNSApi.new
+
+begin
+  result = api.dns_historical_v22("whoisfreaks.com", "A,MX,TXT", page: 1)
+  puts JSON.pretty_generate(result.to_hash)
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Historical DNS Lookup (v2.3)
+
+`GET /v2.3/dns/historical`
+
+```ruby
+# Historical DNS Lookup (v2.3)
+#
+# Parameters for dnsHistoricalV23 (GET /v2.3/dns/historical):
+#   - domain_name (string, required)
+#   - type (string, required)
+#   - page (integer, optional)
+#   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+#   - sort_by (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+#   - format (string (one of: json, xml), optional)
+
+require "json"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DNSApi.new
+
+begin
+  result = api.dns_historical_v23("whoisfreaks.com", "A,MX,TXT", page: 1)
+  puts JSON.pretty_generate(result.to_hash)
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Reverse DNS Lookup (v2.2)
+
+`GET /v2.2/dns/reverse`
+
+```ruby
+# Reverse DNS Lookup (v2.2)
+#
+# Parameters for dnsReverseV22 (GET /v2.2/dns/reverse):
+#   - value (string, required): IP, CIDR, or record value
+#   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
+#   - exact (boolean, optional): When false the value is matched as a substring, which is far slower than an exact match...
+#   - page (integer, optional)
+#   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+#   - sort_by (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+#   - format (string (one of: json, xml), optional)
+
+require "json"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DNSApi.new
+
+begin
+  result = api.dns_reverse_v22("8.8.8.8", "a", page: 1)
+  puts JSON.pretty_generate(result.to_hash)
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Reverse DNS Lookup (v2.3)
+
+`GET /v2.3/dns/reverse`
+
+```ruby
+# Reverse DNS Lookup (v2.3)
+#
+# Parameters for dnsReverseV23 (GET /v2.3/dns/reverse):
+#   - value (string, required): IP, CIDR, or record value
+#   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
+#   - exact (boolean, optional): When false the value is matched as a substring, which is far slower than an exact match...
+#   - page (integer, optional)
+#   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
+#   - sort_by (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
+#   - format (string (one of: json, xml), optional)
+
+require "json"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DNSApi.new
+
+begin
+  result = api.dns_reverse_v23("8.8.8.8", "a", page: 1)
   puts JSON.pretty_generate(result.to_hash)
 rescue WhoisFreaks::ApiError => e
   warn "Request failed: HTTP #{e.code} #{e.response_body}"
@@ -671,6 +813,68 @@ request = WhoisFreaks::BulkGeolocationRequest.new(ips: ["8.8.8.8", "1.1.1.1"])
 
 begin
   results = api.bulk_ip_reputation(request)
+  puts JSON.pretty_generate(results.map(&:to_hash))
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### IP Reputation Lookup (v2.0)
+
+`GET /v2.0/security`
+
+```ruby
+# IP Reputation Lookup (v2.0)
+#
+# Parameters for ipReputationV2 (GET /v2.0/security):
+#   - ip (string, required)
+
+require "json"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::IPReputationApi.new
+
+begin
+  result = api.ip_reputation_v2("8.8.8.8")
+  puts JSON.pretty_generate(result.to_hash)
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Bulk IP Reputation (v2.0)
+
+`POST /v2.0/security`
+
+```ruby
+# Bulk IP Reputation (v2.0)
+#
+# Parameters for bulkIpReputationV2 (POST /v2.0/security):
+#   - body: BulkGeolocationRequest (required): request body object
+
+require "json"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::IPReputationApi.new
+
+request = WhoisFreaks::BulkGeolocationRequest.new(ips: ["1.1.1.1", "2.2.2.2", "8.8.8.8"])
+
+begin
+  results = api.bulk_ip_reputation_v2(request)
   puts JSON.pretty_generate(results.map(&:to_hash))
 rescue WhoisFreaks::ApiError => e
   warn "Request failed: HTTP #{e.code} #{e.response_body}"
@@ -2114,6 +2318,915 @@ begin
   save_as = "DownloadThreatFeedSpamSample.csv"
   FileUtils.cp(file.path, save_as)
   puts "Saved #{File.expand_path(save_as)} (#{File.size(save_as)} bytes)"
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+### Databases - Streaming
+
+#### Stream the daily phishing threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/phishing`
+
+```ruby
+# Stream the daily phishing threat feed (CSV)
+#
+# Parameters for streamThreatFeedPhishing (GET /v3.4/stream/threat-feed/phishing):
+#   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+#   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+#   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+require "date"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DatabasesStreamingApi.new
+
+begin
+  result = api.stream_threat_feed_phishing(Date.parse("2026-10-01"))
+  puts result
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Stream a sample of the phishing threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/phishing/sample`
+
+```ruby
+# Stream a sample of the phishing threat feed (CSV)
+#
+# Parameters for streamThreatFeedPhishingSample (GET /v3.4/stream/threat-feed/phishing/sample):
+#   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+#   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+# (This endpoint is public, so the key is not sent with this request.)
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DatabasesStreamingApi.new
+
+begin
+  result = api.stream_threat_feed_phishing_sample
+  puts result
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Stream the daily malware threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/malware`
+
+```ruby
+# Stream the daily malware threat feed (CSV)
+#
+# Parameters for streamThreatFeedMalware (GET /v3.4/stream/threat-feed/malware):
+#   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+#   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+#   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+require "date"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DatabasesStreamingApi.new
+
+begin
+  result = api.stream_threat_feed_malware(Date.parse("2026-10-01"))
+  puts result
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Stream a sample of the malware threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/malware/sample`
+
+```ruby
+# Stream a sample of the malware threat feed (CSV)
+#
+# Parameters for streamThreatFeedMalwareSample (GET /v3.4/stream/threat-feed/malware/sample):
+#   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+#   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+# (This endpoint is public, so the key is not sent with this request.)
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DatabasesStreamingApi.new
+
+begin
+  result = api.stream_threat_feed_malware_sample
+  puts result
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Stream the daily spam threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/spam`
+
+```ruby
+# Stream the daily spam threat feed (CSV)
+#
+# Parameters for streamThreatFeedSpam (GET /v3.4/stream/threat-feed/spam):
+#   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+#   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+#   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+require "date"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DatabasesStreamingApi.new
+
+begin
+  result = api.stream_threat_feed_spam(Date.parse("2026-10-01"))
+  puts result
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Stream a sample of the spam threat feed (CSV)
+
+`GET /v3.4/stream/threat-feed/spam/sample`
+
+```ruby
+# Stream a sample of the spam threat feed (CSV)
+#
+# Parameters for streamThreatFeedSpamSample (GET /v3.4/stream/threat-feed/spam/sample):
+#   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+#   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+# (This endpoint is public, so the key is not sent with this request.)
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DatabasesStreamingApi.new
+
+begin
+  result = api.stream_threat_feed_spam_sample
+  puts result
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Stream newly registered gTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/gtld`
+
+```ruby
+# Stream newly registered gTLD domains (CSV)
+#
+# Parameters for streamDomainerGtld (GET /v3.3/stream/domainer/gtld):
+#   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+#   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+#   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+#   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+require "date"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DatabasesStreamingApi.new
+
+begin
+  result = api.stream_domainer_gtld(Date.parse("2026-10-01"))
+  puts result
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Stream cleaned newly registered gTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/gtld/cleaned`
+
+```ruby
+# Stream cleaned newly registered gTLD domains (CSV)
+#
+# Parameters for streamDomainerGtldCleaned (GET /v3.3/stream/domainer/gtld/cleaned):
+#   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+#   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+#   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+#   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+require "date"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DatabasesStreamingApi.new
+
+begin
+  result = api.stream_domainer_gtld_cleaned(Date.parse("2026-10-01"))
+  puts result
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Stream cleaned newly registered gTLD domains with an email (CSV)
+
+`GET /v3.3/stream/domainer/gtld/cleaned/email`
+
+```ruby
+# Stream cleaned newly registered gTLD domains with an email (CSV)
+#
+# Parameters for streamDomainerGtldCleanedEmail (GET /v3.3/stream/domainer/gtld/cleaned/email):
+#   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+#   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+#   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+#   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+require "date"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DatabasesStreamingApi.new
+
+begin
+  result = api.stream_domainer_gtld_cleaned_email(Date.parse("2026-10-01"))
+  puts result
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Stream cleaned newly registered gTLD domains with a phone (CSV)
+
+`GET /v3.3/stream/domainer/gtld/cleaned/phone`
+
+```ruby
+# Stream cleaned newly registered gTLD domains with a phone (CSV)
+#
+# Parameters for streamDomainerGtldCleanedPhone (GET /v3.3/stream/domainer/gtld/cleaned/phone):
+#   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+#   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+#   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+#   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+require "date"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DatabasesStreamingApi.new
+
+begin
+  result = api.stream_domainer_gtld_cleaned_phone(Date.parse("2026-10-01"))
+  puts result
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Stream newly registered ccTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/cctld`
+
+```ruby
+# Stream newly registered ccTLD domains (CSV)
+#
+# Parameters for streamDomainerCctld (GET /v3.3/stream/domainer/cctld):
+#   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+#   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+#   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+#   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+require "date"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DatabasesStreamingApi.new
+
+begin
+  result = api.stream_domainer_cctld(Date.parse("2026-10-01"))
+  puts result
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Stream cleaned newly registered ccTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/cctld/cleaned`
+
+```ruby
+# Stream cleaned newly registered ccTLD domains (CSV)
+#
+# Parameters for streamDomainerCctldCleaned (GET /v3.3/stream/domainer/cctld/cleaned):
+#   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+#   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+#   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+#   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+require "date"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DatabasesStreamingApi.new
+
+begin
+  result = api.stream_domainer_cctld_cleaned(Date.parse("2026-10-01"))
+  puts result
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Stream cleaned newly registered ccTLD domains with an email (CSV)
+
+`GET /v3.3/stream/domainer/cctld/cleaned/email`
+
+```ruby
+# Stream cleaned newly registered ccTLD domains with an email (CSV)
+#
+# Parameters for streamDomainerCctldCleanedEmail (GET /v3.3/stream/domainer/cctld/cleaned/email):
+#   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+#   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+#   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+#   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+require "date"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DatabasesStreamingApi.new
+
+begin
+  result = api.stream_domainer_cctld_cleaned_email(Date.parse("2026-10-01"))
+  puts result
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Stream cleaned newly registered ccTLD domains with a phone (CSV)
+
+`GET /v3.3/stream/domainer/cctld/cleaned/phone`
+
+```ruby
+# Stream cleaned newly registered ccTLD domains with a phone (CSV)
+#
+# Parameters for streamDomainerCctldCleanedPhone (GET /v3.3/stream/domainer/cctld/cleaned/phone):
+#   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+#   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+#   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+#   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+require "date"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DatabasesStreamingApi.new
+
+begin
+  result = api.stream_domainer_cctld_cleaned_phone(Date.parse("2026-10-01"))
+  puts result
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Stream expiring domains (CSV)
+
+`GET /v3.3/stream/domainer/expired`
+
+```ruby
+# Stream expiring domains (CSV)
+#
+# Parameters for streamDomainerExpired (GET /v3.3/stream/domainer/expired):
+#   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+#   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+#   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+#   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+require "date"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DatabasesStreamingApi.new
+
+begin
+  result = api.stream_domainer_expired(Date.parse("2026-10-01"))
+  puts result
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Stream cleaned expiring domains (CSV)
+
+`GET /v3.3/stream/domainer/expired/cleaned`
+
+```ruby
+# Stream cleaned expiring domains (CSV)
+#
+# Parameters for streamDomainerExpiredCleaned (GET /v3.3/stream/domainer/expired/cleaned):
+#   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+#   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+#   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+#   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+require "date"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DatabasesStreamingApi.new
+
+begin
+  result = api.stream_domainer_expired_cleaned(Date.parse("2026-10-01"))
+  puts result
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Stream cleaned expiring domains with an email (CSV)
+
+`GET /v3.3/stream/domainer/expired/cleaned/email`
+
+```ruby
+# Stream cleaned expiring domains with an email (CSV)
+#
+# Parameters for streamDomainerExpiredCleanedEmail (GET /v3.3/stream/domainer/expired/cleaned/email):
+#   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+#   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+#   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+#   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+require "date"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DatabasesStreamingApi.new
+
+begin
+  result = api.stream_domainer_expired_cleaned_email(Date.parse("2026-10-01"))
+  puts result
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Stream cleaned expiring domains with a phone (CSV)
+
+`GET /v3.3/stream/domainer/expired/cleaned/phone`
+
+```ruby
+# Stream cleaned expiring domains with a phone (CSV)
+#
+# Parameters for streamDomainerExpiredCleanedPhone (GET /v3.3/stream/domainer/expired/cleaned/phone):
+#   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+#   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+#   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+#   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+require "date"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DatabasesStreamingApi.new
+
+begin
+  result = api.stream_domainer_expired_cleaned_phone(Date.parse("2026-10-01"))
+  puts result
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Stream dropped domains (CSV)
+
+`GET /v3.3/stream/domainer/dropped`
+
+```ruby
+# Stream dropped domains (CSV)
+#
+# Parameters for streamDomainerDropped (GET /v3.3/stream/domainer/dropped):
+#   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+#   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+#   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+#   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+require "date"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DatabasesStreamingApi.new
+
+begin
+  result = api.stream_domainer_dropped(Date.parse("2026-10-01"))
+  puts result
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Stream dropped domains with backlinks (CSV)
+
+`GET /v3.3/stream/domainer/dropped/backlinks`
+
+```ruby
+# Stream dropped domains with backlinks (CSV)
+#
+# Parameters for streamDomainerDroppedBacklinks (GET /v3.3/stream/domainer/dropped/backlinks):
+#   - date (string, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints.
+#   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+#   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+#   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+require "date"
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DatabasesStreamingApi.new
+
+begin
+  result = api.stream_domainer_dropped_backlinks(Date.parse("2026-10-01"))
+  puts result
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Stream a sample of newly registered gTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/gtld`
+
+```ruby
+# Stream a sample of newly registered gTLD domains (CSV)
+#
+# Parameters for streamDomainerGtldSample (GET /v3.3/stream/domainer/sample/gtld):
+#   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+#   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+#   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+# (This endpoint is public, so the key is not sent with this request.)
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DatabasesStreamingApi.new
+
+begin
+  result = api.stream_domainer_gtld_sample
+  puts result
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Stream a sample of cleaned newly registered gTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/gtld/cleaned`
+
+```ruby
+# Stream a sample of cleaned newly registered gTLD domains (CSV)
+#
+# Parameters for streamDomainerGtldCleanedSample (GET /v3.3/stream/domainer/sample/gtld/cleaned):
+#   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+#   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+#   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+# (This endpoint is public, so the key is not sent with this request.)
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DatabasesStreamingApi.new
+
+begin
+  result = api.stream_domainer_gtld_cleaned_sample
+  puts result
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Stream a sample of newly registered ccTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/cctld`
+
+```ruby
+# Stream a sample of newly registered ccTLD domains (CSV)
+#
+# Parameters for streamDomainerCctldSample (GET /v3.3/stream/domainer/sample/cctld):
+#   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+#   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+#   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+# (This endpoint is public, so the key is not sent with this request.)
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DatabasesStreamingApi.new
+
+begin
+  result = api.stream_domainer_cctld_sample
+  puts result
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Stream a sample of cleaned newly registered ccTLD domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/cctld/cleaned`
+
+```ruby
+# Stream a sample of cleaned newly registered ccTLD domains (CSV)
+#
+# Parameters for streamDomainerCctldCleanedSample (GET /v3.3/stream/domainer/sample/cctld/cleaned):
+#   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+#   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+#   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+# (This endpoint is public, so the key is not sent with this request.)
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DatabasesStreamingApi.new
+
+begin
+  result = api.stream_domainer_cctld_cleaned_sample
+  puts result
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Stream a sample of expiring domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/expired`
+
+```ruby
+# Stream a sample of expiring domains (CSV)
+#
+# Parameters for streamDomainerExpiredSample (GET /v3.3/stream/domainer/sample/expired):
+#   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+#   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+#   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+# (This endpoint is public, so the key is not sent with this request.)
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DatabasesStreamingApi.new
+
+begin
+  result = api.stream_domainer_expired_sample
+  puts result
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Stream a sample of cleaned expiring domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/expired/cleaned`
+
+```ruby
+# Stream a sample of cleaned expiring domains (CSV)
+#
+# Parameters for streamDomainerExpiredCleanedSample (GET /v3.3/stream/domainer/sample/expired/cleaned):
+#   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+#   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+#   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+# (This endpoint is public, so the key is not sent with this request.)
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DatabasesStreamingApi.new
+
+begin
+  result = api.stream_domainer_expired_cleaned_sample
+  puts result
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Stream a sample of dropped domains (CSV)
+
+`GET /v3.3/stream/domainer/sample/dropped`
+
+```ruby
+# Stream a sample of dropped domains (CSV)
+#
+# Parameters for streamDomainerDroppedSample (GET /v3.3/stream/domainer/sample/dropped):
+#   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+#   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+#   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+# (This endpoint is public, so the key is not sent with this request.)
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DatabasesStreamingApi.new
+
+begin
+  result = api.stream_domainer_dropped_sample
+  puts result
+rescue WhoisFreaks::ApiError => e
+  warn "Request failed: HTTP #{e.code} #{e.response_body}"
+  exit 1
+end
+
+```
+
+#### Stream a sample of dropped domains with backlinks (CSV)
+
+`GET /v3.3/stream/domainer/sample/dropped/backlinks`
+
+```ruby
+# Stream a sample of dropped domains with backlinks (CSV)
+#
+# Parameters for streamDomainerDroppedBacklinksSample (GET /v3.3/stream/domainer/sample/dropped/backlinks):
+#   - whois (boolean, optional): true streams the full WHOIS record per domain with a CSV header row; false streams only...
+#   - offset (integer, optional): Data rows to skip from the start of the file. The header row is never counted. Rows are...
+#   - limit (integer, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the header row on...
+
+require "whoisfreaks"
+
+# Read the API key from the environment and set it once.
+# (This endpoint is public, so the key is not sent with this request.)
+WhoisFreaks.configure do |config|
+  config.api_key["apiKey"] = ENV.fetch("WHOISFREAKS_API_KEY")
+end
+
+api = WhoisFreaks::DatabasesStreamingApi.new
+
+begin
+  result = api.stream_domainer_dropped_backlinks_sample
+  puts result
 rescue WhoisFreaks::ApiError => e
   warn "Request failed: HTTP #{e.code} #{e.response_body}"
   exit 1

@@ -12,6 +12,10 @@ Install: see the [Kotlin guide](../../docs/languages/kotlin.md). Set the `WHOISF
 - [`DnsLive.kt`](DnsLive.kt): Live DNS Lookup (`GET /v2.0/dns/live`)
 - [`DnsHistorical.kt`](DnsHistorical.kt): Historical DNS Lookup (`GET /v2.0/dns/historical`)
 - [`DnsReverse.kt`](DnsReverse.kt): Reverse DNS Lookup (`GET /v2.1/dns/reverse`)
+- [`DnsHistoricalV22.kt`](DnsHistoricalV22.kt): Historical DNS Lookup (v2.2) (`GET /v2.2/dns/historical`)
+- [`DnsHistoricalV23.kt`](DnsHistoricalV23.kt): Historical DNS Lookup (v2.3) (`GET /v2.3/dns/historical`)
+- [`DnsReverseV22.kt`](DnsReverseV22.kt): Reverse DNS Lookup (v2.2) (`GET /v2.2/dns/reverse`)
+- [`DnsReverseV23.kt`](DnsReverseV23.kt): Reverse DNS Lookup (v2.3) (`GET /v2.3/dns/reverse`)
 - [`DnsBulk.kt`](DnsBulk.kt): Bulk DNS Lookup (`POST /v2.0/dns/bulk/live`)
 
 ## Domain Availability
@@ -34,6 +38,8 @@ Install: see the [Kotlin guide](../../docs/languages/kotlin.md). Set the `WHOISF
 ## IP Reputation
 - [`IpReputation.kt`](IpReputation.kt): IP Reputation Lookup (`GET /v1.0/security`)
 - [`BulkIpReputation.kt`](BulkIpReputation.kt): Bulk IP Reputation (`POST /v1.0/security`)
+- [`IpReputationV2.kt`](IpReputationV2.kt): IP Reputation Lookup (v2.0) (`GET /v2.0/security`)
+- [`BulkIpReputationV2.kt`](BulkIpReputationV2.kt): Bulk IP Reputation (v2.0) (`POST /v2.0/security`)
 
 ## Domain Reputation
 - [`DomainReputation.kt`](DomainReputation.kt): Domain Reputation Lookup (`GET /v1/domain/security`)
@@ -105,3 +111,33 @@ Install: see the [Kotlin guide](../../docs/languages/kotlin.md). Set the `WHOISF
 - [`DownloadThreatFeedMalwareSample.kt`](DownloadThreatFeedMalwareSample.kt): Download a sample of the malware threat feed (CSV) (`GET /v3.4/download/threat-feed/malware/sample`)
 - [`DownloadThreatFeedSpam.kt`](DownloadThreatFeedSpam.kt): Download the daily spam threat feed (CSV) (`GET /v3.4/download/threat-feed/spam`)
 - [`DownloadThreatFeedSpamSample.kt`](DownloadThreatFeedSpamSample.kt): Download a sample of the spam threat feed (CSV) (`GET /v3.4/download/threat-feed/spam/sample`)
+
+## Databases - Streaming
+- [`StreamThreatFeedPhishing.kt`](StreamThreatFeedPhishing.kt): Stream the daily phishing threat feed (CSV) (`GET /v3.4/stream/threat-feed/phishing`)
+- [`StreamThreatFeedPhishingSample.kt`](StreamThreatFeedPhishingSample.kt): Stream a sample of the phishing threat feed (CSV) (`GET /v3.4/stream/threat-feed/phishing/sample`)
+- [`StreamThreatFeedMalware.kt`](StreamThreatFeedMalware.kt): Stream the daily malware threat feed (CSV) (`GET /v3.4/stream/threat-feed/malware`)
+- [`StreamThreatFeedMalwareSample.kt`](StreamThreatFeedMalwareSample.kt): Stream a sample of the malware threat feed (CSV) (`GET /v3.4/stream/threat-feed/malware/sample`)
+- [`StreamThreatFeedSpam.kt`](StreamThreatFeedSpam.kt): Stream the daily spam threat feed (CSV) (`GET /v3.4/stream/threat-feed/spam`)
+- [`StreamThreatFeedSpamSample.kt`](StreamThreatFeedSpamSample.kt): Stream a sample of the spam threat feed (CSV) (`GET /v3.4/stream/threat-feed/spam/sample`)
+- [`StreamDomainerGtld.kt`](StreamDomainerGtld.kt): Stream newly registered gTLD domains (CSV) (`GET /v3.3/stream/domainer/gtld`)
+- [`StreamDomainerGtldCleaned.kt`](StreamDomainerGtldCleaned.kt): Stream cleaned newly registered gTLD domains (CSV) (`GET /v3.3/stream/domainer/gtld/cleaned`)
+- [`StreamDomainerGtldCleanedEmail.kt`](StreamDomainerGtldCleanedEmail.kt): Stream cleaned newly registered gTLD domains with an email (CSV) (`GET /v3.3/stream/domainer/gtld/cleaned/email`)
+- [`StreamDomainerGtldCleanedPhone.kt`](StreamDomainerGtldCleanedPhone.kt): Stream cleaned newly registered gTLD domains with a phone (CSV) (`GET /v3.3/stream/domainer/gtld/cleaned/phone`)
+- [`StreamDomainerCctld.kt`](StreamDomainerCctld.kt): Stream newly registered ccTLD domains (CSV) (`GET /v3.3/stream/domainer/cctld`)
+- [`StreamDomainerCctldCleaned.kt`](StreamDomainerCctldCleaned.kt): Stream cleaned newly registered ccTLD domains (CSV) (`GET /v3.3/stream/domainer/cctld/cleaned`)
+- [`StreamDomainerCctldCleanedEmail.kt`](StreamDomainerCctldCleanedEmail.kt): Stream cleaned newly registered ccTLD domains with an email (CSV) (`GET /v3.3/stream/domainer/cctld/cleaned/email`)
+- [`StreamDomainerCctldCleanedPhone.kt`](StreamDomainerCctldCleanedPhone.kt): Stream cleaned newly registered ccTLD domains with a phone (CSV) (`GET /v3.3/stream/domainer/cctld/cleaned/phone`)
+- [`StreamDomainerExpired.kt`](StreamDomainerExpired.kt): Stream expiring domains (CSV) (`GET /v3.3/stream/domainer/expired`)
+- [`StreamDomainerExpiredCleaned.kt`](StreamDomainerExpiredCleaned.kt): Stream cleaned expiring domains (CSV) (`GET /v3.3/stream/domainer/expired/cleaned`)
+- [`StreamDomainerExpiredCleanedEmail.kt`](StreamDomainerExpiredCleanedEmail.kt): Stream cleaned expiring domains with an email (CSV) (`GET /v3.3/stream/domainer/expired/cleaned/email`)
+- [`StreamDomainerExpiredCleanedPhone.kt`](StreamDomainerExpiredCleanedPhone.kt): Stream cleaned expiring domains with a phone (CSV) (`GET /v3.3/stream/domainer/expired/cleaned/phone`)
+- [`StreamDomainerDropped.kt`](StreamDomainerDropped.kt): Stream dropped domains (CSV) (`GET /v3.3/stream/domainer/dropped`)
+- [`StreamDomainerDroppedBacklinks.kt`](StreamDomainerDroppedBacklinks.kt): Stream dropped domains with backlinks (CSV) (`GET /v3.3/stream/domainer/dropped/backlinks`)
+- [`StreamDomainerGtldSample.kt`](StreamDomainerGtldSample.kt): Stream a sample of newly registered gTLD domains (CSV) (`GET /v3.3/stream/domainer/sample/gtld`)
+- [`StreamDomainerGtldCleanedSample.kt`](StreamDomainerGtldCleanedSample.kt): Stream a sample of cleaned newly registered gTLD domains (CSV) (`GET /v3.3/stream/domainer/sample/gtld/cleaned`)
+- [`StreamDomainerCctldSample.kt`](StreamDomainerCctldSample.kt): Stream a sample of newly registered ccTLD domains (CSV) (`GET /v3.3/stream/domainer/sample/cctld`)
+- [`StreamDomainerCctldCleanedSample.kt`](StreamDomainerCctldCleanedSample.kt): Stream a sample of cleaned newly registered ccTLD domains (CSV) (`GET /v3.3/stream/domainer/sample/cctld/cleaned`)
+- [`StreamDomainerExpiredSample.kt`](StreamDomainerExpiredSample.kt): Stream a sample of expiring domains (CSV) (`GET /v3.3/stream/domainer/sample/expired`)
+- [`StreamDomainerExpiredCleanedSample.kt`](StreamDomainerExpiredCleanedSample.kt): Stream a sample of cleaned expiring domains (CSV) (`GET /v3.3/stream/domainer/sample/expired/cleaned`)
+- [`StreamDomainerDroppedSample.kt`](StreamDomainerDroppedSample.kt): Stream a sample of dropped domains (CSV) (`GET /v3.3/stream/domainer/sample/dropped`)
+- [`StreamDomainerDroppedBacklinksSample.kt`](StreamDomainerDroppedBacklinksSample.kt): Stream a sample of dropped domains with backlinks (CSV) (`GET /v3.3/stream/domainer/sample/dropped/backlinks`)

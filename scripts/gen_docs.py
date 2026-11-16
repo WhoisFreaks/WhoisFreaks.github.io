@@ -406,7 +406,7 @@ SECTIONS = [
       "Databases - WHOIS", "Databases - DNS", "Databases - Subdomains",
       "Databases - IP Geolocation", "Databases - ASN WHOIS",
       "Databases - IP WHOIS", "Databases - IP Security",
-      "Databases - Threat Feed"]),
+      "Databases - Threat Feed", "Databases - Streaming"]),
     ("Account & Utilities",
      "Manage your account, monitor API usage and credits, and rotate your API key.",
      ["Account"]),
