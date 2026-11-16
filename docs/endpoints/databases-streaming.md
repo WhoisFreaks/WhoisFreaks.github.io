@@ -1,6 +1,6 @@
 # Databases - Streaming
 
-*Section: Other*
+*Section: Databases*
 
 Stream database files and threat feeds as plain CSV text instead of downloading a gzip file
 
@@ -45,8 +45,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   var_date (datetime.date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_threat_feed_phishing(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_threat_feed_phishing(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 </details>
@@ -67,8 +67,8 @@ const api = new DatabasesStreamingApi(config);
 //   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main(): Promise<void> {
-  const newKey = await api.streamThreatFeedPhishing({ date: new Date("2026-10-01") }); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamThreatFeedPhishing({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch(async (err: unknown) => {
@@ -164,8 +164,8 @@ with whoisfreaks.ApiClient(config) as client:
     # stream_threat_feed_phishing_sample parameters:
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_threat_feed_phishing_sample()  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_threat_feed_phishing_sample()  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 </details>
@@ -184,8 +184,8 @@ const api = new DatabasesStreamingApi();
 //   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main(): Promise<void> {
-  const newKey = await api.streamThreatFeedPhishingSample(); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamThreatFeedPhishingSample(); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch(async (err: unknown) => {
@@ -279,8 +279,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   var_date (datetime.date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_threat_feed_malware(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_threat_feed_malware(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 </details>
@@ -301,8 +301,8 @@ const api = new DatabasesStreamingApi(config);
 //   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main(): Promise<void> {
-  const newKey = await api.streamThreatFeedMalware({ date: new Date("2026-10-01") }); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamThreatFeedMalware({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch(async (err: unknown) => {
@@ -398,8 +398,8 @@ with whoisfreaks.ApiClient(config) as client:
     # stream_threat_feed_malware_sample parameters:
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_threat_feed_malware_sample()  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_threat_feed_malware_sample()  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 </details>
@@ -418,8 +418,8 @@ const api = new DatabasesStreamingApi();
 //   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main(): Promise<void> {
-  const newKey = await api.streamThreatFeedMalwareSample(); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamThreatFeedMalwareSample(); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch(async (err: unknown) => {
@@ -513,8 +513,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   var_date (datetime.date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_threat_feed_spam(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_threat_feed_spam(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 </details>
@@ -535,8 +535,8 @@ const api = new DatabasesStreamingApi(config);
 //   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main(): Promise<void> {
-  const newKey = await api.streamThreatFeedSpam({ date: new Date("2026-10-01") }); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamThreatFeedSpam({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch(async (err: unknown) => {
@@ -632,8 +632,8 @@ with whoisfreaks.ApiClient(config) as client:
     # stream_threat_feed_spam_sample parameters:
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_threat_feed_spam_sample()  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_threat_feed_spam_sample()  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 </details>
@@ -652,8 +652,8 @@ const api = new DatabasesStreamingApi();
 //   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main(): Promise<void> {
-  const newKey = await api.streamThreatFeedSpamSample(); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamThreatFeedSpamSample(); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch(async (err: unknown) => {
@@ -749,8 +749,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_gtld(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_gtld(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 </details>
@@ -772,8 +772,8 @@ const api = new DatabasesStreamingApi(config);
 //   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main(): Promise<void> {
-  const newKey = await api.streamDomainerGtld({ date: new Date("2026-10-01") }); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerGtld({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch(async (err: unknown) => {
@@ -874,8 +874,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_gtld_cleaned(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_gtld_cleaned(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 </details>
@@ -897,8 +897,8 @@ const api = new DatabasesStreamingApi(config);
 //   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main(): Promise<void> {
-  const newKey = await api.streamDomainerGtldCleaned({ date: new Date("2026-10-01") }); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerGtldCleaned({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch(async (err: unknown) => {
@@ -999,8 +999,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_gtld_cleaned_email(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_gtld_cleaned_email(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 </details>
@@ -1022,8 +1022,8 @@ const api = new DatabasesStreamingApi(config);
 //   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main(): Promise<void> {
-  const newKey = await api.streamDomainerGtldCleanedEmail({ date: new Date("2026-10-01") }); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerGtldCleanedEmail({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch(async (err: unknown) => {
@@ -1124,8 +1124,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_gtld_cleaned_phone(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_gtld_cleaned_phone(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 </details>
@@ -1147,8 +1147,8 @@ const api = new DatabasesStreamingApi(config);
 //   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main(): Promise<void> {
-  const newKey = await api.streamDomainerGtldCleanedPhone({ date: new Date("2026-10-01") }); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerGtldCleanedPhone({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch(async (err: unknown) => {
@@ -1249,8 +1249,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_cctld(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_cctld(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 </details>
@@ -1272,8 +1272,8 @@ const api = new DatabasesStreamingApi(config);
 //   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main(): Promise<void> {
-  const newKey = await api.streamDomainerCctld({ date: new Date("2026-10-01") }); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerCctld({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch(async (err: unknown) => {
@@ -1374,8 +1374,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_cctld_cleaned(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_cctld_cleaned(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 </details>
@@ -1397,8 +1397,8 @@ const api = new DatabasesStreamingApi(config);
 //   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main(): Promise<void> {
-  const newKey = await api.streamDomainerCctldCleaned({ date: new Date("2026-10-01") }); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerCctldCleaned({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch(async (err: unknown) => {
@@ -1499,8 +1499,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_cctld_cleaned_email(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_cctld_cleaned_email(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 </details>
@@ -1522,8 +1522,8 @@ const api = new DatabasesStreamingApi(config);
 //   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main(): Promise<void> {
-  const newKey = await api.streamDomainerCctldCleanedEmail({ date: new Date("2026-10-01") }); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerCctldCleanedEmail({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch(async (err: unknown) => {
@@ -1624,8 +1624,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_cctld_cleaned_phone(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_cctld_cleaned_phone(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 </details>
@@ -1647,8 +1647,8 @@ const api = new DatabasesStreamingApi(config);
 //   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main(): Promise<void> {
-  const newKey = await api.streamDomainerCctldCleanedPhone({ date: new Date("2026-10-01") }); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerCctldCleanedPhone({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch(async (err: unknown) => {
@@ -1749,8 +1749,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_expired(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_expired(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 </details>
@@ -1772,8 +1772,8 @@ const api = new DatabasesStreamingApi(config);
 //   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main(): Promise<void> {
-  const newKey = await api.streamDomainerExpired({ date: new Date("2026-10-01") }); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerExpired({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch(async (err: unknown) => {
@@ -1874,8 +1874,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_expired_cleaned(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_expired_cleaned(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 </details>
@@ -1897,8 +1897,8 @@ const api = new DatabasesStreamingApi(config);
 //   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main(): Promise<void> {
-  const newKey = await api.streamDomainerExpiredCleaned({ date: new Date("2026-10-01") }); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerExpiredCleaned({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch(async (err: unknown) => {
@@ -1999,8 +1999,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_expired_cleaned_email(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_expired_cleaned_email(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 </details>
@@ -2022,8 +2022,8 @@ const api = new DatabasesStreamingApi(config);
 //   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main(): Promise<void> {
-  const newKey = await api.streamDomainerExpiredCleanedEmail({ date: new Date("2026-10-01") }); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerExpiredCleanedEmail({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch(async (err: unknown) => {
@@ -2124,8 +2124,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_expired_cleaned_phone(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_expired_cleaned_phone(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 </details>
@@ -2147,8 +2147,8 @@ const api = new DatabasesStreamingApi(config);
 //   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main(): Promise<void> {
-  const newKey = await api.streamDomainerExpiredCleanedPhone({ date: new Date("2026-10-01") }); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerExpiredCleanedPhone({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch(async (err: unknown) => {
@@ -2249,8 +2249,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_dropped(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_dropped(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 </details>
@@ -2272,8 +2272,8 @@ const api = new DatabasesStreamingApi(config);
 //   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main(): Promise<void> {
-  const newKey = await api.streamDomainerDropped({ date: new Date("2026-10-01") }); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerDropped({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch(async (err: unknown) => {
@@ -2374,8 +2374,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_dropped_backlinks(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_dropped_backlinks(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 </details>
@@ -2397,8 +2397,8 @@ const api = new DatabasesStreamingApi(config);
 //   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main(): Promise<void> {
-  const newKey = await api.streamDomainerDroppedBacklinks({ date: new Date("2026-10-01") }); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerDroppedBacklinks({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch(async (err: unknown) => {
@@ -2497,8 +2497,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_gtld_sample()  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_gtld_sample()  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 </details>
@@ -2518,8 +2518,8 @@ const api = new DatabasesStreamingApi();
 //   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main(): Promise<void> {
-  const newKey = await api.streamDomainerGtldSample(); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerGtldSample(); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch(async (err: unknown) => {
@@ -2614,8 +2614,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_gtld_cleaned_sample()  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_gtld_cleaned_sample()  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 </details>
@@ -2635,8 +2635,8 @@ const api = new DatabasesStreamingApi();
 //   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main(): Promise<void> {
-  const newKey = await api.streamDomainerGtldCleanedSample(); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerGtldCleanedSample(); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch(async (err: unknown) => {
@@ -2731,8 +2731,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_cctld_sample()  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_cctld_sample()  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 </details>
@@ -2752,8 +2752,8 @@ const api = new DatabasesStreamingApi();
 //   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main(): Promise<void> {
-  const newKey = await api.streamDomainerCctldSample(); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerCctldSample(); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch(async (err: unknown) => {
@@ -2848,8 +2848,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_cctld_cleaned_sample()  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_cctld_cleaned_sample()  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 </details>
@@ -2869,8 +2869,8 @@ const api = new DatabasesStreamingApi();
 //   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main(): Promise<void> {
-  const newKey = await api.streamDomainerCctldCleanedSample(); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerCctldCleanedSample(); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch(async (err: unknown) => {
@@ -2965,8 +2965,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_expired_sample()  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_expired_sample()  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 </details>
@@ -2986,8 +2986,8 @@ const api = new DatabasesStreamingApi();
 //   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main(): Promise<void> {
-  const newKey = await api.streamDomainerExpiredSample(); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerExpiredSample(); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch(async (err: unknown) => {
@@ -3082,8 +3082,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_expired_cleaned_sample()  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_expired_cleaned_sample()  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 </details>
@@ -3103,8 +3103,8 @@ const api = new DatabasesStreamingApi();
 //   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main(): Promise<void> {
-  const newKey = await api.streamDomainerExpiredCleanedSample(); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerExpiredCleanedSample(); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch(async (err: unknown) => {
@@ -3199,8 +3199,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_dropped_sample()  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_dropped_sample()  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 </details>
@@ -3220,8 +3220,8 @@ const api = new DatabasesStreamingApi();
 //   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main(): Promise<void> {
-  const newKey = await api.streamDomainerDroppedSample(); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerDroppedSample(); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch(async (err: unknown) => {
@@ -3316,8 +3316,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_dropped_backlinks_sample()  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_dropped_backlinks_sample()  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 </details>
@@ -3337,8 +3337,8 @@ const api = new DatabasesStreamingApi();
 //   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main(): Promise<void> {
-  const newKey = await api.streamDomainerDroppedBacklinksSample(); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerDroppedBacklinksSample(); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch(async (err: unknown) => {

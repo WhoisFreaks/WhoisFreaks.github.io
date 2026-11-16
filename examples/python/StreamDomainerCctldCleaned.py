@@ -19,5 +19,5 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_cctld_cleaned(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_cctld_cleaned(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)

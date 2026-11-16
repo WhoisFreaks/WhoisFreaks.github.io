@@ -2091,8 +2091,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   var_date (datetime.date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_threat_feed_phishing(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_threat_feed_phishing(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 #### Stream a sample of the phishing threat feed (CSV)
@@ -2117,8 +2117,8 @@ with whoisfreaks.ApiClient(config) as client:
     # stream_threat_feed_phishing_sample parameters:
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_threat_feed_phishing_sample()  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_threat_feed_phishing_sample()  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 #### Stream the daily malware threat feed (CSV)
@@ -2146,8 +2146,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   var_date (datetime.date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_threat_feed_malware(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_threat_feed_malware(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 #### Stream a sample of the malware threat feed (CSV)
@@ -2172,8 +2172,8 @@ with whoisfreaks.ApiClient(config) as client:
     # stream_threat_feed_malware_sample parameters:
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_threat_feed_malware_sample()  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_threat_feed_malware_sample()  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 #### Stream the daily spam threat feed (CSV)
@@ -2201,8 +2201,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   var_date (datetime.date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_threat_feed_spam(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_threat_feed_spam(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 #### Stream a sample of the spam threat feed (CSV)
@@ -2227,8 +2227,8 @@ with whoisfreaks.ApiClient(config) as client:
     # stream_threat_feed_spam_sample parameters:
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_threat_feed_spam_sample()  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_threat_feed_spam_sample()  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 #### Stream newly registered gTLD domains (CSV)
@@ -2257,8 +2257,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_gtld(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_gtld(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 #### Stream cleaned newly registered gTLD domains (CSV)
@@ -2287,8 +2287,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_gtld_cleaned(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_gtld_cleaned(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 #### Stream cleaned newly registered gTLD domains with an email (CSV)
@@ -2317,8 +2317,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_gtld_cleaned_email(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_gtld_cleaned_email(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 #### Stream cleaned newly registered gTLD domains with a phone (CSV)
@@ -2347,8 +2347,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_gtld_cleaned_phone(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_gtld_cleaned_phone(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 #### Stream newly registered ccTLD domains (CSV)
@@ -2377,8 +2377,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_cctld(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_cctld(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 #### Stream cleaned newly registered ccTLD domains (CSV)
@@ -2407,8 +2407,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_cctld_cleaned(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_cctld_cleaned(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 #### Stream cleaned newly registered ccTLD domains with an email (CSV)
@@ -2437,8 +2437,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_cctld_cleaned_email(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_cctld_cleaned_email(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 #### Stream cleaned newly registered ccTLD domains with a phone (CSV)
@@ -2467,8 +2467,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_cctld_cleaned_phone(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_cctld_cleaned_phone(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 #### Stream expiring domains (CSV)
@@ -2497,8 +2497,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_expired(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_expired(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 #### Stream cleaned expiring domains (CSV)
@@ -2527,8 +2527,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_expired_cleaned(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_expired_cleaned(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 #### Stream cleaned expiring domains with an email (CSV)
@@ -2557,8 +2557,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_expired_cleaned_email(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_expired_cleaned_email(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 #### Stream cleaned expiring domains with a phone (CSV)
@@ -2587,8 +2587,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_expired_cleaned_phone(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_expired_cleaned_phone(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 #### Stream dropped domains (CSV)
@@ -2617,8 +2617,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_dropped(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_dropped(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 #### Stream dropped domains with backlinks (CSV)
@@ -2647,8 +2647,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_dropped_backlinks(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_dropped_backlinks(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 #### Stream a sample of newly registered gTLD domains (CSV)
@@ -2674,8 +2674,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_gtld_sample()  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_gtld_sample()  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 #### Stream a sample of cleaned newly registered gTLD domains (CSV)
@@ -2701,8 +2701,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_gtld_cleaned_sample()  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_gtld_cleaned_sample()  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 #### Stream a sample of newly registered ccTLD domains (CSV)
@@ -2728,8 +2728,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_cctld_sample()  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_cctld_sample()  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 #### Stream a sample of cleaned newly registered ccTLD domains (CSV)
@@ -2755,8 +2755,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_cctld_cleaned_sample()  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_cctld_cleaned_sample()  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 #### Stream a sample of expiring domains (CSV)
@@ -2782,8 +2782,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_expired_sample()  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_expired_sample()  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 #### Stream a sample of cleaned expiring domains (CSV)
@@ -2809,8 +2809,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_expired_cleaned_sample()  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_expired_cleaned_sample()  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 #### Stream a sample of dropped domains (CSV)
@@ -2836,8 +2836,8 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_dropped_sample()  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_dropped_sample()  # plain CSV text, already decompressed
+    print(csv_text)
 ```
 
 #### Stream a sample of dropped domains with backlinks (CSV)
@@ -2863,6 +2863,6 @@ with whoisfreaks.ApiClient(config) as client:
     #   whois (bool, optional, keyword): true streams the full WHOIS record per domain with a CSV header row; false st...; default False
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_domainer_dropped_backlinks_sample()  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_domainer_dropped_backlinks_sample()  # plain CSV text, already decompressed
+    print(csv_text)
 ```

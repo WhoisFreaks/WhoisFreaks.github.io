@@ -12,8 +12,8 @@ const api = new DatabasesStreamingApi(config);
 //   offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main(): Promise<void> {
-  const newKey = await api.streamDomainerExpiredCleanedPhone({ date: new Date("2026-10-01") }); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerExpiredCleanedPhone({ date: new Date("2026-10-01") }); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch(async (err: unknown) => {

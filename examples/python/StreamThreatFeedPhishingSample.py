@@ -15,5 +15,5 @@ with whoisfreaks.ApiClient(config) as client:
     # stream_threat_feed_phishing_sample parameters:
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_threat_feed_phishing_sample()  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_threat_feed_phishing_sample()  # plain CSV text, already decompressed
+    print(csv_text)

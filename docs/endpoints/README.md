@@ -24,7 +24,7 @@ Real-time and on-demand lookup APIs. Query a single domain, IP, or ASN and get s
 
 Bulk data feeds and downloadable database snapshots for large-scale processing: newly registered, expiring/dropped, and full WHOIS/DNS/IP datasets.
 
-37 endpoints across 10 categories. See the [Databases overview](databases.md).
+65 endpoints across 11 categories. See the [Databases overview](databases.md).
 
 - [Databases - Newly Registered](databases-newly-registered.md): 7 endpoints
 - [Databases - Expiring & Dropped](databases-expiring-dropped.md): 5 endpoints
@@ -36,6 +36,7 @@ Bulk data feeds and downloadable database snapshots for large-scale processing: 
 - [Databases - IP WHOIS](databases-ip-whois.md): 2 endpoints
 - [Databases - IP Security](databases-ip-security.md): 2 endpoints
 - [Databases - Threat Feed](databases-threat-feed.md): 6 endpoints
+- [Databases - Streaming](databases-streaming.md): 28 endpoints
 
 ## Account & Utilities
 
@@ -115,31 +116,31 @@ Manage your account, monitor API usage and credits, and rotate your API key.
 | Databases | Databases - Threat Feed | GET | `/v3.4/download/threat-feed/malware/sample` | `downloadThreatFeedMalwareSample` |
 | Databases | Databases - Threat Feed | GET | `/v3.4/download/threat-feed/spam` | `downloadThreatFeedSpam` |
 | Databases | Databases - Threat Feed | GET | `/v3.4/download/threat-feed/spam/sample` | `downloadThreatFeedSpamSample` |
-| Other | Databases - Streaming | GET | `/v3.4/stream/threat-feed/phishing` | `streamThreatFeedPhishing` |
-| Other | Databases - Streaming | GET | `/v3.4/stream/threat-feed/phishing/sample` | `streamThreatFeedPhishingSample` |
-| Other | Databases - Streaming | GET | `/v3.4/stream/threat-feed/malware` | `streamThreatFeedMalware` |
-| Other | Databases - Streaming | GET | `/v3.4/stream/threat-feed/malware/sample` | `streamThreatFeedMalwareSample` |
-| Other | Databases - Streaming | GET | `/v3.4/stream/threat-feed/spam` | `streamThreatFeedSpam` |
-| Other | Databases - Streaming | GET | `/v3.4/stream/threat-feed/spam/sample` | `streamThreatFeedSpamSample` |
-| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/gtld` | `streamDomainerGtld` |
-| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/gtld/cleaned` | `streamDomainerGtldCleaned` |
-| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/gtld/cleaned/email` | `streamDomainerGtldCleanedEmail` |
-| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/gtld/cleaned/phone` | `streamDomainerGtldCleanedPhone` |
-| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/cctld` | `streamDomainerCctld` |
-| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/cctld/cleaned` | `streamDomainerCctldCleaned` |
-| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/cctld/cleaned/email` | `streamDomainerCctldCleanedEmail` |
-| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/cctld/cleaned/phone` | `streamDomainerCctldCleanedPhone` |
-| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/expired` | `streamDomainerExpired` |
-| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/expired/cleaned` | `streamDomainerExpiredCleaned` |
-| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/expired/cleaned/email` | `streamDomainerExpiredCleanedEmail` |
-| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/expired/cleaned/phone` | `streamDomainerExpiredCleanedPhone` |
-| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/dropped` | `streamDomainerDropped` |
-| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/dropped/backlinks` | `streamDomainerDroppedBacklinks` |
-| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/sample/gtld` | `streamDomainerGtldSample` |
-| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/sample/gtld/cleaned` | `streamDomainerGtldCleanedSample` |
-| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/sample/cctld` | `streamDomainerCctldSample` |
-| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/sample/cctld/cleaned` | `streamDomainerCctldCleanedSample` |
-| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/sample/expired` | `streamDomainerExpiredSample` |
-| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/sample/expired/cleaned` | `streamDomainerExpiredCleanedSample` |
-| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/sample/dropped` | `streamDomainerDroppedSample` |
-| Other | Databases - Streaming | GET | `/v3.3/stream/domainer/sample/dropped/backlinks` | `streamDomainerDroppedBacklinksSample` |
+| Databases | Databases - Streaming | GET | `/v3.4/stream/threat-feed/phishing` | `streamThreatFeedPhishing` |
+| Databases | Databases - Streaming | GET | `/v3.4/stream/threat-feed/phishing/sample` | `streamThreatFeedPhishingSample` |
+| Databases | Databases - Streaming | GET | `/v3.4/stream/threat-feed/malware` | `streamThreatFeedMalware` |
+| Databases | Databases - Streaming | GET | `/v3.4/stream/threat-feed/malware/sample` | `streamThreatFeedMalwareSample` |
+| Databases | Databases - Streaming | GET | `/v3.4/stream/threat-feed/spam` | `streamThreatFeedSpam` |
+| Databases | Databases - Streaming | GET | `/v3.4/stream/threat-feed/spam/sample` | `streamThreatFeedSpamSample` |
+| Databases | Databases - Streaming | GET | `/v3.3/stream/domainer/gtld` | `streamDomainerGtld` |
+| Databases | Databases - Streaming | GET | `/v3.3/stream/domainer/gtld/cleaned` | `streamDomainerGtldCleaned` |
+| Databases | Databases - Streaming | GET | `/v3.3/stream/domainer/gtld/cleaned/email` | `streamDomainerGtldCleanedEmail` |
+| Databases | Databases - Streaming | GET | `/v3.3/stream/domainer/gtld/cleaned/phone` | `streamDomainerGtldCleanedPhone` |
+| Databases | Databases - Streaming | GET | `/v3.3/stream/domainer/cctld` | `streamDomainerCctld` |
+| Databases | Databases - Streaming | GET | `/v3.3/stream/domainer/cctld/cleaned` | `streamDomainerCctldCleaned` |
+| Databases | Databases - Streaming | GET | `/v3.3/stream/domainer/cctld/cleaned/email` | `streamDomainerCctldCleanedEmail` |
+| Databases | Databases - Streaming | GET | `/v3.3/stream/domainer/cctld/cleaned/phone` | `streamDomainerCctldCleanedPhone` |
+| Databases | Databases - Streaming | GET | `/v3.3/stream/domainer/expired` | `streamDomainerExpired` |
+| Databases | Databases - Streaming | GET | `/v3.3/stream/domainer/expired/cleaned` | `streamDomainerExpiredCleaned` |
+| Databases | Databases - Streaming | GET | `/v3.3/stream/domainer/expired/cleaned/email` | `streamDomainerExpiredCleanedEmail` |
+| Databases | Databases - Streaming | GET | `/v3.3/stream/domainer/expired/cleaned/phone` | `streamDomainerExpiredCleanedPhone` |
+| Databases | Databases - Streaming | GET | `/v3.3/stream/domainer/dropped` | `streamDomainerDropped` |
+| Databases | Databases - Streaming | GET | `/v3.3/stream/domainer/dropped/backlinks` | `streamDomainerDroppedBacklinks` |
+| Databases | Databases - Streaming | GET | `/v3.3/stream/domainer/sample/gtld` | `streamDomainerGtldSample` |
+| Databases | Databases - Streaming | GET | `/v3.3/stream/domainer/sample/gtld/cleaned` | `streamDomainerGtldCleanedSample` |
+| Databases | Databases - Streaming | GET | `/v3.3/stream/domainer/sample/cctld` | `streamDomainerCctldSample` |
+| Databases | Databases - Streaming | GET | `/v3.3/stream/domainer/sample/cctld/cleaned` | `streamDomainerCctldCleanedSample` |
+| Databases | Databases - Streaming | GET | `/v3.3/stream/domainer/sample/expired` | `streamDomainerExpiredSample` |
+| Databases | Databases - Streaming | GET | `/v3.3/stream/domainer/sample/expired/cleaned` | `streamDomainerExpiredCleanedSample` |
+| Databases | Databases - Streaming | GET | `/v3.3/stream/domainer/sample/dropped` | `streamDomainerDroppedSample` |
+| Databases | Databases - Streaming | GET | `/v3.3/stream/domainer/sample/dropped/backlinks` | `streamDomainerDroppedBacklinksSample` |

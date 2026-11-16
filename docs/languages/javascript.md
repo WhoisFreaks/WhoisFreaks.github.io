@@ -2193,8 +2193,8 @@ const api = new DatabasesStreamingApi(client);
 //   opts.offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   opts.limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main() {
-  const newKey = await api.streamThreatFeedPhishing("2026-10-01"); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamThreatFeedPhishing("2026-10-01"); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch((err) => {
@@ -2220,8 +2220,8 @@ const api = new DatabasesStreamingApi();
 //   opts.offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   opts.limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main() {
-  const newKey = await api.streamThreatFeedPhishingSample(); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamThreatFeedPhishingSample(); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch((err) => {
@@ -2250,8 +2250,8 @@ const api = new DatabasesStreamingApi(client);
 //   opts.offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   opts.limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main() {
-  const newKey = await api.streamThreatFeedMalware("2026-10-01"); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamThreatFeedMalware("2026-10-01"); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch((err) => {
@@ -2277,8 +2277,8 @@ const api = new DatabasesStreamingApi();
 //   opts.offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   opts.limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main() {
-  const newKey = await api.streamThreatFeedMalwareSample(); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamThreatFeedMalwareSample(); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch((err) => {
@@ -2307,8 +2307,8 @@ const api = new DatabasesStreamingApi(client);
 //   opts.offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   opts.limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main() {
-  const newKey = await api.streamThreatFeedSpam("2026-10-01"); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamThreatFeedSpam("2026-10-01"); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch((err) => {
@@ -2334,8 +2334,8 @@ const api = new DatabasesStreamingApi();
 //   opts.offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   opts.limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main() {
-  const newKey = await api.streamThreatFeedSpamSample(); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamThreatFeedSpamSample(); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch((err) => {
@@ -2365,8 +2365,8 @@ const api = new DatabasesStreamingApi(client);
 //   opts.offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   opts.limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main() {
-  const newKey = await api.streamDomainerGtld("2026-10-01"); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerGtld("2026-10-01"); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch((err) => {
@@ -2396,8 +2396,8 @@ const api = new DatabasesStreamingApi(client);
 //   opts.offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   opts.limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main() {
-  const newKey = await api.streamDomainerGtldCleaned("2026-10-01"); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerGtldCleaned("2026-10-01"); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch((err) => {
@@ -2427,8 +2427,8 @@ const api = new DatabasesStreamingApi(client);
 //   opts.offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   opts.limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main() {
-  const newKey = await api.streamDomainerGtldCleanedEmail("2026-10-01"); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerGtldCleanedEmail("2026-10-01"); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch((err) => {
@@ -2458,8 +2458,8 @@ const api = new DatabasesStreamingApi(client);
 //   opts.offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   opts.limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main() {
-  const newKey = await api.streamDomainerGtldCleanedPhone("2026-10-01"); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerGtldCleanedPhone("2026-10-01"); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch((err) => {
@@ -2489,8 +2489,8 @@ const api = new DatabasesStreamingApi(client);
 //   opts.offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   opts.limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main() {
-  const newKey = await api.streamDomainerCctld("2026-10-01"); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerCctld("2026-10-01"); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch((err) => {
@@ -2520,8 +2520,8 @@ const api = new DatabasesStreamingApi(client);
 //   opts.offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   opts.limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main() {
-  const newKey = await api.streamDomainerCctldCleaned("2026-10-01"); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerCctldCleaned("2026-10-01"); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch((err) => {
@@ -2551,8 +2551,8 @@ const api = new DatabasesStreamingApi(client);
 //   opts.offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   opts.limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main() {
-  const newKey = await api.streamDomainerCctldCleanedEmail("2026-10-01"); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerCctldCleanedEmail("2026-10-01"); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch((err) => {
@@ -2582,8 +2582,8 @@ const api = new DatabasesStreamingApi(client);
 //   opts.offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   opts.limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main() {
-  const newKey = await api.streamDomainerCctldCleanedPhone("2026-10-01"); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerCctldCleanedPhone("2026-10-01"); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch((err) => {
@@ -2613,8 +2613,8 @@ const api = new DatabasesStreamingApi(client);
 //   opts.offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   opts.limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main() {
-  const newKey = await api.streamDomainerExpired("2026-10-01"); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerExpired("2026-10-01"); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch((err) => {
@@ -2644,8 +2644,8 @@ const api = new DatabasesStreamingApi(client);
 //   opts.offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   opts.limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main() {
-  const newKey = await api.streamDomainerExpiredCleaned("2026-10-01"); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerExpiredCleaned("2026-10-01"); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch((err) => {
@@ -2675,8 +2675,8 @@ const api = new DatabasesStreamingApi(client);
 //   opts.offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   opts.limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main() {
-  const newKey = await api.streamDomainerExpiredCleanedEmail("2026-10-01"); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerExpiredCleanedEmail("2026-10-01"); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch((err) => {
@@ -2706,8 +2706,8 @@ const api = new DatabasesStreamingApi(client);
 //   opts.offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   opts.limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main() {
-  const newKey = await api.streamDomainerExpiredCleanedPhone("2026-10-01"); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerExpiredCleanedPhone("2026-10-01"); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch((err) => {
@@ -2737,8 +2737,8 @@ const api = new DatabasesStreamingApi(client);
 //   opts.offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   opts.limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main() {
-  const newKey = await api.streamDomainerDropped("2026-10-01"); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerDropped("2026-10-01"); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch((err) => {
@@ -2768,8 +2768,8 @@ const api = new DatabasesStreamingApi(client);
 //   opts.offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   opts.limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main() {
-  const newKey = await api.streamDomainerDroppedBacklinks("2026-10-01"); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerDroppedBacklinks("2026-10-01"); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch((err) => {
@@ -2796,8 +2796,8 @@ const api = new DatabasesStreamingApi();
 //   opts.offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   opts.limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main() {
-  const newKey = await api.streamDomainerGtldSample(); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerGtldSample(); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch((err) => {
@@ -2824,8 +2824,8 @@ const api = new DatabasesStreamingApi();
 //   opts.offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   opts.limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main() {
-  const newKey = await api.streamDomainerGtldCleanedSample(); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerGtldCleanedSample(); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch((err) => {
@@ -2852,8 +2852,8 @@ const api = new DatabasesStreamingApi();
 //   opts.offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   opts.limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main() {
-  const newKey = await api.streamDomainerCctldSample(); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerCctldSample(); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch((err) => {
@@ -2880,8 +2880,8 @@ const api = new DatabasesStreamingApi();
 //   opts.offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   opts.limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main() {
-  const newKey = await api.streamDomainerCctldCleanedSample(); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerCctldCleanedSample(); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch((err) => {
@@ -2908,8 +2908,8 @@ const api = new DatabasesStreamingApi();
 //   opts.offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   opts.limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main() {
-  const newKey = await api.streamDomainerExpiredSample(); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerExpiredSample(); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch((err) => {
@@ -2936,8 +2936,8 @@ const api = new DatabasesStreamingApi();
 //   opts.offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   opts.limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main() {
-  const newKey = await api.streamDomainerExpiredCleanedSample(); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerExpiredCleanedSample(); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch((err) => {
@@ -2964,8 +2964,8 @@ const api = new DatabasesStreamingApi();
 //   opts.offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   opts.limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main() {
-  const newKey = await api.streamDomainerDroppedSample(); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerDroppedSample(); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch((err) => {
@@ -2992,8 +2992,8 @@ const api = new DatabasesStreamingApi();
 //   opts.offset (number, optional): Data rows to skip from the start of the file. The header row is never counted...
 //   opts.limit (number, optional): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
 async function main() {
-  const newKey = await api.streamDomainerDroppedBacklinksSample(); // use this key from now on
-  console.log("New API key:", newKey);
+  const csvText = await api.streamDomainerDroppedBacklinksSample(); // plain CSV text, already decompressed
+  console.log(csvText);
 }
 
 main().catch((err) => {

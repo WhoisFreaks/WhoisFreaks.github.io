@@ -18,5 +18,5 @@ with whoisfreaks.ApiClient(config) as client:
     #   var_date (datetime.date, required): yyyy-MM-dd. Streaming always requires a date, unlike the download endpoints
     #   offset (int, optional, keyword): Data rows to skip from the start of the file. The header row is never counted...
     #   limit (int, optional, keyword): Maximum data rows to return. Omit for the whole file. limit=0 returns the hea...
-    new_key = api.stream_threat_feed_phishing(date(2026, 10, 1))  # use this key from now on
-    print("New API key:", new_key)
+    csv_text = api.stream_threat_feed_phishing(date(2026, 10, 1))  # plain CSV text, already decompressed
+    print(csv_text)

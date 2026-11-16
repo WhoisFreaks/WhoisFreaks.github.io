@@ -2,7 +2,7 @@
 
 Bulk data feeds and downloadable database snapshots for large-scale processing: newly registered, expiring/dropped, and full WHOIS/DNS/IP datasets.
 
-**37 endpoints** across **10 categories**. Requests need your API key unless noted otherwise. See [Authentication](../authentication.md).
+**65 endpoints** across **11 categories**. Requests need your API key unless noted otherwise. See [Authentication](../authentication.md).
 
 ## Categories
 
@@ -112,3 +112,38 @@ Daily phishing, malware and spam threat feeds
 - **Download a sample of the malware threat feed (CSV)**: `GET /v3.4/download/threat-feed/malware/sample`
 - **Download the daily spam threat feed (CSV)**: `GET /v3.4/download/threat-feed/spam`
 - **Download a sample of the spam threat feed (CSV)**: `GET /v3.4/download/threat-feed/spam/sample`
+
+### [Databases - Streaming](databases-streaming.md)
+
+Stream database files and threat feeds as plain CSV text instead of downloading a gzip file
+
+28 endpoints:
+
+- **Stream the daily phishing threat feed (CSV)**: `GET /v3.4/stream/threat-feed/phishing`
+- **Stream a sample of the phishing threat feed (CSV)**: `GET /v3.4/stream/threat-feed/phishing/sample`
+- **Stream the daily malware threat feed (CSV)**: `GET /v3.4/stream/threat-feed/malware`
+- **Stream a sample of the malware threat feed (CSV)**: `GET /v3.4/stream/threat-feed/malware/sample`
+- **Stream the daily spam threat feed (CSV)**: `GET /v3.4/stream/threat-feed/spam`
+- **Stream a sample of the spam threat feed (CSV)**: `GET /v3.4/stream/threat-feed/spam/sample`
+- **Stream newly registered gTLD domains (CSV)**: `GET /v3.3/stream/domainer/gtld`
+- **Stream cleaned newly registered gTLD domains (CSV)**: `GET /v3.3/stream/domainer/gtld/cleaned`
+- **Stream cleaned newly registered gTLD domains with an email (CSV)**: `GET /v3.3/stream/domainer/gtld/cleaned/email`
+- **Stream cleaned newly registered gTLD domains with a phone (CSV)**: `GET /v3.3/stream/domainer/gtld/cleaned/phone`
+- **Stream newly registered ccTLD domains (CSV)**: `GET /v3.3/stream/domainer/cctld`
+- **Stream cleaned newly registered ccTLD domains (CSV)**: `GET /v3.3/stream/domainer/cctld/cleaned`
+- **Stream cleaned newly registered ccTLD domains with an email (CSV)**: `GET /v3.3/stream/domainer/cctld/cleaned/email`
+- **Stream cleaned newly registered ccTLD domains with a phone (CSV)**: `GET /v3.3/stream/domainer/cctld/cleaned/phone`
+- **Stream expiring domains (CSV)**: `GET /v3.3/stream/domainer/expired`
+- **Stream cleaned expiring domains (CSV)**: `GET /v3.3/stream/domainer/expired/cleaned`
+- **Stream cleaned expiring domains with an email (CSV)**: `GET /v3.3/stream/domainer/expired/cleaned/email`
+- **Stream cleaned expiring domains with a phone (CSV)**: `GET /v3.3/stream/domainer/expired/cleaned/phone`
+- **Stream dropped domains (CSV)**: `GET /v3.3/stream/domainer/dropped`
+- **Stream dropped domains with backlinks (CSV)**: `GET /v3.3/stream/domainer/dropped/backlinks`
+- **Stream a sample of newly registered gTLD domains (CSV)**: `GET /v3.3/stream/domainer/sample/gtld`
+- **Stream a sample of cleaned newly registered gTLD domains (CSV)**: `GET /v3.3/stream/domainer/sample/gtld/cleaned`
+- **Stream a sample of newly registered ccTLD domains (CSV)**: `GET /v3.3/stream/domainer/sample/cctld`
+- **Stream a sample of cleaned newly registered ccTLD domains (CSV)**: `GET /v3.3/stream/domainer/sample/cctld/cleaned`
+- **Stream a sample of expiring domains (CSV)**: `GET /v3.3/stream/domainer/sample/expired`
+- **Stream a sample of cleaned expiring domains (CSV)**: `GET /v3.3/stream/domainer/sample/expired/cleaned`
+- **Stream a sample of dropped domains (CSV)**: `GET /v3.3/stream/domainer/sample/dropped`
+- **Stream a sample of dropped domains with backlinks (CSV)**: `GET /v3.3/stream/domainer/sample/dropped/backlinks`
