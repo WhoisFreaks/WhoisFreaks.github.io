@@ -6,7 +6,7 @@ info:
     \ Domain Reputation, and bulk database downloads.\n\n## Authentication\nAll requests require an `apiKey`\
     \ query parameter.\n\n## Resources\n- Docs: https://whoisfreaks.com/documentation\n- Billing: https://billing.whoisfreaks.com\n\
     - Support: support@whoisfreaks.com\n"
-  version: 2026-11-17.1
+  version: 2026-11-17.2
   contact:
     name: WhoisFreaks Support
     email: support@whoisfreaks.com
@@ -92,6 +92,161 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/WhoisResponse"
+              example:
+                status: true
+                domain_name: example.com
+                query_time: '2026-04-14T10:30:00Z'
+                whois_server: whois.example-registrar.com
+                domain_registered: 'yes'
+                secure_dns: true
+                domain_handle: D123456789
+                create_date: '2010-05-10'
+                update_date: '2025-03-01'
+                expiry_date: '2030-05-10'
+                domain_registrar:
+                  id: '123'
+                  id_type: IANA
+                  iana_id: '9999'
+                  registry_id: reg-123
+                  handle: REG-HANDLE-1
+                  status: active
+                  registrar_name: Example Registrar Inc.
+                  normalized_name: example registrar
+                  whois_server: whois.example-registrar.com
+                  rdap_server: https://rdap.example-registrar.com
+                  website_url: https://www.example-registrar.com
+                  email_address: support@example-registrar.com
+                  phone_number: +1-800-123-4567
+                  authoritative_registry_name: Example Registry
+                  organization_number: ORG-001
+                  is_sponsor: true
+                reseller_contact:
+                  name: Example Reseller
+                  email_address: reseller@example.com
+                  phone: +1-800-765-4321
+                registrant_contact:
+                  id: C001
+                  id_type: contact
+                  handle: REG-USER-1
+                  name: John Doe
+                  company: Example Corp
+                  street: 123 Main Street
+                  city: New York
+                  state: NY
+                  zip_code: '10001'
+                  country_name: United States
+                  country_code: US
+                  email_address: john.doe@example.com
+                  phone: +1-555-1234
+                  fax: +1-555-5678
+                  mailing_address: 123 Main Street, New York, NY 10001, USA
+                administrative_contact:
+                  id: C002
+                  id_type: contact
+                  handle: ADMIN-1
+                  name: Jane Smith
+                  company: Example Corp
+                  street: 123 Main Street
+                  city: New York
+                  state: NY
+                  zip_code: '10001'
+                  country_name: United States
+                  country_code: US
+                  email_address: admin@example.com
+                  phone: +1-555-2222
+                  fax: +1-555-2222
+                  mailing_address: 123 Main Street, New York, NY 10001, USA
+                technical_contact:
+                  id: C003
+                  id_type: contact
+                  handle: TECH-1
+                  name: Tech Support
+                  company: Example Corp
+                  street: 456 Tech Park
+                  city: San Francisco
+                  state: CA
+                  zip_code: '94105'
+                  country_name: United States
+                  country_code: US
+                  email_address: tech@example.com
+                  phone: +1-555-3333
+                  fax: +1-555-2222
+                  mailing_address: 456 Tech Park, San Francisco, CA 94105, USA
+                billing_contact:
+                  id: C004
+                  id_type: contact
+                  handle: BILL-1
+                  name: Billing Dept
+                  company: Example Corp
+                  street: 789 Finance Ave
+                  city: Chicago
+                  state: IL
+                  zip_code: '60601'
+                  country_name: United States
+                  country_code: US
+                  email_address: billing@example.com
+                  phone: +1-555-4444
+                  fax: +1-555-2222
+                  mailing_address: 789 Finance Ave, Chicago, IL 60601, USA
+                eligibility_info:
+                  id: ELIG-001
+                  name: Standard Eligibility
+                  type: business
+                abuse_contact:
+                  id: '999'
+                  id_type: IANA
+                  iana_id: '9999'
+                  registry_id: abuse-123
+                  handle: ABUSE-1
+                  status: active
+                  registrar_name: Example Registrar Inc.
+                  normalized_name: example registrar
+                  whois_server: whois.example-registrar.com
+                  rdap_server: https://rdap.example-registrar.com
+                  website_url: https://www.example-registrar.com
+                  email_address: abuse@example-registrar.com
+                  phone_number: +1-800-999-9999
+                  authoritative_registry_name: Example Registry
+                  organization_number: ORG-001
+                  is_sponsor: false
+                name_servers:
+                - ns1.example.com
+                - ns2.example.com
+                domain_status:
+                - active
+                - clientTransferProhibited
+                whois_raw_domain: RAW WHOIS DATA HERE
+                registry_data:
+                  domain_name: example.com
+                  query_time: '2026-04-14T10:30:00Z'
+                  whois_server: whois.registry-example.com
+                  domain_registered: 'yes'
+                  create_date: '2010-05-10'
+                  update_date: '2025-03-01'
+                  expiry_date: '2030-05-10'
+                  domain_registrar:
+                    id: '123'
+                    id_type: IANA
+                    iana_id: '9999'
+                    registry_id: reg-123
+                    handle: REG-HANDLE-1
+                    status: active
+                    registrar_name: Example Registrar Inc.
+                    normalized_name: example registrar
+                    whois_server: whois.example-registrar.com
+                    rdap_server: https://rdap.example-registrar.com
+                    website_url: https://www.example-registrar.com
+                    email_address: support@example-registrar.com
+                    phone_number: +1-800-123-4567
+                    authoritative_registry_name: Example Registry
+                    organization_number: ORG-001
+                    is_sponsor: true
+                  name_servers:
+                  - ns1.example.com
+                  - ns2.example.com
+                  domain_status:
+                  - active
+                  whois_raw_registery: RAW REGISTRY WHOIS DATA HERE
         "401":
           $ref: "#/components/responses/Unauthorized"
         "404":
@@ -125,6 +280,10 @@ paths:
                 domainNames:
                   - whoisfreaks.com
                   - jfreaks.com
+            example:
+              domainNames:
+              - jfreaks.com
+              - whoisfreaks.com
       responses:
         "200":
           description: Successful response
@@ -132,6 +291,244 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/BulkWhoisResponse"
+              example:
+                bulk_whois_response:
+                - status: true
+                  domain_name: whoisfreaks.com
+                  query_time: '2024-07-11 13:48:23'
+                  whois_server: whois.verisign-grs.com
+                  domain_registered: 'yes'
+                  secure_dns: false
+                  domain_handle: 2370976244_DOMAIN_COM-VRSN
+                  create_date: '2019-03-19'
+                  update_date: '2024-02-18'
+                  expiry_date: '2025-03-19'
+                  domain_registrar:
+                    id: '1068'
+                    id_type: IANA
+                    iana_id: '1068'
+                    registry_id: '1068'
+                    handle: '1068'
+                    status: Accredited
+                    registrar_name: NAMECHEAP INC
+                    normalized_name: namecheap
+                    whois_server: whois.namecheap.com
+                    rdap_server: https://rdap.namecheap.com/
+                    website_url: http://www.namecheap.com
+                    email_address: abuse@namecheap.com
+                    phone_number: '+1.9854014545'
+                    authoritative_registry_name: VeriSign Global Registry Services
+                    organization_number: N/A
+                    is_sponsor: true
+                  reseller_contact:
+                    name: NAMECHEAP INC
+                    email_address: N/A
+                    phone: N/A
+                  registrant_contact:
+                    id: N/A
+                    name: Redacted for Privacy
+                    company: Privacy service provided by Withheld for Privacy ehf
+                    street: Kalkofnsvegur 2
+                    city: Reykjavik
+                    state: Capital Region
+                    zip_code: '101'
+                    country_name: Iceland
+                    country_code: IS
+                    email_address: b8e54d7b11b347b285b60992e0889dde.protect@withheldforprivacy.com
+                    phone: '+354.4212434'
+                    fax: N/A
+                    mailing_address: Kalkofnsvegur 2, 101 Reykjavik, Capital Region, Iceland
+                  administrative_contact:
+                    name: Redacted for Privacy
+                    company: Privacy service provided by Withheld for Privacy ehf
+                    street: Kalkofnsvegur 2
+                    city: Reykjavik
+                    state: Capital Region
+                    zip_code: '101'
+                    country_name: Iceland
+                    country_code: IS
+                    email_address: b8e54d7b11b347b285b60992e0889dde.protect@withheldforprivacy.com
+                    phone: '+354.4212434'
+                    fax: N/A
+                    mailing_address: Kalkofnsvegur 2, 101 Reykjavik, Capital Region, Iceland
+                  technical_contact:
+                    name: Redacted for Privacy
+                    company: Privacy service provided by Withheld for Privacy ehf
+                    street: Kalkofnsvegur 2
+                    city: Reykjavik
+                    state: Capital Region
+                    zip_code: '101'
+                    country_name: Iceland
+                    country_code: IS
+                    email_address: b8e54d7b11b347b285b60992e0889dde.protect@withheldforprivacy.com
+                    phone: '+354.4212434'
+                    fax: N/A
+                    mailing_address: Kalkofnsvegur 2, 101 Reykjavik, Capital Region, Iceland
+                  billing_contact:
+                    name: N/A
+                    company: N/A
+                    street: N/A
+                    city: N/A
+                    state: N/A
+                    zip_code: N/A
+                    country_name: N/A
+                    country_code: N/A
+                    email_address: N/A
+                    phone: N/A
+                    fax: N/A
+                    mailing_address: N/A
+                  eligibility_info:
+                    id: N/A
+                    name: N/A
+                    type: N/A
+                  abuse_contact:
+                    email_address: abuse@namecheap.com
+                    phone_number: '+1.9854014545'
+                  name_servers:
+                  - dns3.cloudns.net
+                  - dns4.cloudns.net
+                  - dns7.cloudns.net
+                  - dns8.cloudns.net
+                  domain_status:
+                  - clientTransferProhibited
+                  whois_raw_domain: ' Domain name: whoisfreaks.com Registry Domain ID: 2370976244_DOMAIN_COM-VRSN Registrar WHOIS Server: whois.namecheap.com Registrar URL: http://www.namecheap.com Updated Date: 2024-02-18T08:28:27.96Z Creation Date: 2019-03-19T18:24:27.00Z Registrar Registration Expiration Date: 2025-03-19T18:24:27.00Z Registrar: NAMECHEAP INC Registrar IANA ID: 1068 Registrar Abuse Contact Email: abuse@namecheap.com Registrar Abuse Contact Phone: +1.9854014545 Reseller: NAMECHEAP INC Domain Status: clientTransferProhibited https://icann.org/epp#clientTransferProhibited Registry Registrant ID:  Registrant Name: Redacted for Privacy Registrant Organization: Privacy service provided by Withheld for Privacy ehf Registrant Street: Kalkofnsvegur 2  Registrant City: Reykjavik Registrant State/Province: Capital Region Registrant Postal Code: 101 Registrant Country: IS Registrant Phone: +354.4212434 Registrant Phone Ext:  Registrant Fax:  Registrant Fax Ext:  Registrant Email: b8e54d7b11b347b285b60992e0889dde.protect@withheldforprivacy.com Registry Admin ID:  Admin Name: Redacted for Privacy Admin Organization: Privacy service provided by Withheld for Privacy ehf Admin Street: Kalkofnsvegur 2  Admin City: Reykjavik Admin State/Province: Capital Region Admin Postal Code: 101 Admin Country: IS Admin Phone: +354.4212434 Admin Phone Ext:  Admin Fax:  Admin Fax Ext:  Admin Email: b8e54d7b11b347b285b60992e0889dde.protect@withheldforprivacy.com Registry Tech ID:  Tech Name: Redacted for Privacy Tech Organization: Privacy service provided by Withheld for Privacy ehf Tech Street: Kalkofnsvegur 2  Tech City: Reykjavik Tech State/Province: Capital Region Tech Postal Code: 101 Tech Country: IS Tech Phone: +354.4212434 Tech Phone Ext:  Tech Fax:  Tech Fax Ext:  Tech Email: b8e54d7b11b347b285b60992e0889dde.protect@withheldforprivacy.com Name Server: dns3.cloudns.net Name Server: dns4.cloudns.net Name Server: dns7.cloudns.net Name Server: dns8.cloudns.net DNSSEC: unsigned URL of the ICANN WHOIS Data Problem Reporting System: http://wdprs.internic.net/ >>> Last update of WHOIS database: 2024-07-10T19:48:23.70Z <<< For more information on Whois status codes, please visit https://icann.org/epp'
+                  registry_data:
+                    domain_name: WHOISFREAKS.COM
+                    query_time: '2024-07-11 13:48:23'
+                    whois_server: whois.verisign-grs.com
+                    domain_registered: 'yes'
+                    create_date: N/A
+                    update_date: N/A
+                    expiry_date: N/A
+                    domain_registrar:
+                      iana_id: '1068'
+                      registrar_name: NameCheap, Inc.
+                      whois_server: whois.namecheap.com
+                      website_url: http://www.namecheap.com
+                      email_address: abuse@namecheap.com
+                      phone_number: '+1.6613102107'
+                    name_servers:
+                    - dns3.cloudns.net
+                    - dns4.cloudns.net
+                    - dns7.cloudns.net
+                    - dns8.cloudns.net
+                    domain_status:
+                    - clientTransferProhibited
+                    whois_raw_registery: '    Domain Name: WHOISFREAKS.COM    Registry Domain ID: 2370976244_DOMAIN_COM-VRSN    Registrar WHOIS Server: whois.namecheap.com    Registrar URL: http://www.namecheap.com    Updated Date: 2024-02-18T08:28:27Z    Creation Date: 2019-03-19T18:24:27Z    Registry Expiry Date: 2025-03-19T18:24:27Z    Registrar: NameCheap, Inc.    Registrar IANA ID: 1068    Registrar Abuse Contact Email: abuse@namecheap.com    Registrar Abuse Contact Phone: +1.6613102107    Domain Status: clientTransferProhibited https://icann.org/epp#clientTransferProhibited    Name Server: DNS3.CLOUDNS.NET    Name Server: DNS4.CLOUDNS.NET    Name Server: DNS7.CLOUDNS.NET    Name Server: DNS8.CLOUDNS.NET    DNSSEC: unsigned    URL of the ICANN Whois Inaccuracy Complaint Form: https://www.icann.org/wicf/ >>> Last update of whois database: 2024-07-11T13:48:11Z <<<  For more information on Whois status codes, please visit https://icann.org/epp  NOTICE: The expiration date displayed in this record is the date the registrar''s sponsorship of the domain name registration in the registry is currently set to expire. This date does not necessarily reflect the expiration date of the domain name registrant''s agreement with the sponsoring registrar.  Users may consult the sponsoring registrar''s Whois database to view the registrar''s reported date of expiration for this registration.  TERMS OF USE: You are not authorized to access or query our Whois database through the use of electronic processes that are high-volume and automated except as reasonably necessary to register domain names or modify existing registrations; the Data in VeriSign Global Registry Services'' ("VeriSign") Whois database is provided by VeriSign for information purposes only, and to assist persons in obtaining information about or related to a domain name registration record. VeriSign does not guarantee its accuracy. By submitting a Whois query, you agree to abide by the following terms of use: You agree that you may use this Data only for lawful purposes and that under no circumstances will you use this Data to: (1) allow, enable, or otherwise support the transmission of mass unsolicited, commercial advertising or solicitations via e-mail, telephone, or facsimile; or (2) enable high volume, automated, electronic processes that apply to VeriSign (or its computer systems). The compilation, repackaging, dissemination or other use of this Data is expressly prohibited without the prior written consent of VeriSign. You agree not to use electronic processes that are automated and high-volume to access or query the Whois database except as reasonably necessary to register domain names or modify existing registrations. VeriSign reserves the right to restrict your access to the Whois database in its sole discretion to ensure operational stability.  VeriSign may restrict or terminate your access to the Whois database for failure to abide by these terms of use. VeriSign reserves the right to modify these terms at any time.  The Registry database contains ONLY .COM, .NET, .EDU domains and Registrars.'
+                - status: true
+                  domain_name: jfreaks.com
+                  query_time: '2024-07-11 13:48:24'
+                  whois_server: whois.verisign-grs.com
+                  domain_registered: 'yes'
+                  secure_dns: false
+                  domain_handle: 2017238463_DOMAIN_COM-VRSN
+                  create_date: '2016-04-01'
+                  update_date: '2024-02-01'
+                  expiry_date: '2029-04-01'
+                  domain_registrar:
+                    id: '82'
+                    id_type: IANA
+                    iana_id: '82'
+                    registry_id: '82'
+                    handle: '82'
+                    status: Accredited
+                    registrar_name: Onlinenic Inc
+                    normalized_name: onlinenic
+                    whois_server: whois.onlinenic.com
+                    rdap_server: https://rdap.onlinenic.com/
+                    website_url: http://www.onlinenic.com
+                    email_address: abuse@onlinenic.com
+                    phone_number: '+1.5107698492'
+                    authoritative_registry_name: VeriSign Global Registry Services
+                    organization_number: N/A
+                    is_sponsor: true
+                  registrant_contact:
+                    id: N/A
+                    name: Ejaz  Ahmed
+                    company: None
+                    street: Lahore
+                    city: Lahore
+                    state: Punjab
+                    zip_code: '54000'
+                    country_name: Pakistan
+                    country_code: PK
+                    email_address: ejaz_ahmed@outlook.com
+                    phone: '+92.3366009992'
+                    fax: '+92.3366009992'
+                    mailing_address: 54000 Lahore Punjab, Pakistan
+                  administrative_contact:
+                    name: Ejaz  Ahmed
+                    company: None
+                    street: Lahore
+                    city: Lahore
+                    state: Punjab
+                    zip_code: '54000'
+                    country_name: Pakistan
+                    country_code: PK
+                    email_address: ejaz_ahmed@outlook.com
+                    phone: '+92.3366009992'
+                    fax: '+92.3366009992'
+                    mailing_address: 54000 Lahore Punjab, Pakistan
+                  technical_contact:
+                    name: Ejaz  Ahmed
+                    company: None
+                    street: Lahore
+                    city: Lahore
+                    state: Punjab
+                    zip_code: '54000'
+                    country_name: Pakistan
+                    country_code: PK
+                    email_address: ejaz_ahmed@outlook.com
+                    phone: '+92.3366009992'
+                    fax: '+92.3366009992'
+                    mailing_address: 54000 Lahore Punjab, Pakistan
+                  billing_contact:
+                    name: N/A
+                    company: N/A
+                    street: N/A
+                    city: N/A
+                    state: N/A
+                    zip_code: N/A
+                    country_name: N/A
+                    country_code: N/A
+                    email_address: N/A
+                    phone: N/A
+                    fax: N/A
+                    mailing_address: N/A
+                  eligibility_info:
+                    id: N/A
+                    name: N/A
+                    type: N/A
+                  abuse_contact:
+                    email_address: abuse@onlinenic.com
+                    phone_number: '+1.5107698492'
+                  name_servers:
+                  - cheryl.ns.cloudflare.com
+                  - nash.ns.cloudflare.com
+                  domain_status:
+                  - clientTransferProhibited
+                  whois_raw_domain: ' Domain Name: jfreaks.com                                                                                         Registry Domain ID: 2017968397_DOMAIN_COM-VRSN Registrar WHOIS Server: whois.onlinenic.com Registrar URL: http://www.onlinenic.com Updated Date: 2024-02-01T07:31:58Z Creation Date: 2016-04-01T04:00:00Z Registrar Registration Expiration Date: 2029-04-01T04:00:00Z Registrar: Onlinenic Inc Registrar IANA ID: 82 Registrar Abuse Contact Email: abuse@onlinenic.com Registrar Abuse Contact Phone: +1.5107698492 Domain Status: clientTransferProhibited https://icann.org/epp#clientTransferProhibited Registry Registrant ID: Not Available From Registry Registrant Name: Ejaz  Ahmed Registrant Organization: None Registrant Street: Lahore Registrant City: Lahore Registrant State/Province: Punjab Registrant Postal Code: 54000 Registrant Country: PK Registrant Phone: +92.3366009992 Registrant Phone Ext: Registrant Fax: +92.3366009992 Registrant Fax Ext: Registrant Email: ejaz_ahmed@outlook.com Registry Admin ID: Not Available From Registry Admin Name: Ejaz  Ahmed Admin Organization: None Admin Street: Lahore Admin City: Lahore Admin State/Province: Punjab Admin Postal Code: 54000 Admin Country: PK Admin Phone: +92.3366009992 Admin Phone Ext: Admin Fax: +92.3366009992 Admin Fax Ext: Admin Email: ejaz_ahmed@outlook.com Registry Tech ID: Not Available From Registry Tech Name: Ejaz  Ahmed Tech Organization: None Tech Street: Lahore Tech City: Lahore Tech State/Province: Punjab Tech Postal Code: 54000 Tech Country: PK Tech Phone: +92.3366009992 Tech Phone Ext: Tech Fax: +92.3366009992 Tech Fax Ext: Tech Email: ejaz_ahmed@outlook.com Name Server: cheryl.ns.cloudflare.com Name Server: nash.ns.cloudflare.com DNSSEC: unsigned URL of the ICANN WHOIS Data Problem Reporting System: http://wdprs.internic.net/ >>> Last update of WHOIS database: 2024-02-01T07:31:58Z <<<    For more information on Whois status codes, please visit https://icann.org/epp  This data is provided by OnlineNIC, Inc. for information purposes, and to assist persons obtaining information about or related to domain name registration records. OnlineNIC, Inc. does not guarantee its accuracy. By submitting a WHOIS query, you agree that you will use this data only for lawful purposes and that, under no circumstances, you will use this data to 1) allow, enable, or otherwise support the transmission of mass unsolicited, commercial advertising or solicitations via E-mail  (spam); or 2) enable high volume, automated, electronic processes that apply to this WHOIS server. These terms may be changed without prior notice. By submitting this query, you agree to abide by this policy.'
+                  registry_data:
+                    domain_name: JFREAKS.COM
+                    query_time: '2024-07-11 13:48:23'
+                    whois_server: whois.verisign-grs.com
+                    domain_registered: 'yes'
+                    create_date: N/A
+                    update_date: N/A
+                    expiry_date: N/A
+                    domain_registrar:
+                      iana_id: '82'
+                      registrar_name: OnlineNIC, Inc.
+                      whois_server: whois.onlinenic.com
+                      website_url: http://www.onlinenic.com
+                      email_address: abuse@onlinenic.com
+                      phone_number: +1 833-678-1173
+                    name_servers:
+                    - cheryl.ns.cloudflare.com
+                    - nash.ns.cloudflare.com
+                    domain_status:
+                    - clientTransferProhibited
+                    whois_raw_registery: '    Domain Name: JFREAKS.COM    Registry Domain ID: 2017968397_DOMAIN_COM-VRSN    Registrar WHOIS Server: whois.onlinenic.com    Registrar URL: http://www.onlinenic.com    Updated Date: 2024-02-01T12:31:59Z    Creation Date: 2016-04-01T11:43:27Z    Registry Expiry Date: 2029-04-01T11:43:27Z    Registrar: OnlineNIC, Inc.    Registrar IANA ID: 82    Registrar Abuse Contact Email: abuse@onlinenic.com    Registrar Abuse Contact Phone: +1 833-678-1173    Domain Status: clientTransferProhibited https://icann.org/epp#clientTransferProhibited    Name Server: CHERYL.NS.CLOUDFLARE.COM    Name Server: NASH.NS.CLOUDFLARE.COM    DNSSEC: unsigned    URL of the ICANN Whois Inaccuracy Complaint Form: https://www.icann.org/wicf/ >>> Last update of whois database: 2024-07-11T13:48:11Z <<<  For more information on Whois status codes, please visit https://icann.org/epp  NOTICE: The expiration date displayed in this record is the date the registrar''s sponsorship of the domain name registration in the registry is currently set to expire. This date does not necessarily reflect the expiration date of the domain name registrant''s agreement with the sponsoring registrar.  Users may consult the sponsoring registrar''s Whois database to view the registrar''s reported date of expiration for this registration.  TERMS OF USE: You are not authorized to access or query our Whois database through the use of electronic processes that are high-volume and automated except as reasonably necessary to register domain names or modify existing registrations; the Data in VeriSign Global Registry Services'' ("VeriSign") Whois database is provided by VeriSign for information purposes only, and to assist persons in obtaining information about or related to a domain name registration record. VeriSign does not guarantee its accuracy. By submitting a Whois query, you agree to abide by the following terms of use: You agree that you may use this Data only for lawful purposes and that under no circumstances will you use this Data to: (1) allow, enable, or otherwise support the transmission of mass unsolicited, commercial advertising or solicitations via e-mail, telephone, or facsimile; or (2) enable high volume, automated, electronic processes that apply to VeriSign (or its computer systems). The compilation, repackaging, dissemination or other use of this Data is expressly prohibited without the prior written consent of VeriSign. You agree not to use electronic processes that are automated and high-volume to access or query the Whois database except as reasonably necessary to register domain names or modify existing registrations. VeriSign reserves the right to restrict your access to the Whois database in its sole discretion to ensure operational stability.  VeriSign may restrict or terminate your access to the Whois database for failure to abide by these terms of use. VeriSign reserves the right to modify these terms at any time.  The Registry database contains ONLY .COM, .NET, .EDU domains and Registrars.'
         4XX:
           $ref: "#/components/responses/ErrorResponse"
   /v2.0/dns/live:
@@ -212,6 +609,262 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HistoricalDnsResponse"
+              example:
+                totalRecords: 27
+                totalPages: 1
+                currentPage: 1
+                historicalDnsRecords:
+                - queryTime: '2024-05-07'
+                  domainName: whoisfreaks.com.
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: whoisfreaks.com
+                    type: 1
+                    dnsType: A
+                    ttl: 3600
+                    rawText: "whoisfreaks.com.\t3600\tIN\tA\t4.157.25.229"
+                    rRsetType: 1
+                    address: 4.157.25.229
+                - queryTime: '2024-05-27'
+                  domainName: whoisfreaks.com.
+                  dnsTypes:
+                    SPF: 99
+                    TXT: 16
+                  dnsRecords:
+                  - name: whoisfreaks.com
+                    type: 16
+                    dnsType: TXT
+                    ttl: 3600
+                    rawText: "whoisfreaks.com.\t3600\tIN\tTXT\tpaddle-verification=ba8cd073"
+                    rRsetType: 16
+                    strings:
+                    - paddle-verification=ba8cd073
+                  - name: whoisfreaks.com
+                    type: 16
+                    dnsType: TXT
+                    ttl: 3600
+                    rawText: "whoisfreaks.com.\t3600\tIN\tTXT\tgoogle-site-verification=ArWP3KvRFCLXdW6rnUfCYNBmI4LMNQjx9_XoCM0It1w"
+                    rRsetType: 16
+                    strings:
+                    - google-site-verification=ArWP3KvRFCLXdW6rnUfCYNBmI4LMNQjx9_XoCM0It1w
+                  - name: whoisfreaks.com
+                    type: 16
+                    dnsType: TXT
+                    ttl: 3600
+                    rawText: "whoisfreaks.com.\t3600\tIN\tTXT\tzoho-verification=zb15766004.zmverify.zoho.com"
+                    rRsetType: 16
+                    strings:
+                    - zoho-verification=zb15766004.zmverify.zoho.com
+                  - name: whoisfreaks.com
+                    type: 99
+                    dnsType: SPF
+                    ttl: 3600
+                    rawText: "whoisfreaks.com.\t3600\tIN\tSPF\tv=spf1 mx include:spf.mtasv.net -all."
+                    rRsetType: 99
+                    strings:
+                    - v=spf1 mx include:spf.mtasv.net -all.
+                - queryTime: '2023-02-24'
+                  domainName: whoisfreaks.com.
+                  dnsTypes:
+                    SPF: 99
+                    A: 1
+                  dnsRecords:
+                  - name: whoisfreaks.com
+                    type: 1
+                    dnsType: A
+                    ttl: 3600
+                    rawText: "whoisfreaks.com.\t3600\tIN\tA\t45.79.216.218"
+                    rRsetType: 1
+                    address: 45.79.216.218
+                  - name: whoisfreaks.com
+                    type: 99
+                    dnsType: SPF
+                    ttl: 3600
+                    rawText: "whoisfreaks.com.\t3600\tIN\tSPF\tv=spf1 include:zoho.com ~all"
+                    rRsetType: 99
+                    strings:
+                    - v=spf1 include:zoho.com ~all
+                  - name: whoisfreaks.com
+                    type: 99
+                    dnsType: SPF
+                    ttl: 3600
+                    rawText: "whoisfreaks.com.\t3600\tIN\tSPF\tv=spf1 include:zoho.com ~all"
+                    rRsetType: 99
+                    strings:
+                    - v=spf1 include:zoho.com ~all
+                - queryTime: '2024-03-09'
+                  domainName: whoisfreaks.com.
+                  dnsTypes:
+                    SPF: 99
+                    TXT: 16
+                  dnsRecords:
+                  - name: whoisfreaks.com
+                    type: 16
+                    dnsType: TXT
+                    ttl: 3600
+                    rawText: "whoisfreaks.com.\t3600\tIN\tTXT\tgoogle-site-verification=ArWP3KvRFCLXdW6rnUfCYNBmI4LMNQjx9_XoCM0It1w"
+                    rRsetType: 16
+                    strings:
+                    - google-site-verification=ArWP3KvRFCLXdW6rnUfCYNBmI4LMNQjx9_XoCM0It1w
+                  - name: whoisfreaks.com
+                    type: 16
+                    dnsType: TXT
+                    ttl: 3600
+                    rawText: "whoisfreaks.com.\t3600\tIN\tTXT\tzoho-verification=zb15766004.zmverify.zoho.com"
+                    rRsetType: 16
+                    strings:
+                    - zoho-verification=zb15766004.zmverify.zoho.com
+                  - name: whoisfreaks.com
+                    type: 16
+                    dnsType: TXT
+                    ttl: 3600
+                    rawText: "whoisfreaks.com.\t3600\tIN\tTXT\tpaddle-verification=ba8cd073"
+                    rRsetType: 16
+                    strings:
+                    - paddle-verification=ba8cd073
+                  - name: whoisfreaks.com
+                    type: 99
+                    dnsType: SPF
+                    ttl: 3600
+                    rawText: "whoisfreaks.com.\t3600\tIN\tSPF\tv=spf1 mx include:spf.mtasv.net -all."
+                    rRsetType: 99
+                    strings:
+                    - v=spf1 mx include:spf.mtasv.net -all.
+                - queryTime: '2024-10-02'
+                  domainName: whoisfreaks.com.
+                  dnsTypes:
+                    SPF: 99
+                    A: 1
+                    TXT: 16
+                    SOA: 6
+                    MX: 15
+                    NS: 2
+                  dnsRecords:
+                  - name: whoisfreaks.com
+                    type: 1
+                    dnsType: A
+                    ttl: 3600
+                    rawText: "whoisfreaks.com.\t3600\tIN\tA\t172.233.38.245"
+                    rRsetType: 1
+                    address: 172.233.38.245
+                  - name: whoisfreaks.com
+                    type: 6
+                    dnsType: SOA
+                    ttl: 3600
+                    rawText: "whoisfreaks.com.\t3600\tIN\tSOA\tdns3.cloudns.net. support.cloudns.net. 2024010102 7200 1800 1209600 3600"
+                    rRsetType: 6
+                    admin: support.cloudns.net.
+                    host: dns3.cloudns.net.
+                    expire: 1209600
+                    minimum: 3600
+                    refresh: 7200
+                    retry: 1800
+                    serial: 2024010102
+                  - name: whoisfreaks.com
+                    type: 16
+                    dnsType: TXT
+                    ttl: 3600
+                    rawText: "whoisfreaks.com.\t3600\tIN\tTXT\tzoho-verification=zb15766004.zmverify.zoho.com"
+                    rRsetType: 16
+                    strings:
+                    - zoho-verification=zb15766004.zmverify.zoho.com
+                  - name: whoisfreaks.com
+                    type: 16
+                    dnsType: TXT
+                    ttl: 3600
+                    rawText: "whoisfreaks.com.\t3600\tIN\tTXT\tgoogle-site-verification=s0lTTBfSePwOO7LWlSND2ulZUfz7h-BE15H2llWem2A"
+                    rRsetType: 16
+                    strings:
+                    - google-site-verification=s0lTTBfSePwOO7LWlSND2ulZUfz7h-BE15H2llWem2A
+                  - name: whoisfreaks.com
+                    type: 16
+                    dnsType: TXT
+                    ttl: 3600
+                    rawText: "whoisfreaks.com.\t3600\tIN\tTXT\tpaddle-verification=ba8cd073"
+                    rRsetType: 16
+                    strings:
+                    - paddle-verification=ba8cd073
+                  - name: whoisfreaks.com
+                    type: 16
+                    dnsType: TXT
+                    ttl: 3600
+                    rawText: "whoisfreaks.com.\t3600\tIN\tTXT\tgoogle-site-verification=ArWP3KvRFCLXdW6rnUfCYNBmI4LMNQjx9_XoCM0It1w"
+                    rRsetType: 16
+                    strings:
+                    - google-site-verification=ArWP3KvRFCLXdW6rnUfCYNBmI4LMNQjx9_XoCM0It1w
+                  - name: whoisfreaks.com
+                    type: 15
+                    dnsType: MX
+                    ttl: 3600
+                    rawText: "whoisfreaks.com.\t3600\tIN\tMX\t10 mx.zoho.com."
+                    rRsetType: 15
+                    target: mx.zoho.com.
+                    priority: 10
+                  - name: whoisfreaks.com
+                    type: 15
+                    dnsType: MX
+                    ttl: 3600
+                    rawText: "whoisfreaks.com.\t3600\tIN\tMX\t20 mx2.zoho.com."
+                    rRsetType: 15
+                    target: mx2.zoho.com.
+                    priority: 20
+                  - name: whoisfreaks.com
+                    type: 15
+                    dnsType: MX
+                    ttl: 3600
+                    rawText: "whoisfreaks.com.\t3600\tIN\tMX\t50 mx3.zoho.com."
+                    rRsetType: 15
+                    target: mx3.zoho.com.
+                    priority: 50
+                  - name: whoisfreaks.com
+                    type: 99
+                    dnsType: SPF
+                    ttl: 3600
+                    rawText: "whoisfreaks.com.\t3600\tIN\tSPF\tv=spf1 mx include:spf.mtasv.net -all."
+                    rRsetType: 99
+                    strings:
+                    - v=spf1 mx include:spf.mtasv.net -all.
+                  - name: whoisfreaks.com
+                    type: 2
+                    dnsType: NS
+                    ttl: 3600
+                    rawText: "whoisfreaks.com.\t3600\tIN\tNS\tdns4.cloudns.net."
+                    rRsetType: 2
+                    singleName: dns4.cloudns.net.
+                  - name: whoisfreaks.com
+                    type: 2
+                    dnsType: NS
+                    ttl: 3600
+                    rawText: "whoisfreaks.com.\t3600\tIN\tNS\tdns8.cloudns.net."
+                    rRsetType: 2
+                    singleName: dns8.cloudns.net.
+                  - name: whoisfreaks.com
+                    type: 2
+                    dnsType: NS
+                    ttl: 3600
+                    rawText: "whoisfreaks.com.\t3600\tIN\tNS\tdns7.cloudns.net."
+                    rRsetType: 2
+                    singleName: dns7.cloudns.net.
+                  - name: whoisfreaks.com
+                    type: 2
+                    dnsType: NS
+                    ttl: 3600
+                    rawText: "whoisfreaks.com.\t3600\tIN\tNS\tdns3.cloudns.net."
+                    rRsetType: 2
+                    singleName: dns3.cloudns.net.
+                - queryTime: '2024-04-01'
+                  domainName: whoisfreaks.com.
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: whoisfreaks.com
+                    type: 1
+                    dnsType: A
+                    ttl: 3600
+                    rawText: "whoisfreaks.com.\t3600\tIN\tA\t139.144.20.35"
+                    rRsetType: 1
+                    address: 139.144.20.35
         4XX:
           $ref: "#/components/responses/ErrorResponse"
   /v2.1/dns/reverse:
@@ -264,6 +917,1211 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ReverseDnsResponse"
+              example:
+                totalRecords: 23017
+                totalPages: 231
+                currentPage: 1
+                reverseDnsRecords:
+                - queryTime: '2024-07-06'
+                  domainName: techbrink.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: techbrink.com
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "techbrink.com.\t\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-03'
+                  domainName: hdgalaxy.xyz
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: hdgalaxy.xyz
+                    type: 1
+                    dnsType: A
+                    ttl: 200
+                    rawText: "hdgalaxy.xyz.\t\t200\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-05-02'
+                  domainName: agrolabsa.site
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: agrolabsa.site
+                    type: 1
+                    dnsType: A
+                    ttl: 14400
+                    rawText: "agrolabsa.site.\t\t14400\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-06-27'
+                  domainName: ii.itcivil.website
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: ii.itcivil.website
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "ii.itcivil.website.\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-02'
+                  domainName: dvbx.xyz
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: dvbx.xyz
+                    type: 1
+                    dnsType: A
+                    ttl: 60
+                    rawText: "dvbx.xyz.\t\t60\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-11'
+                  domainName: atlantis.sandbox.axa-altitude.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: atlantis.sandbox.axa-altitude.com
+                    type: 1
+                    dnsType: A
+                    ttl: 21600
+                    rawText: "atlantis.sandbox.axa-altitude.com.\t21600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-14'
+                  domainName: dnbr.club
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: dnbr.club
+                    type: 1
+                    dnsType: A
+                    ttl: 3600
+                    rawText: "dnbr.club.\t\t3600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-13'
+                  domainName: prod-001.thrivefinance.app
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: prod-001.thrivefinance.app
+                    type: 1
+                    dnsType: A
+                    ttl: 60
+                    rawText: "prod-001.thrivefinance.app.\t60\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-06'
+                  domainName: qiynetwork.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: qiynetwork.com
+                    type: 1
+                    dnsType: A
+                    ttl: 600
+                    rawText: "qiynetwork.com.\t\t600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-03'
+                  domainName: seu.cloudns.ch
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: seu.cloudns.ch
+                    type: 1
+                    dnsType: A
+                    ttl: 3600
+                    rawText: "seu.cloudns.ch.\t\t3600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2023-08-31'
+                  domainName: nipmy.shop
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: nipmy.shop
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "nipmy.shop.\t\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2023-08-29'
+                  domainName: loudatmosphere.info
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: loudatmosphere.info
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "loudatmosphere.info.\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-11'
+                  domainName: external-1.thuyetminh.xyz
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: external-1.thuyetminh.xyz
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "external-1.thuyetminh.xyz.\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2023-09-01'
+                  domainName: riverdivide.info
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: riverdivide.info
+                    type: 1
+                    dnsType: A
+                    ttl: 1799
+                    rawText: "riverdivide.info.\t1799\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-07'
+                  domainName: kalbas.tk
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: kalbas.tk
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "kalbas.tk.\t\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-04'
+                  domainName: gerhild-baumeister.de
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: gerhild-baumeister.de
+                    type: 1
+                    dnsType: A
+                    ttl: 3600
+                    rawText: "gerhild-baumeister.de.\t3600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-03-12'
+                  domainName: termiux.cloud
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: termiux.cloud
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "termiux.cloud.\t\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-12'
+                  domainName: www.hfgforex.com.au
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: www.hfgforex.com.au
+                    type: 1
+                    dnsType: A
+                    ttl: 600
+                    rawText: "www.hfgforex.com.au.\t600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-03'
+                  domainName: sv741.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: sv741.com
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "sv741.com.\t\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-03'
+                  domainName: beast-clothes-99.shop
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: beast-clothes-99.shop
+                    type: 1
+                    dnsType: A
+                    ttl: 21600
+                    rawText: "beast-clothes-99.shop.\t21600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-05'
+                  domainName: sv805.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: sv805.com
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "sv805.com.\t\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-14'
+                  domainName: www.xingmai888.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: www.xingmai888.com
+                    type: 1
+                    dnsType: A
+                    ttl: 600
+                    rawText: "www.xingmai888.com.\t600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-03-26'
+                  domainName: imapi.sadsaasd.xyz
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: imapi.sadsaasd.xyz
+                    type: 1
+                    dnsType: A
+                    ttl: 1800
+                    rawText: "imapi.sadsaasd.xyz.\t1800\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-03-28'
+                  domainName: ip10122.ij403.xyz
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: ip10122.ij403.xyz
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "ip10122.ij403.xyz.\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2023-02-25'
+                  domainName: 3267kd.vip
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: 3267kd.vip
+                    type: 1
+                    dnsType: A
+                    ttl: 600
+                    rawText: "3267kd.vip.\t\t600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-10'
+                  domainName: google.cryptotracking.es
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: google.cryptotracking.es
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "google.cryptotracking.es.\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-06'
+                  domainName: dieselgenerator.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: dieselgenerator.com
+                    type: 1
+                    dnsType: A
+                    ttl: 900
+                    rawText: "dieselgenerator.com.\t900\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-06-02'
+                  domainName: blog.owa.avalon-invest.pro
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: blog.owa.avalon-invest.pro
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "blog.owa.avalon-invest.pro.\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-14'
+                  domainName: ci.epiclabs.io
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: ci.epiclabs.io
+                    type: 1
+                    dnsType: A
+                    ttl: 21600
+                    rawText: "ci.epiclabs.io.\t\t21600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-02-17'
+                  domainName: aslancasino-croupier.top
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: aslancasino-croupier.top
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "aslancasino-croupier.top.\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-04'
+                  domainName: juansystems.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: juansystems.com
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "juansystems.com.\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-09'
+                  domainName: mewodemo-001-site1.ltempurl.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: mewodemo-001-site1.ltempurl.com
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "mewodemo-001-site1.ltempurl.com.\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-03-19'
+                  domainName: finapps360-001-site1.ltempurl.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: finapps360-001-site1.ltempurl.com
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "finapps360-001-site1.ltempurl.com.\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2023-02-19'
+                  domainName: smoke9testodinmonday.se
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: smoke9testodinmonday.se
+                    type: 1
+                    dnsType: A
+                    ttl: 600
+                    rawText: "smoke9testodinmonday.se.\t600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-13'
+                  domainName: csavasboglarka.gd13bcs1.hu
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: csavasboglarka.gd13bcs1.hu
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "csavasboglarka.gd13bcs1.hu.\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-14'
+                  domainName: testpipelines-001-site1.jtempurl.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: testpipelines-001-site1.jtempurl.com
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "testpipelines-001-site1.jtempurl.com.\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2023-02-23'
+                  domainName: feedknit.info
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: feedknit.info
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "feedknit.info.\t\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2023-02-19'
+                  domainName: ttzf4.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: ttzf4.com
+                    type: 1
+                    dnsType: A
+                    ttl: 600
+                    rawText: "ttzf4.com.\t\t600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-11'
+                  domainName: devops.bhubportal.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: devops.bhubportal.com
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "devops.bhubportal.com.\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-05-17'
+                  domainName: www.w.avalon-invest.pro
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: www.w.avalon-invest.pro
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "www.w.avalon-invest.pro.\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2023-02-24'
+                  domainName: q8appapi.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: q8appapi.com
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "q8appapi.com.\t\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2023-11-18'
+                  domainName: myhamed.ir
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: myhamed.ir
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "myhamed.ir.\t\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-05'
+                  domainName: fraunhofer.institute
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: fraunhofer.institute
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "fraunhofer.institute.\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-14'
+                  domainName: www.megatron.keylinksolutions.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: www.megatron.keylinksolutions.com
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "www.megatron.keylinksolutions.com.\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-04'
+                  domainName: cengfons125.cn
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: cengfons125.cn
+                    type: 1
+                    dnsType: A
+                    ttl: 600
+                    rawText: "cengfons125.cn.\t\t600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-05'
+                  domainName: mobilegun.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: mobilegun.com
+                    type: 1
+                    dnsType: A
+                    ttl: 21600
+                    rawText: "mobilegun.com.\t\t21600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-07'
+                  domainName: b22f.co
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: b22f.co
+                    type: 1
+                    dnsType: A
+                    ttl: 600
+                    rawText: "b22f.co.\t\t600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-04'
+                  domainName: debrecenben.hu
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: debrecenben.hu
+                    type: 1
+                    dnsType: A
+                    ttl: 3600
+                    rawText: "debrecenben.hu.\t\t3600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-06-02'
+                  domainName: www.www.console.avalon-invest.pro
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: www.www.console.avalon-invest.pro
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "www.www.console.avalon-invest.pro.\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-07'
+                  domainName: hamrah-akhar.tk
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: hamrah-akhar.tk
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "hamrah-akhar.tk.\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-06'
+                  domainName: wuzur.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: wuzur.com
+                    type: 1
+                    dnsType: A
+                    ttl: 600
+                    rawText: "wuzur.com.\t\t600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-04'
+                  domainName: 68975.tv
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: 68975.tv
+                    type: 1
+                    dnsType: A
+                    ttl: 600
+                    rawText: "68975.tv.\t\t600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2023-11-19'
+                  domainName: dzy.gift
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: dzy.gift
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "dzy.gift.\t\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2023-02-21'
+                  domainName: petbit.ltd
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: petbit.ltd
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "petbit.ltd.\t\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-06-29'
+                  domainName: ty94t.top
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: ty94t.top
+                    type: 1
+                    dnsType: A
+                    ttl: 600
+                    rawText: "ty94t.top.\t\t600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-12'
+                  domainName: www.slot.bonaocity.com.do
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: www.slot.bonaocity.com.do
+                    type: 1
+                    dnsType: A
+                    ttl: 14400
+                    rawText: "www.slot.bonaocity.com.do.\t14400\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-03-12'
+                  domainName: copycybertv.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: copycybertv.com
+                    type: 1
+                    dnsType: A
+                    ttl: 100
+                    rawText: "copycybertv.com.\t100\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2023-02-26'
+                  domainName: nwcdgx.top
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: nwcdgx.top
+                    type: 1
+                    dnsType: A
+                    ttl: 600
+                    rawText: "nwcdgx.top.\t\t600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-07'
+                  domainName: xn--s39ax62a1ndi3b.kr
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: xn--s39ax62a1ndi3b.kr
+                    type: 1
+                    dnsType: A
+                    ttl: 180
+                    rawText: "xn--s39ax62a1ndi3b.kr.\t180\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-06'
+                  domainName: jiohyoo.net
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: jiohyoo.net
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "jiohyoo.net.\t\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2023-11-19'
+                  domainName: extentionsgoogle.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: extentionsgoogle.com
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "extentionsgoogle.com.\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2023-11-17'
+                  domainName: luckeyspin.cfd
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: luckeyspin.cfd
+                    type: 1
+                    dnsType: A
+                    ttl: 1800
+                    rawText: "luckeyspin.cfd.\t\t1800\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-07'
+                  domainName: theoverseerproject.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: theoverseerproject.com
+                    type: 1
+                    dnsType: A
+                    ttl: 1799
+                    rawText: "theoverseerproject.com.\t1799\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-04'
+                  domainName: thelondonstillhouse.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: thelondonstillhouse.com
+                    type: 1
+                    dnsType: A
+                    ttl: 600
+                    rawText: "thelondonstillhouse.com.\t600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-05-20'
+                  domainName: best.earcashpro.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: best.earcashpro.com
+                    type: 1
+                    dnsType: A
+                    ttl: 200
+                    rawText: "best.earcashpro.com.\t200\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-05'
+                  domainName: dalentesolutions.net
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: dalentesolutions.net
+                    type: 1
+                    dnsType: A
+                    ttl: 60
+                    rawText: "dalentesolutions.net.\t60\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-10'
+                  domainName: lotusblue-002-site7.ltempurl.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: lotusblue-002-site7.ltempurl.com
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "lotusblue-002-site7.ltempurl.com.\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-11'
+                  domainName: www.tarrodqq.vip
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: www.tarrodqq.vip
+                    type: 1
+                    dnsType: A
+                    ttl: 600
+                    rawText: "www.tarrodqq.vip.\t600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2023-12-01'
+                  domainName: napik.se
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: napik.se
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "napik.se.\t\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-01-05'
+                  domainName: www.165668.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: www.165668.com
+                    type: 1
+                    dnsType: A
+                    ttl: 600
+                    rawText: "www.165668.com.\t\t600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2023-11-22'
+                  domainName: yensaohoangphi.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: yensaohoangphi.com
+                    type: 1
+                    dnsType: A
+                    ttl: 360
+                    rawText: "yensaohoangphi.com.\t360\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-15'
+                  domainName: licensing-gql.bumastemra.services
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: licensing-gql.bumastemra.services
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "licensing-gql.bumastemra.services.\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-13'
+                  domainName: staging.xoeye.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: staging.xoeye.com
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "staging.xoeye.com.\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-14'
+                  domainName: oss.sxwy.xyz
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: oss.sxwy.xyz
+                    type: 1
+                    dnsType: A
+                    ttl: 600
+                    rawText: "oss.sxwy.xyz.\t\t600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-05'
+                  domainName: 8888.ar
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: 8888.ar
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "8888.ar.\t\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-05-30'
+                  domainName: www.local.avalon-invest.pro
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: www.local.avalon-invest.pro
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "www.local.avalon-invest.pro.\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-05-16'
+                  domainName: www.wj0qtrcyztrc4hr.whkvgkqgv0krkul.www.home.avalon-invest.pro
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: www.wj0qtrcyztrc4hr.whkvgkqgv0krkul.www.home.avalon-invest.pro
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "www.wj0qtrcyztrc4hr.whkvgkqgv0krkul.www.home.avalon-invest.pro.\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-14'
+                  domainName: brirembillel-001-site1.ktempurl.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: brirembillel-001-site1.ktempurl.com
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "brirembillel-001-site1.ktempurl.com.\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2023-11-28'
+                  domainName: xsasianpinaycdn14.xyz
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: xsasianpinaycdn14.xyz
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "xsasianpinaycdn14.xyz.\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-06-10'
+                  domainName: juegoseguros.mx
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: juegoseguros.mx
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "juegoseguros.mx.\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-11'
+                  domainName: dow.topbuzzmall.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: dow.topbuzzmall.com
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "dow.topbuzzmall.com.\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-06'
+                  domainName: loinaprifti.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: loinaprifti.com
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "loinaprifti.com.\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2023-11-28'
+                  domainName: thisis.lol
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: thisis.lol
+                    type: 1
+                    dnsType: A
+                    ttl: 600
+                    rawText: "thisis.lol.\t\t600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-07'
+                  domainName: v94f.us
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: v94f.us
+                    type: 1
+                    dnsType: A
+                    ttl: 3600
+                    rawText: "v94f.us.\t\t3600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2023-08-31'
+                  domainName: vzd78.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: vzd78.com
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "vzd78.com.\t\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-02'
+                  domainName: xn--w2xs5c4xgtz1a.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: xn--w2xs5c4xgtz1a.com
+                    type: 1
+                    dnsType: A
+                    ttl: 600
+                    rawText: "xn--w2xs5c4xgtz1a.com.\t600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-03'
+                  domainName: hjeans.com.cn
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: hjeans.com.cn
+                    type: 1
+                    dnsType: A
+                    ttl: 600
+                    rawText: "hjeans.com.cn.\t\t600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-05'
+                  domainName: yunxingchu.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: yunxingchu.com
+                    type: 1
+                    dnsType: A
+                    ttl: 600
+                    rawText: "yunxingchu.com.\t\t600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2023-11-24'
+                  domainName: ahosta.org
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: ahosta.org
+                    type: 1
+                    dnsType: A
+                    ttl: 3600
+                    rawText: "ahosta.org.\t\t3600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2023-11-18'
+                  domainName: csoppkeblog.hu
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: csoppkeblog.hu
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "csoppkeblog.hu.\t\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-13'
+                  domainName: ftp.cs-6.vip
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: ftp.cs-6.vip
+                    type: 1
+                    dnsType: A
+                    ttl: 600
+                    rawText: "ftp.cs-6.vip.\t\t600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-07-09'
+                  domainName: o.clomid2.top
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: o.clomid2.top
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "o.clomid2.top.\t\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2023-02-17'
+                  domainName: pj33cc.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: pj33cc.com
+                    type: 1
+                    dnsType: A
+                    ttl: 600
+                    rawText: "pj33cc.com.\t\t600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-02-22'
+                  domainName: workingparty.ai
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: workingparty.ai
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "workingparty.ai.\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2023-11-17'
+                  domainName: 98w99.com
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: 98w99.com
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "98w99.com.\t\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-06-03'
+                  domainName: bwww.tcnxpfsiplwe3gd.www.whkvgkqgv0krkul.www.home.avalon-invest.pro
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: bwww.tcnxpfsiplwe3gd.www.whkvgkqgv0krkul.www.home.avalon-invest.pro
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "bwww.tcnxpfsiplwe3gd.www.whkvgkqgv0krkul.www.home.avalon-invest.pro.\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2023-02-24'
+                  domainName: man13frpp.club
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: man13frpp.club
+                    type: 1
+                    dnsType: A
+                    ttl: 1800
+                    rawText: "man13frpp.club.\t\t1800\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2023-12-26'
+                  domainName: www.fertilityroom.it
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: www.fertilityroom.it
+                    type: 1
+                    dnsType: A
+                    ttl: 3600
+                    rawText: "www.fertilityroom.it.\t3600\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-05-08'
+                  domainName: forumasicrepair.ir
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: forumasicrepair.ir
+                    type: 1
+                    dnsType: A
+                    ttl: 120
+                    rawText: "forumasicrepair.ir.\t120\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
+                - queryTime: '2024-06-02'
+                  domainName: www.benefits.avalon-invest.pro
+                  dnsTypes:
+                    A: 1
+                  dnsRecords:
+                  - name: www.benefits.avalon-invest.pro
+                    type: 1
+                    dnsType: A
+                    ttl: 300
+                    rawText: "www.benefits.avalon-invest.pro.\t300\tIN\tA\t8.8.8.8"
+                    rRsetType: 1
+                    address: 8.8.8.8
         4XX:
           $ref: "#/components/responses/ErrorResponse"
   /v2.2/dns/historical:
@@ -460,6 +2318,13 @@ paths:
                   type: array
                   items:
                     type: string
+            example:
+              domainNames:
+              - whoisfreaks.com
+              - jfreaks.com
+              ipAddresses:
+              - 1.1.1.1
+              - 8.8.8.8
       responses:
         "200":
           description: Successful response
@@ -467,6 +2332,34 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/BulkDnsResponse"
+              example:
+                bulk_dns_info:
+                - status: true
+                  queryTime: '2024-08-05 17:38:42'
+                  ipAddress: 1.1.1.1
+                  dnsTypes:
+                    PTR: 12
+                  dnsRecords:
+                  - name: 1.1.1.1.in-addr.arpa
+                    type: 12
+                    dnsType: PTR
+                    ttl: 1132
+                    rawText: "1.1.1.1.in-addr.arpa.\t1132\tIN\tPTR\tone.one.one.one."
+                    rRsetType: 12
+                    singleName: one.one.one.one.
+                - status: true
+                  queryTime: '2024-08-05 17:38:42'
+                  ipAddress: 8.8.8.8
+                  dnsTypes:
+                    PTR: 12
+                  dnsRecords:
+                  - name: 8.8.8.8.in-addr.arpa
+                    type: 12
+                    dnsType: PTR
+                    ttl: 7296
+                    rawText: "8.8.8.8.in-addr.arpa.\t7296\tIN\tPTR\tdns.google."
+                    rRsetType: 12
+                    singleName: dns.google.
         4XX:
           $ref: "#/components/responses/ErrorResponse"
   /v2.0/domain/availability:
@@ -582,6 +2475,29 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/TyposquattingResponse"
+              example:
+                status: true
+                totalRecords: 741
+                currentPage: 1
+                totalPages: 8
+                hasNextPage: true
+                nextPageToken: eyJkb21haW5OYW1lIjoidG9kZGxlLnJ1IiwiY3VycmVudFBhZ2UiOjF9
+                domains:
+                - domainName: t-doodle.co.za
+                  createDate: '2024-02-27'
+                  expiryDate: '2026-02-27'
+                  lastSeen: '2025-12-27'
+                  isDropped: false
+                - domainName: t-doodle.com
+                  createDate: '2023-10-27'
+                  expiryDate: '2025-10-27'
+                  lastSeen: '2025-07-03'
+                  isDropped: false
+                - domainName: t-idle.org
+                  createDate: '2024-10-24'
+                  expiryDate: '2026-10-24'
+                  lastSeen: '2026-01-16'
+                  isDropped: false
         "400":
           $ref: "#/components/responses/BadRequest"
         "401":
@@ -635,6 +2551,36 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/TyposquatSubdomainsResponse"
+              example:
+                status: true
+                totalRecords: 98387
+                currentPage: 1
+                totalPages: 984
+                hasNextPage: true
+                nextPageToken: eyJkb21haW5OYW1lIjoiMTBya3dzd3BxZi5paGdrZ3BucS5wYXlwYXkuY29wcGVycG9pc29uc2t5LmZpdCIsImN1cnJlbnRQYWdlIjoxLCJ0b3RhbFJlY29yZHMiOjk4Mzg3fQ==
+                subdomains:
+                - subdomain: 001.paypal.acruefix.com
+                  domain: acruefix.com
+                  status: inactive
+                  firstSeen: '2023-07-11'
+                  lastSeen: '2025-10-01'
+                  inactiveFrom: '2025-10-01'
+                - subdomain: 017067bc272d5376afa25eb4.pypal.mmscloudtest.com
+                  domain: mmscloudtest.com
+                  status: inactive
+                  firstSeen: '2024-08-12'
+                  lastSeen: '2025-11-04'
+                  inactiveFrom: '2025-11-04'
+                - subdomain: 01reportes.paypal.antimoney-laundering.org
+                  domain: antimoney-laundering.org
+                  status: active
+                  firstSeen: '2026-02-06'
+                  lastSeen: '2026-10-02'
+                - subdomain: 03c93e5d.paypal.carbonouomo.com.br
+                  domain: carbonouomo.com.br
+                  status: active
+                  firstSeen: '2025-08-26'
+                  lastSeen: '2026-07-21'
         "400":
           $ref: "#/components/responses/BadRequest"
         "401":
@@ -679,6 +2625,98 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/SslResponse"
+              example:
+                domainName: whoisfreaks.com
+                queryTime: '2024-10-04 07:17:04'
+                sslCertificates:
+                - chainOrder: end-user
+                  authenticationType: domain
+                  validityStartDate: 2024-09-7 23:03:18 UTC
+                  validityEndDate: 2024-12-6 23:03:17 UTC
+                  serialNumber: 04:8e:90:ab:b3:ec:32:10:1e:de:83:4a:e8:9c:3c:e7:1e:a7
+                  signatureAlgorithm: ECDSA-SHA2384
+                  subject:
+                    commonName: whoisfreaks.com
+                  issuer:
+                    commonName: E6
+                    organization: Let's Encrypt
+                    country: US
+                  publicKey:
+                    keySize: 256 bit
+                    keyAlgorithm: ECDSA
+                  extensions:
+                    authorityKeyIdentifier: 93:27:46:98:03:A9:51:68:8E:98:D6:C4:42:48:DB:23:BF:58:94:D2
+                    subjectKeyIdentifier: 95:B1:F8:43:43:1B:A9:D9:A0:73:E6:F7:BF:FB:34:D8:DE:69:CC:39
+                    keyUsages:
+                    - Digital Signature
+                    extendedKeyUsages:
+                    - TLS Web Server Authentication
+                    - TLS Web Client Authentication
+                    authorityInfoAccess:
+                      issuers:
+                      - http://e6.i.lencr.org/
+                      ocsp:
+                      - http://e6.o.lencr.org
+                    subjectAlternativeNames:
+                      dnsNames:
+                      - www.whoisfreaks.com
+                      - whoisfreaks.com
+                    certificatePolicies:
+                    - policyId: 2.23.140.1.2.1
+                - chainOrder: intermediate
+                  authenticationType: organization
+                  validityStartDate: 2024-03-13 00:00:00 UTC
+                  validityEndDate: 2027-03-12 23:59:59 UTC
+                  serialNumber: b0:57:3e:91:73:97:27:70:db:b4:87:cb:3a:45:2b:38
+                  signatureAlgorithm: SHA256-RSA
+                  subject:
+                    commonName: E6
+                    organization: Let's Encrypt
+                    country: US
+                  issuer:
+                    commonName: ISRG Root X1
+                    organization: Internet Security Research Group
+                    country: US
+                  publicKey:
+                    keySize: 384 bit
+                    keyAlgorithm: ECDSA
+                  extensions:
+                    authorityKeyIdentifier: 79:B4:59:E6:7B:B6:E5:E4:01:73:80:08:88:C8:1A:58:F6:E9:9B:6E
+                    subjectKeyIdentifier: 93:27:46:98:03:A9:51:68:8E:98:D6:C4:42:48:DB:23:BF:58:94:D2
+                    keyUsages:
+                    - CRL Sign
+                    - Digital Signature
+                    - Certificate Sign
+                    extendedKeyUsages:
+                    - TLS Web Server Authentication
+                    - TLS Web Client Authentication
+                    authorityInfoAccess:
+                      issuers:
+                      - http://x1.i.lencr.org/
+                    certificatePolicies:
+                    - policyId: 2.23.140.1.2.1
+                - chainOrder: root
+                  authenticationType: self-signed-ca
+                  validityStartDate: 2015-06-4 11:04:38 UTC
+                  validityEndDate: 2035-06-4 11:04:38 UTC
+                  serialNumber: 82:10:cf:b0:d2:40:e3:59:44:63:e0:bb:63:82:8b:00
+                  signatureAlgorithm: SHA256-RSA
+                  subject:
+                    commonName: ISRG Root X1
+                    organization: Internet Security Research Group
+                    country: US
+                  issuer:
+                    commonName: ISRG Root X1
+                    organization: Internet Security Research Group
+                    country: US
+                  publicKey:
+                    keySize: 4096 bit
+                    keyAlgorithm: RSA
+                  extensions:
+                    subjectKeyIdentifier: 79:B4:59:E6:7B:B6:E5:E4:01:73:80:08:88:C8:1A:58:F6:E9:9B:6E
+                    keyUsages:
+                    - CRL Sign
+                    - Certificate Sign
         4XX:
           $ref: "#/components/responses/ErrorResponse"
   /v1.0/geolocation:
@@ -703,6 +2741,58 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GeolocationResponse"
+              example:
+                ip: 8.8.8.8
+                location:
+                  continent_code: NA
+                  continent_name: North America
+                  country_code2: US
+                  country_code3: USA
+                  country_name: United States
+                  country_name_official: United States of America
+                  country_capital: Washington, D.C.
+                  state_prov: California
+                  state_code: US-CA
+                  district: Santa Clara
+                  city: Mountain View
+                  locality: Mountain View
+                  accuracy_radius: ''
+                  zipcode: 94043-1351
+                  latitude: '37.42240'
+                  longitude: '-122.08421'
+                  is_eu: false
+                  geoname_id: '6301403'
+                  country_emoji: 🇺🇸
+                country_metadata:
+                  calling_code: '+1'
+                  tld: .us
+                  languages:
+                  - en-US
+                  - es-US
+                  - haw
+                  - fr
+                network:
+                  asn:
+                    as_number: AS15169
+                    organization: Google LLC
+                    country: US
+                    asn_name: GOOGLE
+                    type: BUSINESS
+                    domain: about.google
+                    date_allocated: ''
+                    allocation_status: assigned
+                    num_of_ipv4_routes: '967'
+                    num_of_ipv6_routes: '104'
+                    rir: ARIN
+                  connection_type: ''
+                  company:
+                    name: Google LLC
+                    type: ''
+                    domain: ''
+                currency:
+                  code: USD
+                  name: US Dollar
+                  symbol: $
         4XX:
           $ref: "#/components/responses/ErrorResponse"
     post:
@@ -726,6 +2816,11 @@ paths:
                   items:
                     type: string
                   maxItems: 100
+            example:
+              ips:
+              - 1.1.1.1
+              - 2.2.2.2
+              - 8.8.8.8
       responses:
         "200":
           description: Successful response
@@ -735,6 +2830,157 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/GeolocationResponse"
+              example:
+                - ip: 1.1.1.1
+                  location:
+                    continent_code: OC
+                    continent_name: Oceania
+                    country_code2: AU
+                    country_code3: AUS
+                    country_name: Australia
+                    country_name_official: Commonwealth of Australia
+                    country_capital: Canberra
+                    state_prov: Queensland
+                    state_code: AU-QLD
+                    district: Brisbane
+                    city: South Brisbane
+                    locality: South Brisbane
+                    accuracy_radius: ''
+                    zipcode: '4101'
+                    latitude: '-27.47306'
+                    longitude: '153.01421'
+                    is_eu: false
+                    geoname_id: '10113228'
+                    country_emoji: 🇦🇺
+                  country_metadata:
+                    calling_code: '+61'
+                    tld: .au
+                    languages:
+                    - en-AU
+                  network:
+                    asn:
+                      as_number: AS13335
+                      organization: Cloudflare, Inc.
+                      country: US
+                      asn_name: CLOUDFLARENET
+                      type: BUSINESS
+                      domain: cloudflare.com
+                      date_allocated: ''
+                      allocation_status: assigned
+                      num_of_ipv4_routes: '2358'
+                      num_of_ipv6_routes: '2827'
+                      rir: ARIN
+                    connection_type: ''
+                    company:
+                      name: APNIC Research and Development
+                      type: Business
+                      domain: apnic.com
+                  currency:
+                    code: AUD
+                    name: Australian Dollar
+                    symbol: A$
+                - ip: 2.2.2.2
+                  location:
+                    continent_code: NA
+                    continent_name: North America
+                    country_code2: US
+                    country_code3: USA
+                    country_name: United States
+                    country_name_official: United States of America
+                    country_capital: Washington, D.C.
+                    state_prov: California
+                    state_code: US-CA
+                    district: Redwood Shores
+                    city: Redwood City
+                    locality: Redwood City
+                    accuracy_radius: ''
+                    zipcode: 94065-1600
+                    latitude: '37.53073'
+                    longitude: '-122.26245'
+                    is_eu: false
+                    geoname_id: '5370560'
+                    country_emoji: 🇺🇸
+                  country_metadata:
+                    calling_code: '+1'
+                    tld: .us
+                    languages:
+                    - en-US
+                    - es-US
+                    - haw
+                    - fr
+                  network:
+                    asn:
+                      as_number: AS3215
+                      organization: Orange S.A.
+                      country: FR
+                      asn_name: AS3215
+                      type: ISP
+                      domain: wholesale.orange.com
+                      date_allocated: '1994-04-15'
+                      allocation_status: allocated
+                      num_of_ipv4_routes: '978'
+                      num_of_ipv6_routes: '42'
+                      rir: RIPE
+                    connection_type: ''
+                    company:
+                      name: Oracle America Inc.
+                      type: ''
+                      domain: ''
+                  currency:
+                    code: USD
+                    name: US Dollar
+                    symbol: $
+                - ip: 8.8.8.8
+                  location:
+                    continent_code: NA
+                    continent_name: North America
+                    country_code2: US
+                    country_code3: USA
+                    country_name: United States
+                    country_name_official: United States of America
+                    country_capital: Washington, D.C.
+                    state_prov: California
+                    state_code: US-CA
+                    district: Santa Clara
+                    city: Mountain View
+                    locality: Mountain View
+                    accuracy_radius: ''
+                    zipcode: 94043-1351
+                    latitude: '37.42240'
+                    longitude: '-122.08421'
+                    is_eu: false
+                    geoname_id: '6301403'
+                    country_emoji: 🇺🇸
+                  country_metadata:
+                    calling_code: '+1'
+                    tld: .us
+                    languages:
+                    - en-US
+                    - es-US
+                    - haw
+                    - fr
+                  network:
+                    asn:
+                      as_number: AS15169
+                      organization: Google LLC
+                      country: US
+                      asn_name: GOOGLE
+                      type: BUSINESS
+                      domain: about.google
+                      date_allocated: ''
+                      allocation_status: assigned
+                      num_of_ipv4_routes: '967'
+                      num_of_ipv6_routes: '104'
+                      rir: ARIN
+                    connection_type: ''
+                    company:
+                      name: Google LLC
+                      type: ''
+                      domain: ''
+                  currency:
+                    code: USD
+                    name: US Dollar
+                    symbol: $
         4XX:
           $ref: "#/components/responses/ErrorResponse"
   /v1.0/subdomains:
@@ -789,6 +3035,46 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/SubdomainsResponse"
+              example:
+                domain: google.com
+                status: true
+                query_time: '2025-05-22T16:00:50.978835309'
+                current_page: 3
+                total_pages: 182
+                total_records: 18128
+                subdomains:
+                - subdomain: liqckdx.sites.google.com
+                  first_seen: '2022-05-17'
+                  last_seen: N/A
+                  inactive_from: N/A
+                - subdomain: gkwpvg8.sites.google.com
+                  first_seen: '2023-06-09'
+                  last_seen: '2025-05-01'
+                  inactive_from: N/A
+                - subdomain: igc0b4i.sites.google.com
+                  first_seen: '2023-12-02'
+                  last_seen: '2025-05-01'
+                  inactive_from: N/A
+                - subdomain: ediscovery.google.com
+                  first_seen: '2016-09-01'
+                  last_seen: '2025-05-20'
+                  inactive_from: N/A
+                - subdomain: lnivsn4.sites.google.com
+                  first_seen: '2022-05-24'
+                  last_seen: N/A
+                  inactive_from: N/A
+                - subdomain: m6yg874.sites.google.com
+                  first_seen: '2023-12-06'
+                  last_seen: N/A
+                  inactive_from: N/A
+                - subdomain: 12w2grv.sites.google.com
+                  first_seen: '2023-06-10'
+                  last_seen: N/A
+                  inactive_from: N/A
+                - subdomain: 134s1fm.sites.google.com
+                  first_seen: '2023-06-07'
+                  last_seen: N/A
+                  inactive_from: N/A
         4XX:
           $ref: "#/components/responses/ErrorResponse"
   /v1.0/security:
@@ -874,6 +3160,74 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/IpReputationResponse"
+              example:
+                ip: 8.8.8.8
+                security:
+                  threat_score: 5
+                  is_tor: false
+                  is_proxy: false
+                  proxy_provider_names: []
+                  proxy_confidence_score: 0
+                  proxy_last_seen: ''
+                  proxy_days_seen_30d: 0
+                  proxy_days_seen_7d: 0
+                  proxy_provider_count_30d: 0
+                  is_residential_proxy: false
+                  is_vpn: false
+                  vpn_provider_names: []
+                  vpn_confidence_score: 0
+                  vpn_last_seen: ''
+                  is_relay: false
+                  relay_provider_name: ''
+                  is_anonymous: false
+                  is_known_attacker: false
+                  is_bot: false
+                  bot_confidence_score: 0
+                  bot_operator_name: ''
+                  bot_type: ''
+                  is_known_good_bot: false
+                  bot_last_seen: ''
+                  is_spam: false
+                  is_cloud_provider: true
+                  cloud_provider_name: Google LLC
+                  is_corporate_gateway: false
+                  corporate_gateway_type: ''
+                  corporate_gateway_provider_name: ''
+                location:
+                  continent_code: NA
+                  continent_name: North America
+                  country_code2: US
+                  country_code3: USA
+                  country_name: United States
+                  country_name_official: United States of America
+                  country_capital: Washington, D.C.
+                  state_prov: California
+                  state_code: US-CA
+                  district: Santa Clara
+                  city: Mountain View
+                  locality: Mountain View
+                  accuracy_radius: '26.181'
+                  confidence: low
+                  zipcode: 94043-1351
+                  latitude: '37.42240'
+                  longitude: '-122.08421'
+                  is_eu: false
+                  geoname_id: '6301403'
+                  country_emoji: 🇺🇸
+                network:
+                  connection_type: ''
+                  route: 8.8.8.0/24
+                  is_anycast: true
+                  is_cdn: false
+                  cdn_provider_name: ''
+                asn:
+                  as_number: AS15169
+                  organization: Google LLC
+                  country: US
+                  type: HOSTING
+                  domain: google.com
+                  date_allocated: '2000-03-30'
+                  rir: ARIN
         4XX:
           $ref: "#/components/responses/ErrorResponse"
     post:
@@ -904,6 +3258,11 @@ paths:
                   - 1.1.1.1
                   - 2.2.2.2
                   - 8.8.8.8
+            example:
+              ips:
+              - 1.1.1.1
+              - 2.2.2.2
+              - 8.8.8.8
       responses:
         "200":
           description: Successful response
@@ -913,6 +3272,169 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/IpReputationResponse"
+              example:
+                - ip: 8.8.8.8
+                  location:
+                    continent_code: NA
+                    continent_name: North America
+                    country_code2: US
+                    country_code3: USA
+                    country_name: United States
+                    country_name_official: United States of America
+                    country_capital: Washington, D.C.
+                    state_prov: California
+                    state_code: US-CA
+                    district: Santa Clara
+                    city: Mountain View
+                    locality: Mountain View
+                    accuracy_radius: '38.15'
+                    confidence: low
+                    zipcode: 94043-1351
+                    latitude: '37.42240'
+                    longitude: '-122.08421'
+                    is_eu: false
+                    geoname_id: '6301403'
+                    country_emoji: 🇺🇸
+                  network:
+                    connection_type: ''
+                    route: 8.8.8.0/24
+                    is_anycast: true
+                  asn:
+                    as_number: AS15169
+                    organization: Google LLC
+                    country: US
+                    type: BUSINESS
+                    domain: google.com
+                    date_allocated: '2000-03-30'
+                    rir: ARIN
+                  security:
+                    threat_score: 0
+                    is_tor: false
+                    is_proxy: false
+                    proxy_provider_names: []
+                    proxy_confidence_score: 0
+                    proxy_last_seen: ''
+                    is_residential_proxy: false
+                    is_vpn: false
+                    vpn_provider_names: []
+                    vpn_confidence_score: 0
+                    vpn_last_seen: ''
+                    is_relay: false
+                    relay_provider_name: ''
+                    is_anonymous: false
+                    is_known_attacker: false
+                    is_bot: false
+                    is_spam: false
+                    is_cloud_provider: false
+                    cloud_provider_name: ''
+                - ip: 2.2.2.2
+                  location:
+                    continent_code: NA
+                    continent_name: North America
+                    country_code2: US
+                    country_code3: USA
+                    country_name: United States
+                    country_name_official: United States of America
+                    country_capital: Washington, D.C.
+                    state_prov: California
+                    state_code: US-CA
+                    district: Redwood Shores
+                    city: Redwood City
+                    locality: Redwood City
+                    accuracy_radius: '21.997'
+                    confidence: low
+                    zipcode: 94065-1600
+                    latitude: '37.53073'
+                    longitude: '-122.26245'
+                    is_eu: false
+                    geoname_id: '5370560'
+                    country_emoji: 🇺🇸
+                  network:
+                    connection_type: ''
+                    route: ''
+                    is_anycast: false
+                  asn:
+                    as_number: AS0
+                    organization: ''
+                    country: ''
+                    type: ''
+                    domain: ''
+                    date_allocated: ''
+                    rir: ''
+                  security:
+                    threat_score: 30
+                    is_tor: false
+                    is_proxy: false
+                    proxy_provider_names: []
+                    proxy_confidence_score: 0
+                    proxy_last_seen: ''
+                    is_residential_proxy: false
+                    is_vpn: false
+                    vpn_provider_names: []
+                    vpn_confidence_score: 0
+                    vpn_last_seen: ''
+                    is_relay: false
+                    relay_provider_name: ''
+                    is_anonymous: false
+                    is_known_attacker: true
+                    is_bot: false
+                    is_spam: false
+                    is_cloud_provider: false
+                    cloud_provider_name: ''
+                - ip: 1.1.1.1
+                  location:
+                    continent_code: OC
+                    continent_name: Oceania
+                    country_code2: AU
+                    country_code3: AUS
+                    country_name: Australia
+                    country_name_official: Commonwealth of Australia
+                    country_capital: Canberra
+                    state_prov: Queensland
+                    state_code: AU-QLD
+                    district: Brisbane
+                    city: South Brisbane
+                    locality: South Brisbane
+                    accuracy_radius: '29.565'
+                    confidence: low
+                    zipcode: '4101'
+                    latitude: '-27.47306'
+                    longitude: '153.01421'
+                    is_eu: false
+                    geoname_id: '10113228'
+                    country_emoji: 🇦🇺
+                  network:
+                    connection_type: ''
+                    route: 1.1.1.0/24
+                    is_anycast: true
+                  asn:
+                    as_number: AS13335
+                    organization: Cloudflare, Inc.
+                    country: US
+                    type: BUSINESS
+                    domain: cloudflare.com
+                    date_allocated: '2010-07-14'
+                    rir: ARIN
+                  security:
+                    threat_score: 5
+                    is_tor: false
+                    is_proxy: false
+                    proxy_provider_names: []
+                    proxy_confidence_score: 0
+                    proxy_last_seen: ''
+                    is_residential_proxy: false
+                    is_vpn: false
+                    vpn_provider_names: []
+                    vpn_confidence_score: 0
+                    vpn_last_seen: ''
+                    is_relay: false
+                    relay_provider_name: ''
+                    is_anonymous: false
+                    is_known_attacker: false
+                    is_bot: false
+                    is_spam: false
+                    is_cloud_provider: true
+                    cloud_provider_name: Cloudflare, Inc.
         4XX:
           $ref: "#/components/responses/ErrorResponse"
   /v1/domain/security:
@@ -940,6 +3462,156 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/DomainReputationResponse"
+              example:
+                input:
+                  domain: example.com
+                assessed_at: '2026-07-08T08:12:29Z'
+                version: 1.0.0
+                processing_time_ms: 742
+                risk_category:
+                  verdict: suspicious
+                  confidence: 0.94
+                  primary_threat: phishing
+                  severity: high
+                  threat_types:
+                  - phishing
+                  - spam
+                  sources:
+                  - source: Spamhaus
+                    indicator: example.com
+                    threat_type: phishing
+                    confidence: 0.97
+                    first_seen: '2026-07-01T10:22:00Z'
+                    last_seen: '2026-07-08T05:00:00Z'
+                  - source: AbuseIPDB
+                    indicator: 93.184.216.34
+                    threat_type: spam
+                    confidence: 0.83
+                    first_seen: '2026-06-30T13:11:00Z'
+                    last_seen: '2026-07-07T20:11:00Z'
+                  pivot_matches:
+                  - pivot: ns1.exampledns.com
+                    pivot_type: ns
+                    total_related_threats: 34
+                    confidence: 0.92
+                  - pivot: support@example.com
+                    pivot_type: email
+                    total_related_threats: 5
+                    confidence: 0.72
+                dga_score:
+                  score: 0.81
+                  is_dga: true
+                  model: deterministic_features_v1
+                  features:
+                    domain_length: 17
+                    vowel_consonant_ratio: 0.18
+                    ngram_perplexity: 3.91
+                    shannon_entropy: 4.72
+                    digit_letter_ratio: 0.23
+                    consonant_streak_max: 6
+                    tld_in_known_dga_set: false
+                  interpretation: likely_dga
+                trust_signals:
+                  trust_score: 12
+                  trust_band: low
+                  signals:
+                    positive:
+                    - code: valid_ssl
+                      weight: 8
+                      polarity: positive
+                      category: ssl_certificate
+                      evidence: TLS certificate issued by DigiCert
+                      confidence: 1
+                    negative:
+                    - code: dmarc_missing
+                      weight: 5
+                      polarity: negative
+                      category: email_security
+                      evidence: No DMARC record
+                      confidence: 1
+                    - code: javascript_obfuscated
+                      weight: 20
+                      polarity: negative
+                      category: content_analysis
+                      evidence: Highly obfuscated inline JavaScript detected
+                      confidence: 0.99
+                    neutral:
+                    - code: content_unavailable
+                      weight: 0
+                      polarity: neutral
+                      category: content_analysis
+                      evidence: Website did not respond
+                      confidence: 1
+                  indicators:
+                    is_newly_registered: true
+                    uses_free_extension: false
+                    uses_free_ssl: true
+                    has_privacy_whois: true
+                    ssl_age_days: 18
+                    has_dmarc: false
+                    has_spf: true
+                    redirects_externally: true
+                    javascript_obfuscated: true
+                    domain_age_days: 24
+                    registrar: Namecheap
+                email_deliverability:
+                  score: 95
+                  grade: excellent
+                  can_receive_email: true
+                  authentication:
+                    spf:
+                      present: true
+                      policy: -all
+                      record: v=spf1 include:_spf.example.com -all
+                    dkim:
+                      found: true
+                      selectors_found:
+                      - google
+                      providers_detected:
+                      - Google Workspace / Gmail
+                      note: Only common selectors are probed; a domain may use a custom selector
+                    dmarc:
+                      present: true
+                      policy: reject
+                      reporting_configured: true
+                  infrastructure:
+                    mx_count: 2
+                    mx_records:
+                    - aspmx.l.google.com
+                    - alt1.aspmx.l.google.com
+                    mx_provider: google_workspace
+                    null_mx: false
+                  reputation:
+                    spam_blacklisted: false
+                    newly_registered: false
+                    domain_age_days: 10500
+                  issues: []
+                intelligence:
+                  ioc_type: domain
+                  ioc_value: example.com
+                  related_iocs:
+                  - type: ipv4
+                    value: 93.184.216.34
+                    confidence: 0.91
+                  - type: email
+                    value: admin@example.com
+                    confidence: 0.84
+                  feed_tags:
+                  - verdict:suspicious
+                  - severity:high
+                  - campaign:phishing
+                  stix_pattern: '[domain-name:value=''example.com'']'
+                  recommended_action: block
+                  first_seen: '2026-07-01T10:22:00Z'
+                  last_seen: '2026-07-08T05:00:00Z'
+                evidence_summary:
+                  why_flagged:
+                  - Detected in multiple phishing feeds
+                  - Newly registered domain
+                  - Obfuscated JavaScript detected
+                  - External redirect observed
+                  - No DMARC record
+                errors: []
         "400":
           $ref: "#/components/responses/BadRequest"
         "401":
@@ -971,6 +3643,107 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AsnWhoisResponse"
+              example:
+                status: true
+                as_number: AS56554
+                query_time: '2024-02-01 08:28:26'
+                whois_server: whois.ripe.net
+                as_blocks:
+                - as_block: AS56444 - AS57146
+                  description:
+                  - RIPE NCC ASN block
+                  remarks:
+                  - These AS Numbers are assigned to network operators in the RIPE NCC service region.
+                  mnt_by:
+                  - RIPE-NCC-HM-MNT
+                  date_created: '2023-08-23'
+                  date_updated: '2023-08-23'
+                  source: RIPE
+                aut_nums:
+                - aut_num: AS56554
+                  as_name: IETF-MEETING
+                  description:
+                  - IETF Meeting Network
+                  status: ASSIGNED
+                  import:
+                  - from AS-ANY accept ANY
+                  export:
+                  - to AS-ANY announce ANY
+                  organization: ORG-IS136-RIPE
+                  sponsoring_organization: ORG-NIE1-RIPE
+                  admin_contacts:
+                  - IED11-RIPE
+                  tech_contacts:
+                  - IETF-RIPE
+                  mnt_by:
+                  - RIPE-NCC-END-MNT
+                  - IETF-MNT
+                  - netnod-mnt
+                  date_created: '2011-03-16'
+                  date_updated: '2019-03-26'
+                  source: RIPE
+                organization:
+                  handle: ORG-IS136-RIPE
+                  name: Internet Society
+                  type: OTHER
+                  address:
+                  - Galerie Jean-Malbuisson 15, CH-1204 Geneva, Switzerland
+                  street: Galerie Jean-malbuisson
+                  city: Geneva
+                  zip_code: CH-1204
+                  country:
+                  - CH
+                  abuse_contacts:
+                  - AR28097-RIPE
+                  mnt_ref:
+                  - netnod-mnt
+                  mnt_by:
+                  - ietf-mnt
+                  date_created: '2010-11-09'
+                  date_updated: '2022-12-01'
+                  source: RIPE
+                administrative_contacts:
+                - handle: IED11-RIPE
+                  name: IETF Executive Director
+                  address:
+                  - c/o Association Management Solutions, LLC (AMS)
+                  - 5177 Brandin Court
+                  - Fremont, California 94538
+                  - USA
+                  street: Brandin Court
+                  city: Fremont
+                  state: CALIFORNIA
+                  zip_code: '94538'
+                  country: USA
+                  mnt_by:
+                  - IETF-MNT
+                  date_created: '2019-03-26'
+                  date_updated: '2019-03-26'
+                  source: RIPE
+                technical_contacts:
+                - handle: IETF-RIPE
+                  name: IETF NOC
+                  address:
+                  - c/o Association Management Solutions, LLC (AMS)
+                  - 5177 Brandin Court
+                  - Fremont, California 94538
+                  - USA
+                  street: Brandin Court
+                  city: Fremont
+                  state: CALIFORNIA
+                  zip_code: '94538'
+                  country: USA
+                  tech_contacts:
+                  - JM13150-RIPE
+                  - SC21890-RIPE
+                  - WK1766-RIPE
+                  - CS218
+                  mnt_by:
+                  - IETF-MNT
+                  date_created: '2019-03-26'
+                  date_updated: '2019-05-28'
+                  source: RIPE
+                whois_raw_response: '#########################################'
         4XX:
           $ref: "#/components/responses/ErrorResponse"
   /v1.0/ip-whois:
@@ -996,6 +3769,60 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/IpWhoisResponse"
+              example:
+                status: true
+                ip_address: 8.8.8.8
+                query_time: '2024-02-01 07:50:47'
+                whois_server: whois.arin.net
+                inet_nums:
+                - start_ip: 8.8.8.0
+                  end_ip: 8.8.8.255
+                  cidr:
+                  - 8.8.8.0/24
+                  net_name: GOGL
+                  net_handle: NET-8-8-8-0-2
+                  status: Direct Allocation
+                  organization: Google LLC (GOGL)
+                  date_created: '2023-12-28'
+                  date_updated: '2023-12-28'
+                  source: https://rdap.arin.net/registry/ip/8.8.8.0
+                  parents:
+                  - NET8 (NET-8-0-0-0-0)
+                organization:
+                  handle: GOGL
+                  name: Google LLC
+                  address:
+                  - 1600 Amphitheatre Parkway
+                  - Mountain View
+                  - CA
+                  - '94043'
+                  - US
+                  street: Amphitheatre Parkway
+                  city: Mountain View
+                  state: CA
+                  zip_code: '94043'
+                  country:
+                  - US
+                  date_created: '2000-03-30'
+                  date_updated: '2019-10-31'
+                  source: https://rdap.arin.net/registry/entity/GOGL
+                technical_contacts:
+                - handle: ZG39-ARIN
+                  name: Google LLC
+                  email:
+                  - arin-contact@google.com
+                  phone:
+                  - +1-650-253-0000
+                  source: https://rdap.arin.net/registry/entity/ZG39-ARIN
+                abuse_contacts:
+                - handle: ABUSE5250-ARIN
+                  name: Abuse
+                  email:
+                  - network-abuse@google.com
+                  phone:
+                  - +1-650-253-0000
+                  source: https://rdap.arin.net/registry/entity/ABUSE5250-ARIN
+                whois_raw_response: '###############################################'
         4XX:
           $ref: "#/components/responses/ErrorResponse"
   /v1.0/api-key/rotate:
@@ -1033,6 +3860,17 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/AccountUsageResponse"
+              example:
+                apiKey: '************3f9a'
+                apiCredits:
+                  totalCredits: 5000
+                  servedRequest: 1240
+                apiSubscription:
+                  subscriptionStatus: active
+                  requestLimit: 100000
+                  servedRequests: 28431
+                  surchargeRequestLimit: 10000
+                  servedSurchargeRequests: 0
         4XX:
           $ref: "#/components/responses/ErrorResponse"
       description: Account Usage. Returns the file/snapshot described by this operation.
@@ -1784,6 +4622,181 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/WhoisHistoricalResponse"
+              example:
+                status: true
+                whois: historical
+                total_records: '2'
+                whois_domains_historical:
+                - num: 1
+                  status: true
+                  domain_name: example.com
+                  query_time: '2022-01-01 00:00:00'
+                  whois_server: whois.verisign-grs.com
+                  domain_registered: 'yes'
+                  secure_dns: true
+                  domain_handle: D12345-LRMS
+                  create_date: '1995-08-14'
+                  update_date: '2022-01-01'
+                  expiry_date: '2023-08-13'
+                  domain_registrar:
+                    id: R123
+                    id_type: IANA
+                    iana_id: '292'
+                    registry_id: RID789
+                    handle: H456
+                    status: active
+                    registrar_name: Example Registrar Inc.
+                    normalized_name: example registrar inc
+                    whois_server: whois.registrar.com
+                    rdap_server: https://rdap.registrar.com
+                    website_url: https://www.registrar.com
+                    email_address: support@registrar.com
+                    phone_number: '+1.5555555555'
+                    authoritative_registry_name: VeriSign Global Registry Services
+                    organization_number: ORG-12345
+                    is_sponsor: true
+                  reseller_contact:
+                    id: RES-123
+                    id_type: IANA
+                    handle: RH-123
+                    name: Reseller Name
+                    company: Reseller Company
+                    street: 123 Reseller St
+                    city: Reseller City
+                    state: CA
+                    zip_code: '90001'
+                    country_name: United States
+                    country_code: US
+                    email_address: reseller@example.com
+                    phone: '+1.5555555555'
+                    fax: '+1.5555555556'
+                    mailing_address: 123 Reseller St, Reseller City, CA 90001
+                  registrant_contact:
+                    id: REG-123
+                    id_type: IANA
+                    handle: C1234-LRMS
+                    name: John Doe
+                    company: Example Company Inc.
+                    street: 123 Example St
+                    city: Example City
+                    state: CA
+                    zip_code: '90001'
+                    country_name: United States
+                    country_code: US
+                    email_address: john@example.com
+                    phone: '+1.5555555555'
+                    fax: '+1.5555555556'
+                    mailing_address: 123 Example St, Example City, CA 90001
+                  administrative_contact:
+                    id: ADM-123
+                    id_type: IANA
+                    handle: A1234-LRMS
+                    name: Admin Name
+                    company: Admin Company
+                    street: 123 Admin St
+                    city: Admin City
+                    state: CA
+                    zip_code: '90001'
+                    country_name: United States
+                    country_code: US
+                    email_address: admin@example.com
+                    phone: '+1.5555555555'
+                    fax: '+1.5555555556'
+                    mailing_address: 123 Admin St, Admin City, CA 90001
+                  technical_contact:
+                    id: TECH-123
+                    id_type: IANA
+                    handle: T1234-LRMS
+                    name: Tech Name
+                    company: Tech Company
+                    street: 123 Tech St
+                    city: Tech City
+                    state: CA
+                    zip_code: '90001'
+                    country_name: United States
+                    country_code: US
+                    email_address: tech@example.com
+                    phone: '+1.5555555555'
+                    fax: '+1.5555555556'
+                    mailing_address: 123 Tech St, Tech City, CA 90001
+                  billing_contact:
+                    id: BILL-123
+                    id_type: IANA
+                    handle: B1234-LRMS
+                    name: Billing Name
+                    company: Billing Company
+                    street: 123 Billing St
+                    city: Billing City
+                    state: CA
+                    zip_code: '90001'
+                    country_name: United States
+                    country_code: US
+                    email_address: billing@example.com
+                    phone: '+1.5555555555'
+                    fax: '+1.5555555556'
+                    mailing_address: 123 Billing St, Billing City, CA 90001
+                  eligibility_info:
+                    id: ELG-123
+                    name: Eligibility Name
+                    type: ABN
+                  abuse_contact:
+                    id: ABUSE-123
+                    id_type: IANA
+                    iana_id: '292'
+                    registry_id: RID789
+                    handle: AH-456
+                    status: active
+                    registrar_name: Abuse Registrar
+                    normalized_name: abuse registrar
+                    whois_server: whois.abuse.com
+                    rdap_server: https://rdap.abuse.com
+                    website_url: https://www.abuse.com
+                    email_address: abuse@registrar.com
+                    phone_number: '+1.5555555555'
+                    authoritative_registry_name: VeriSign Global Registry Services
+                    organization_number: ORG-ABUSE
+                    is_sponsor: false
+                  name_servers:
+                  - ns1.example.com
+                  - ns2.example.com
+                  domain_status:
+                  - clientTransferProhibited
+                  - clientUpdateProhibited
+                  whois_raw_domain: 'Domain Name: EXAMPLE.COM
+
+                    Registry Domain ID: ...'
+                  registry_data:
+                    domain_name: example.com
+                    query_time: '2022-01-01 00:00:00'
+                    whois_server: whois.iana.org
+                    create_date: '1995-08-14'
+                    update_date: '2022-01-01'
+                    expiry_date: '2023-08-13'
+                    domain_registrar:
+                      id: R123
+                      id_type: IANA
+                      iana_id: '292'
+                      registry_id: RID789
+                      handle: H456
+                      status: active
+                      registrar_name: Example Registrar Inc.
+                      normalized_name: example registrar inc
+                      whois_server: whois.registrar.com
+                      rdap_server: https://rdap.registrar.com
+                      website_url: https://www.registrar.com
+                      email_address: support@registrar.com
+                      phone_number: '+1.5555555555'
+                      authoritative_registry_name: VeriSign Global Registry Services
+                      organization_number: ORG-12345
+                      is_sponsor: true
+                    name_servers:
+                    - ns1.example.com
+                    - ns2.example.com
+                    domain_status:
+                    - clientTransferProhibited
+                    whois_raw_registry: 'Domain Name: EXAMPLE.COM
+
+                      Registry Domain ID: ...'
   /v2.0/whois/reverse:
     get:
       tags:
@@ -1822,6 +4835,181 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ReverseWhoisResponse"
+              example:
+                total_Result: 150
+                total_Pages: 3
+                current_Page: 1
+                whois_domains_historical:
+                - num: 1
+                  status: true
+                  domain_name: example.com
+                  query_time: '2026-07-15 06:39:03'
+                  whois_server: whois.verisign-grs.com
+                  domain_registered: 'yes'
+                  secure_dns: true
+                  domain_handle: D12345-LRMS
+                  create_date: '1995-08-14'
+                  update_date: '2024-08-14'
+                  expiry_date: '2025-08-13'
+                  domain_registrar:
+                    id: R123
+                    id_type: IANA
+                    iana_id: '292'
+                    registry_id: RID789
+                    handle: H456
+                    status: active
+                    registrar_name: Example Registrar Inc.
+                    normalized_name: example registrar inc
+                    whois_server: whois.registrar.com
+                    rdap_server: https://rdap.registrar.com
+                    website_url: https://www.registrar.com
+                    email_address: support@registrar.com
+                    phone_number: '+1.5555555555'
+                    authoritative_registry_name: VeriSign Global Registry Services
+                    organization_number: ORG-12345
+                    is_sponsor: true
+                  reseller_contact:
+                    id: RES-123
+                    id_type: IANA
+                    handle: RH-123
+                    name: Reseller Name
+                    company: Reseller Company
+                    street: 123 Reseller St
+                    city: Reseller City
+                    state: CA
+                    zip_code: '90001'
+                    country_name: United States
+                    country_code: US
+                    email_address: reseller@example.com
+                    phone: '+1.5555555555'
+                    fax: '+1.5555555556'
+                    mailing_address: 123 Reseller St, Reseller City, CA 90001
+                  registrant_contact:
+                    id: REG-123
+                    id_type: IANA
+                    handle: C1234-LRMS
+                    name: John Doe
+                    company: Example Company Inc.
+                    street: 123 Example St
+                    city: Example City
+                    state: CA
+                    zip_code: '90001'
+                    country_name: United States
+                    country_code: US
+                    email_address: john@example.com
+                    phone: '+1.5555555555'
+                    fax: '+1.5555555556'
+                    mailing_address: 123 Example St, Example City, CA 90001
+                  administrative_contact:
+                    id: ADM-123
+                    id_type: IANA
+                    handle: A1234-LRMS
+                    name: Admin Name
+                    company: Admin Company
+                    street: 123 Admin St
+                    city: Admin City
+                    state: CA
+                    zip_code: '90001'
+                    country_name: United States
+                    country_code: US
+                    email_address: admin@example.com
+                    phone: '+1.5555555555'
+                    fax: '+1.5555555556'
+                    mailing_address: 123 Admin St, Admin City, CA 90001
+                  technical_contact:
+                    id: TECH-123
+                    id_type: IANA
+                    handle: T1234-LRMS
+                    name: Tech Name
+                    company: Tech Company
+                    street: 123 Tech St
+                    city: Tech City
+                    state: CA
+                    zip_code: '90001'
+                    country_name: United States
+                    country_code: US
+                    email_address: tech@example.com
+                    phone: '+1.5555555555'
+                    fax: '+1.5555555556'
+                    mailing_address: 123 Tech St, Tech City, CA 90001
+                  billing_contact:
+                    id: BILL-123
+                    id_type: IANA
+                    handle: B1234-LRMS
+                    name: Billing Name
+                    company: Billing Company
+                    street: 123 Billing St
+                    city: Billing City
+                    state: CA
+                    zip_code: '90001'
+                    country_name: United States
+                    country_code: US
+                    email_address: billing@example.com
+                    phone: '+1.5555555555'
+                    fax: '+1.5555555556'
+                    mailing_address: 123 Billing St, Billing City, CA 90001
+                  eligibility_info:
+                    id: ELG-123
+                    name: Eligibility Name
+                    type: ABN
+                  abuse_contact:
+                    id: ABUSE-123
+                    id_type: IANA
+                    iana_id: '292'
+                    registry_id: RID789
+                    handle: AH-456
+                    status: active
+                    registrar_name: Abuse Registrar
+                    normalized_name: abuse registrar
+                    whois_server: whois.abuse.com
+                    rdap_server: https://rdap.abuse.com
+                    website_url: https://www.abuse.com
+                    email_address: abuse@registrar.com
+                    phone_number: '+1.5555555555'
+                    authoritative_registry_name: VeriSign Global Registry Services
+                    organization_number: ORG-ABUSE
+                    is_sponsor: false
+                  name_servers:
+                  - ns1.example.com
+                  - ns2.example.com
+                  domain_status:
+                  - clientTransferProhibited
+                  - clientUpdateProhibited
+                  whois_raw_domain: 'Domain Name: EXAMPLE.COM
+
+                    Registry Domain ID: ...'
+                  registry_data:
+                    domain_name: example.com
+                    query_time: '2026-07-15 06:39:03'
+                    whois_server: whois.iana.org
+                    create_date: '1995-08-14'
+                    update_date: '2024-08-14'
+                    expiry_date: '2025-08-13'
+                    domain_registrar:
+                      id: R123
+                      id_type: IANA
+                      iana_id: '292'
+                      registry_id: RID789
+                      handle: H456
+                      status: active
+                      registrar_name: Example Registrar Inc.
+                      normalized_name: example registrar inc
+                      whois_server: whois.registrar.com
+                      rdap_server: https://rdap.registrar.com
+                      website_url: https://www.registrar.com
+                      email_address: support@registrar.com
+                      phone_number: '+1.5555555555'
+                      authoritative_registry_name: VeriSign Global Registry Services
+                      organization_number: ORG-12345
+                      is_sponsor: true
+                    name_servers:
+                    - ns1.example.com
+                    - ns2.example.com
+                    domain_status:
+                    - clientTransferProhibited
+                    whois_raw_registry: 'Domain Name: EXAMPLE.COM
+
+                      Registry Domain ID: ...'
   /v3.4/download/threat-feed/phishing:
     servers: *id001
     get:
