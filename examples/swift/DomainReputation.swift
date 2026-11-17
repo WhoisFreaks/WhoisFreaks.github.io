@@ -2,7 +2,7 @@
 //
 // Parameters for domainReputation (GET /v1/domain/security):
 //   - domainName (string, required): The domain name to assess
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 //
 // Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
 

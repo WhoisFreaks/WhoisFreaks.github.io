@@ -1,7 +1,7 @@
 # Bulk WHOIS Lookup
 #
 # Parameters for bulkWhois (POST /v2.0/bulkwhois/live):
-#   - format (string (one of: json, xml), optional)
+#   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 #   - body: BulkWhoisRequest (required): request body object
 
 require "json"

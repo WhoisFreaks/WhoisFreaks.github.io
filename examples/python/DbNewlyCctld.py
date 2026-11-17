@@ -15,9 +15,9 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DatabasesNewlyRegisteredApi(client)
 
     # db_newly_cctld parameters:
-    #   whois (bool, required)
+    #   whois (bool, required): Set true for the file with full WHOIS records, false for domain names only
     #   var_date (datetime.date, optional, keyword): yyyy-MM-dd; omit for latest
-    #   tlds (str, optional, keyword)
+    #   tlds (str, optional, keyword): Comma separated TLDs to limit the file to, for example com,net. Every TLD is ...
     data = api.db_newly_cctld(True, var_date=date(2026, 10, 1))  # the file's raw bytes
     path = "DbNewlyCctld.csv"
     with open(path, "wb") as f:

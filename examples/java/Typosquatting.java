@@ -1,9 +1,9 @@
 // Runnable example: Typosquatting Lookup (GET /v3.0/domain/typos)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=Typosquatting
 // Parameters for typosquatting (GET /v3.0/domain/typos):
-//   - keyword (string, optional)
-//   - pattern (string, optional)
-//   - pageToken (string, optional)
+//   - keyword (string, optional): Brand or label to find typo variants for. Pass either keyword or pattern, not both.
+//   - pattern (string, optional): Wildcard search string, where '*' matches any characters. Pass either keyword or patter...
+//   - pageToken (string, optional): Token from nextPageToken in the previous response, needed from page 2 onward. Send it w...
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.TyposquattingApi;

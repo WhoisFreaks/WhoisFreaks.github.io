@@ -19,7 +19,7 @@ Check availability of a single domain and optionally get suggestions across mult
 | `domain` | query | yes | string |  | The domain name to check |
 | `sug` | query | no | boolean | `false` | Whether to return TLD suggestions alongside the queried domain. |
 | `count` | query | no | integer | `5` | Number of TLD suggestions to return when sug=true. Maximum is 100. |
-| `format` | query | no | string | `json` |  (one of: json, xml) |
+| `format` | query | no | string | `json` | Response format. JSON when the parameter is left out. (one of: json, xml) |
 
 **Response** (`DomainAvailabilityResponse`)
 
@@ -66,7 +66,7 @@ with whoisfreaks.ApiClient(config) as client:
     #   domain (str, required): The domain name to check
     #   sug (bool, optional, keyword): Whether to return TLD suggestions alongside the queried domain; default False
     #   count (int, optional, keyword): Number of TLD suggestions to return when sug=true. Maximum is 100; default 5
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.domain_availability_v2("google.com", sug=True, count=5)
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -88,7 +88,7 @@ const api = new DomainAvailabilityApi(config);
 //   domain (string, required): The domain name to check
 //   sug (boolean, optional): Whether to return TLD suggestions alongside the queried domain; default false
 //   count (number, optional): Number of TLD suggestions to return when sug=true. Maximum is 100; default 5
-//   format ("json" | "xml", optional): default "json"
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.domainAvailabilityV2({ domain: "google.com", sug: true, count: 5 });
   console.log(JSON.stringify(result, null, 2));
@@ -116,7 +116,7 @@ main().catch(async (err: unknown) => {
 //   - domain (string, required): The domain name to check
 //   - sug (boolean, optional): Whether to return TLD suggestions alongside the queried domain.
 //   - count (integer, optional): Number of TLD suggestions to return when sug=true. Maximum is 100.
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 
@@ -162,7 +162,7 @@ Two bulk modes. Mode 1: POST domainNames array. Mode 2: POST tld array plus doma
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
 | `domain` | query | no | string |  | Required for TLD-mode bulk check (base domain). |
-| `format` | query | no | string | `json` |  (one of: json, xml) |
+| `format` | query | no | string | `json` | Response format. JSON when the parameter is left out. (one of: json, xml) |
 
 **Request body** (`application/json`, model `BulkDomainAvailabilityRequest`)
 
@@ -214,7 +214,7 @@ with whoisfreaks.ApiClient(config) as client:
     # bulk_domain_availability_v2 parameters:
     #   bulk_domain_availability_request (BulkDomainAvailabilityRequest, required): request body
     #   domain (str, optional, keyword): Required for TLD-mode bulk check (base domain)
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     body = whoisfreaks.BulkDomainAvailabilityRequest(domain_names=["whoisfreaks.com", "example.com"])
     result = api.bulk_domain_availability_v2(body)
     print(json.dumps(result.to_dict(), indent=2))
@@ -236,7 +236,7 @@ const api = new DomainAvailabilityApi(config);
 // bulkDomainAvailabilityV2({ bulkDomainAvailabilityRequest, domain?, format? })
 //   bulkDomainAvailabilityRequest (BulkDomainAvailabilityRequest, required): request body
 //   domain (string, optional): Required for TLD-mode bulk check (base domain)
-//   format ("json" | "xml", optional): default "json"
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const body: BulkDomainAvailabilityRequest = { domainNames: ["whoisfreaks.com", "example.com"] };
   const result = await api.bulkDomainAvailabilityV2({ bulkDomainAvailabilityRequest: body });
@@ -263,7 +263,7 @@ main().catch(async (err: unknown) => {
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for bulkDomainAvailabilityV2 (POST /v2.0/domain/availability):
 //   - domain (string, optional): Required for TLD-mode bulk check (base domain).
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 //   - body: BulkDomainAvailabilityRequest (required): request body object
 
 package main

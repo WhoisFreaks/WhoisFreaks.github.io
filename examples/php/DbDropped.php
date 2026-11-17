@@ -2,7 +2,7 @@
 // Dropped Domains
 //
 // Parameters for dbDropped (GET /v3.1/download/domainer/dropped):
-//   - whois (boolean, required)
+//   - whois (boolean, required): Set true for the file with full WHOIS records, false for domain names only.
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 
 require __DIR__ . '/vendor/autoload.php';

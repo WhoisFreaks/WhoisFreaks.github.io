@@ -1,7 +1,7 @@
 // Runnable example: ASN WHOIS Snapshot (GET /v3.3/download/snapshot/asn/whois)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbAsnWhois
 // Parameters for dbAsnWhois (GET /v3.3/download/snapshot/asn/whois):
-//   - date (string, required)
+//   - date (string, required): The day whose file you want, in YYYY-MM-DD format.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.DatabasesAsnWhoisApi;

@@ -1,7 +1,7 @@
 # IP WHOIS Snapshot
 #
 # Parameters for dbIpWhois (GET /v3.3/download/snapshot/ip/whois):
-#   - date (string, required)
+#   - date (string, required): The day whose file you want, in YYYY-MM-DD format.
 
 require "date"
 require "fileutils"

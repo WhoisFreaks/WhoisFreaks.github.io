@@ -15,6 +15,6 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.GeolocationApi(client)
 
     # geolocation parameters:
-    #   ip (str, required)
+    #   ip (str, required): IP address to look up
     result = api.geolocation("8.8.8.8")
     print(json.dumps(result.to_dict(), indent=2))

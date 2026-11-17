@@ -1,7 +1,7 @@
 # ASN WHOIS Snapshot
 #
 # Parameters for dbAsnWhois (GET /v3.3/download/snapshot/asn/whois):
-#   - date (string, required)
+#   - date (string, required): The day whose file you want, in YYYY-MM-DD format.
 
 require "date"
 require "fileutils"

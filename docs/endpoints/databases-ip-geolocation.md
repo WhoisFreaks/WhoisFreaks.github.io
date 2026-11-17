@@ -135,7 +135,7 @@ IP to Country Snapshot. Returns the file/snapshot described by this operation.
 
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
-| `date` | query | yes | string (date) |  |  |
+| `date` | query | yes | string (date) |  | The day whose file you want, in YYYY-MM-DD format. |
 
 **Usage**
 
@@ -159,7 +159,7 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DatabasesIPGeolocationApi(client)
 
     # db_ip_country parameters:
-    #   var_date (datetime.date, required)
+    #   var_date (datetime.date, required): The day whose file you want, in YYYY-MM-DD format
     data = api.db_ip_country(date(2026, 10, 1))  # the file's raw bytes
     path = "DbIpCountry.zip"
     with open(path, "wb") as f:
@@ -183,7 +183,7 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesIPGeolocationApi(config);
 
 // dbIpCountry({ date })
-//   date (Date, required)
+//   date (Date, required): The day whose file you want, in YYYY-MM-DD format
 async function main(): Promise<void> {
   const blob = await api.dbIpCountry({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
   const file = "DbIpCountry.zip";
@@ -210,7 +210,7 @@ main().catch(async (err: unknown) => {
 // Runnable example: IP to Country Snapshot (GET /v3.3/download/snapshot/ip/country)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbIpCountry (GET /v3.3/download/snapshot/ip/country):
-//   - date (string, required)
+//   - date (string, required): The day whose file you want, in YYYY-MM-DD format.
 
 package main
 
@@ -387,7 +387,7 @@ IP to City Snapshot. Returns the file/snapshot described by this operation.
 
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
-| `date` | query | yes | string (date) |  |  |
+| `date` | query | yes | string (date) |  | The day whose file you want, in YYYY-MM-DD format. |
 
 **Usage**
 
@@ -411,7 +411,7 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DatabasesIPGeolocationApi(client)
 
     # db_ip_city parameters:
-    #   var_date (datetime.date, required)
+    #   var_date (datetime.date, required): The day whose file you want, in YYYY-MM-DD format
     data = api.db_ip_city(date(2026, 10, 1))  # the file's raw bytes
     path = "DbIpCity.zip"
     with open(path, "wb") as f:
@@ -435,7 +435,7 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesIPGeolocationApi(config);
 
 // dbIpCity({ date })
-//   date (Date, required)
+//   date (Date, required): The day whose file you want, in YYYY-MM-DD format
 async function main(): Promise<void> {
   const blob = await api.dbIpCity({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
   const file = "DbIpCity.zip";
@@ -462,7 +462,7 @@ main().catch(async (err: unknown) => {
 // Runnable example: IP to City Snapshot (GET /v3.3/download/snapshot/ip/city)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbIpCity (GET /v3.3/download/snapshot/ip/city):
-//   - date (string, required)
+//   - date (string, required): The day whose file you want, in YYYY-MM-DD format.
 
 package main
 

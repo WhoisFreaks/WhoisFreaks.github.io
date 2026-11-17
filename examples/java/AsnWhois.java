@@ -1,8 +1,8 @@
 // Runnable example: ASN WHOIS Lookup (GET /v2.0/asn-whois)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=AsnWhois
 // Parameters for asnWhois (GET /v2.0/asn-whois):
-//   - asn (string, required)
-//   - format (string (one of: json, xml), optional)
+//   - asn (string, required): Autonomous system number to look up, with or without the AS prefix.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.AsnWhoisApi;

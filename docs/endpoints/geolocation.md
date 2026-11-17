@@ -16,7 +16,7 @@ Get location, ASN, currency for an IP. 1 credit.
 
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
-| `ip` | query | yes | string |  |  |
+| `ip` | query | yes | string |  | IP address to look up. |
 
 **Response** (`GeolocationResponse`)
 
@@ -108,7 +108,7 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.GeolocationApi(client)
 
     # geolocation parameters:
-    #   ip (str, required)
+    #   ip (str, required): IP address to look up
     result = api.geolocation("8.8.8.8")
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -127,7 +127,7 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new GeolocationApi(config);
 
 // geolocation({ ip })
-//   ip (string, required)
+//   ip (string, required): IP address to look up
 async function main(): Promise<void> {
   const result = await api.geolocation({ ip: "8.8.8.8" });
   console.log(JSON.stringify(result, null, 2));
@@ -152,7 +152,7 @@ main().catch(async (err: unknown) => {
 // Runnable example: IP Geolocation Lookup (GET /v1.0/geolocation)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for geolocation (GET /v1.0/geolocation):
-//   - ip (string, required)
+//   - ip (string, required): IP address to look up.
 
 package main
 

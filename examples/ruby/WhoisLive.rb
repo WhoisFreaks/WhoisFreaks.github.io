@@ -1,8 +1,8 @@
 # Live WHOIS Lookup
 #
 # Parameters for whoisLive (GET /v2.0/whois/live):
-#   - domain_name (string, required)
-#   - format (string (one of: json, xml), optional)
+#   - domain_name (string, required): Domain to look up.
+#   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 require "json"
 require "whoisfreaks"

@@ -16,7 +16,7 @@ Threat intel for IP: VPN, proxy, Tor, bots. 1 credit.
 
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
-| `ip` | query | yes | string |  |  |
+| `ip` | query | yes | string |  | IP address to look up. |
 
 **Response** (`IpReputationResponse`)
 
@@ -130,7 +130,7 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.IPReputationApi(client)
 
     # ip_reputation parameters:
-    #   ip (str, required)
+    #   ip (str, required): IP address to look up
     result = api.ip_reputation("8.8.8.8")
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -149,7 +149,7 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new IPReputationApi(config);
 
 // ipReputation({ ip })
-//   ip (string, required)
+//   ip (string, required): IP address to look up
 async function main(): Promise<void> {
   const result = await api.ipReputation({ ip: "8.8.8.8" });
   console.log(JSON.stringify(result, null, 2));
@@ -174,7 +174,7 @@ main().catch(async (err: unknown) => {
 // Runnable example: IP Reputation Lookup (GET /v1.0/security)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for ipReputation (GET /v1.0/security):
-//   - ip (string, required)
+//   - ip (string, required): IP address to look up.
 
 package main
 
@@ -430,7 +430,7 @@ Same lookup as /v1.0/security on a restructured response. The ASN block moves to
 
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
-| `ip` | query | yes | string |  |  |
+| `ip` | query | yes | string |  | IP address to look up. |
 
 **Response** (`IpReputationResponse`)
 
@@ -544,7 +544,7 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.IPReputationApi(client)
 
     # ip_reputation_v2 parameters:
-    #   ip (str, required)
+    #   ip (str, required): IP address to look up
     result = api.ip_reputation_v2("8.8.8.8")
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -563,7 +563,7 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new IPReputationApi(config);
 
 // ipReputationV2({ ip })
-//   ip (string, required)
+//   ip (string, required): IP address to look up
 async function main(): Promise<void> {
   const result = await api.ipReputationV2({ ip: "8.8.8.8" });
   console.log(JSON.stringify(result, null, 2));
@@ -588,7 +588,7 @@ main().catch(async (err: unknown) => {
 // Runnable example: IP Reputation Lookup (v2.0) (GET /v2.0/security)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for ipReputationV2 (GET /v2.0/security):
-//   - ip (string, required)
+//   - ip (string, required): IP address to look up.
 
 package main
 

@@ -24,6 +24,7 @@ Install: see the [Kotlin guide](../../docs/languages/kotlin.md). Set the `WHOISF
 
 ## Typosquatting
 - [`Typosquatting.kt`](Typosquatting.kt): Typosquatting Lookup (`GET /v3.0/domain/typos`)
+- [`SubdomainTyposquatting.kt`](SubdomainTyposquatting.kt): Subdomain Typosquatting Lookup (`GET /v3.0/subdomains/typos`)
 
 ## SSL
 - [`SslLookup.kt`](SslLookup.kt): SSL Certificate Lookup (`GET /v1.0/ssl/live`)

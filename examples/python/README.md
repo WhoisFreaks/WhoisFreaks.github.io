@@ -24,6 +24,7 @@ Install: see the [Python guide](../../docs/languages/python.md). Set the `WHOISF
 
 ## Typosquatting
 - [`Typosquatting.py`](Typosquatting.py): Typosquatting Lookup (`GET /v3.0/domain/typos`)
+- [`SubdomainTyposquatting.py`](SubdomainTyposquatting.py): Subdomain Typosquatting Lookup (`GET /v3.0/subdomains/typos`)
 
 ## SSL
 - [`SslLookup.py`](SslLookup.py): SSL Certificate Lookup (`GET /v1.0/ssl/live`)

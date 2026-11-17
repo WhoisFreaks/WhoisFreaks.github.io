@@ -119,8 +119,8 @@ See [Authentication](../authentication.md) for how to obtain a key. Minimal setu
 // Runnable example: Live WHOIS Lookup (GET /v2.0/whois/live)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=WhoisLive
 // Parameters for whoisLive (GET /v2.0/whois/live):
-//   - domainName (string, required)
-//   - format (string (one of: json, xml), optional)
+//   - domainName (string, required): Domain to look up.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.WhoisApi;
@@ -144,7 +144,7 @@ public class WhoisLive {
 
 ## Endpoints
 
-All 94 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
+All 95 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
 
 ### WHOIS
 
@@ -156,8 +156,8 @@ All 94 endpoints are shown below, grouped by category. Each includes its method,
 // Runnable example: Live WHOIS Lookup (GET /v2.0/whois/live)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=WhoisLive
 // Parameters for whoisLive (GET /v2.0/whois/live):
-//   - domainName (string, required)
-//   - format (string (one of: json, xml), optional)
+//   - domainName (string, required): Domain to look up.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.WhoisApi;
@@ -187,7 +187,7 @@ public class WhoisLive {
 // Runnable example: Bulk WHOIS Lookup (POST /v2.0/bulkwhois/live)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=BulkWhois
 // Parameters for bulkWhois (POST /v2.0/bulkwhois/live):
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 //   - body: BulkWhoisRequest (required): request body object
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
@@ -224,7 +224,7 @@ public class BulkWhois {
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=WhoisHistory
 // Parameters for whoisHistory (GET /v2.0/whois/history):
 //   - domainName (string, required): Domain to fetch historical WHOIS records for
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.WhoisApi;
@@ -256,7 +256,7 @@ public class WhoisHistory {
 // Parameters for whoisReverse (GET /v2.0/whois/reverse):
 //   - keyword (string, required): Keyword to search across WHOIS records
 //   - page (integer, optional): Page number
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.WhoisApi;
@@ -288,10 +288,10 @@ public class WhoisReverse {
 // Runnable example: Live DNS Lookup (GET /v2.0/dns/live)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DnsLive
 // Parameters for dnsLive (GET /v2.0/dns/live):
-//   - domainName (string, optional)
+//   - domainName (string, optional): Domain to look up.
 //   - ipAddress (string, optional): Use for PTR lookups
 //   - type (string, required): all or comma-separated: A,MX,NS,TXT,SOA,SPF,AAAA,CNAME
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.DnsApi;
@@ -321,10 +321,10 @@ public class DnsLive {
 // Runnable example: Historical DNS Lookup (GET /v2.0/dns/historical)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DnsHistorical
 // Parameters for dnsHistorical (GET /v2.0/dns/historical):
-//   - domainName (string, required)
-//   - type (string, required)
-//   - page (integer, optional)
-//   - format (string (one of: json, xml), optional)
+//   - domainName (string, required): Domain to look up.
+//   - type (string, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to all.
+//   - page (integer, optional): Page of results to return. Defaults to 1.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.DnsApi;
@@ -355,10 +355,10 @@ public class DnsHistorical {
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DnsReverse
 // Parameters for dnsReverse (GET /v2.1/dns/reverse):
 //   - value (string, required): IP, CIDR, or record value
-//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
-//   - exact (boolean, optional)
-//   - page (integer, optional)
-//   - format (string (one of: json, xml), optional)
+//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required): DNS record type to search by.
+//   - exact (boolean, optional): Set true to match value exactly. Defaults to false, where value is treated as a pattern...
+//   - page (integer, optional): Page of results to return. Defaults to 1.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.DnsApi;
@@ -388,12 +388,12 @@ public class DnsReverse {
 // Runnable example: Historical DNS Lookup (v2.2) (GET /v2.2/dns/historical)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DnsHistoricalV22
 // Parameters for dnsHistoricalV22 (GET /v2.2/dns/historical):
-//   - domainName (string, required)
-//   - type (string, required)
-//   - page (integer, optional)
+//   - domainName (string, required): Domain to look up.
+//   - type (string, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to all.
+//   - page (integer, optional): Page of results to return. Defaults to 1.
 //   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
 //   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.DnsApi;
@@ -423,12 +423,12 @@ public class DnsHistoricalV22 {
 // Runnable example: Historical DNS Lookup (v2.3) (GET /v2.3/dns/historical)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DnsHistoricalV23
 // Parameters for dnsHistoricalV23 (GET /v2.3/dns/historical):
-//   - domainName (string, required)
-//   - type (string, required)
-//   - page (integer, optional)
+//   - domainName (string, required): Domain to look up.
+//   - type (string, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to all.
+//   - page (integer, optional): Page of results to return. Defaults to 1.
 //   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
 //   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.DnsApi;
@@ -459,12 +459,12 @@ public class DnsHistoricalV23 {
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DnsReverseV22
 // Parameters for dnsReverseV22 (GET /v2.2/dns/reverse):
 //   - value (string, required): IP, CIDR, or record value
-//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
+//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required): DNS record type to search by.
 //   - exact (boolean, optional): When false the value is matched as a substring, which is far slower than an exact match...
-//   - page (integer, optional)
+//   - page (integer, optional): Page of results to return. Defaults to 1.
 //   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
 //   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.DnsApi;
@@ -495,12 +495,12 @@ public class DnsReverseV22 {
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DnsReverseV23
 // Parameters for dnsReverseV23 (GET /v2.3/dns/reverse):
 //   - value (string, required): IP, CIDR, or record value
-//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
+//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required): DNS record type to search by.
 //   - exact (boolean, optional): When false the value is matched as a substring, which is far slower than an exact match...
-//   - page (integer, optional)
+//   - page (integer, optional): Page of results to return. Defaults to 1.
 //   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
 //   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.DnsApi;
@@ -530,8 +530,8 @@ public class DnsReverseV23 {
 // Runnable example: Bulk DNS Lookup (POST /v2.0/dns/bulk/live)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DnsBulk
 // Parameters for dnsBulk (POST /v2.0/dns/bulk/live):
-//   - type (string, required)
-//   - format (string (one of: json, xml), optional)
+//   - type (string, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to all.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 //   - body: DnsBulkRequest (required): request body object
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
@@ -572,7 +572,7 @@ public class DnsBulk {
 //   - domain (string, required): The domain name to check
 //   - sug (boolean, optional): Whether to return TLD suggestions alongside the queried domain.
 //   - count (integer, optional): Number of TLD suggestions to return when sug=true. Maximum is 100.
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.DomainAvailabilityApi;
@@ -603,7 +603,7 @@ public class DomainAvailabilityV2 {
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=BulkDomainAvailabilityV2
 // Parameters for bulkDomainAvailabilityV2 (POST /v2.0/domain/availability):
 //   - domain (string, optional): Required for TLD-mode bulk check (base domain).
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 //   - body: BulkDomainAvailabilityRequest (required): request body object
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
@@ -641,9 +641,9 @@ public class BulkDomainAvailabilityV2 {
 // Runnable example: Typosquatting Lookup (GET /v3.0/domain/typos)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=Typosquatting
 // Parameters for typosquatting (GET /v3.0/domain/typos):
-//   - keyword (string, optional)
-//   - pattern (string, optional)
-//   - pageToken (string, optional)
+//   - keyword (string, optional): Brand or label to find typo variants for. Pass either keyword or pattern, not both.
+//   - pattern (string, optional): Wildcard search string, where '*' matches any characters. Pass either keyword or patter...
+//   - pageToken (string, optional): Token from nextPageToken in the previous response, needed from page 2 onward. Send it w...
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.TyposquattingApi;
@@ -665,6 +665,39 @@ public class Typosquatting {
 
 ```
 
+#### Subdomain Typosquatting Lookup
+
+`GET /v3.0/subdomains/typos`
+
+```java
+// Runnable example: Subdomain Typosquatting Lookup (GET /v3.0/subdomains/typos)
+// Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=SubdomainTyposquatting
+// Parameters for subdomainTyposquatting (GET /v3.0/subdomains/typos):
+//   - keyword (string, optional): Brand or label to find typo variants for. 3 to 63 characters, letters, digits and hyphe...
+//   - pattern (string, optional): Wildcard search string, where '*' matches any characters and '?' matches one. At most 2...
+//   - pageToken (string, optional): Token from nextPageToken in the previous response, needed from page 2 onward. Send it w...
+//   - fetch_size (integer, optional): Subdomains per page. 100 when the parameter is left out, and values above 10000 are cap...
+import com.whoisfreaks.client.ApiClient;
+import com.whoisfreaks.client.Configuration;
+import com.whoisfreaks.client.api.TyposquattingApi;
+import com.whoisfreaks.client.auth.ApiKeyAuth;
+import com.whoisfreaks.client.model.TyposquatSubdomainsResponse;
+
+public class SubdomainTyposquatting {
+    public static void main(String[] args) throws Exception {
+        ApiClient client = Configuration.getDefaultApiClient();
+        ApiKeyAuth auth = (ApiKeyAuth) client.getAuthentication("ApiKeyAuth");
+        auth.setApiKey(System.getenv("WHOISFREAKS_API_KEY"));  // set once, sent with every call
+        TyposquattingApi api = new TyposquattingApi(client);
+
+        // subdomainTyposquatting(keyword, pattern, pageToken, fetch_size); null leaves an optional parameter unset
+        TyposquatSubdomainsResponse result = api.subdomainTyposquatting("paypal", null, null, null);
+        System.out.println(result);
+    }
+}
+
+```
+
 ### SSL
 
 #### SSL Certificate Lookup
@@ -675,10 +708,10 @@ public class Typosquatting {
 // Runnable example: SSL Certificate Lookup (GET /v1.0/ssl/live)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=SslLookup
 // Parameters for sslLookup (GET /v1.0/ssl/live):
-//   - domainName (string, required)
-//   - chain (boolean, optional)
-//   - sslRaw (boolean, optional)
-//   - format (string (one of: json, xml), optional)
+//   - domainName (string, required): Domain to look up.
+//   - chain (boolean, optional): Set true to return the full certificate chain, ordered from the end-user certificate to...
+//   - sslRaw (boolean, optional): Set true to include the raw OpenSSL response for the domain. Defaults to false.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.SslApi;
@@ -710,7 +743,7 @@ public class SslLookup {
 // Runnable example: IP Geolocation Lookup (GET /v1.0/geolocation)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=Geolocation
 // Parameters for geolocation (GET /v1.0/geolocation):
-//   - ip (string, required)
+//   - ip (string, required): IP address to look up.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.GeolocationApi;
@@ -776,12 +809,12 @@ public class BulkGeolocation {
 // Runnable example: Subdomains Lookup (GET /v1.0/subdomains)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=Subdomains
 // Parameters for subdomains (GET /v1.0/subdomains):
-//   - domain (string, required)
-//   - after (string, optional)
-//   - before (string, optional)
-//   - status (string (one of: active, inactive), optional)
-//   - page (integer, optional)
-//   - format (string (one of: json, xml), optional)
+//   - domain (string, required): Domain whose subdomains you want.
+//   - after (string, optional): Only return records created after this date, in YYYY-MM-DD format. Defaults to the olde...
+//   - before (string, optional): Only return records created before this date, in YYYY-MM-DD format. Defaults to today, ...
+//   - status (string (one of: active, inactive), optional): Limit results to active or inactive subdomains. Both are returned when the parameter is...
+//   - page (integer, optional): Page of results to return. Defaults to 1.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.SubdomainsApi;
@@ -813,7 +846,7 @@ public class Subdomains {
 // Runnable example: IP Reputation Lookup (GET /v1.0/security)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=IpReputation
 // Parameters for ipReputation (GET /v1.0/security):
-//   - ip (string, required)
+//   - ip (string, required): IP address to look up.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.IpReputationApi;
@@ -877,7 +910,7 @@ public class BulkIpReputation {
 // Runnable example: IP Reputation Lookup (v2.0) (GET /v2.0/security)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=IpReputationV2
 // Parameters for ipReputationV2 (GET /v2.0/security):
-//   - ip (string, required)
+//   - ip (string, required): IP address to look up.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.IpReputationApi;
@@ -944,7 +977,7 @@ public class BulkIpReputationV2 {
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DomainReputation
 // Parameters for domainReputation (GET /v1/domain/security):
 //   - domainName (string, required): The domain name to assess
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.DomainReputationApi;
@@ -976,8 +1009,8 @@ public class DomainReputation {
 // Runnable example: ASN WHOIS Lookup (GET /v2.0/asn-whois)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=AsnWhois
 // Parameters for asnWhois (GET /v2.0/asn-whois):
-//   - asn (string, required)
-//   - format (string (one of: json, xml), optional)
+//   - asn (string, required): Autonomous system number to look up, with or without the AS prefix.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.AsnWhoisApi;
@@ -1009,8 +1042,8 @@ public class AsnWhois {
 // Runnable example: IP WHOIS Lookup (GET /v1.0/ip-whois)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=IpWhois
 // Parameters for ipWhois (GET /v1.0/ip-whois):
-//   - ip (string, required)
-//   - format (string (one of: json, xml), optional)
+//   - ip (string, required): IP address to look up.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.IpWhoisApi;
@@ -1128,9 +1161,9 @@ public class DatabaseFileStatus {
 // Runnable example: Newly Registered gTLD (CSV) (GET /v3.1/download/domainer/gtld)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbNewlyGtld
 // Parameters for dbNewlyGtld (GET /v3.1/download/domainer/gtld):
-//   - whois (boolean, required)
+//   - whois (boolean, required): Set true for the file with full WHOIS records, false for domain names only.
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-//   - tlds (string, optional)
+//   - tlds (string, optional): Comma separated TLDs to limit the file to, for example com,net. Every TLD is included w...
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.DatabasesNewlyRegisteredApi;
@@ -1169,9 +1202,9 @@ public class DbNewlyGtld {
 // Runnable example: Newly Registered ccTLD (CSV) (GET /v3.1/download/domainer/cctld)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbNewlyCctld
 // Parameters for dbNewlyCctld (GET /v3.1/download/domainer/cctld):
-//   - whois (boolean, required)
+//   - whois (boolean, required): Set true for the file with full WHOIS records, false for domain names only.
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-//   - tlds (string, optional)
+//   - tlds (string, optional): Comma separated TLDs to limit the file to, for example com,net. Every TLD is included w...
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.DatabasesNewlyRegisteredApi;
@@ -1287,7 +1320,7 @@ public class DbNewlyCctldCleaned {
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbNewlyGtldJson
 // Parameters for dbNewlyGtldJson (GET /v3.1/domains/newly/gtld):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-//   - tlds (string, optional)
+//   - tlds (string, optional): Comma separated TLDs to limit the file to, for example com,net. Every TLD is included w...
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.DatabasesNewlyRegisteredApi;
@@ -1320,7 +1353,7 @@ public class DbNewlyGtldJson {
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbNewlyCctldJson
 // Parameters for dbNewlyCctldJson (GET /v3.1/domains/newly/cctld):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-//   - tlds (string, optional)
+//   - tlds (string, optional): Comma separated TLDs to limit the file to, for example com,net. Every TLD is included w...
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.DatabasesNewlyRegisteredApi;
@@ -1392,7 +1425,7 @@ public class DbNewlyDns {
 // Runnable example: Expiring Domains (GET /v3.1/download/domainer/expired)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbExpired
 // Parameters for dbExpired (GET /v3.1/download/domainer/expired):
-//   - whois (boolean, required)
+//   - whois (boolean, required): Set true for the file with full WHOIS records, false for domain names only.
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
@@ -1469,7 +1502,7 @@ public class DbExpiredCleaned {
 // Runnable example: Dropped Domains (GET /v3.1/download/domainer/dropped)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbDropped
 // Parameters for dbDropped (GET /v3.1/download/domainer/dropped):
-//   - whois (boolean, required)
+//   - whois (boolean, required): Set true for the file with full WHOIS records, false for domain names only.
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
@@ -1509,7 +1542,7 @@ public class DbDropped {
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbDroppedJson
 // Parameters for dbDroppedJson (GET /v3.1/domains/dropped):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-//   - tlds (string, optional)
+//   - tlds (string, optional): Comma separated TLDs to limit the file to, for example com,net. Every TLD is included w...
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.DatabasesExpiringDroppedApi;
@@ -1541,7 +1574,7 @@ public class DbDroppedJson {
 // Runnable example: Dropped With Backlinks (GET /v3.3/download/domainer/dropped/backlinks)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbDroppedBacklinks
 // Parameters for dbDroppedBacklinks (GET /v3.3/download/domainer/dropped/backlinks):
-//   - whois (boolean, optional)
+//   - whois (boolean, optional): Set true for the file with full WHOIS records, false for domain names only.
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
@@ -1960,7 +1993,7 @@ public class DbIpCountryStatus {
 // Runnable example: IP to Country Snapshot (GET /v3.3/download/snapshot/ip/country)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbIpCountry
 // Parameters for dbIpCountry (GET /v3.3/download/snapshot/ip/country):
-//   - date (string, required)
+//   - date (string, required): The day whose file you want, in YYYY-MM-DD format.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.DatabasesIpGeolocationApi;
@@ -2027,7 +2060,7 @@ public class DbIpCityStatus {
 // Runnable example: IP to City Snapshot (GET /v3.3/download/snapshot/ip/city)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbIpCity
 // Parameters for dbIpCity (GET /v3.3/download/snapshot/ip/city):
-//   - date (string, required)
+//   - date (string, required): The day whose file you want, in YYYY-MM-DD format.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.DatabasesIpGeolocationApi;
@@ -2067,7 +2100,7 @@ public class DbIpCity {
 // Runnable example: ASN WHOIS Snapshot (GET /v3.3/download/snapshot/asn/whois)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbAsnWhois
 // Parameters for dbAsnWhois (GET /v3.3/download/snapshot/asn/whois):
-//   - date (string, required)
+//   - date (string, required): The day whose file you want, in YYYY-MM-DD format.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.DatabasesAsnWhoisApi;
@@ -2136,7 +2169,7 @@ public class DbAsnWhoisStatus {
 // Runnable example: IP WHOIS Snapshot (GET /v3.3/download/snapshot/ip/whois)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbIpWhois
 // Parameters for dbIpWhois (GET /v3.3/download/snapshot/ip/whois):
-//   - date (string, required)
+//   - date (string, required): The day whose file you want, in YYYY-MM-DD format.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.DatabasesIpWhoisApi;
@@ -2205,7 +2238,7 @@ public class DbIpWhoisStatus {
 // Runnable example: IP Security Snapshot (GET /v3.3/download/snapshot/ip/security)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbIpSecurity
 // Parameters for dbIpSecurity (GET /v3.3/download/snapshot/ip/security):
-//   - date (string, required)
+//   - date (string, required): The day whose file you want, in YYYY-MM-DD format.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.DatabasesIpSecurityApi;

@@ -1,12 +1,12 @@
 // Historical DNS Lookup (v2.2)
 //
 // Parameters for dnsHistoricalV22 (GET /v2.2/dns/historical):
-//   - domainName (string, required)
-//   - type (string, required)
-//   - page (integer, optional)
+//   - domainName (string, required): Domain to look up.
+//   - type (string, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to all.
+//   - page (integer, optional): Page of results to return. Defaults to 1.
 //   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
 //   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 //
 // Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
 

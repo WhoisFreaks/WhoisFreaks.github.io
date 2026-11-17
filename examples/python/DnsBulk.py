@@ -15,9 +15,9 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DNSApi(client)
 
     # dns_bulk parameters:
-    #   type (str, required): default "all"
+    #   type (str, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to...; default "all"
     #   dns_bulk_request (DnsBulkRequest, required): request body
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     body = whoisfreaks.DnsBulkRequest(domain_names=["whoisfreaks.com", "example.com"])
     result = api.dns_bulk("A,MX,TXT", body)
     print(json.dumps(result.to_dict(), indent=2))

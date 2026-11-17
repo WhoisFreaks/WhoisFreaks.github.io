@@ -1,7 +1,7 @@
 // Runnable example: IP WHOIS Snapshot (GET /v3.3/download/snapshot/ip/whois)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbIpWhois (GET /v3.3/download/snapshot/ip/whois):
-//   - date (string, required)
+//   - date (string, required): The day whose file you want, in YYYY-MM-DD format.
 
 package main
 

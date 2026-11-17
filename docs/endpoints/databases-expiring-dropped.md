@@ -16,7 +16,7 @@ Expiring Domains. Returns the file/snapshot described by this operation.
 
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
-| `whois` | query | yes | boolean |  |  |
+| `whois` | query | yes | boolean |  | Set true for the file with full WHOIS records, false for domain names only. |
 | `date` | query | no | string (date) |  | yyyy-MM-dd; omit for latest |
 
 **Usage**
@@ -41,7 +41,7 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DatabasesExpiringDroppedApi(client)
 
     # db_expired parameters:
-    #   whois (bool, required)
+    #   whois (bool, required): Set true for the file with full WHOIS records, false for domain names only
     #   var_date (datetime.date, optional, keyword): yyyy-MM-dd; omit for latest
     data = api.db_expired(True, var_date=date(2026, 10, 1))  # the file's raw bytes
     path = "DbExpired.csv"
@@ -66,7 +66,7 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesExpiringDroppedApi(config);
 
 // dbExpired({ whois, date? })
-//   whois (boolean, required)
+//   whois (boolean, required): Set true for the file with full WHOIS records, false for domain names only
 //   date (Date, optional): yyyy-MM-dd; omit for latest
 async function main(): Promise<void> {
   const blob = await api.dbExpired({ whois: true, date: new Date("2026-10-01") }); // a Blob with the file's bytes
@@ -94,7 +94,7 @@ main().catch(async (err: unknown) => {
 // Runnable example: Expiring Domains (GET /v3.1/download/domainer/expired)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbExpired (GET /v3.1/download/domainer/expired):
-//   - whois (boolean, required)
+//   - whois (boolean, required): Set true for the file with full WHOIS records, false for domain names only.
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 
 package main
@@ -288,7 +288,7 @@ Dropped Domains. Returns the file/snapshot described by this operation.
 
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
-| `whois` | query | yes | boolean |  |  |
+| `whois` | query | yes | boolean |  | Set true for the file with full WHOIS records, false for domain names only. |
 | `date` | query | no | string (date) |  | yyyy-MM-dd; omit for latest |
 
 **Usage**
@@ -313,7 +313,7 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DatabasesExpiringDroppedApi(client)
 
     # db_dropped parameters:
-    #   whois (bool, required)
+    #   whois (bool, required): Set true for the file with full WHOIS records, false for domain names only
     #   var_date (datetime.date, optional, keyword): yyyy-MM-dd; omit for latest
     data = api.db_dropped(True, var_date=date(2026, 10, 1))  # the file's raw bytes
     path = "DbDropped.csv"
@@ -338,7 +338,7 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesExpiringDroppedApi(config);
 
 // dbDropped({ whois, date? })
-//   whois (boolean, required)
+//   whois (boolean, required): Set true for the file with full WHOIS records, false for domain names only
 //   date (Date, optional): yyyy-MM-dd; omit for latest
 async function main(): Promise<void> {
   const blob = await api.dbDropped({ whois: true, date: new Date("2026-10-01") }); // a Blob with the file's bytes
@@ -366,7 +366,7 @@ main().catch(async (err: unknown) => {
 // Runnable example: Dropped Domains (GET /v3.1/download/domainer/dropped)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbDropped (GET /v3.1/download/domainer/dropped):
-//   - whois (boolean, required)
+//   - whois (boolean, required): Set true for the file with full WHOIS records, false for domain names only.
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 
 package main
@@ -427,7 +427,7 @@ Dropped Domains (JSON). Returns the file/snapshot described by this operation.
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
 | `date` | query | no | string (date) |  | yyyy-MM-dd; omit for latest |
-| `tlds` | query | no | string |  |  |
+| `tlds` | query | no | string |  | Comma separated TLDs to limit the file to, for example com,net. Every TLD is included when the parameter is left out. |
 
 **Usage**
 
@@ -452,7 +452,7 @@ with whoisfreaks.ApiClient(config) as client:
 
     # db_dropped_json parameters:
     #   var_date (datetime.date, optional, keyword): yyyy-MM-dd; omit for latest
-    #   tlds (str, optional, keyword)
+    #   tlds (str, optional, keyword): Comma separated TLDs to limit the file to, for example com,net. Every TLD is ...
     domains = api.db_dropped_json(var_date=date(2026, 10, 1))
     print(f"{len(domains)} domains")
     print("\n".join(domains[:10]))
@@ -473,7 +473,7 @@ const api = new DatabasesExpiringDroppedApi(config);
 
 // dbDroppedJson({ date?, tlds? })
 //   date (Date, optional): yyyy-MM-dd; omit for latest
-//   tlds (string, optional)
+//   tlds (string, optional): Comma separated TLDs to limit the file to, for example com,net. Every TLD is ...
 async function main(): Promise<void> {
   const domains = await api.dbDroppedJson({ date: new Date("2026-10-01") });
   console.log(`${domains.length} domains`);
@@ -500,7 +500,7 @@ main().catch(async (err: unknown) => {
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbDroppedJson (GET /v3.1/domains/dropped):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-//   - tlds (string, optional)
+//   - tlds (string, optional): Comma separated TLDs to limit the file to, for example com,net. Every TLD is included w...
 
 package main
 
@@ -545,7 +545,7 @@ Dropped With Backlinks. Returns the file/snapshot described by this operation.
 
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
-| `whois` | query | no | boolean |  |  |
+| `whois` | query | no | boolean |  | Set true for the file with full WHOIS records, false for domain names only. |
 | `date` | query | no | string (date) |  | yyyy-MM-dd; omit for latest |
 
 **Usage**
@@ -570,7 +570,7 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DatabasesExpiringDroppedApi(client)
 
     # db_dropped_backlinks parameters:
-    #   whois (bool, optional, keyword)
+    #   whois (bool, optional, keyword): Set true for the file with full WHOIS records, false for domain names only
     #   var_date (datetime.date, optional, keyword): yyyy-MM-dd; omit for latest
     data = api.db_dropped_backlinks(var_date=date(2026, 10, 1))  # the file's raw bytes
     path = "DbDroppedBacklinks.csv"
@@ -595,7 +595,7 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesExpiringDroppedApi(config);
 
 // dbDroppedBacklinks({ whois?, date? })
-//   whois (boolean, optional)
+//   whois (boolean, optional): Set true for the file with full WHOIS records, false for domain names only
 //   date (Date, optional): yyyy-MM-dd; omit for latest
 async function main(): Promise<void> {
   const blob = await api.dbDroppedBacklinks({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
@@ -623,7 +623,7 @@ main().catch(async (err: unknown) => {
 // Runnable example: Dropped With Backlinks (GET /v3.3/download/domainer/dropped/backlinks)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbDroppedBacklinks (GET /v3.3/download/domainer/dropped/backlinks):
-//   - whois (boolean, optional)
+//   - whois (boolean, optional): Set true for the file with full WHOIS records, false for domain names only.
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 
 package main

@@ -1,7 +1,7 @@
 // Runnable example: IP WHOIS Snapshot (GET /v3.3/download/snapshot/ip/whois)
 // Run it from the Getting Started project: gradle run -PmainClass=DbIpWhoisKt
 // Parameters for dbIpWhois (GET /v3.3/download/snapshot/ip/whois):
-//   - date (string, required)
+//   - date (string, required): The day whose file you want, in YYYY-MM-DD format.
 import com.whoisfreaks.client.apis.DatabasesIPWHOISApi
 import com.whoisfreaks.client.infrastructure.ApiClient
 import java.io.File

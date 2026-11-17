@@ -9,7 +9,7 @@ const api = new WHOISApi(config);
 // whoisReverse({ keyword, page?, format? })
 //   keyword (string, required): Keyword to search across WHOIS records
 //   page (number, optional): Page number
-//   format ("json" | "xml", optional)
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out
 async function main(): Promise<void> {
   const result = await api.whoisReverse({ keyword: "whoisfreaks", page: 1 });
   console.log(JSON.stringify(result, null, 2));

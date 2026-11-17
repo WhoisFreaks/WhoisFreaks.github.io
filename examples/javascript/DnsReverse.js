@@ -9,10 +9,10 @@ const api = new DNSApi(client);
 
 // dnsReverse(value, type, opts)
 //   value (string, required): IP, CIDR, or record value
-//   type (string, required): one of a, mx, cname, ns, aaaa, txt, soa
-//   opts.exact (boolean, optional): default true
-//   opts.page (number, optional): default 1
-//   opts.format (string, optional): one of json, xml; default "json"
+//   type (string, required): DNS record type to search by; one of a, mx, cname, ns, aaaa, txt, soa
+//   opts.exact (boolean, optional): Set true to match value exactly. Defaults to false, where value is treated as...; default false
+//   opts.page (number, optional): Page of results to return. Defaults to 1; default 1
+//   opts.format (string, optional): Response format. JSON when the parameter is left out; one of json, xml; default "json"
 async function main() {
   const result = await api.dnsReverse("8.8.8.8", "a", { page: 1 });
   console.log(JSON.stringify(result, null, 2));

@@ -1,7 +1,7 @@
 // Runnable example: IP Security Snapshot (GET /v3.3/download/snapshot/ip/security)
 // Run it from the Getting Started project: gradle run -PmainClass=DbIpSecurityKt
 // Parameters for dbIpSecurity (GET /v3.3/download/snapshot/ip/security):
-//   - date (string, required)
+//   - date (string, required): The day whose file you want, in YYYY-MM-DD format.
 import com.whoisfreaks.client.apis.DatabasesIPSecurityApi
 import com.whoisfreaks.client.infrastructure.ApiClient
 import java.io.File

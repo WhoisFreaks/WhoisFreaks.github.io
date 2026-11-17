@@ -15,7 +15,7 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DatabasesIPGeolocationApi(client)
 
     # db_ip_city parameters:
-    #   var_date (datetime.date, required)
+    #   var_date (datetime.date, required): The day whose file you want, in YYYY-MM-DD format
     data = api.db_ip_city(date(2026, 10, 1))  # the file's raw bytes
     path = "DbIpCity.zip"
     with open(path, "wb") as f:

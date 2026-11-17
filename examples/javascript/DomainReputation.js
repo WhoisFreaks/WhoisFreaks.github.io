@@ -9,7 +9,7 @@ const api = new DomainReputationApi(client);
 
 // domainReputation(domainName, opts)
 //   domainName (string, required): The domain name to assess
-//   opts.format (string, optional): one of json, xml; default "json"
+//   opts.format (string, optional): Response format. JSON when the parameter is left out; one of json, xml; default "json"
 async function main() {
   const result = await api.domainReputation("amazon.com");
   console.log(JSON.stringify(result, null, 2));

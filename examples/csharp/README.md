@@ -24,6 +24,7 @@ Install: see the [C# / .NET guide](../../docs/languages/csharp.md). Set the `WHO
 
 ## Typosquatting
 - [`Typosquatting.cs`](Typosquatting.cs): Typosquatting Lookup (`GET /v3.0/domain/typos`)
+- [`SubdomainTyposquatting.cs`](SubdomainTyposquatting.cs): Subdomain Typosquatting Lookup (`GET /v3.0/subdomains/typos`)
 
 ## SSL
 - [`SslLookup.cs`](SslLookup.cs): SSL Certificate Lookup (`GET /v1.0/ssl/live`)

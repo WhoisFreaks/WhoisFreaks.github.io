@@ -24,6 +24,7 @@ Install: see the [Go guide](../../docs/languages/go.md). Set the `WHOISFREAKS_AP
 
 ## Typosquatting
 - [`Typosquatting.go`](Typosquatting.go): Typosquatting Lookup (`GET /v3.0/domain/typos`)
+- [`SubdomainTyposquatting.go`](SubdomainTyposquatting.go): Subdomain Typosquatting Lookup (`GET /v3.0/subdomains/typos`)
 
 ## SSL
 - [`SslLookup.go`](SslLookup.go): SSL Certificate Lookup (`GET /v1.0/ssl/live`)

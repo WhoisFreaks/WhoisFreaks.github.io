@@ -93,8 +93,8 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new WHOISApi(config);
 
 // whoisLive({ domainName, format? })
-//   domainName (string, required)
-//   format ("json" | "xml", optional): default "json"
+//   domainName (string, required): Domain to look up
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.whoisLive({ domainName: "whoisfreaks.com" });
   console.log(JSON.stringify(result, null, 2));
@@ -113,7 +113,7 @@ main().catch(async (err: unknown) => {
 
 ## Endpoints
 
-All 94 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
+All 95 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
 
 ### WHOIS
 
@@ -131,8 +131,8 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new WHOISApi(config);
 
 // whoisLive({ domainName, format? })
-//   domainName (string, required)
-//   format ("json" | "xml", optional): default "json"
+//   domainName (string, required): Domain to look up
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.whoisLive({ domainName: "whoisfreaks.com" });
   console.log(JSON.stringify(result, null, 2));
@@ -164,7 +164,7 @@ const api = new WHOISApi(config);
 
 // bulkWhois({ bulkWhoisRequest, format? })
 //   bulkWhoisRequest (BulkWhoisRequest, required): request body
-//   format ("json" | "xml", optional): default "json"
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const body: BulkWhoisRequest = { domainNames: ["whoisfreaks.com", "jfreaks.com"] };
   const result = await api.bulkWhois({ bulkWhoisRequest: body });
@@ -197,7 +197,7 @@ const api = new WHOISApi(config);
 
 // whoisHistory({ domainName, format? })
 //   domainName (string, required): Domain to fetch historical WHOIS records for
-//   format ("json" | "xml", optional)
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out
 async function main(): Promise<void> {
   const result = await api.whoisHistory({ domainName: "whoisfreaks.com" });
   console.log(JSON.stringify(result, null, 2));
@@ -230,7 +230,7 @@ const api = new WHOISApi(config);
 // whoisReverse({ keyword, page?, format? })
 //   keyword (string, required): Keyword to search across WHOIS records
 //   page (number, optional): Page number
-//   format ("json" | "xml", optional)
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out
 async function main(): Promise<void> {
   const result = await api.whoisReverse({ keyword: "whoisfreaks", page: 1 });
   console.log(JSON.stringify(result, null, 2));
@@ -264,9 +264,9 @@ const api = new DNSApi(config);
 
 // dnsLive({ type, domainName?, ipAddress?, format? })
 //   type (string, required): all or comma-separated: A,MX,NS,TXT,SOA,SPF,AAAA,CNAME; default "all"
-//   domainName (string, optional)
+//   domainName (string, optional): Domain to look up
 //   ipAddress (string, optional): Use for PTR lookups
-//   format ("json" | "xml", optional): default "json"
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.dnsLive({ type: "A,MX,TXT", domainName: "whoisfreaks.com" });
   console.log(JSON.stringify(result, null, 2));
@@ -297,10 +297,10 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DNSApi(config);
 
 // dnsHistorical({ domainName, type, page?, format? })
-//   domainName (string, required)
-//   type (string, required): default "all"
-//   page (number, optional): default 1
-//   format ("json" | "xml", optional): default "json"
+//   domainName (string, required): Domain to look up
+//   type (string, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to...; default "all"
+//   page (number, optional): Page of results to return. Defaults to 1; default 1
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.dnsHistorical({ domainName: "whoisfreaks.com", type: "A,MX,TXT", page: 1 });
   console.log(JSON.stringify(result, null, 2));
@@ -332,10 +332,10 @@ const api = new DNSApi(config);
 
 // dnsReverse({ value, type, exact?, page?, format? })
 //   value (string, required): IP, CIDR, or record value
-//   type ("a" | "mx" | "cname" | "ns" | "aaaa" | "txt" | "soa", required)
-//   exact (boolean, optional): default true
-//   page (number, optional): default 1
-//   format ("json" | "xml", optional): default "json"
+//   type ("a" | "mx" | "cname" | "ns" | "aaaa" | "txt" | "soa", required): DNS record type to search by
+//   exact (boolean, optional): Set true to match value exactly. Defaults to false, where value is treated as...; default false
+//   page (number, optional): Page of results to return. Defaults to 1; default 1
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.dnsReverse({ value: "8.8.8.8", type: "a", page: 1 });
   console.log(JSON.stringify(result, null, 2));
@@ -366,12 +366,12 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DNSApi(config);
 
 // dnsHistoricalV22({ domainName, type, page?, sort?, sortBy?, format? })
-//   domainName (string, required)
-//   type (string, required): default "all"
-//   page (number, optional): default 1
+//   domainName (string, required): Domain to look up
+//   type (string, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to...; default "all"
+//   page (number, optional): Page of results to return. Defaults to 1; default 1
 //   sort ("asc" | "desc", optional): Sort direction. Omit to leave the results unsorted
 //   sortBy ("firstSeen" | "lastSeen", optional): Field to sort on. Only applies when sort is given; default "lastSeen"
-//   format ("json" | "xml", optional): default "json"
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.dnsHistoricalV22({ domainName: "whoisfreaks.com", type: "A,MX,TXT", page: 1 });
   console.log(JSON.stringify(result, null, 2));
@@ -402,12 +402,12 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DNSApi(config);
 
 // dnsHistoricalV23({ domainName, type, page?, sort?, sortBy?, format? })
-//   domainName (string, required)
-//   type (string, required): default "all"
-//   page (number, optional): default 1
+//   domainName (string, required): Domain to look up
+//   type (string, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to...; default "all"
+//   page (number, optional): Page of results to return. Defaults to 1; default 1
 //   sort ("asc" | "desc", optional): Sort direction. Omit to leave the results unsorted
 //   sortBy ("firstSeen" | "lastSeen", optional): Field to sort on. Only applies when sort is given; default "lastSeen"
-//   format ("json" | "xml", optional): default "json"
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.dnsHistoricalV23({ domainName: "whoisfreaks.com", type: "A,MX,TXT", page: 1 });
   console.log(JSON.stringify(result, null, 2));
@@ -439,12 +439,12 @@ const api = new DNSApi(config);
 
 // dnsReverseV22({ value, type, exact?, page?, sort?, sortBy?, format? })
 //   value (string, required): IP, CIDR, or record value
-//   type ("a" | "mx" | "cname" | "ns" | "aaaa" | "txt" | "soa", required)
+//   type ("a" | "mx" | "cname" | "ns" | "aaaa" | "txt" | "soa", required): DNS record type to search by
 //   exact (boolean, optional): When false the value is matched as a substring, which is far slower than an e...; default true
-//   page (number, optional): default 1
+//   page (number, optional): Page of results to return. Defaults to 1; default 1
 //   sort ("asc" | "desc", optional): Sort direction. Omit to leave the results unsorted
 //   sortBy ("firstSeen" | "lastSeen", optional): Field to sort on. Only applies when sort is given; default "lastSeen"
-//   format ("json" | "xml", optional): default "json"
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.dnsReverseV22({ value: "8.8.8.8", type: "a", page: 1 });
   console.log(JSON.stringify(result, null, 2));
@@ -476,12 +476,12 @@ const api = new DNSApi(config);
 
 // dnsReverseV23({ value, type, exact?, page?, sort?, sortBy?, format? })
 //   value (string, required): IP, CIDR, or record value
-//   type ("a" | "mx" | "cname" | "ns" | "aaaa" | "txt" | "soa", required)
+//   type ("a" | "mx" | "cname" | "ns" | "aaaa" | "txt" | "soa", required): DNS record type to search by
 //   exact (boolean, optional): When false the value is matched as a substring, which is far slower than an e...; default true
-//   page (number, optional): default 1
+//   page (number, optional): Page of results to return. Defaults to 1; default 1
 //   sort ("asc" | "desc", optional): Sort direction. Omit to leave the results unsorted
 //   sortBy ("firstSeen" | "lastSeen", optional): Field to sort on. Only applies when sort is given; default "lastSeen"
-//   format ("json" | "xml", optional): default "json"
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.dnsReverseV23({ value: "8.8.8.8", type: "a", page: 1 });
   console.log(JSON.stringify(result, null, 2));
@@ -512,9 +512,9 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DNSApi(config);
 
 // dnsBulk({ type, dnsBulkRequest, format? })
-//   type (string, required): default "all"
+//   type (string, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to...; default "all"
 //   dnsBulkRequest (DnsBulkRequest, required): request body
-//   format ("json" | "xml", optional): default "json"
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const body: DnsBulkRequest = { domainNames: ["whoisfreaks.com", "example.com"] };
   const result = await api.dnsBulk({ type: "A,MX,TXT", dnsBulkRequest: body });
@@ -551,7 +551,7 @@ const api = new DomainAvailabilityApi(config);
 //   domain (string, required): The domain name to check
 //   sug (boolean, optional): Whether to return TLD suggestions alongside the queried domain; default false
 //   count (number, optional): Number of TLD suggestions to return when sug=true. Maximum is 100; default 5
-//   format ("json" | "xml", optional): default "json"
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.domainAvailabilityV2({ domain: "google.com", sug: true, count: 5 });
   console.log(JSON.stringify(result, null, 2));
@@ -584,7 +584,7 @@ const api = new DomainAvailabilityApi(config);
 // bulkDomainAvailabilityV2({ bulkDomainAvailabilityRequest, domain?, format? })
 //   bulkDomainAvailabilityRequest (BulkDomainAvailabilityRequest, required): request body
 //   domain (string, optional): Required for TLD-mode bulk check (base domain)
-//   format ("json" | "xml", optional): default "json"
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const body: BulkDomainAvailabilityRequest = { domainNames: ["whoisfreaks.com", "example.com"] };
   const result = await api.bulkDomainAvailabilityV2({ bulkDomainAvailabilityRequest: body });
@@ -618,11 +618,45 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new TyposquattingApi(config);
 
 // typosquatting({ keyword?, pattern?, pageToken? })
-//   keyword (string, optional)
-//   pattern (string, optional)
-//   pageToken (string, optional)
+//   keyword (string, optional): Brand or label to find typo variants for. Pass either keyword or pattern, not...
+//   pattern (string, optional): Wildcard search string, where '*' matches any characters. Pass either keyword...
+//   pageToken (string, optional): Token from nextPageToken in the previous response, needed from page 2 onward....
 async function main(): Promise<void> {
   const result = await api.typosquatting({ keyword: "whoisfreaks" });
+  console.log(JSON.stringify(result, null, 2));
+}
+
+main().catch(async (err: unknown) => {
+  // API errors carry the HTTP response
+  if (err instanceof ResponseError) {
+    console.error(`HTTP ${err.response.status}: ${await err.response.text()}`);
+  } else {
+    console.error(err);
+  }
+  process.exitCode = 1;
+});
+```
+
+#### Subdomain Typosquatting Lookup
+
+`GET /v3.0/subdomains/typos`
+
+```typescript
+// Subdomain Typosquatting Lookup: GET https://api.whoisfreaks.com/v3.0/subdomains/typos
+// Run: WHOISFREAKS_API_KEY=your_api_key npx tsx SubdomainTyposquatting.ts
+import { Configuration, TyposquattingApi, ResponseError } from "whoisfreaks";
+
+// Set the API key once; the client adds it to every request.
+const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
+const api = new TyposquattingApi(config);
+
+// subdomainTyposquatting({ keyword?, pattern?, pageToken?, fetch_size? })
+//   keyword (string, optional): Brand or label to find typo variants for. 3 to 63 characters, letters, digits...
+//   pattern (string, optional): Wildcard search string, where '*' matches any characters and '?' matches one....
+//   pageToken (string, optional): Token from nextPageToken in the previous response, needed from page 2 onward....
+//   fetch_size (number, optional): Subdomains per page. 100 when the parameter is left out, and values above 100...; default 100
+async function main(): Promise<void> {
+  const result = await api.subdomainTyposquatting();
   console.log(JSON.stringify(result, null, 2));
 }
 
@@ -653,10 +687,10 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new SSLApi(config);
 
 // sslLookup({ domainName, chain?, sslRaw?, format? })
-//   domainName (string, required)
-//   chain (boolean, optional): default false
-//   sslRaw (boolean, optional): default false
-//   format ("json" | "xml", optional): default "json"
+//   domainName (string, required): Domain to look up
+//   chain (boolean, optional): Set true to return the full certificate chain, ordered from the end-user cert...; default false
+//   sslRaw (boolean, optional): Set true to include the raw OpenSSL response for the domain. Defaults to false; default false
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.sslLookup({ domainName: "whoisfreaks.com" });
   console.log(JSON.stringify(result, null, 2));
@@ -689,7 +723,7 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new GeolocationApi(config);
 
 // geolocation({ ip })
-//   ip (string, required)
+//   ip (string, required): IP address to look up
 async function main(): Promise<void> {
   const result = await api.geolocation({ ip: "8.8.8.8" });
   console.log(JSON.stringify(result, null, 2));
@@ -754,12 +788,12 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new SubdomainsApi(config);
 
 // subdomains({ domain, after?, before?, status?, page?, format? })
-//   domain (string, required)
-//   after (Date, optional)
-//   before (Date, optional)
-//   status ("active" | "inactive", optional)
-//   page (number, optional): default 1
-//   format ("json" | "xml", optional): default "json"
+//   domain (string, required): Domain whose subdomains you want
+//   after (Date, optional): Only return records created after this date, in YYYY-MM-DD format. Defaults t...
+//   before (Date, optional): Only return records created before this date, in YYYY-MM-DD format. Defaults ...
+//   status ("active" | "inactive", optional): Limit results to active or inactive subdomains. Both are returned when the pa...
+//   page (number, optional): Page of results to return. Defaults to 1; default 1
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.subdomains({ domain: "whoisfreaks.com", page: 1 });
   console.log(JSON.stringify(result, null, 2));
@@ -792,7 +826,7 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new IPReputationApi(config);
 
 // ipReputation({ ip })
-//   ip (string, required)
+//   ip (string, required): IP address to look up
 async function main(): Promise<void> {
   const result = await api.ipReputation({ ip: "8.8.8.8" });
   console.log(JSON.stringify(result, null, 2));
@@ -855,7 +889,7 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new IPReputationApi(config);
 
 // ipReputationV2({ ip })
-//   ip (string, required)
+//   ip (string, required): IP address to look up
 async function main(): Promise<void> {
   const result = await api.ipReputationV2({ ip: "8.8.8.8" });
   console.log(JSON.stringify(result, null, 2));
@@ -921,7 +955,7 @@ const api = new DomainReputationApi(config);
 
 // domainReputation({ domainName, format? })
 //   domainName (string, required): The domain name to assess
-//   format ("json" | "xml", optional): default "json"
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.domainReputation({ domainName: "amazon.com" });
   console.log(JSON.stringify(result, null, 2));
@@ -954,8 +988,8 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new ASNWHOISApi(config);
 
 // asnWhois({ asn, format? })
-//   asn (string, required)
-//   format ("json" | "xml", optional): default "json"
+//   asn (string, required): Autonomous system number to look up, with or without the AS prefix
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.asnWhois({ asn: "as15169" });
   console.log(JSON.stringify(result, null, 2));
@@ -988,8 +1022,8 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new IPWHOISApi(config);
 
 // ipWhois({ ip, format? })
-//   ip (string, required)
-//   format ("json" | "xml", optional): default "json"
+//   ip (string, required): IP address to look up
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.ipWhois({ ip: "8.8.8.8" });
   console.log(JSON.stringify(result, null, 2));
@@ -1115,9 +1149,9 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesNewlyRegisteredApi(config);
 
 // dbNewlyGtld({ whois, date?, tlds? })
-//   whois (boolean, required)
+//   whois (boolean, required): Set true for the file with full WHOIS records, false for domain names only
 //   date (Date, optional): yyyy-MM-dd; omit for latest
-//   tlds (string, optional)
+//   tlds (string, optional): Comma separated TLDs to limit the file to, for example com,net. Every TLD is ...
 async function main(): Promise<void> {
   const blob = await api.dbNewlyGtld({ whois: true, date: new Date("2026-10-01") }); // a Blob with the file's bytes
   const file = "DbNewlyGtld.csv";
@@ -1152,9 +1186,9 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesNewlyRegisteredApi(config);
 
 // dbNewlyCctld({ whois, date?, tlds? })
-//   whois (boolean, required)
+//   whois (boolean, required): Set true for the file with full WHOIS records, false for domain names only
 //   date (Date, optional): yyyy-MM-dd; omit for latest
-//   tlds (string, optional)
+//   tlds (string, optional): Comma separated TLDs to limit the file to, for example com,net. Every TLD is ...
 async function main(): Promise<void> {
   const blob = await api.dbNewlyCctld({ whois: true, date: new Date("2026-10-01") }); // a Blob with the file's bytes
   const file = "DbNewlyCctld.csv";
@@ -1258,7 +1292,7 @@ const api = new DatabasesNewlyRegisteredApi(config);
 
 // dbNewlyGtldJson({ date?, tlds? })
 //   date (Date, optional): yyyy-MM-dd; omit for latest
-//   tlds (string, optional)
+//   tlds (string, optional): Comma separated TLDs to limit the file to, for example com,net. Every TLD is ...
 async function main(): Promise<void> {
   const domains = await api.dbNewlyGtldJson({ date: new Date("2026-10-01") });
   console.log(`${domains.length} domains`);
@@ -1291,7 +1325,7 @@ const api = new DatabasesNewlyRegisteredApi(config);
 
 // dbNewlyCctldJson({ date?, tlds? })
 //   date (Date, optional): yyyy-MM-dd; omit for latest
-//   tlds (string, optional)
+//   tlds (string, optional): Comma separated TLDs to limit the file to, for example com,net. Every TLD is ...
 async function main(): Promise<void> {
   const domains = await api.dbNewlyCctldJson({ date: new Date("2026-10-01") });
   console.log(`${domains.length} domains`);
@@ -1362,7 +1396,7 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesExpiringDroppedApi(config);
 
 // dbExpired({ whois, date? })
-//   whois (boolean, required)
+//   whois (boolean, required): Set true for the file with full WHOIS records, false for domain names only
 //   date (Date, optional): yyyy-MM-dd; omit for latest
 async function main(): Promise<void> {
   const blob = await api.dbExpired({ whois: true, date: new Date("2026-10-01") }); // a Blob with the file's bytes
@@ -1433,7 +1467,7 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesExpiringDroppedApi(config);
 
 // dbDropped({ whois, date? })
-//   whois (boolean, required)
+//   whois (boolean, required): Set true for the file with full WHOIS records, false for domain names only
 //   date (Date, optional): yyyy-MM-dd; omit for latest
 async function main(): Promise<void> {
   const blob = await api.dbDropped({ whois: true, date: new Date("2026-10-01") }); // a Blob with the file's bytes
@@ -1468,7 +1502,7 @@ const api = new DatabasesExpiringDroppedApi(config);
 
 // dbDroppedJson({ date?, tlds? })
 //   date (Date, optional): yyyy-MM-dd; omit for latest
-//   tlds (string, optional)
+//   tlds (string, optional): Comma separated TLDs to limit the file to, for example com,net. Every TLD is ...
 async function main(): Promise<void> {
   const domains = await api.dbDroppedJson({ date: new Date("2026-10-01") });
   console.log(`${domains.length} domains`);
@@ -1502,7 +1536,7 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesExpiringDroppedApi(config);
 
 // dbDroppedBacklinks({ whois?, date? })
-//   whois (boolean, optional)
+//   whois (boolean, optional): Set true for the file with full WHOIS records, false for domain names only
 //   date (Date, optional): yyyy-MM-dd; omit for latest
 async function main(): Promise<void> {
   const blob = await api.dbDroppedBacklinks({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
@@ -1891,7 +1925,7 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesIPGeolocationApi(config);
 
 // dbIpCountry({ date })
-//   date (Date, required)
+//   date (Date, required): The day whose file you want, in YYYY-MM-DD format
 async function main(): Promise<void> {
   const blob = await api.dbIpCountry({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
   const file = "DbIpCountry.zip";
@@ -1956,7 +1990,7 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesIPGeolocationApi(config);
 
 // dbIpCity({ date })
-//   date (Date, required)
+//   date (Date, required): The day whose file you want, in YYYY-MM-DD format
 async function main(): Promise<void> {
   const blob = await api.dbIpCity({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
   const file = "DbIpCity.zip";
@@ -1993,7 +2027,7 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesASNWHOISApi(config);
 
 // dbAsnWhois({ date })
-//   date (Date, required)
+//   date (Date, required): The day whose file you want, in YYYY-MM-DD format
 async function main(): Promise<void> {
   const blob = await api.dbAsnWhois({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
   const file = "DbAsnWhois.json.gz";
@@ -2060,7 +2094,7 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesIPWHOISApi(config);
 
 // dbIpWhois({ date })
-//   date (Date, required)
+//   date (Date, required): The day whose file you want, in YYYY-MM-DD format
 async function main(): Promise<void> {
   const blob = await api.dbIpWhois({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
   const file = "DbIpWhois.json.gz";
@@ -2127,7 +2161,7 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesIPSecurityApi(config);
 
 // dbIpSecurity({ date })
-//   date (Date, required)
+//   date (Date, required): The day whose file you want, in YYYY-MM-DD format
 async function main(): Promise<void> {
   const blob = await api.dbIpSecurity({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
   const file = "DbIpSecurity.csv";

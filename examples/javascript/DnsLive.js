@@ -9,9 +9,9 @@ const api = new DNSApi(client);
 
 // dnsLive(type, opts)
 //   type (string, required): all or comma-separated: A,MX,NS,TXT,SOA,SPF,AAAA,CNAME; default "all"
-//   opts.domainName (string, optional)
+//   opts.domainName (string, optional): Domain to look up
 //   opts.ipAddress (string, optional): Use for PTR lookups
-//   opts.format (string, optional): one of json, xml; default "json"
+//   opts.format (string, optional): Response format. JSON when the parameter is left out; one of json, xml; default "json"
 async function main() {
   const result = await api.dnsLive("A,MX,TXT", { domainName: "whoisfreaks.com" });
   console.log(JSON.stringify(result, null, 2));

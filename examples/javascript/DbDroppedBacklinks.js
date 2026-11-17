@@ -10,7 +10,7 @@ client.authentications["ApiKeyAuth"].apiKey = process.env.WHOISFREAKS_API_KEY;
 const api = new DatabasesExpiringDroppedApi(client);
 
 // dbDroppedBacklinks(opts)
-//   opts.whois (boolean, optional)
+//   opts.whois (boolean, optional): Set true for the file with full WHOIS records, false for domain names only
 //   opts.date (string, "yyyy-MM-dd", optional): yyyy-MM-dd; omit for latest
 async function main() {
   const data = await api.dbDroppedBacklinks({ date: "2026-10-01" }); // a Buffer with the file's bytes

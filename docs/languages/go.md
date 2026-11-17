@@ -83,8 +83,8 @@ See [Authentication](../authentication.md) for how to obtain a key. Minimal setu
 // Runnable example: Live WHOIS Lookup (GET /v2.0/whois/live)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for whoisLive (GET /v2.0/whois/live):
-//   - domainName (string, required)
-//   - format (string (one of: json, xml), optional)
+//   - domainName (string, required): Domain to look up.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 
@@ -116,7 +116,7 @@ func main() {
 
 ## Endpoints
 
-All 94 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
+All 95 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
 
 ### WHOIS
 
@@ -128,8 +128,8 @@ All 94 endpoints are shown below, grouped by category. Each includes its method,
 // Runnable example: Live WHOIS Lookup (GET /v2.0/whois/live)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for whoisLive (GET /v2.0/whois/live):
-//   - domainName (string, required)
-//   - format (string (one of: json, xml), optional)
+//   - domainName (string, required): Domain to look up.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 
@@ -167,7 +167,7 @@ func main() {
 // Runnable example: Bulk WHOIS Lookup (POST /v2.0/bulkwhois/live)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for bulkWhois (POST /v2.0/bulkwhois/live):
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 //   - body: BulkWhoisRequest (required): request body object
 
 package main
@@ -208,7 +208,7 @@ func main() {
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for whoisHistory (GET /v2.0/whois/history):
 //   - domainName (string, required): Domain to fetch historical WHOIS records for
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 
@@ -248,7 +248,7 @@ func main() {
 // Parameters for whoisReverse (GET /v2.0/whois/reverse):
 //   - keyword (string, required): Keyword to search across WHOIS records
 //   - page (integer, optional): Page number
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 
@@ -288,10 +288,10 @@ func main() {
 // Runnable example: Live DNS Lookup (GET /v2.0/dns/live)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dnsLive (GET /v2.0/dns/live):
-//   - domainName (string, optional)
+//   - domainName (string, optional): Domain to look up.
 //   - ipAddress (string, optional): Use for PTR lookups
 //   - type (string, required): all or comma-separated: A,MX,NS,TXT,SOA,SPF,AAAA,CNAME
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 
@@ -330,10 +330,10 @@ func main() {
 // Runnable example: Historical DNS Lookup (GET /v2.0/dns/historical)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dnsHistorical (GET /v2.0/dns/historical):
-//   - domainName (string, required)
-//   - type (string, required)
-//   - page (integer, optional)
-//   - format (string (one of: json, xml), optional)
+//   - domainName (string, required): Domain to look up.
+//   - type (string, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to all.
+//   - page (integer, optional): Page of results to return. Defaults to 1.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 
@@ -373,10 +373,10 @@ func main() {
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dnsReverse (GET /v2.1/dns/reverse):
 //   - value (string, required): IP, CIDR, or record value
-//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
-//   - exact (boolean, optional)
-//   - page (integer, optional)
-//   - format (string (one of: json, xml), optional)
+//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required): DNS record type to search by.
+//   - exact (boolean, optional): Set true to match value exactly. Defaults to false, where value is treated as a pattern...
+//   - page (integer, optional): Page of results to return. Defaults to 1.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 
@@ -414,12 +414,12 @@ func main() {
 // Runnable example: Historical DNS Lookup (v2.2) (GET /v2.2/dns/historical)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dnsHistoricalV22 (GET /v2.2/dns/historical):
-//   - domainName (string, required)
-//   - type (string, required)
-//   - page (integer, optional)
+//   - domainName (string, required): Domain to look up.
+//   - type (string, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to all.
+//   - page (integer, optional): Page of results to return. Defaults to 1.
 //   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
 //   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 
@@ -458,12 +458,12 @@ func main() {
 // Runnable example: Historical DNS Lookup (v2.3) (GET /v2.3/dns/historical)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dnsHistoricalV23 (GET /v2.3/dns/historical):
-//   - domainName (string, required)
-//   - type (string, required)
-//   - page (integer, optional)
+//   - domainName (string, required): Domain to look up.
+//   - type (string, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to all.
+//   - page (integer, optional): Page of results to return. Defaults to 1.
 //   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
 //   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 
@@ -503,12 +503,12 @@ func main() {
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dnsReverseV22 (GET /v2.2/dns/reverse):
 //   - value (string, required): IP, CIDR, or record value
-//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
+//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required): DNS record type to search by.
 //   - exact (boolean, optional): When false the value is matched as a substring, which is far slower than an exact match...
-//   - page (integer, optional)
+//   - page (integer, optional): Page of results to return. Defaults to 1.
 //   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
 //   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 
@@ -547,12 +547,12 @@ func main() {
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dnsReverseV23 (GET /v2.3/dns/reverse):
 //   - value (string, required): IP, CIDR, or record value
-//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
+//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required): DNS record type to search by.
 //   - exact (boolean, optional): When false the value is matched as a substring, which is far slower than an exact match...
-//   - page (integer, optional)
+//   - page (integer, optional): Page of results to return. Defaults to 1.
 //   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
 //   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 
@@ -590,8 +590,8 @@ func main() {
 // Runnable example: Bulk DNS Lookup (POST /v2.0/dns/bulk/live)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dnsBulk (POST /v2.0/dns/bulk/live):
-//   - type (string, required)
-//   - format (string (one of: json, xml), optional)
+//   - type (string, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to all.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 //   - body: DnsBulkRequest (required): request body object
 
 package main
@@ -637,7 +637,7 @@ func main() {
 //   - domain (string, required): The domain name to check
 //   - sug (boolean, optional): Whether to return TLD suggestions alongside the queried domain.
 //   - count (integer, optional): Number of TLD suggestions to return when sug=true. Maximum is 100.
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 
@@ -677,7 +677,7 @@ func main() {
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for bulkDomainAvailabilityV2 (POST /v2.0/domain/availability):
 //   - domain (string, optional): Required for TLD-mode bulk check (base domain).
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 //   - body: BulkDomainAvailabilityRequest (required): request body object
 
 package main
@@ -721,9 +721,9 @@ func main() {
 // Runnable example: Typosquatting Lookup (GET /v3.0/domain/typos)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for typosquatting (GET /v3.0/domain/typos):
-//   - keyword (string, optional)
-//   - pattern (string, optional)
-//   - pageToken (string, optional)
+//   - keyword (string, optional): Brand or label to find typo variants for. Pass either keyword or pattern, not both.
+//   - pattern (string, optional): Wildcard search string, where '*' matches any characters. Pass either keyword or patter...
+//   - pageToken (string, optional): Token from nextPageToken in the previous response, needed from page 2 onward. Send it w...
 
 package main
 
@@ -753,6 +753,47 @@ func main() {
 
 ```
 
+#### Subdomain Typosquatting Lookup
+
+`GET /v3.0/subdomains/typos`
+
+```go
+// Runnable example: Subdomain Typosquatting Lookup (GET /v3.0/subdomains/typos)
+// Run it from the Getting Started module: save it as main.go, then `go run .`
+// Parameters for subdomainTyposquatting (GET /v3.0/subdomains/typos):
+//   - keyword (string, optional): Brand or label to find typo variants for. 3 to 63 characters, letters, digits and hyphe...
+//   - pattern (string, optional): Wildcard search string, where '*' matches any characters and '?' matches one. At most 2...
+//   - pageToken (string, optional): Token from nextPageToken in the previous response, needed from page 2 onward. Send it w...
+//   - fetch_size (integer, optional): Subdomains per page. 100 when the parameter is left out, and values above 10000 are cap...
+
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
+
+	whoisfreaks "github.com/WhoisFreaks/whoisfreaks-go"
+)
+
+func main() {
+	// Set the API key once on the context; every call made with ctx sends it.
+	ctx := context.WithValue(context.Background(), whoisfreaks.ContextAPIKeys,
+		map[string]whoisfreaks.APIKey{"ApiKeyAuth": {Key: os.Getenv("WHOISFREAKS_API_KEY")}})
+	client := whoisfreaks.NewAPIClient(whoisfreaks.NewConfiguration())
+
+	result, _, err := client.TyposquattingAPI.SubdomainTyposquatting(ctx).Keyword("paypal").Execute()
+	if err != nil {
+		log.Fatal(err)
+	}
+	out, _ := json.MarshalIndent(result, "", "  ")
+	fmt.Println(string(out))
+}
+
+```
+
 ### SSL
 
 #### SSL Certificate Lookup
@@ -763,10 +804,10 @@ func main() {
 // Runnable example: SSL Certificate Lookup (GET /v1.0/ssl/live)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for sslLookup (GET /v1.0/ssl/live):
-//   - domainName (string, required)
-//   - chain (boolean, optional)
-//   - sslRaw (boolean, optional)
-//   - format (string (one of: json, xml), optional)
+//   - domainName (string, required): Domain to look up.
+//   - chain (boolean, optional): Set true to return the full certificate chain, ordered from the end-user certificate to...
+//   - sslRaw (boolean, optional): Set true to include the raw OpenSSL response for the domain. Defaults to false.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 
@@ -806,7 +847,7 @@ func main() {
 // Runnable example: IP Geolocation Lookup (GET /v1.0/geolocation)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for geolocation (GET /v1.0/geolocation):
-//   - ip (string, required)
+//   - ip (string, required): IP address to look up.
 
 package main
 
@@ -886,12 +927,12 @@ func main() {
 // Runnable example: Subdomains Lookup (GET /v1.0/subdomains)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for subdomains (GET /v1.0/subdomains):
-//   - domain (string, required)
-//   - after (string, optional)
-//   - before (string, optional)
-//   - status (string (one of: active, inactive), optional)
-//   - page (integer, optional)
-//   - format (string (one of: json, xml), optional)
+//   - domain (string, required): Domain whose subdomains you want.
+//   - after (string, optional): Only return records created after this date, in YYYY-MM-DD format. Defaults to the olde...
+//   - before (string, optional): Only return records created before this date, in YYYY-MM-DD format. Defaults to today, ...
+//   - status (string (one of: active, inactive), optional): Limit results to active or inactive subdomains. Both are returned when the parameter is...
+//   - page (integer, optional): Page of results to return. Defaults to 1.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 
@@ -931,7 +972,7 @@ func main() {
 // Runnable example: IP Reputation Lookup (GET /v1.0/security)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for ipReputation (GET /v1.0/security):
-//   - ip (string, required)
+//   - ip (string, required): IP address to look up.
 
 package main
 
@@ -1009,7 +1050,7 @@ func main() {
 // Runnable example: IP Reputation Lookup (v2.0) (GET /v2.0/security)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for ipReputationV2 (GET /v2.0/security):
-//   - ip (string, required)
+//   - ip (string, required): IP address to look up.
 
 package main
 
@@ -1090,7 +1131,7 @@ func main() {
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for domainReputation (GET /v1/domain/security):
 //   - domainName (string, required): The domain name to assess
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 
@@ -1131,8 +1172,8 @@ func main() {
 // Runnable example: ASN WHOIS Lookup (GET /v2.0/asn-whois)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for asnWhois (GET /v2.0/asn-whois):
-//   - asn (string, required)
-//   - format (string (one of: json, xml), optional)
+//   - asn (string, required): Autonomous system number to look up, with or without the AS prefix.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 
@@ -1172,8 +1213,8 @@ func main() {
 // Runnable example: IP WHOIS Lookup (GET /v1.0/ip-whois)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for ipWhois (GET /v1.0/ip-whois):
-//   - ip (string, required)
-//   - format (string (one of: json, xml), optional)
+//   - ip (string, required): IP address to look up.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 
@@ -1326,9 +1367,9 @@ func main() {
 // Runnable example: Newly Registered gTLD (CSV) (GET /v3.1/download/domainer/gtld)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbNewlyGtld (GET /v3.1/download/domainer/gtld):
-//   - whois (boolean, required)
+//   - whois (boolean, required): Set true for the file with full WHOIS records, false for domain names only.
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-//   - tlds (string, optional)
+//   - tlds (string, optional): Comma separated TLDs to limit the file to, for example com,net. Every TLD is included w...
 
 package main
 
@@ -1381,9 +1422,9 @@ func main() {
 // Runnable example: Newly Registered ccTLD (CSV) (GET /v3.1/download/domainer/cctld)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbNewlyCctld (GET /v3.1/download/domainer/cctld):
-//   - whois (boolean, required)
+//   - whois (boolean, required): Set true for the file with full WHOIS records, false for domain names only.
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-//   - tlds (string, optional)
+//   - tlds (string, optional): Comma separated TLDs to limit the file to, for example com,net. Every TLD is included w...
 
 package main
 
@@ -1543,7 +1584,7 @@ func main() {
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbNewlyGtldJson (GET /v3.1/domains/newly/gtld):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-//   - tlds (string, optional)
+//   - tlds (string, optional): Comma separated TLDs to limit the file to, for example com,net. Every TLD is included w...
 
 package main
 
@@ -1583,7 +1624,7 @@ func main() {
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbNewlyCctldJson (GET /v3.1/domains/newly/cctld):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-//   - tlds (string, optional)
+//   - tlds (string, optional): Comma separated TLDs to limit the file to, for example com,net. Every TLD is included w...
 
 package main
 
@@ -1676,7 +1717,7 @@ func main() {
 // Runnable example: Expiring Domains (GET /v3.1/download/domainer/expired)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbExpired (GET /v3.1/download/domainer/expired):
-//   - whois (boolean, required)
+//   - whois (boolean, required): Set true for the file with full WHOIS records, false for domain names only.
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 
 package main
@@ -1783,7 +1824,7 @@ func main() {
 // Runnable example: Dropped Domains (GET /v3.1/download/domainer/dropped)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbDropped (GET /v3.1/download/domainer/dropped):
-//   - whois (boolean, required)
+//   - whois (boolean, required): Set true for the file with full WHOIS records, false for domain names only.
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 
 package main
@@ -1838,7 +1879,7 @@ func main() {
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbDroppedJson (GET /v3.1/domains/dropped):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-//   - tlds (string, optional)
+//   - tlds (string, optional): Comma separated TLDs to limit the file to, for example com,net. Every TLD is included w...
 
 package main
 
@@ -1877,7 +1918,7 @@ func main() {
 // Runnable example: Dropped With Backlinks (GET /v3.3/download/domainer/dropped/backlinks)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbDroppedBacklinks (GET /v3.3/download/domainer/dropped/backlinks):
-//   - whois (boolean, optional)
+//   - whois (boolean, optional): Set true for the file with full WHOIS records, false for domain names only.
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 
 package main
@@ -2448,7 +2489,7 @@ func main() {
 // Runnable example: IP to Country Snapshot (GET /v3.3/download/snapshot/ip/country)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbIpCountry (GET /v3.3/download/snapshot/ip/country):
-//   - date (string, required)
+//   - date (string, required): The day whose file you want, in YYYY-MM-DD format.
 
 package main
 
@@ -2538,7 +2579,7 @@ func main() {
 // Runnable example: IP to City Snapshot (GET /v3.3/download/snapshot/ip/city)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbIpCity (GET /v3.3/download/snapshot/ip/city):
-//   - date (string, required)
+//   - date (string, required): The day whose file you want, in YYYY-MM-DD format.
 
 package main
 
@@ -2592,7 +2633,7 @@ func main() {
 // Runnable example: ASN WHOIS Snapshot (GET /v3.3/download/snapshot/asn/whois)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbAsnWhois (GET /v3.3/download/snapshot/asn/whois):
-//   - date (string, required)
+//   - date (string, required): The day whose file you want, in YYYY-MM-DD format.
 
 package main
 
@@ -2684,7 +2725,7 @@ func main() {
 // Runnable example: IP WHOIS Snapshot (GET /v3.3/download/snapshot/ip/whois)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbIpWhois (GET /v3.3/download/snapshot/ip/whois):
-//   - date (string, required)
+//   - date (string, required): The day whose file you want, in YYYY-MM-DD format.
 
 package main
 
@@ -2776,7 +2817,7 @@ func main() {
 // Runnable example: IP Security Snapshot (GET /v3.3/download/snapshot/ip/security)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbIpSecurity (GET /v3.3/download/snapshot/ip/security):
-//   - date (string, required)
+//   - date (string, required): The day whose file you want, in YYYY-MM-DD format.
 
 package main
 

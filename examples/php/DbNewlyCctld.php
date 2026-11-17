@@ -2,9 +2,9 @@
 // Newly Registered ccTLD (CSV)
 //
 // Parameters for dbNewlyCctld (GET /v3.1/download/domainer/cctld):
-//   - whois (boolean, required)
+//   - whois (boolean, required): Set true for the file with full WHOIS records, false for domain names only.
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-//   - tlds (string, optional)
+//   - tlds (string, optional): Comma separated TLDs to limit the file to, for example com,net. Every TLD is included w...
 
 require __DIR__ . '/vendor/autoload.php';
 

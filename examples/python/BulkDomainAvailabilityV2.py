@@ -17,7 +17,7 @@ with whoisfreaks.ApiClient(config) as client:
     # bulk_domain_availability_v2 parameters:
     #   bulk_domain_availability_request (BulkDomainAvailabilityRequest, required): request body
     #   domain (str, optional, keyword): Required for TLD-mode bulk check (base domain)
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     body = whoisfreaks.BulkDomainAvailabilityRequest(domain_names=["whoisfreaks.com", "example.com"])
     result = api.bulk_domain_availability_v2(body)
     print(json.dumps(result.to_dict(), indent=2))

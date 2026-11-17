@@ -1,7 +1,7 @@
 // Runnable example: Bulk WHOIS Lookup (POST /v2.0/bulkwhois/live)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for bulkWhois (POST /v2.0/bulkwhois/live):
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 //   - body: BulkWhoisRequest (required): request body object
 
 package main

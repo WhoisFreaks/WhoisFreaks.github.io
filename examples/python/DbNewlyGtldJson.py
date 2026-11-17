@@ -16,7 +16,7 @@ with whoisfreaks.ApiClient(config) as client:
 
     # db_newly_gtld_json parameters:
     #   var_date (datetime.date, optional, keyword): yyyy-MM-dd; omit for latest
-    #   tlds (str, optional, keyword)
+    #   tlds (str, optional, keyword): Comma separated TLDs to limit the file to, for example com,net. Every TLD is ...
     domains = api.db_newly_gtld_json(var_date=date(2026, 10, 1))
     print(f"{len(domains)} domains")
     print("\n".join(domains[:10]))

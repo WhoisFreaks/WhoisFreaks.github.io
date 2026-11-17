@@ -7,7 +7,7 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new IPReputationApi(config);
 
 // ipReputationV2({ ip })
-//   ip (string, required)
+//   ip (string, required): IP address to look up
 async function main(): Promise<void> {
   const result = await api.ipReputationV2({ ip: "8.8.8.8" });
   console.log(JSON.stringify(result, null, 2));

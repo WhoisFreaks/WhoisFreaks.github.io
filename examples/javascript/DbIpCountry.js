@@ -10,7 +10,7 @@ client.authentications["ApiKeyAuth"].apiKey = process.env.WHOISFREAKS_API_KEY;
 const api = new DatabasesIPGeolocationApi(client);
 
 // dbIpCountry(date)
-//   date (string, "yyyy-MM-dd", required)
+//   date (string, "yyyy-MM-dd", required): The day whose file you want, in YYYY-MM-DD format
 async function main() {
   const data = await api.dbIpCountry("2026-10-01"); // a Buffer with the file's bytes
   const file = "DbIpCountry.zip";

@@ -9,9 +9,9 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesNewlyRegisteredApi(config);
 
 // dbNewlyGtld({ whois, date?, tlds? })
-//   whois (boolean, required)
+//   whois (boolean, required): Set true for the file with full WHOIS records, false for domain names only
 //   date (Date, optional): yyyy-MM-dd; omit for latest
-//   tlds (string, optional)
+//   tlds (string, optional): Comma separated TLDs to limit the file to, for example com,net. Every TLD is ...
 async function main(): Promise<void> {
   const blob = await api.dbNewlyGtld({ whois: true, date: new Date("2026-10-01") }); // a Blob with the file's bytes
   const file = "DbNewlyGtld.csv";

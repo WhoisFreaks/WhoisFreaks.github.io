@@ -9,7 +9,7 @@ const api = new DatabasesExpiringDroppedApi(client);
 
 // dbDroppedJson(opts)
 //   opts.date (string, "yyyy-MM-dd", optional): yyyy-MM-dd; omit for latest
-//   opts.tlds (string, optional)
+//   opts.tlds (string, optional): Comma separated TLDs to limit the file to, for example com,net. Every TLD is ...
 async function main() {
   const domains = await api.dbDroppedJson({ date: "2026-10-01" });
   console.log(`${domains.length} domains`);

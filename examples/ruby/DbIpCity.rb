@@ -1,7 +1,7 @@
 # IP to City Snapshot
 #
 # Parameters for dbIpCity (GET /v3.3/download/snapshot/ip/city):
-#   - date (string, required)
+#   - date (string, required): The day whose file you want, in YYYY-MM-DD format.
 
 require "date"
 require "fileutils"

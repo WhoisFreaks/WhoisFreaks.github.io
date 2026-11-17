@@ -7,12 +7,12 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new SubdomainsApi(config);
 
 // subdomains({ domain, after?, before?, status?, page?, format? })
-//   domain (string, required)
-//   after (Date, optional)
-//   before (Date, optional)
-//   status ("active" | "inactive", optional)
-//   page (number, optional): default 1
-//   format ("json" | "xml", optional): default "json"
+//   domain (string, required): Domain whose subdomains you want
+//   after (Date, optional): Only return records created after this date, in YYYY-MM-DD format. Defaults t...
+//   before (Date, optional): Only return records created before this date, in YYYY-MM-DD format. Defaults ...
+//   status ("active" | "inactive", optional): Limit results to active or inactive subdomains. Both are returned when the pa...
+//   page (number, optional): Page of results to return. Defaults to 1; default 1
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.subdomains({ domain: "whoisfreaks.com", page: 1 });
   console.log(JSON.stringify(result, null, 2));

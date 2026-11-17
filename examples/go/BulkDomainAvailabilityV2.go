@@ -2,7 +2,7 @@
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for bulkDomainAvailabilityV2 (POST /v2.0/domain/availability):
 //   - domain (string, optional): Required for TLD-mode bulk check (base domain).
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 //   - body: BulkDomainAvailabilityRequest (required): request body object
 
 package main

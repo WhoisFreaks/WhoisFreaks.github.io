@@ -1,10 +1,10 @@
 # Live DNS Lookup
 #
 # Parameters for dnsLive (GET /v2.0/dns/live):
-#   - domain_name (string, optional)
+#   - domain_name (string, optional): Domain to look up.
 #   - ip_address (string, optional): Use for PTR lookups
 #   - type (string, required): all or comma-separated: A,MX,NS,TXT,SOA,SPF,AAAA,CNAME
-#   - format (string (one of: json, xml), optional)
+#   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 require "json"
 require "whoisfreaks"

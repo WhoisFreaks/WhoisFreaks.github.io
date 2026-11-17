@@ -8,7 +8,7 @@ const api = new WHOISApi(config);
 
 // whoisHistory({ domainName, format? })
 //   domainName (string, required): Domain to fetch historical WHOIS records for
-//   format ("json" | "xml", optional)
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out
 async function main(): Promise<void> {
   const result = await api.whoisHistory({ domainName: "whoisfreaks.com" });
   console.log(JSON.stringify(result, null, 2));

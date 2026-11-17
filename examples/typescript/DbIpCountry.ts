@@ -9,7 +9,7 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesIPGeolocationApi(config);
 
 // dbIpCountry({ date })
-//   date (Date, required)
+//   date (Date, required): The day whose file you want, in YYYY-MM-DD format
 async function main(): Promise<void> {
   const blob = await api.dbIpCountry({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
   const file = "DbIpCountry.zip";

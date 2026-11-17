@@ -7,8 +7,8 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new ASNWHOISApi(config);
 
 // asnWhois({ asn, format? })
-//   asn (string, required)
-//   format ("json" | "xml", optional): default "json"
+//   asn (string, required): Autonomous system number to look up, with or without the AS prefix
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.asnWhois({ asn: "as15169" });
   console.log(JSON.stringify(result, null, 2));

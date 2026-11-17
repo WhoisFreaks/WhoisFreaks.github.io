@@ -15,7 +15,7 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DatabasesIPWHOISApi(client)
 
     # db_ip_whois parameters:
-    #   var_date (datetime.date, required)
+    #   var_date (datetime.date, required): The day whose file you want, in YYYY-MM-DD format
     data = api.db_ip_whois(date(2026, 10, 1))  # the file's raw bytes
     path = "DbIpWhois.json.gz"
     with open(path, "wb") as f:

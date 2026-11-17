@@ -16,6 +16,6 @@ with whoisfreaks.ApiClient(config) as client:
 
     # whois_history parameters:
     #   domain_name (str, required): Domain to fetch historical WHOIS records for
-    #   format (str, optional, keyword): one of json, xml
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml
     result = api.whois_history("whoisfreaks.com")
     print(json.dumps(result.to_dict(), indent=2))

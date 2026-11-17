@@ -7,10 +7,10 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DNSApi(config);
 
 // dnsHistorical({ domainName, type, page?, format? })
-//   domainName (string, required)
-//   type (string, required): default "all"
-//   page (number, optional): default 1
-//   format ("json" | "xml", optional): default "json"
+//   domainName (string, required): Domain to look up
+//   type (string, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to...; default "all"
+//   page (number, optional): Page of results to return. Defaults to 1; default 1
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.dnsHistorical({ domainName: "whoisfreaks.com", type: "A,MX,TXT", page: 1 });
   console.log(JSON.stringify(result, null, 2));

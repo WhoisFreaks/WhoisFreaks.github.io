@@ -9,7 +9,7 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesExpiringDroppedApi(config);
 
 // dbDroppedBacklinks({ whois?, date? })
-//   whois (boolean, optional)
+//   whois (boolean, optional): Set true for the file with full WHOIS records, false for domain names only
 //   date (Date, optional): yyyy-MM-dd; omit for latest
 async function main(): Promise<void> {
   const blob = await api.dbDroppedBacklinks({ date: new Date("2026-10-01") }); // a Blob with the file's bytes

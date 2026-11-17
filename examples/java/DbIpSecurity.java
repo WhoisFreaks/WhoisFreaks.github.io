@@ -1,7 +1,7 @@
 // Runnable example: IP Security Snapshot (GET /v3.3/download/snapshot/ip/security)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbIpSecurity
 // Parameters for dbIpSecurity (GET /v3.3/download/snapshot/ip/security):
-//   - date (string, required)
+//   - date (string, required): The day whose file you want, in YYYY-MM-DD format.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.DatabasesIpSecurityApi;

@@ -17,6 +17,6 @@ with whoisfreaks.ApiClient(config) as client:
     # whois_reverse parameters:
     #   keyword (str, required): Keyword to search across WHOIS records
     #   page (int, optional, keyword): Page number
-    #   format (str, optional, keyword): one of json, xml
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml
     result = api.whois_reverse("whoisfreaks", page=1)
     print(json.dumps(result.to_dict(), indent=2))

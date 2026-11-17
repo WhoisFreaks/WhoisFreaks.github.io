@@ -1,17 +1,17 @@
 # Endpoint Reference
 
-The WhoisFreaks API exposes **94 endpoints** across **23 categories**, organized into 3 sections. Every endpoint is available in all 10 SDKs.
+The WhoisFreaks API exposes **95 endpoints** across **23 categories**, organized into 3 sections. Every endpoint is available in all 10 SDKs.
 
 ## API Solutions
 
 Real-time and on-demand lookup APIs. Query a single domain, IP, or ASN and get structured JSON (or XML) back immediately.
 
-26 endpoints across 11 categories. See the [API Solutions overview](api-solutions.md).
+27 endpoints across 11 categories. See the [API Solutions overview](api-solutions.md).
 
 - [WHOIS](whois.md): 4 endpoints
 - [DNS](dns.md): 8 endpoints
 - [Domain Availability](domain-availability.md): 2 endpoints
-- [Typosquatting](typosquatting.md): 1 endpoint
+- [Typosquatting](typosquatting.md): 2 endpoints
 - [SSL](ssl.md): 1 endpoint
 - [Geolocation](geolocation.md): 2 endpoints
 - [Subdomains](subdomains.md): 1 endpoint
@@ -65,6 +65,7 @@ Manage your account, monitor API usage and credits, and rotate your API key.
 | API Solutions | Domain Availability | GET | `/v2.0/domain/availability` | `domainAvailabilityV2` |
 | API Solutions | Domain Availability | POST | `/v2.0/domain/availability` | `bulkDomainAvailabilityV2` |
 | API Solutions | Typosquatting | GET | `/v3.0/domain/typos` | `typosquatting` |
+| API Solutions | Typosquatting | GET | `/v3.0/subdomains/typos` | `subdomainTyposquatting` |
 | API Solutions | SSL | GET | `/v1.0/ssl/live` | `sslLookup` |
 | API Solutions | Geolocation | GET | `/v1.0/geolocation` | `geolocation` |
 | API Solutions | Geolocation | POST | `/v1.0/geolocation` | `bulkGeolocation` |

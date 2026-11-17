@@ -1,7 +1,7 @@
 // Runnable example: Dropped With Backlinks (GET /v3.3/download/domainer/dropped/backlinks)
 // Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbDroppedBacklinks (GET /v3.3/download/domainer/dropped/backlinks):
-//   - whois (boolean, optional)
+//   - whois (boolean, optional): Set true for the file with full WHOIS records, false for domain names only.
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 using System;
 using System.IO;

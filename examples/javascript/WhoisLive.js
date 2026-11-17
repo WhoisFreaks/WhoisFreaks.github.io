@@ -8,8 +8,8 @@ client.authentications["ApiKeyAuth"].apiKey = process.env.WHOISFREAKS_API_KEY;
 const api = new WHOISApi(client);
 
 // whoisLive(domainName, opts)
-//   domainName (string, required)
-//   opts.format (string, optional): one of json, xml; default "json"
+//   domainName (string, required): Domain to look up
+//   opts.format (string, optional): Response format. JSON when the parameter is left out; one of json, xml; default "json"
 async function main() {
   const result = await api.whoisLive("whoisfreaks.com");
   console.log(JSON.stringify(result, null, 2));

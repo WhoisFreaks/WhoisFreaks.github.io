@@ -1,7 +1,7 @@
 // Runnable example: ASN WHOIS Snapshot (GET /v3.3/download/snapshot/asn/whois)
 // Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbAsnWhois (GET /v3.3/download/snapshot/asn/whois):
-//   - date (string, required)
+//   - date (string, required): The day whose file you want, in YYYY-MM-DD format.
 using System;
 using System.IO;
 using WhoisFreaks.Api;
