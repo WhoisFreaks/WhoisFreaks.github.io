@@ -241,6 +241,9 @@ const api = new DNSApi(client);
 //   type (string, required): all or comma-separated: A,MX,NS,TXT,SOA,SPF,AAAA,CNAME; default "all"
 //   opts.domainName (string, optional): Domain to look up
 //   opts.ipAddress (string, optional): Use for PTR lookups
+//   opts.cnameDepth (number, optional): How many CNAME links to follow before returning the records they point at. 0,...; default 0
+//   opts.relativeRecords (boolean, optional): Keeps the records picked up for other names along the way, such as a CNAME ta...; default true
+//   opts.isAuthoritative (boolean, optional): Set true to read the records from the zone's own nameservers instead of a rec...; default false
 //   opts.format (string, optional): Response format. JSON when the parameter is left out; one of json, xml; default "json"
 async function main() {
   const result = await api.dnsLive("A,MX,TXT", { domainName: "whoisfreaks.com" });
@@ -468,6 +471,8 @@ const api = new DNSApi(client);
 // dnsBulk(type, dnsBulkRequest, opts)
 //   type (string, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to...; default "all"
 //   dnsBulkRequest (DnsBulkRequest, required): request body
+//   opts.cname_depth (number, optional): How many CNAME links to follow before returning the records they point at. 0,...; default 0
+//   opts.isAuthoritative (boolean, optional): Set true to read the records from each zone's own nameservers instead of a re...; default false
 //   opts.format (string, optional): Response format. JSON when the parameter is left out; one of json, xml; default "json"
 async function main() {
   const body = DnsBulkRequest.constructFromObject({ domainNames: ["whoisfreaks.com", "example.com"] });

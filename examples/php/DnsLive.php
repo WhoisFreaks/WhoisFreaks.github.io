@@ -5,6 +5,9 @@
 //   - domainName (string, optional): Domain to look up.
 //   - ipAddress (string, optional): Use for PTR lookups
 //   - type (string, required): all or comma-separated: A,MX,NS,TXT,SOA,SPF,AAAA,CNAME
+//   - cnameDepth (integer, optional): How many CNAME links to follow before returning the records they point at. 0, the defau...
+//   - relativeRecords (boolean, optional): Keeps the records picked up for other names along the way, such as a CNAME target's own...
+//   - isAuthoritative (boolean, optional): Set true to read the records from the zone's own nameservers instead of a recursive res...
 //   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 require __DIR__ . '/vendor/autoload.php';

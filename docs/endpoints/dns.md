@@ -19,6 +19,9 @@ Real-time DNS record lookup. 1 credit per query.
 | `domainName` | query | no | string |  | Domain to look up. |
 | `ipAddress` | query | no | string |  | Use for PTR lookups |
 | `type` | query | yes | string | `all` | all or comma-separated: A,MX,NS,TXT,SOA,SPF,AAAA,CNAME |
+| `cnameDepth` | query | no | integer | `0` | How many CNAME links to follow before returning the records they point at. 0, the default, returns only what the queried name itself holds. Anything outside 1 to 4 is treated as 0. |
+| `relativeRecords` | query | no | boolean | `true` | Keeps the records picked up for other names along the way, such as a CNAME target's own records. Set false to return only the records whose name is the queried domain itself. PTR records are kept either way. |
+| `isAuthoritative` | query | no | boolean | `false` | Set true to read the records from the zone's own nameservers instead of a recursive resolver, so every TTL is the zone's full value rather than what is left of a cached copy. A name that is an alias into another zone then returns its CNAME and no address, because that is all the zone holds: pass cnameDepth to follow it. Answers read this way are not added to the DNS history database. |
 | `format` | query | no | string | `json` | Response format. JSON when the parameter is left out. (one of: json, xml) |
 
 **Response** (`DnsResponse`)
@@ -85,6 +88,9 @@ with whoisfreaks.ApiClient(config) as client:
     #   type (str, required): all or comma-separated: A,MX,NS,TXT,SOA,SPF,AAAA,CNAME; default "all"
     #   domain_name (str, optional, keyword): Domain to look up
     #   ip_address (str, optional, keyword): Use for PTR lookups
+    #   cname_depth (int, optional, keyword): How many CNAME links to follow before returning the records they point at. 0,...; default 0
+    #   relative_records (bool, optional, keyword): Keeps the records picked up for other names along the way, such as a CNAME ta...; default True
+    #   is_authoritative (bool, optional, keyword): Set true to read the records from the zone's own nameservers instead of a rec...; default False
     #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.dns_live("A,MX,TXT", domain_name="whoisfreaks.com")
     print(json.dumps(result.to_dict(), indent=2))
@@ -103,10 +109,13 @@ import { Configuration, DNSApi, ResponseError } from "whoisfreaks";
 const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DNSApi(config);
 
-// dnsLive({ type, domainName?, ipAddress?, format? })
+// dnsLive({ type, domainName?, ipAddress?, cnameDepth?, relativeRecords?, isAuthoritative?, format? })
 //   type (string, required): all or comma-separated: A,MX,NS,TXT,SOA,SPF,AAAA,CNAME; default "all"
 //   domainName (string, optional): Domain to look up
 //   ipAddress (string, optional): Use for PTR lookups
+//   cnameDepth (number, optional): How many CNAME links to follow before returning the records they point at. 0,...; default 0
+//   relativeRecords (boolean, optional): Keeps the records picked up for other names along the way, such as a CNAME ta...; default true
+//   isAuthoritative (boolean, optional): Set true to read the records from the zone's own nameservers instead of a rec...; default false
 //   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.dnsLive({ type: "A,MX,TXT", domainName: "whoisfreaks.com" });
@@ -135,6 +144,9 @@ main().catch(async (err: unknown) => {
 //   - domainName (string, optional): Domain to look up.
 //   - ipAddress (string, optional): Use for PTR lookups
 //   - type (string, required): all or comma-separated: A,MX,NS,TXT,SOA,SPF,AAAA,CNAME
+//   - cnameDepth (integer, optional): How many CNAME links to follow before returning the records they point at. 0, the defau...
+//   - relativeRecords (boolean, optional): Keeps the records picked up for other names along the way, such as a CNAME target's own...
+//   - isAuthoritative (boolean, optional): Set true to read the records from the zone's own nameservers instead of a recursive res...
 //   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
@@ -1121,6 +1133,8 @@ Up to 100 domains + 100 IPs in one request.
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
 | `type` | query | yes | string | `all` | Comma separated DNS record types to return, for example A,MX,TXT. Defaults to all. |
+| `cname_depth` | query | no | integer | `0` | How many CNAME links to follow before returning the records they point at. 0, the default, returns only what each queried name itself holds. Anything outside 1 to 4 is treated as 0. Note the spelling: the single lookup endpoint names this cnameDepth. |
+| `isAuthoritative` | query | no | boolean | `false` | Set true to read the records from each zone's own nameservers instead of a recursive resolver, so every TTL is the zone's full value rather than what is left of a cached copy. A name that is an alias into another zone then returns its CNAME and no address; pass cname_depth to follow it. Answers read this way are not added to the DNS history database. |
 | `format` | query | no | string | `json` | Response format. JSON when the parameter is left out. (one of: json, xml) |
 
 **Request body** (`application/json`, model `DnsBulkRequest`)
@@ -1177,6 +1191,8 @@ with whoisfreaks.ApiClient(config) as client:
     # dns_bulk parameters:
     #   type (str, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to...; default "all"
     #   dns_bulk_request (DnsBulkRequest, required): request body
+    #   cname_depth (int, optional, keyword): How many CNAME links to follow before returning the records they point at. 0,...; default 0
+    #   is_authoritative (bool, optional, keyword): Set true to read the records from each zone's own nameservers instead of a re...; default False
     #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     body = whoisfreaks.DnsBulkRequest(domain_names=["whoisfreaks.com", "example.com"])
     result = api.dns_bulk("A,MX,TXT", body)
@@ -1196,9 +1212,11 @@ import { Configuration, DNSApi, ResponseError, type DnsBulkRequest } from "whois
 const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DNSApi(config);
 
-// dnsBulk({ type, dnsBulkRequest, format? })
+// dnsBulk({ type, dnsBulkRequest, cname_depth?, isAuthoritative?, format? })
 //   type (string, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to...; default "all"
 //   dnsBulkRequest (DnsBulkRequest, required): request body
+//   cname_depth (number, optional): How many CNAME links to follow before returning the records they point at. 0,...; default 0
+//   isAuthoritative (boolean, optional): Set true to read the records from each zone's own nameservers instead of a re...; default false
 //   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const body: DnsBulkRequest = { domainNames: ["whoisfreaks.com", "example.com"] };
@@ -1226,6 +1244,8 @@ main().catch(async (err: unknown) => {
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dnsBulk (POST /v2.0/dns/bulk/live):
 //   - type (string, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to all.
+//   - cname_depth (integer, optional): How many CNAME links to follow before returning the records they point at. 0, the defau...
+//   - isAuthoritative (boolean, optional): Set true to read the records from each zone's own nameservers instead of a recursive re...
 //   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 //   - body: DnsBulkRequest (required): request body object
 
