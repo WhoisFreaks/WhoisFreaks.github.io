@@ -1,7 +1,7 @@
 // Runnable example: IP Geolocation Lookup (GET /v1.0/geolocation)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=Geolocation
 // Parameters for geolocation (GET /v1.0/geolocation):
-//   - ip (string, required)
+//   - ip (string, required): IP address to look up.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.GeolocationApi;

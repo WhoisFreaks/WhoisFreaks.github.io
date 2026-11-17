@@ -15,6 +15,6 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.IPReputationApi(client)
 
     # ip_reputation_v2 parameters:
-    #   ip (str, required)
+    #   ip (str, required): IP address to look up
     result = api.ip_reputation_v2("8.8.8.8")
     print(json.dumps(result.to_dict(), indent=2))

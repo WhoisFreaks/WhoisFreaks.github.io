@@ -2,9 +2,9 @@
 // Typosquatting Lookup
 //
 // Parameters for typosquatting (GET /v3.0/domain/typos):
-//   - keyword (string, optional)
-//   - pattern (string, optional)
-//   - pageToken (string, optional)
+//   - keyword (string, optional): Brand or label to find typo variants for. Pass either keyword or pattern, not both.
+//   - pattern (string, optional): Wildcard search string, where '*' matches any characters. Pass either keyword or patter...
+//   - pageToken (string, optional): Token from nextPageToken in the previous response, needed from page 2 onward. Send it w...
 
 require __DIR__ . '/vendor/autoload.php';
 

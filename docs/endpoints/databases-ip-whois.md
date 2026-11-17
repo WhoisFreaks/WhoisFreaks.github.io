@@ -16,7 +16,7 @@ IP WHOIS Snapshot. Returns the file/snapshot described by this operation.
 
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
-| `date` | query | yes | string (date) |  |  |
+| `date` | query | yes | string (date) |  | The day whose file you want, in YYYY-MM-DD format. |
 
 **Usage**
 
@@ -40,7 +40,7 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DatabasesIPWHOISApi(client)
 
     # db_ip_whois parameters:
-    #   var_date (datetime.date, required)
+    #   var_date (datetime.date, required): The day whose file you want, in YYYY-MM-DD format
     data = api.db_ip_whois(date(2026, 10, 1))  # the file's raw bytes
     path = "DbIpWhois.json.gz"
     with open(path, "wb") as f:
@@ -64,7 +64,7 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesIPWHOISApi(config);
 
 // dbIpWhois({ date })
-//   date (Date, required)
+//   date (Date, required): The day whose file you want, in YYYY-MM-DD format
 async function main(): Promise<void> {
   const blob = await api.dbIpWhois({ date: new Date("2026-10-01") }); // a Blob with the file's bytes
   const file = "DbIpWhois.json.gz";
@@ -91,7 +91,7 @@ main().catch(async (err: unknown) => {
 // Runnable example: IP WHOIS Snapshot (GET /v3.3/download/snapshot/ip/whois)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbIpWhois (GET /v3.3/download/snapshot/ip/whois):
-//   - date (string, required)
+//   - date (string, required): The day whose file you want, in YYYY-MM-DD format.
 
 package main
 

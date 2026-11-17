@@ -15,7 +15,7 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DatabasesIPSecurityApi(client)
 
     # db_ip_security parameters:
-    #   var_date (datetime.date, required)
+    #   var_date (datetime.date, required): The day whose file you want, in YYYY-MM-DD format
     data = api.db_ip_security(date(2026, 10, 1))  # the file's raw bytes
     path = "DbIpSecurity.csv"
     with open(path, "wb") as f:

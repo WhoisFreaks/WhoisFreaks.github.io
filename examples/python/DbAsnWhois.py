@@ -15,7 +15,7 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DatabasesASNWHOISApi(client)
 
     # db_asn_whois parameters:
-    #   var_date (datetime.date, required)
+    #   var_date (datetime.date, required): The day whose file you want, in YYYY-MM-DD format
     data = api.db_asn_whois(date(2026, 10, 1))  # the file's raw bytes
     path = "DbAsnWhois.json.gz"
     with open(path, "wb") as f:

@@ -24,6 +24,7 @@ Install: see the [Ruby guide](../../docs/languages/ruby.md). Set the `WHOISFREAK
 
 ## Typosquatting
 - [`Typosquatting.rb`](Typosquatting.rb): Typosquatting Lookup (`GET /v3.0/domain/typos`)
+- [`SubdomainTyposquatting.rb`](SubdomainTyposquatting.rb): Subdomain Typosquatting Lookup (`GET /v3.0/subdomains/typos`)
 
 ## SSL
 - [`SslLookup.rb`](SslLookup.rb): SSL Certificate Lookup (`GET /v1.0/ssl/live`)

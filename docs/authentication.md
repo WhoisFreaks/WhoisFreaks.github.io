@@ -47,8 +47,8 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.WHOISApi(client)
 
     # whois_live parameters:
-    #   domain_name (str, required)
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   domain_name (str, required): Domain to look up
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.whois_live("whoisfreaks.com")
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -66,8 +66,8 @@ client.authentications["ApiKeyAuth"].apiKey = process.env.WHOISFREAKS_API_KEY;
 const api = new WHOISApi(client);
 
 // whoisLive(domainName, opts)
-//   domainName (string, required)
-//   opts.format (string, optional): one of json, xml; default "json"
+//   domainName (string, required): Domain to look up
+//   opts.format (string, optional): Response format. JSON when the parameter is left out; one of json, xml; default "json"
 async function main() {
   const result = await api.whoisLive("whoisfreaks.com");
   console.log(JSON.stringify(result, null, 2));
@@ -92,8 +92,8 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new WHOISApi(config);
 
 // whoisLive({ domainName, format? })
-//   domainName (string, required)
-//   format ("json" | "xml", optional): default "json"
+//   domainName (string, required): Domain to look up
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.whoisLive({ domainName: "whoisfreaks.com" });
   console.log(JSON.stringify(result, null, 2));
@@ -116,8 +116,8 @@ main().catch(async (err: unknown) => {
 // Runnable example: Live WHOIS Lookup (GET /v2.0/whois/live)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=WhoisLive
 // Parameters for whoisLive (GET /v2.0/whois/live):
-//   - domainName (string, required)
-//   - format (string (one of: json, xml), optional)
+//   - domainName (string, required): Domain to look up.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.WhoisApi;
@@ -145,8 +145,8 @@ public class WhoisLive {
 // Runnable example: Live WHOIS Lookup (GET /v2.0/whois/live)
 // Run it from the Getting Started project: gradle run -PmainClass=WhoisLiveKt
 // Parameters for whoisLive (GET /v2.0/whois/live):
-//   - domainName (string, required)
-//   - format (string (one of: json, xml), optional)
+//   - domainName (string, required): Domain to look up.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 import com.whoisfreaks.client.apis.WHOISApi
 import com.whoisfreaks.client.infrastructure.ApiClient
 
@@ -166,8 +166,8 @@ fun main() {
 // Runnable example: Live WHOIS Lookup (GET /v2.0/whois/live)
 // Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for whoisLive (GET /v2.0/whois/live):
-//   - domainName (string, required)
-//   - format (string (one of: json, xml), optional)
+//   - domainName (string, required): Domain to look up.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;
@@ -190,8 +190,8 @@ Console.WriteLine(result.ToJson());
 # Live WHOIS Lookup
 #
 # Parameters for whoisLive (GET /v2.0/whois/live):
-#   - domain_name (string, required)
-#   - format (string (one of: json, xml), optional)
+#   - domain_name (string, required): Domain to look up.
+#   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 require "json"
 require "whoisfreaks"
@@ -219,8 +219,8 @@ end
 // Runnable example: Live WHOIS Lookup (GET /v2.0/whois/live)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for whoisLive (GET /v2.0/whois/live):
-//   - domainName (string, required)
-//   - format (string (one of: json, xml), optional)
+//   - domainName (string, required): Domain to look up.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 
@@ -256,8 +256,8 @@ func main() {
 // Live WHOIS Lookup
 //
 // Parameters for whoisLive (GET /v2.0/whois/live):
-//   - domainName (string, required)
-//   - format (string (one of: json, xml), optional)
+//   - domainName (string, required): Domain to look up.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 //
 // Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
 
@@ -288,8 +288,8 @@ do {
 // Live WHOIS Lookup
 //
 // Parameters for whoisLive (GET /v2.0/whois/live):
-//   - domainName (string, required)
-//   - format (string (one of: json, xml), optional)
+//   - domainName (string, required): Domain to look up.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 require __DIR__ . '/vendor/autoload.php';
 

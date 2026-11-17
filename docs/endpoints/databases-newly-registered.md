@@ -16,9 +16,9 @@ Newly Registered gTLD (CSV). Returns the file/snapshot described by this operati
 
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
-| `whois` | query | yes | boolean |  |  |
+| `whois` | query | yes | boolean |  | Set true for the file with full WHOIS records, false for domain names only. |
 | `date` | query | no | string (date) |  | yyyy-MM-dd; omit for latest |
-| `tlds` | query | no | string |  |  |
+| `tlds` | query | no | string |  | Comma separated TLDs to limit the file to, for example com,net. Every TLD is included when the parameter is left out. |
 
 **Usage**
 
@@ -42,9 +42,9 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DatabasesNewlyRegisteredApi(client)
 
     # db_newly_gtld parameters:
-    #   whois (bool, required)
+    #   whois (bool, required): Set true for the file with full WHOIS records, false for domain names only
     #   var_date (datetime.date, optional, keyword): yyyy-MM-dd; omit for latest
-    #   tlds (str, optional, keyword)
+    #   tlds (str, optional, keyword): Comma separated TLDs to limit the file to, for example com,net. Every TLD is ...
     data = api.db_newly_gtld(True, var_date=date(2026, 10, 1))  # the file's raw bytes
     path = "DbNewlyGtld.csv"
     with open(path, "wb") as f:
@@ -68,9 +68,9 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesNewlyRegisteredApi(config);
 
 // dbNewlyGtld({ whois, date?, tlds? })
-//   whois (boolean, required)
+//   whois (boolean, required): Set true for the file with full WHOIS records, false for domain names only
 //   date (Date, optional): yyyy-MM-dd; omit for latest
-//   tlds (string, optional)
+//   tlds (string, optional): Comma separated TLDs to limit the file to, for example com,net. Every TLD is ...
 async function main(): Promise<void> {
   const blob = await api.dbNewlyGtld({ whois: true, date: new Date("2026-10-01") }); // a Blob with the file's bytes
   const file = "DbNewlyGtld.csv";
@@ -97,9 +97,9 @@ main().catch(async (err: unknown) => {
 // Runnable example: Newly Registered gTLD (CSV) (GET /v3.1/download/domainer/gtld)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbNewlyGtld (GET /v3.1/download/domainer/gtld):
-//   - whois (boolean, required)
+//   - whois (boolean, required): Set true for the file with full WHOIS records, false for domain names only.
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-//   - tlds (string, optional)
+//   - tlds (string, optional): Comma separated TLDs to limit the file to, for example com,net. Every TLD is included w...
 
 package main
 
@@ -158,9 +158,9 @@ Newly Registered ccTLD (CSV). Returns the file/snapshot described by this operat
 
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
-| `whois` | query | yes | boolean |  |  |
+| `whois` | query | yes | boolean |  | Set true for the file with full WHOIS records, false for domain names only. |
 | `date` | query | no | string (date) |  | yyyy-MM-dd; omit for latest |
-| `tlds` | query | no | string |  |  |
+| `tlds` | query | no | string |  | Comma separated TLDs to limit the file to, for example com,net. Every TLD is included when the parameter is left out. |
 
 **Usage**
 
@@ -184,9 +184,9 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DatabasesNewlyRegisteredApi(client)
 
     # db_newly_cctld parameters:
-    #   whois (bool, required)
+    #   whois (bool, required): Set true for the file with full WHOIS records, false for domain names only
     #   var_date (datetime.date, optional, keyword): yyyy-MM-dd; omit for latest
-    #   tlds (str, optional, keyword)
+    #   tlds (str, optional, keyword): Comma separated TLDs to limit the file to, for example com,net. Every TLD is ...
     data = api.db_newly_cctld(True, var_date=date(2026, 10, 1))  # the file's raw bytes
     path = "DbNewlyCctld.csv"
     with open(path, "wb") as f:
@@ -210,9 +210,9 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DatabasesNewlyRegisteredApi(config);
 
 // dbNewlyCctld({ whois, date?, tlds? })
-//   whois (boolean, required)
+//   whois (boolean, required): Set true for the file with full WHOIS records, false for domain names only
 //   date (Date, optional): yyyy-MM-dd; omit for latest
-//   tlds (string, optional)
+//   tlds (string, optional): Comma separated TLDs to limit the file to, for example com,net. Every TLD is ...
 async function main(): Promise<void> {
   const blob = await api.dbNewlyCctld({ whois: true, date: new Date("2026-10-01") }); // a Blob with the file's bytes
   const file = "DbNewlyCctld.csv";
@@ -239,9 +239,9 @@ main().catch(async (err: unknown) => {
 // Runnable example: Newly Registered ccTLD (CSV) (GET /v3.1/download/domainer/cctld)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbNewlyCctld (GET /v3.1/download/domainer/cctld):
-//   - whois (boolean, required)
+//   - whois (boolean, required): Set true for the file with full WHOIS records, false for domain names only.
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-//   - tlds (string, optional)
+//   - tlds (string, optional): Comma separated TLDs to limit the file to, for example com,net. Every TLD is included w...
 
 package main
 
@@ -569,7 +569,7 @@ Newly Registered gTLD (JSON). Returns the file/snapshot described by this operat
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
 | `date` | query | no | string (date) |  | yyyy-MM-dd; omit for latest |
-| `tlds` | query | no | string |  |  |
+| `tlds` | query | no | string |  | Comma separated TLDs to limit the file to, for example com,net. Every TLD is included when the parameter is left out. |
 
 **Usage**
 
@@ -594,7 +594,7 @@ with whoisfreaks.ApiClient(config) as client:
 
     # db_newly_gtld_json parameters:
     #   var_date (datetime.date, optional, keyword): yyyy-MM-dd; omit for latest
-    #   tlds (str, optional, keyword)
+    #   tlds (str, optional, keyword): Comma separated TLDs to limit the file to, for example com,net. Every TLD is ...
     domains = api.db_newly_gtld_json(var_date=date(2026, 10, 1))
     print(f"{len(domains)} domains")
     print("\n".join(domains[:10]))
@@ -615,7 +615,7 @@ const api = new DatabasesNewlyRegisteredApi(config);
 
 // dbNewlyGtldJson({ date?, tlds? })
 //   date (Date, optional): yyyy-MM-dd; omit for latest
-//   tlds (string, optional)
+//   tlds (string, optional): Comma separated TLDs to limit the file to, for example com,net. Every TLD is ...
 async function main(): Promise<void> {
   const domains = await api.dbNewlyGtldJson({ date: new Date("2026-10-01") });
   console.log(`${domains.length} domains`);
@@ -642,7 +642,7 @@ main().catch(async (err: unknown) => {
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbNewlyGtldJson (GET /v3.1/domains/newly/gtld):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-//   - tlds (string, optional)
+//   - tlds (string, optional): Comma separated TLDs to limit the file to, for example com,net. Every TLD is included w...
 
 package main
 
@@ -688,7 +688,7 @@ Newly Registered ccTLD (JSON). Returns the file/snapshot described by this opera
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
 | `date` | query | no | string (date) |  | yyyy-MM-dd; omit for latest |
-| `tlds` | query | no | string |  |  |
+| `tlds` | query | no | string |  | Comma separated TLDs to limit the file to, for example com,net. Every TLD is included when the parameter is left out. |
 
 **Usage**
 
@@ -713,7 +713,7 @@ with whoisfreaks.ApiClient(config) as client:
 
     # db_newly_cctld_json parameters:
     #   var_date (datetime.date, optional, keyword): yyyy-MM-dd; omit for latest
-    #   tlds (str, optional, keyword)
+    #   tlds (str, optional, keyword): Comma separated TLDs to limit the file to, for example com,net. Every TLD is ...
     domains = api.db_newly_cctld_json(var_date=date(2026, 10, 1))
     print(f"{len(domains)} domains")
     print("\n".join(domains[:10]))
@@ -734,7 +734,7 @@ const api = new DatabasesNewlyRegisteredApi(config);
 
 // dbNewlyCctldJson({ date?, tlds? })
 //   date (Date, optional): yyyy-MM-dd; omit for latest
-//   tlds (string, optional)
+//   tlds (string, optional): Comma separated TLDs to limit the file to, for example com,net. Every TLD is ...
 async function main(): Promise<void> {
   const domains = await api.dbNewlyCctldJson({ date: new Date("2026-10-01") });
   console.log(`${domains.length} domains`);
@@ -761,7 +761,7 @@ main().catch(async (err: unknown) => {
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dbNewlyCctldJson (GET /v3.1/domains/newly/cctld):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-//   - tlds (string, optional)
+//   - tlds (string, optional): Comma separated TLDs to limit the file to, for example com,net. Every TLD is included w...
 
 package main
 

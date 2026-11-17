@@ -1,7 +1,7 @@
 // Runnable example: IP to Country Snapshot (GET /v3.3/download/snapshot/ip/country)
 // Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for dbIpCountry (GET /v3.3/download/snapshot/ip/country):
-//   - date (string, required)
+//   - date (string, required): The day whose file you want, in YYYY-MM-DD format.
 using System;
 using System.IO;
 using WhoisFreaks.Api;

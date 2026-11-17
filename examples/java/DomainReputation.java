@@ -2,7 +2,7 @@
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DomainReputation
 // Parameters for domainReputation (GET /v1/domain/security):
 //   - domainName (string, required): The domain name to assess
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.DomainReputationApi;

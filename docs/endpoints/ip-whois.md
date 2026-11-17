@@ -16,8 +16,8 @@ WHOIS for an IP address. 1 credit.
 
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
-| `ip` | query | yes | string |  |  |
-| `format` | query | no | string | `json` |  (one of: json, xml) |
+| `ip` | query | yes | string |  | IP address to look up. |
+| `format` | query | no | string | `json` | Response format. JSON when the parameter is left out. (one of: json, xml) |
 
 **Response** (`IpWhoisResponse`)
 
@@ -221,8 +221,8 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.IPWHOISApi(client)
 
     # ip_whois parameters:
-    #   ip (str, required)
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   ip (str, required): IP address to look up
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.ip_whois("8.8.8.8")
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -241,8 +241,8 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new IPWHOISApi(config);
 
 // ipWhois({ ip, format? })
-//   ip (string, required)
-//   format ("json" | "xml", optional): default "json"
+//   ip (string, required): IP address to look up
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.ipWhois({ ip: "8.8.8.8" });
   console.log(JSON.stringify(result, null, 2));
@@ -267,8 +267,8 @@ main().catch(async (err: unknown) => {
 // Runnable example: IP WHOIS Lookup (GET /v1.0/ip-whois)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for ipWhois (GET /v1.0/ip-whois):
-//   - ip (string, required)
-//   - format (string (one of: json, xml), optional)
+//   - ip (string, required): IP address to look up.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 

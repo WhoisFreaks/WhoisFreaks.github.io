@@ -1,10 +1,10 @@
 // Runnable example: Historical DNS Lookup (GET /v2.0/dns/historical)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dnsHistorical (GET /v2.0/dns/historical):
-//   - domainName (string, required)
-//   - type (string, required)
-//   - page (integer, optional)
-//   - format (string (one of: json, xml), optional)
+//   - domainName (string, required): Domain to look up.
+//   - type (string, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to all.
+//   - page (integer, optional): Page of results to return. Defaults to 1.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 

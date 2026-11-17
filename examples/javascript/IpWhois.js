@@ -8,8 +8,8 @@ client.authentications["ApiKeyAuth"].apiKey = process.env.WHOISFREAKS_API_KEY;
 const api = new IPWHOISApi(client);
 
 // ipWhois(ip, opts)
-//   ip (string, required)
-//   opts.format (string, optional): one of json, xml; default "json"
+//   ip (string, required): IP address to look up
+//   opts.format (string, optional): Response format. JSON when the parameter is left out; one of json, xml; default "json"
 async function main() {
   const result = await api.ipWhois("8.8.8.8");
   console.log(JSON.stringify(result, null, 2));

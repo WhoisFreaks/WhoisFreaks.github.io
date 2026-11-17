@@ -1,7 +1,7 @@
 // Runnable example: IP Reputation Lookup (GET /v1.0/security)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=IpReputation
 // Parameters for ipReputation (GET /v1.0/security):
-//   - ip (string, required)
+//   - ip (string, required): IP address to look up.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.IpReputationApi;

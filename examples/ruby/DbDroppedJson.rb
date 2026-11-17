@@ -2,7 +2,7 @@
 #
 # Parameters for dbDroppedJson (GET /v3.1/domains/dropped):
 #   - date (string, optional): yyyy-MM-dd; omit for latest
-#   - tlds (string, optional)
+#   - tlds (string, optional): Comma separated TLDs to limit the file to, for example com,net. Every TLD is included w...
 
 require "date"
 require "whoisfreaks"

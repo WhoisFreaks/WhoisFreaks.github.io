@@ -7,8 +7,8 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new WHOISApi(config);
 
 // whoisLive({ domainName, format? })
-//   domainName (string, required)
-//   format ("json" | "xml", optional): default "json"
+//   domainName (string, required): Domain to look up
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.whoisLive({ domainName: "whoisfreaks.com" });
   console.log(JSON.stringify(result, null, 2));

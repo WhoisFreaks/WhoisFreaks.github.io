@@ -2,7 +2,7 @@
 // IP Security Snapshot
 //
 // Parameters for dbIpSecurity (GET /v3.3/download/snapshot/ip/security):
-//   - date (string, required)
+//   - date (string, required): The day whose file you want, in YYYY-MM-DD format.
 
 require __DIR__ . '/vendor/autoload.php';
 

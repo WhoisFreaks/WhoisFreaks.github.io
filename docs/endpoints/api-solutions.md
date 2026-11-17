@@ -2,7 +2,7 @@
 
 Real-time and on-demand lookup APIs. Query a single domain, IP, or ASN and get structured JSON (or XML) back immediately.
 
-**26 endpoints** across **11 categories**. Requests need your API key unless noted otherwise. See [Authentication](../authentication.md).
+**27 endpoints** across **11 categories**. Requests need your API key unless noted otherwise. See [Authentication](../authentication.md).
 
 ## Categories
 
@@ -45,9 +45,10 @@ Check domain availability
 
 Detect typo variants of brand domains
 
-1 endpoint:
+2 endpoints:
 
 - **Typosquatting Lookup**: `GET /v3.0/domain/typos`
+- **Subdomain Typosquatting Lookup**: `GET /v3.0/subdomains/typos`
 
 ### [SSL](ssl.md)
 

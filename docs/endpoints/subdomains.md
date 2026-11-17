@@ -16,12 +16,12 @@ All subdomains including nested. 2 credits per query.
 
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
-| `domain` | query | yes | string |  |  |
-| `after` | query | no | string (date) |  |  |
-| `before` | query | no | string (date) |  |  |
-| `status` | query | no | string |  |  (one of: active, inactive) |
-| `page` | query | no | integer | `1` |  |
-| `format` | query | no | string | `json` |  (one of: json, xml) |
+| `domain` | query | yes | string |  | Domain whose subdomains you want. |
+| `after` | query | no | string (date) |  | Only return records created after this date, in YYYY-MM-DD format. Defaults to the oldest record held, and must not be in the future or later than before. |
+| `before` | query | no | string (date) |  | Only return records created before this date, in YYYY-MM-DD format. Defaults to today, and must not be in the future. |
+| `status` | query | no | string |  | Limit results to active or inactive subdomains. Both are returned when the parameter is left out. (one of: active, inactive) |
+| `page` | query | no | integer | `1` | Page of results to return. Defaults to 1. |
+| `format` | query | no | string | `json` | Response format. JSON when the parameter is left out. (one of: json, xml) |
 
 **Response** (`SubdomainsResponse`)
 
@@ -70,12 +70,12 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.SubdomainsApi(client)
 
     # subdomains parameters:
-    #   domain (str, required)
-    #   after (datetime.date, optional, keyword)
-    #   before (datetime.date, optional, keyword)
-    #   status (str, optional, keyword): one of active, inactive
-    #   page (int, optional, keyword): default 1
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   domain (str, required): Domain whose subdomains you want
+    #   after (datetime.date, optional, keyword): Only return records created after this date, in YYYY-MM-DD format. Defaults t...
+    #   before (datetime.date, optional, keyword): Only return records created before this date, in YYYY-MM-DD format. Defaults ...
+    #   status (str, optional, keyword): Limit results to active or inactive subdomains. Both are returned when the pa...; one of active, inactive
+    #   page (int, optional, keyword): Page of results to return. Defaults to 1; default 1
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.subdomains("whoisfreaks.com", page=1)
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -94,12 +94,12 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new SubdomainsApi(config);
 
 // subdomains({ domain, after?, before?, status?, page?, format? })
-//   domain (string, required)
-//   after (Date, optional)
-//   before (Date, optional)
-//   status ("active" | "inactive", optional)
-//   page (number, optional): default 1
-//   format ("json" | "xml", optional): default "json"
+//   domain (string, required): Domain whose subdomains you want
+//   after (Date, optional): Only return records created after this date, in YYYY-MM-DD format. Defaults t...
+//   before (Date, optional): Only return records created before this date, in YYYY-MM-DD format. Defaults ...
+//   status ("active" | "inactive", optional): Limit results to active or inactive subdomains. Both are returned when the pa...
+//   page (number, optional): Page of results to return. Defaults to 1; default 1
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.subdomains({ domain: "whoisfreaks.com", page: 1 });
   console.log(JSON.stringify(result, null, 2));
@@ -124,12 +124,12 @@ main().catch(async (err: unknown) => {
 // Runnable example: Subdomains Lookup (GET /v1.0/subdomains)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for subdomains (GET /v1.0/subdomains):
-//   - domain (string, required)
-//   - after (string, optional)
-//   - before (string, optional)
-//   - status (string (one of: active, inactive), optional)
-//   - page (integer, optional)
-//   - format (string (one of: json, xml), optional)
+//   - domain (string, required): Domain whose subdomains you want.
+//   - after (string, optional): Only return records created after this date, in YYYY-MM-DD format. Defaults to the olde...
+//   - before (string, optional): Only return records created before this date, in YYYY-MM-DD format. Defaults to today, ...
+//   - status (string (one of: active, inactive), optional): Limit results to active or inactive subdomains. Both are returned when the parameter is...
+//   - page (integer, optional): Page of results to return. Defaults to 1.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 

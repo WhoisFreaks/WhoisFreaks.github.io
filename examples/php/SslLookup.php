@@ -2,10 +2,10 @@
 // SSL Certificate Lookup
 //
 // Parameters for sslLookup (GET /v1.0/ssl/live):
-//   - domainName (string, required)
-//   - chain (boolean, optional)
-//   - sslRaw (boolean, optional)
-//   - format (string (one of: json, xml), optional)
+//   - domainName (string, required): Domain to look up.
+//   - chain (boolean, optional): Set true to return the full certificate chain, ordered from the end-user certificate to...
+//   - sslRaw (boolean, optional): Set true to include the raw OpenSSL response for the domain. Defaults to false.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 require __DIR__ . '/vendor/autoload.php';
 

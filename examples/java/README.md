@@ -24,6 +24,7 @@ Install: see the [Java guide](../../docs/languages/java.md). Set the `WHOISFREAK
 
 ## Typosquatting
 - [`Typosquatting.java`](Typosquatting.java): Typosquatting Lookup (`GET /v3.0/domain/typos`)
+- [`SubdomainTyposquatting.java`](SubdomainTyposquatting.java): Subdomain Typosquatting Lookup (`GET /v3.0/subdomains/typos`)
 
 ## SSL
 - [`SslLookup.java`](SslLookup.java): SSL Certificate Lookup (`GET /v1.0/ssl/live`)

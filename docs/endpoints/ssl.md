@@ -16,10 +16,10 @@ Real-time SSL cert with optional chain.
 
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
-| `domainName` | query | yes | string |  |  |
-| `chain` | query | no | boolean | `false` |  |
-| `sslRaw` | query | no | boolean | `false` |  |
-| `format` | query | no | string | `json` |  (one of: json, xml) |
+| `domainName` | query | yes | string |  | Domain to look up. |
+| `chain` | query | no | boolean | `false` | Set true to return the full certificate chain, ordered from the end-user certificate to the root. Defaults to false. |
+| `sslRaw` | query | no | boolean | `false` | Set true to include the raw OpenSSL response for the domain. Defaults to false. |
+| `format` | query | no | string | `json` | Response format. JSON when the parameter is left out. (one of: json, xml) |
 
 **Response** (`SslResponse`)
 
@@ -71,10 +71,10 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.SSLApi(client)
 
     # ssl_lookup parameters:
-    #   domain_name (str, required)
-    #   chain (bool, optional, keyword): default False
-    #   ssl_raw (bool, optional, keyword): default False
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   domain_name (str, required): Domain to look up
+    #   chain (bool, optional, keyword): Set true to return the full certificate chain, ordered from the end-user cert...; default False
+    #   ssl_raw (bool, optional, keyword): Set true to include the raw OpenSSL response for the domain. Defaults to false; default False
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.ssl_lookup("whoisfreaks.com")
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -93,10 +93,10 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new SSLApi(config);
 
 // sslLookup({ domainName, chain?, sslRaw?, format? })
-//   domainName (string, required)
-//   chain (boolean, optional): default false
-//   sslRaw (boolean, optional): default false
-//   format ("json" | "xml", optional): default "json"
+//   domainName (string, required): Domain to look up
+//   chain (boolean, optional): Set true to return the full certificate chain, ordered from the end-user cert...; default false
+//   sslRaw (boolean, optional): Set true to include the raw OpenSSL response for the domain. Defaults to false; default false
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.sslLookup({ domainName: "whoisfreaks.com" });
   console.log(JSON.stringify(result, null, 2));
@@ -121,10 +121,10 @@ main().catch(async (err: unknown) => {
 // Runnable example: SSL Certificate Lookup (GET /v1.0/ssl/live)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for sslLookup (GET /v1.0/ssl/live):
-//   - domainName (string, required)
-//   - chain (boolean, optional)
-//   - sslRaw (boolean, optional)
-//   - format (string (one of: json, xml), optional)
+//   - domainName (string, required): Domain to look up.
+//   - chain (boolean, optional): Set true to return the full certificate chain, ordered from the end-user certificate to...
+//   - sslRaw (boolean, optional): Set true to include the raw OpenSSL response for the domain. Defaults to false.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 

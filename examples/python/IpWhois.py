@@ -15,7 +15,7 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.IPWHOISApi(client)
 
     # ip_whois parameters:
-    #   ip (str, required)
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   ip (str, required): IP address to look up
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.ip_whois("8.8.8.8")
     print(json.dumps(result.to_dict(), indent=2))

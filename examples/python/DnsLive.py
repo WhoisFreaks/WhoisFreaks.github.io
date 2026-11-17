@@ -16,8 +16,8 @@ with whoisfreaks.ApiClient(config) as client:
 
     # dns_live parameters:
     #   type (str, required): all or comma-separated: A,MX,NS,TXT,SOA,SPF,AAAA,CNAME; default "all"
-    #   domain_name (str, optional, keyword)
+    #   domain_name (str, optional, keyword): Domain to look up
     #   ip_address (str, optional, keyword): Use for PTR lookups
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.dns_live("A,MX,TXT", domain_name="whoisfreaks.com")
     print(json.dumps(result.to_dict(), indent=2))

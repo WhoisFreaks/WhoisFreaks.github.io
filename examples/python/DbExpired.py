@@ -15,7 +15,7 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DatabasesExpiringDroppedApi(client)
 
     # db_expired parameters:
-    #   whois (bool, required)
+    #   whois (bool, required): Set true for the file with full WHOIS records, false for domain names only
     #   var_date (datetime.date, optional, keyword): yyyy-MM-dd; omit for latest
     data = api.db_expired(True, var_date=date(2026, 10, 1))  # the file's raw bytes
     path = "DbExpired.csv"

@@ -10,7 +10,7 @@ const api = new DomainAvailabilityApi(client);
 // bulkDomainAvailabilityV2(bulkDomainAvailabilityRequest, opts)
 //   bulkDomainAvailabilityRequest (BulkDomainAvailabilityRequest, required): request body
 //   opts.domain (string, optional): Required for TLD-mode bulk check (base domain)
-//   opts.format (string, optional): one of json, xml; default "json"
+//   opts.format (string, optional): Response format. JSON when the parameter is left out; one of json, xml; default "json"
 async function main() {
   const body = BulkDomainAvailabilityRequest.constructFromObject({ domainNames: ["whoisfreaks.com", "example.com"] });
   const result = await api.bulkDomainAvailabilityV2(body);

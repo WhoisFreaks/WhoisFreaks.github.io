@@ -1,7 +1,7 @@
 // Runnable example: IP Reputation Lookup (v2.0) (GET /v2.0/security)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for ipReputationV2 (GET /v2.0/security):
-//   - ip (string, required)
+//   - ip (string, required): IP address to look up.
 
 package main
 

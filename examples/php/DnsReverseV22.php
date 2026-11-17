@@ -3,12 +3,12 @@
 //
 // Parameters for dnsReverseV22 (GET /v2.2/dns/reverse):
 //   - value (string, required): IP, CIDR, or record value
-//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
+//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required): DNS record type to search by.
 //   - exact (boolean, optional): When false the value is matched as a substring, which is far slower than an exact match...
-//   - page (integer, optional)
+//   - page (integer, optional): Page of results to return. Defaults to 1.
 //   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
 //   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 require __DIR__ . '/vendor/autoload.php';
 

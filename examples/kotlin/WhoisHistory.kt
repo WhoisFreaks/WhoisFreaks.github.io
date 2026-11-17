@@ -2,7 +2,7 @@
 // Run it from the Getting Started project: gradle run -PmainClass=WhoisHistoryKt
 // Parameters for whoisHistory (GET /v2.0/whois/history):
 //   - domainName (string, required): Domain to fetch historical WHOIS records for
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 import com.whoisfreaks.client.apis.WHOISApi
 import com.whoisfreaks.client.infrastructure.ApiClient
 

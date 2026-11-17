@@ -1,7 +1,7 @@
 // Runnable example: Bulk WHOIS Lookup (POST /v2.0/bulkwhois/live)
 // Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for bulkWhois (POST /v2.0/bulkwhois/live):
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 //   - body: BulkWhoisRequest (required): request body object
 using System;
 using System.Collections.Generic;

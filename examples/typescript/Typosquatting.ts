@@ -7,9 +7,9 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new TyposquattingApi(config);
 
 // typosquatting({ keyword?, pattern?, pageToken? })
-//   keyword (string, optional)
-//   pattern (string, optional)
-//   pageToken (string, optional)
+//   keyword (string, optional): Brand or label to find typo variants for. Pass either keyword or pattern, not...
+//   pattern (string, optional): Wildcard search string, where '*' matches any characters. Pass either keyword...
+//   pageToken (string, optional): Token from nextPageToken in the previous response, needed from page 2 onward....
 async function main(): Promise<void> {
   const result = await api.typosquatting({ keyword: "whoisfreaks" });
   console.log(JSON.stringify(result, null, 2));

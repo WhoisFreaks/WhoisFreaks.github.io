@@ -84,15 +84,15 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.WHOISApi(client)
 
     # whois_live parameters:
-    #   domain_name (str, required)
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   domain_name (str, required): Domain to look up
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.whois_live("whoisfreaks.com")
     print(json.dumps(result.to_dict(), indent=2))
 ```
 
 ## Endpoints
 
-All 94 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
+All 95 endpoints are shown below, grouped by category. Each includes its method, path, parameters, and a runnable example. See the [full endpoint reference](../endpoints/README.md) for response shapes and field details.
 
 ### WHOIS
 
@@ -118,8 +118,8 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.WHOISApi(client)
 
     # whois_live parameters:
-    #   domain_name (str, required)
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   domain_name (str, required): Domain to look up
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.whois_live("whoisfreaks.com")
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -147,7 +147,7 @@ with whoisfreaks.ApiClient(config) as client:
 
     # bulk_whois parameters:
     #   bulk_whois_request (BulkWhoisRequest, required): request body
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     body = whoisfreaks.BulkWhoisRequest(domain_names=["whoisfreaks.com", "jfreaks.com"])
     result = api.bulk_whois(body)
     print(json.dumps(result.to_dict(), indent=2))
@@ -176,7 +176,7 @@ with whoisfreaks.ApiClient(config) as client:
 
     # whois_history parameters:
     #   domain_name (str, required): Domain to fetch historical WHOIS records for
-    #   format (str, optional, keyword): one of json, xml
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml
     result = api.whois_history("whoisfreaks.com")
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -205,7 +205,7 @@ with whoisfreaks.ApiClient(config) as client:
     # whois_reverse parameters:
     #   keyword (str, required): Keyword to search across WHOIS records
     #   page (int, optional, keyword): Page number
-    #   format (str, optional, keyword): one of json, xml
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml
     result = api.whois_reverse("whoisfreaks", page=1)
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -235,9 +235,9 @@ with whoisfreaks.ApiClient(config) as client:
 
     # dns_live parameters:
     #   type (str, required): all or comma-separated: A,MX,NS,TXT,SOA,SPF,AAAA,CNAME; default "all"
-    #   domain_name (str, optional, keyword)
+    #   domain_name (str, optional, keyword): Domain to look up
     #   ip_address (str, optional, keyword): Use for PTR lookups
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.dns_live("A,MX,TXT", domain_name="whoisfreaks.com")
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -264,10 +264,10 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DNSApi(client)
 
     # dns_historical parameters:
-    #   domain_name (str, required)
-    #   type (str, required): default "all"
-    #   page (int, optional, keyword): default 1
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   domain_name (str, required): Domain to look up
+    #   type (str, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to...; default "all"
+    #   page (int, optional, keyword): Page of results to return. Defaults to 1; default 1
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.dns_historical("whoisfreaks.com", "A,MX,TXT", page=1)
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -295,10 +295,10 @@ with whoisfreaks.ApiClient(config) as client:
 
     # dns_reverse parameters:
     #   value (str, required): IP, CIDR, or record value
-    #   type (str, required): one of a, mx, cname, ns, aaaa, txt, soa
-    #   exact (bool, optional, keyword): default True
-    #   page (int, optional, keyword): default 1
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   type (str, required): DNS record type to search by; one of a, mx, cname, ns, aaaa, txt, soa
+    #   exact (bool, optional, keyword): Set true to match value exactly. Defaults to false, where value is treated as...; default False
+    #   page (int, optional, keyword): Page of results to return. Defaults to 1; default 1
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.dns_reverse("8.8.8.8", "a", page=1)
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -325,12 +325,12 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DNSApi(client)
 
     # dns_historical_v22 parameters:
-    #   domain_name (str, required)
-    #   type (str, required): default "all"
-    #   page (int, optional, keyword): default 1
+    #   domain_name (str, required): Domain to look up
+    #   type (str, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to...; default "all"
+    #   page (int, optional, keyword): Page of results to return. Defaults to 1; default 1
     #   sort (str, optional, keyword): Sort direction. Omit to leave the results unsorted; one of asc, desc
     #   sort_by (str, optional, keyword): Field to sort on. Only applies when sort is given; one of firstSeen, lastSeen; default "lastSeen"
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.dns_historical_v22("whoisfreaks.com", "A,MX,TXT", page=1)
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -357,12 +357,12 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DNSApi(client)
 
     # dns_historical_v23 parameters:
-    #   domain_name (str, required)
-    #   type (str, required): default "all"
-    #   page (int, optional, keyword): default 1
+    #   domain_name (str, required): Domain to look up
+    #   type (str, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to...; default "all"
+    #   page (int, optional, keyword): Page of results to return. Defaults to 1; default 1
     #   sort (str, optional, keyword): Sort direction. Omit to leave the results unsorted; one of asc, desc
     #   sort_by (str, optional, keyword): Field to sort on. Only applies when sort is given; one of firstSeen, lastSeen; default "lastSeen"
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.dns_historical_v23("whoisfreaks.com", "A,MX,TXT", page=1)
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -390,12 +390,12 @@ with whoisfreaks.ApiClient(config) as client:
 
     # dns_reverse_v22 parameters:
     #   value (str, required): IP, CIDR, or record value
-    #   type (str, required): one of a, mx, cname, ns, aaaa, txt, soa
+    #   type (str, required): DNS record type to search by; one of a, mx, cname, ns, aaaa, txt, soa
     #   exact (bool, optional, keyword): When false the value is matched as a substring, which is far slower than an e...; default True
-    #   page (int, optional, keyword): default 1
+    #   page (int, optional, keyword): Page of results to return. Defaults to 1; default 1
     #   sort (str, optional, keyword): Sort direction. Omit to leave the results unsorted; one of asc, desc
     #   sort_by (str, optional, keyword): Field to sort on. Only applies when sort is given; one of firstSeen, lastSeen; default "lastSeen"
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.dns_reverse_v22("8.8.8.8", "a", page=1)
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -423,12 +423,12 @@ with whoisfreaks.ApiClient(config) as client:
 
     # dns_reverse_v23 parameters:
     #   value (str, required): IP, CIDR, or record value
-    #   type (str, required): one of a, mx, cname, ns, aaaa, txt, soa
+    #   type (str, required): DNS record type to search by; one of a, mx, cname, ns, aaaa, txt, soa
     #   exact (bool, optional, keyword): When false the value is matched as a substring, which is far slower than an e...; default True
-    #   page (int, optional, keyword): default 1
+    #   page (int, optional, keyword): Page of results to return. Defaults to 1; default 1
     #   sort (str, optional, keyword): Sort direction. Omit to leave the results unsorted; one of asc, desc
     #   sort_by (str, optional, keyword): Field to sort on. Only applies when sort is given; one of firstSeen, lastSeen; default "lastSeen"
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.dns_reverse_v23("8.8.8.8", "a", page=1)
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -455,9 +455,9 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DNSApi(client)
 
     # dns_bulk parameters:
-    #   type (str, required): default "all"
+    #   type (str, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to...; default "all"
     #   dns_bulk_request (DnsBulkRequest, required): request body
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     body = whoisfreaks.DnsBulkRequest(domain_names=["whoisfreaks.com", "example.com"])
     result = api.dns_bulk("A,MX,TXT", body)
     print(json.dumps(result.to_dict(), indent=2))
@@ -490,7 +490,7 @@ with whoisfreaks.ApiClient(config) as client:
     #   domain (str, required): The domain name to check
     #   sug (bool, optional, keyword): Whether to return TLD suggestions alongside the queried domain; default False
     #   count (int, optional, keyword): Number of TLD suggestions to return when sug=true. Maximum is 100; default 5
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.domain_availability_v2("google.com", sug=True, count=5)
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -519,7 +519,7 @@ with whoisfreaks.ApiClient(config) as client:
     # bulk_domain_availability_v2 parameters:
     #   bulk_domain_availability_request (BulkDomainAvailabilityRequest, required): request body
     #   domain (str, optional, keyword): Required for TLD-mode bulk check (base domain)
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     body = whoisfreaks.BulkDomainAvailabilityRequest(domain_names=["whoisfreaks.com", "example.com"])
     result = api.bulk_domain_availability_v2(body)
     print(json.dumps(result.to_dict(), indent=2))
@@ -549,10 +549,40 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.TyposquattingApi(client)
 
     # typosquatting parameters:
-    #   keyword (str, optional, keyword)
-    #   pattern (str, optional, keyword)
-    #   page_token (str, optional, keyword)
+    #   keyword (str, optional, keyword): Brand or label to find typo variants for. Pass either keyword or pattern, not...
+    #   pattern (str, optional, keyword): Wildcard search string, where '*' matches any characters. Pass either keyword...
+    #   page_token (str, optional, keyword): Token from nextPageToken in the previous response, needed from page 2 onward....
     result = api.typosquatting(keyword="whoisfreaks")
+    print(json.dumps(result.to_dict(), indent=2))
+```
+
+#### Subdomain Typosquatting Lookup
+
+`GET /v3.0/subdomains/typos`
+
+```python
+"""Subdomain Typosquatting Lookup: GET https://api.whoisfreaks.com/v3.0/subdomains/typos
+
+Run it with your API key in the environment:
+    WHOISFREAKS_API_KEY=your_api_key python SubdomainTyposquatting.py
+"""
+import json
+import os
+
+import whoisfreaks
+
+config = whoisfreaks.Configuration()
+config.api_key["ApiKeyAuth"] = os.environ["WHOISFREAKS_API_KEY"]  # set once for every request
+
+with whoisfreaks.ApiClient(config) as client:
+    api = whoisfreaks.TyposquattingApi(client)
+
+    # subdomain_typosquatting parameters:
+    #   keyword (str, optional, keyword): Brand or label to find typo variants for. 3 to 63 characters, letters, digits...
+    #   pattern (str, optional, keyword): Wildcard search string, where '*' matches any characters and '?' matches one....
+    #   page_token (str, optional, keyword): Token from nextPageToken in the previous response, needed from page 2 onward....
+    #   fetch_size (int, optional, keyword): Subdomains per page. 100 when the parameter is left out, and values above 100...; default 100
+    result = api.subdomain_typosquatting()
     print(json.dumps(result.to_dict(), indent=2))
 ```
 
@@ -580,10 +610,10 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.SSLApi(client)
 
     # ssl_lookup parameters:
-    #   domain_name (str, required)
-    #   chain (bool, optional, keyword): default False
-    #   ssl_raw (bool, optional, keyword): default False
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   domain_name (str, required): Domain to look up
+    #   chain (bool, optional, keyword): Set true to return the full certificate chain, ordered from the end-user cert...; default False
+    #   ssl_raw (bool, optional, keyword): Set true to include the raw OpenSSL response for the domain. Defaults to false; default False
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.ssl_lookup("whoisfreaks.com")
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -612,7 +642,7 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.GeolocationApi(client)
 
     # geolocation parameters:
-    #   ip (str, required)
+    #   ip (str, required): IP address to look up
     result = api.geolocation("8.8.8.8")
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -669,12 +699,12 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.SubdomainsApi(client)
 
     # subdomains parameters:
-    #   domain (str, required)
-    #   after (datetime.date, optional, keyword)
-    #   before (datetime.date, optional, keyword)
-    #   status (str, optional, keyword): one of active, inactive
-    #   page (int, optional, keyword): default 1
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   domain (str, required): Domain whose subdomains you want
+    #   after (datetime.date, optional, keyword): Only return records created after this date, in YYYY-MM-DD format. Defaults t...
+    #   before (datetime.date, optional, keyword): Only return records created before this date, in YYYY-MM-DD format. Defaults ...
+    #   status (str, optional, keyword): Limit results to active or inactive subdomains. Both are returned when the pa...; one of active, inactive
+    #   page (int, optional, keyword): Page of results to return. Defaults to 1; default 1
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.subdomains("whoisfreaks.com", page=1)
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -703,7 +733,7 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.IPReputationApi(client)
 
     # ip_reputation parameters:
-    #   ip (str, required)
+    #   ip (str, required): IP address to look up
     result = api.ip_reputation("8.8.8.8")
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -758,7 +788,7 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.IPReputationApi(client)
 
     # ip_reputation_v2 parameters:
-    #   ip (str, required)
+    #   ip (str, required): IP address to look up
     result = api.ip_reputation_v2("8.8.8.8")
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -816,7 +846,7 @@ with whoisfreaks.ApiClient(config) as client:
 
     # domain_reputation parameters:
     #   domain_name (str, required): The domain name to assess
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.domain_reputation("amazon.com")
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -845,8 +875,8 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.ASNWHOISApi(client)
 
     # asn_whois parameters:
-    #   asn (str, required)
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   asn (str, required): Autonomous system number to look up, with or without the AS prefix
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.asn_whois("as15169")
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -875,8 +905,8 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.IPWHOISApi(client)
 
     # ip_whois parameters:
-    #   ip (str, required)
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   ip (str, required): IP address to look up
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.ip_whois("8.8.8.8")
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -983,9 +1013,9 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DatabasesNewlyRegisteredApi(client)
 
     # db_newly_gtld parameters:
-    #   whois (bool, required)
+    #   whois (bool, required): Set true for the file with full WHOIS records, false for domain names only
     #   var_date (datetime.date, optional, keyword): yyyy-MM-dd; omit for latest
-    #   tlds (str, optional, keyword)
+    #   tlds (str, optional, keyword): Comma separated TLDs to limit the file to, for example com,net. Every TLD is ...
     data = api.db_newly_gtld(True, var_date=date(2026, 10, 1))  # the file's raw bytes
     path = "DbNewlyGtld.csv"
     with open(path, "wb") as f:
@@ -1015,9 +1045,9 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DatabasesNewlyRegisteredApi(client)
 
     # db_newly_cctld parameters:
-    #   whois (bool, required)
+    #   whois (bool, required): Set true for the file with full WHOIS records, false for domain names only
     #   var_date (datetime.date, optional, keyword): yyyy-MM-dd; omit for latest
-    #   tlds (str, optional, keyword)
+    #   tlds (str, optional, keyword): Comma separated TLDs to limit the file to, for example com,net. Every TLD is ...
     data = api.db_newly_cctld(True, var_date=date(2026, 10, 1))  # the file's raw bytes
     path = "DbNewlyCctld.csv"
     with open(path, "wb") as f:
@@ -1108,7 +1138,7 @@ with whoisfreaks.ApiClient(config) as client:
 
     # db_newly_gtld_json parameters:
     #   var_date (datetime.date, optional, keyword): yyyy-MM-dd; omit for latest
-    #   tlds (str, optional, keyword)
+    #   tlds (str, optional, keyword): Comma separated TLDs to limit the file to, for example com,net. Every TLD is ...
     domains = api.db_newly_gtld_json(var_date=date(2026, 10, 1))
     print(f"{len(domains)} domains")
     print("\n".join(domains[:10]))
@@ -1137,7 +1167,7 @@ with whoisfreaks.ApiClient(config) as client:
 
     # db_newly_cctld_json parameters:
     #   var_date (datetime.date, optional, keyword): yyyy-MM-dd; omit for latest
-    #   tlds (str, optional, keyword)
+    #   tlds (str, optional, keyword): Comma separated TLDs to limit the file to, for example com,net. Every TLD is ...
     domains = api.db_newly_cctld_json(var_date=date(2026, 10, 1))
     print(f"{len(domains)} domains")
     print("\n".join(domains[:10]))
@@ -1197,7 +1227,7 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DatabasesExpiringDroppedApi(client)
 
     # db_expired parameters:
-    #   whois (bool, required)
+    #   whois (bool, required): Set true for the file with full WHOIS records, false for domain names only
     #   var_date (datetime.date, optional, keyword): yyyy-MM-dd; omit for latest
     data = api.db_expired(True, var_date=date(2026, 10, 1))  # the file's raw bytes
     path = "DbExpired.csv"
@@ -1258,7 +1288,7 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DatabasesExpiringDroppedApi(client)
 
     # db_dropped parameters:
-    #   whois (bool, required)
+    #   whois (bool, required): Set true for the file with full WHOIS records, false for domain names only
     #   var_date (datetime.date, optional, keyword): yyyy-MM-dd; omit for latest
     data = api.db_dropped(True, var_date=date(2026, 10, 1))  # the file's raw bytes
     path = "DbDropped.csv"
@@ -1290,7 +1320,7 @@ with whoisfreaks.ApiClient(config) as client:
 
     # db_dropped_json parameters:
     #   var_date (datetime.date, optional, keyword): yyyy-MM-dd; omit for latest
-    #   tlds (str, optional, keyword)
+    #   tlds (str, optional, keyword): Comma separated TLDs to limit the file to, for example com,net. Every TLD is ...
     domains = api.db_dropped_json(var_date=date(2026, 10, 1))
     print(f"{len(domains)} domains")
     print("\n".join(domains[:10]))
@@ -1318,7 +1348,7 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DatabasesExpiringDroppedApi(client)
 
     # db_dropped_backlinks parameters:
-    #   whois (bool, optional, keyword)
+    #   whois (bool, optional, keyword): Set true for the file with full WHOIS records, false for domain names only
     #   var_date (datetime.date, optional, keyword): yyyy-MM-dd; omit for latest
     data = api.db_dropped_backlinks(var_date=date(2026, 10, 1))  # the file's raw bytes
     path = "DbDroppedBacklinks.csv"
@@ -1653,7 +1683,7 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DatabasesIPGeolocationApi(client)
 
     # db_ip_country parameters:
-    #   var_date (datetime.date, required)
+    #   var_date (datetime.date, required): The day whose file you want, in YYYY-MM-DD format
     data = api.db_ip_country(date(2026, 10, 1))  # the file's raw bytes
     path = "DbIpCountry.zip"
     with open(path, "wb") as f:
@@ -1709,7 +1739,7 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DatabasesIPGeolocationApi(client)
 
     # db_ip_city parameters:
-    #   var_date (datetime.date, required)
+    #   var_date (datetime.date, required): The day whose file you want, in YYYY-MM-DD format
     data = api.db_ip_city(date(2026, 10, 1))  # the file's raw bytes
     path = "DbIpCity.zip"
     with open(path, "wb") as f:
@@ -1741,7 +1771,7 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DatabasesASNWHOISApi(client)
 
     # db_asn_whois parameters:
-    #   var_date (datetime.date, required)
+    #   var_date (datetime.date, required): The day whose file you want, in YYYY-MM-DD format
     data = api.db_asn_whois(date(2026, 10, 1))  # the file's raw bytes
     path = "DbAsnWhois.json.gz"
     with open(path, "wb") as f:
@@ -1799,7 +1829,7 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DatabasesIPWHOISApi(client)
 
     # db_ip_whois parameters:
-    #   var_date (datetime.date, required)
+    #   var_date (datetime.date, required): The day whose file you want, in YYYY-MM-DD format
     data = api.db_ip_whois(date(2026, 10, 1))  # the file's raw bytes
     path = "DbIpWhois.json.gz"
     with open(path, "wb") as f:
@@ -1857,7 +1887,7 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DatabasesIPSecurityApi(client)
 
     # db_ip_security parameters:
-    #   var_date (datetime.date, required)
+    #   var_date (datetime.date, required): The day whose file you want, in YYYY-MM-DD format
     data = api.db_ip_security(date(2026, 10, 1))  # the file's raw bytes
     path = "DbIpSecurity.csv"
     with open(path, "wb") as f:

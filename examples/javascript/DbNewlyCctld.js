@@ -10,9 +10,9 @@ client.authentications["ApiKeyAuth"].apiKey = process.env.WHOISFREAKS_API_KEY;
 const api = new DatabasesNewlyRegisteredApi(client);
 
 // dbNewlyCctld(whois, opts)
-//   whois (boolean, required)
+//   whois (boolean, required): Set true for the file with full WHOIS records, false for domain names only
 //   opts.date (string, "yyyy-MM-dd", optional): yyyy-MM-dd; omit for latest
-//   opts.tlds (string, optional)
+//   opts.tlds (string, optional): Comma separated TLDs to limit the file to, for example com,net. Every TLD is ...
 async function main() {
   const data = await api.dbNewlyCctld(true, { date: "2026-10-01" }); // a Buffer with the file's bytes
   const file = "DbNewlyCctld.csv";

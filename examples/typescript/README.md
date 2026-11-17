@@ -24,6 +24,7 @@ Install: see the [TypeScript guide](../../docs/languages/typescript.md). Set the
 
 ## Typosquatting
 - [`Typosquatting.ts`](Typosquatting.ts): Typosquatting Lookup (`GET /v3.0/domain/typos`)
+- [`SubdomainTyposquatting.ts`](SubdomainTyposquatting.ts): Subdomain Typosquatting Lookup (`GET /v3.0/subdomains/typos`)
 
 ## SSL
 - [`SslLookup.ts`](SslLookup.ts): SSL Certificate Lookup (`GET /v1.0/ssl/live`)

@@ -1,7 +1,7 @@
 // Runnable example: Dropped With Backlinks (GET /v3.3/download/domainer/dropped/backlinks)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbDroppedBacklinks
 // Parameters for dbDroppedBacklinks (GET /v3.3/download/domainer/dropped/backlinks):
-//   - whois (boolean, optional)
+//   - whois (boolean, optional): Set true for the file with full WHOIS records, false for domain names only.
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;

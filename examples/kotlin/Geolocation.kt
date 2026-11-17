@@ -1,7 +1,7 @@
 // Runnable example: IP Geolocation Lookup (GET /v1.0/geolocation)
 // Run it from the Getting Started project: gradle run -PmainClass=GeolocationKt
 // Parameters for geolocation (GET /v1.0/geolocation):
-//   - ip (string, required)
+//   - ip (string, required): IP address to look up.
 import com.whoisfreaks.client.apis.GeolocationApi
 import com.whoisfreaks.client.infrastructure.ApiClient
 

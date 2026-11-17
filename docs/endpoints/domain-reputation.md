@@ -17,7 +17,7 @@ Real-time domain threat assessment. Returns risk verdict, trust score, DGA analy
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
 | `domainName` | query | yes | string |  | The domain name to assess |
-| `format` | query | no | string | `json` |  (one of: json, xml) |
+| `format` | query | no | string | `json` | Response format. JSON when the parameter is left out. (one of: json, xml) |
 
 **Response** (`DomainReputationResponse`)
 
@@ -126,7 +126,7 @@ with whoisfreaks.ApiClient(config) as client:
 
     # domain_reputation parameters:
     #   domain_name (str, required): The domain name to assess
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.domain_reputation("amazon.com")
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -146,7 +146,7 @@ const api = new DomainReputationApi(config);
 
 // domainReputation({ domainName, format? })
 //   domainName (string, required): The domain name to assess
-//   format ("json" | "xml", optional): default "json"
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.domainReputation({ domainName: "amazon.com" });
   console.log(JSON.stringify(result, null, 2));
@@ -172,7 +172,7 @@ main().catch(async (err: unknown) => {
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for domainReputation (GET /v1/domain/security):
 //   - domainName (string, required): The domain name to assess
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 

@@ -18,6 +18,6 @@ with whoisfreaks.ApiClient(config) as client:
     #   domain (str, required): The domain name to check
     #   sug (bool, optional, keyword): Whether to return TLD suggestions alongside the queried domain; default False
     #   count (int, optional, keyword): Number of TLD suggestions to return when sug=true. Maximum is 100; default 5
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.domain_availability_v2("google.com", sug=True, count=5)
     print(json.dumps(result.to_dict(), indent=2))

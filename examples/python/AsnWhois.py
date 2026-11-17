@@ -15,7 +15,7 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.ASNWHOISApi(client)
 
     # asn_whois parameters:
-    #   asn (str, required)
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   asn (str, required): Autonomous system number to look up, with or without the AS prefix
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.asn_whois("as15169")
     print(json.dumps(result.to_dict(), indent=2))

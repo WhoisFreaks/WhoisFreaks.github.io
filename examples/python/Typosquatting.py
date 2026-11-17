@@ -15,8 +15,8 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.TyposquattingApi(client)
 
     # typosquatting parameters:
-    #   keyword (str, optional, keyword)
-    #   pattern (str, optional, keyword)
-    #   page_token (str, optional, keyword)
+    #   keyword (str, optional, keyword): Brand or label to find typo variants for. Pass either keyword or pattern, not...
+    #   pattern (str, optional, keyword): Wildcard search string, where '*' matches any characters. Pass either keyword...
+    #   page_token (str, optional, keyword): Token from nextPageToken in the previous response, needed from page 2 onward....
     result = api.typosquatting(keyword="whoisfreaks")
     print(json.dumps(result.to_dict(), indent=2))

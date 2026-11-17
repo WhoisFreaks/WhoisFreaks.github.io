@@ -2,7 +2,7 @@
 // Run it from the Getting Started project: gradle run -PmainClass=DbNewlyGtldJsonKt
 // Parameters for dbNewlyGtldJson (GET /v3.1/domains/newly/gtld):
 //   - date (string, optional): yyyy-MM-dd; omit for latest
-//   - tlds (string, optional)
+//   - tlds (string, optional): Comma separated TLDs to limit the file to, for example com,net. Every TLD is included w...
 import com.whoisfreaks.client.apis.DatabasesNewlyRegisteredApi
 import com.whoisfreaks.client.infrastructure.ApiClient
 import java.time.LocalDate

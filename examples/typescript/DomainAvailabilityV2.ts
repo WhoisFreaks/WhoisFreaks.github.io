@@ -10,7 +10,7 @@ const api = new DomainAvailabilityApi(config);
 //   domain (string, required): The domain name to check
 //   sug (boolean, optional): Whether to return TLD suggestions alongside the queried domain; default false
 //   count (number, optional): Number of TLD suggestions to return when sug=true. Maximum is 100; default 5
-//   format ("json" | "xml", optional): default "json"
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.domainAvailabilityV2({ domain: "google.com", sug: true, count: 5 });
   console.log(JSON.stringify(result, null, 2));

@@ -1,8 +1,8 @@
 // Runnable example: Bulk DNS Lookup (POST /v2.0/dns/bulk/live)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dnsBulk (POST /v2.0/dns/bulk/live):
-//   - type (string, required)
-//   - format (string (one of: json, xml), optional)
+//   - type (string, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to all.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 //   - body: DnsBulkRequest (required): request body object
 
 package main

@@ -8,9 +8,9 @@ client.authentications["ApiKeyAuth"].apiKey = process.env.WHOISFREAKS_API_KEY;
 const api = new DNSApi(client);
 
 // dnsBulk(type, dnsBulkRequest, opts)
-//   type (string, required): default "all"
+//   type (string, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to...; default "all"
 //   dnsBulkRequest (DnsBulkRequest, required): request body
-//   opts.format (string, optional): one of json, xml; default "json"
+//   opts.format (string, optional): Response format. JSON when the parameter is left out; one of json, xml; default "json"
 async function main() {
   const body = DnsBulkRequest.constructFromObject({ domainNames: ["whoisfreaks.com", "example.com"] });
   const result = await api.dnsBulk("A,MX,TXT", body);

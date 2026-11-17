@@ -16,7 +16,7 @@ with whoisfreaks.ApiClient(config) as client:
 
     # bulk_whois parameters:
     #   bulk_whois_request (BulkWhoisRequest, required): request body
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     body = whoisfreaks.BulkWhoisRequest(domain_names=["whoisfreaks.com", "jfreaks.com"])
     result = api.bulk_whois(body)
     print(json.dumps(result.to_dict(), indent=2))

@@ -1,7 +1,7 @@
 // Runnable example: ASN WHOIS Snapshot (GET /v3.3/download/snapshot/asn/whois)
 // Run it from the Getting Started project: gradle run -PmainClass=DbAsnWhoisKt
 // Parameters for dbAsnWhois (GET /v3.3/download/snapshot/asn/whois):
-//   - date (string, required)
+//   - date (string, required): The day whose file you want, in YYYY-MM-DD format.
 import com.whoisfreaks.client.apis.DatabasesASNWHOISApi
 import com.whoisfreaks.client.infrastructure.ApiClient
 import java.io.File

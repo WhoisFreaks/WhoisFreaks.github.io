@@ -16,8 +16,8 @@ WHOIS for an ASN. 1 credit.
 
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
-| `asn` | query | yes | string |  |  |
-| `format` | query | no | string | `json` |  (one of: json, xml) |
+| `asn` | query | yes | string |  | Autonomous system number to look up, with or without the AS prefix. |
+| `format` | query | no | string | `json` | Response format. JSON when the parameter is left out. (one of: json, xml) |
 
 **Response** (`AsnWhoisResponse`)
 
@@ -71,8 +71,8 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.ASNWHOISApi(client)
 
     # asn_whois parameters:
-    #   asn (str, required)
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   asn (str, required): Autonomous system number to look up, with or without the AS prefix
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.asn_whois("as15169")
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -91,8 +91,8 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new ASNWHOISApi(config);
 
 // asnWhois({ asn, format? })
-//   asn (string, required)
-//   format ("json" | "xml", optional): default "json"
+//   asn (string, required): Autonomous system number to look up, with or without the AS prefix
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.asnWhois({ asn: "as15169" });
   console.log(JSON.stringify(result, null, 2));
@@ -117,8 +117,8 @@ main().catch(async (err: unknown) => {
 // Runnable example: ASN WHOIS Lookup (GET /v2.0/asn-whois)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for asnWhois (GET /v2.0/asn-whois):
-//   - asn (string, required)
-//   - format (string (one of: json, xml), optional)
+//   - asn (string, required): Autonomous system number to look up, with or without the AS prefix.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 

@@ -24,6 +24,7 @@ Install: see the [JavaScript guide](../../docs/languages/javascript.md). Set the
 
 ## Typosquatting
 - [`Typosquatting.js`](Typosquatting.js): Typosquatting Lookup (`GET /v3.0/domain/typos`)
+- [`SubdomainTyposquatting.js`](SubdomainTyposquatting.js): Subdomain Typosquatting Lookup (`GET /v3.0/subdomains/typos`)
 
 ## SSL
 - [`SslLookup.js`](SslLookup.js): SSL Certificate Lookup (`GET /v1.0/ssl/live`)

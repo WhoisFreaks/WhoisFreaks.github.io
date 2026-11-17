@@ -16,8 +16,8 @@ Real-time WHOIS lookup from authoritative servers. Cost 1 credit.
 
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
-| `domainName` | query | yes | string |  |  |
-| `format` | query | no | string | `json` |  (one of: json, xml) |
+| `domainName` | query | yes | string |  | Domain to look up. |
+| `format` | query | no | string | `json` | Response format. JSON when the parameter is left out. (one of: json, xml) |
 
 **Response** (`WhoisResponse`)
 
@@ -152,8 +152,8 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.WHOISApi(client)
 
     # whois_live parameters:
-    #   domain_name (str, required)
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   domain_name (str, required): Domain to look up
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.whois_live("whoisfreaks.com")
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -172,8 +172,8 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new WHOISApi(config);
 
 // whoisLive({ domainName, format? })
-//   domainName (string, required)
-//   format ("json" | "xml", optional): default "json"
+//   domainName (string, required): Domain to look up
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.whoisLive({ domainName: "whoisfreaks.com" });
   console.log(JSON.stringify(result, null, 2));
@@ -198,8 +198,8 @@ main().catch(async (err: unknown) => {
 // Runnable example: Live WHOIS Lookup (GET /v2.0/whois/live)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for whoisLive (GET /v2.0/whois/live):
-//   - domainName (string, required)
-//   - format (string (one of: json, xml), optional)
+//   - domainName (string, required): Domain to look up.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 
@@ -243,7 +243,7 @@ Up to 100 domains in one request. 1 credit per successful domain.
 
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
-| `format` | query | no | string | `json` |  (one of: json, xml) |
+| `format` | query | no | string | `json` | Response format. JSON when the parameter is left out. (one of: json, xml) |
 
 **Request body** (`application/json`, model `BulkWhoisRequest`)
 
@@ -313,7 +313,7 @@ with whoisfreaks.ApiClient(config) as client:
 
     # bulk_whois parameters:
     #   bulk_whois_request (BulkWhoisRequest, required): request body
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     body = whoisfreaks.BulkWhoisRequest(domain_names=["whoisfreaks.com", "jfreaks.com"])
     result = api.bulk_whois(body)
     print(json.dumps(result.to_dict(), indent=2))
@@ -334,7 +334,7 @@ const api = new WHOISApi(config);
 
 // bulkWhois({ bulkWhoisRequest, format? })
 //   bulkWhoisRequest (BulkWhoisRequest, required): request body
-//   format ("json" | "xml", optional): default "json"
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const body: BulkWhoisRequest = { domainNames: ["whoisfreaks.com", "jfreaks.com"] };
   const result = await api.bulkWhois({ bulkWhoisRequest: body });
@@ -360,7 +360,7 @@ main().catch(async (err: unknown) => {
 // Runnable example: Bulk WHOIS Lookup (POST /v2.0/bulkwhois/live)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for bulkWhois (POST /v2.0/bulkwhois/live):
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 //   - body: BulkWhoisRequest (required): request body object
 
 package main
@@ -407,7 +407,7 @@ Every WHOIS record captured for the domain since 1986, in one response (no pagin
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
 | `domainName` | query | yes | string |  | Domain to fetch historical WHOIS records for |
-| `format` | query | no | string |  |  (one of: json, xml) |
+| `format` | query | no | string |  | Response format. JSON when the parameter is left out. (one of: json, xml) |
 
 **Response** (`WhoisHistoricalResponse`)
 
@@ -472,7 +472,7 @@ with whoisfreaks.ApiClient(config) as client:
 
     # whois_history parameters:
     #   domain_name (str, required): Domain to fetch historical WHOIS records for
-    #   format (str, optional, keyword): one of json, xml
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml
     result = api.whois_history("whoisfreaks.com")
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -492,7 +492,7 @@ const api = new WHOISApi(config);
 
 // whoisHistory({ domainName, format? })
 //   domainName (string, required): Domain to fetch historical WHOIS records for
-//   format ("json" | "xml", optional)
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out
 async function main(): Promise<void> {
   const result = await api.whoisHistory({ domainName: "whoisfreaks.com" });
   console.log(JSON.stringify(result, null, 2));
@@ -518,7 +518,7 @@ main().catch(async (err: unknown) => {
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for whoisHistory (GET /v2.0/whois/history):
 //   - domainName (string, required): Domain to fetch historical WHOIS records for
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 
@@ -556,13 +556,15 @@ func main() {
 
 `GET https://api.whoisfreaks.com/v2.0/whois/reverse`
 
+Find every domain whose WHOIS record carries a keyword, owner name, company, email or postal address. Results are paginated 100 domains per page.
+
 **Parameters**
 
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
 | `keyword` | query | yes | string |  | Keyword to search across WHOIS records |
 | `page` | query | no | integer |  | Page number |
-| `format` | query | no | string |  |  (one of: json, xml) |
+| `format` | query | no | string |  | Response format. JSON when the parameter is left out. (one of: json, xml) |
 
 **Response** (`ReverseWhoisResponse`)
 
@@ -628,7 +630,7 @@ with whoisfreaks.ApiClient(config) as client:
     # whois_reverse parameters:
     #   keyword (str, required): Keyword to search across WHOIS records
     #   page (int, optional, keyword): Page number
-    #   format (str, optional, keyword): one of json, xml
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml
     result = api.whois_reverse("whoisfreaks", page=1)
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -649,7 +651,7 @@ const api = new WHOISApi(config);
 // whoisReverse({ keyword, page?, format? })
 //   keyword (string, required): Keyword to search across WHOIS records
 //   page (number, optional): Page number
-//   format ("json" | "xml", optional)
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out
 async function main(): Promise<void> {
   const result = await api.whoisReverse({ keyword: "whoisfreaks", page: 1 });
   console.log(JSON.stringify(result, null, 2));
@@ -676,7 +678,7 @@ main().catch(async (err: unknown) => {
 // Parameters for whoisReverse (GET /v2.0/whois/reverse):
 //   - keyword (string, required): Keyword to search across WHOIS records
 //   - page (integer, optional): Page number
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 

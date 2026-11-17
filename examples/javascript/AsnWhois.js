@@ -8,8 +8,8 @@ client.authentications["ApiKeyAuth"].apiKey = process.env.WHOISFREAKS_API_KEY;
 const api = new ASNWHOISApi(client);
 
 // asnWhois(asn, opts)
-//   asn (string, required)
-//   opts.format (string, optional): one of json, xml; default "json"
+//   asn (string, required): Autonomous system number to look up, with or without the AS prefix
+//   opts.format (string, optional): Response format. JSON when the parameter is left out; one of json, xml; default "json"
 async function main() {
   const result = await api.asnWhois("as15169");
   console.log(JSON.stringify(result, null, 2));

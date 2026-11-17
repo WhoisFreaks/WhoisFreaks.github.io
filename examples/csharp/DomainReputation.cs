@@ -2,7 +2,7 @@
 // Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for domainReputation (GET /v1/domain/security):
 //   - domainName (string, required): The domain name to assess
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;

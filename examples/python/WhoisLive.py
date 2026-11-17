@@ -15,7 +15,7 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.WHOISApi(client)
 
     # whois_live parameters:
-    #   domain_name (str, required)
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   domain_name (str, required): Domain to look up
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.whois_live("whoisfreaks.com")
     print(json.dumps(result.to_dict(), indent=2))

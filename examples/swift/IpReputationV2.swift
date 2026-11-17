@@ -1,7 +1,7 @@
 // IP Reputation Lookup (v2.0)
 //
 // Parameters for ipReputationV2 (GET /v2.0/security):
-//   - ip (string, required)
+//   - ip (string, required): IP address to look up.
 //
 // Top-level code for Sources/<YourTarget>/main.swift (see Getting Started).
 

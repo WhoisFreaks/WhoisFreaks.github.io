@@ -1,7 +1,7 @@
 // Runnable example: IP to City Snapshot (GET /v3.3/download/snapshot/ip/city)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbIpCity
 // Parameters for dbIpCity (GET /v3.3/download/snapshot/ip/city):
-//   - date (string, required)
+//   - date (string, required): The day whose file you want, in YYYY-MM-DD format.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.DatabasesIpGeolocationApi;

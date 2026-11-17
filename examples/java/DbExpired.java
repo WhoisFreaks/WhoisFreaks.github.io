@@ -1,7 +1,7 @@
 // Runnable example: Expiring Domains (GET /v3.1/download/domainer/expired)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DbExpired
 // Parameters for dbExpired (GET /v3.1/download/domainer/expired):
-//   - whois (boolean, required)
+//   - whois (boolean, required): Set true for the file with full WHOIS records, false for domain names only.
 //   - date (string, optional): yyyy-MM-dd; omit for latest
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;

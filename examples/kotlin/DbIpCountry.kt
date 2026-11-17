@@ -1,7 +1,7 @@
 // Runnable example: IP to Country Snapshot (GET /v3.3/download/snapshot/ip/country)
 // Run it from the Getting Started project: gradle run -PmainClass=DbIpCountryKt
 // Parameters for dbIpCountry (GET /v3.3/download/snapshot/ip/country):
-//   - date (string, required)
+//   - date (string, required): The day whose file you want, in YYYY-MM-DD format.
 import com.whoisfreaks.client.apis.DatabasesIPGeolocationApi
 import com.whoisfreaks.client.infrastructure.ApiClient
 import java.io.File

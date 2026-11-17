@@ -24,6 +24,7 @@ Install: see the [Swift guide](../../docs/languages/swift.md). Set the `WHOISFRE
 
 ## Typosquatting
 - [`Typosquatting.swift`](Typosquatting.swift): Typosquatting Lookup (`GET /v3.0/domain/typos`)
+- [`SubdomainTyposquatting.swift`](SubdomainTyposquatting.swift): Subdomain Typosquatting Lookup (`GET /v3.0/subdomains/typos`)
 
 ## SSL
 - [`SslLookup.swift`](SslLookup.swift): SSL Certificate Lookup (`GET /v1.0/ssl/live`)

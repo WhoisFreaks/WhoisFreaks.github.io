@@ -24,6 +24,7 @@ Install: see the [PHP guide](../../docs/languages/php.md). Set the `WHOISFREAKS_
 
 ## Typosquatting
 - [`Typosquatting.php`](Typosquatting.php): Typosquatting Lookup (`GET /v3.0/domain/typos`)
+- [`SubdomainTyposquatting.php`](SubdomainTyposquatting.php): Subdomain Typosquatting Lookup (`GET /v3.0/subdomains/typos`)
 
 ## SSL
 - [`SslLookup.php`](SslLookup.php): SSL Certificate Lookup (`GET /v1.0/ssl/live`)

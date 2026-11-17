@@ -2,7 +2,7 @@
 #
 # Parameters for domainReputation (GET /v1/domain/security):
 #   - domain_name (string, required): The domain name to assess
-#   - format (string (one of: json, xml), optional)
+#   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 require "json"
 require "whoisfreaks"

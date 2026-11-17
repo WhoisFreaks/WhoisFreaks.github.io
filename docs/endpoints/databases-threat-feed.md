@@ -10,6 +10,8 @@ Daily phishing, malware and spam threat feeds
 
 `GET https://files.whoisfreaks.com/v3.4/download/threat-feed/phishing`
 
+Download the day's phishing domain feed as a gzip-compressed CSV file.
+
 **Parameters**
 
 | Parameter | In | Required | Type | Default | Description |
@@ -141,6 +143,8 @@ func main() {
 
 `GET https://files.whoisfreaks.com/v3.4/download/threat-feed/phishing/sample`
 
+Download an open sample of the phishing domain feed as a gzip-compressed CSV file. No API key and no date are needed.
+
 **Parameters**
 
 None. The API key is set once on the client.
@@ -266,6 +270,8 @@ func main() {
 ## Download the daily malware threat feed (CSV)
 
 `GET https://files.whoisfreaks.com/v3.4/download/threat-feed/malware`
+
+Download the day's malware domain feed as a gzip-compressed CSV file.
 
 **Parameters**
 
@@ -398,6 +404,8 @@ func main() {
 
 `GET https://files.whoisfreaks.com/v3.4/download/threat-feed/malware/sample`
 
+Download an open sample of the malware domain feed as a gzip-compressed CSV file. No API key and no date are needed.
+
 **Parameters**
 
 None. The API key is set once on the client.
@@ -523,6 +531,8 @@ func main() {
 ## Download the daily spam threat feed (CSV)
 
 `GET https://files.whoisfreaks.com/v3.4/download/threat-feed/spam`
+
+Download the day's spam domain feed as a gzip-compressed CSV file.
 
 **Parameters**
 
@@ -654,6 +664,8 @@ func main() {
 ## Download a sample of the spam threat feed (CSV)
 
 `GET https://files.whoisfreaks.com/v3.4/download/threat-feed/spam/sample`
+
+Download an open sample of the spam domain feed as a gzip-compressed CSV file. No API key and no date are needed.
 
 **Parameters**
 

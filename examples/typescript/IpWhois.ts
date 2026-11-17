@@ -7,8 +7,8 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new IPWHOISApi(config);
 
 // ipWhois({ ip, format? })
-//   ip (string, required)
-//   format ("json" | "xml", optional): default "json"
+//   ip (string, required): IP address to look up
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.ipWhois({ ip: "8.8.8.8" });
   console.log(JSON.stringify(result, null, 2));

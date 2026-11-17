@@ -9,7 +9,7 @@ const api = new WHOISApi(client);
 
 // bulkWhois(bulkWhoisRequest, opts)
 //   bulkWhoisRequest (BulkWhoisRequest, required): request body
-//   opts.format (string, optional): one of json, xml; default "json"
+//   opts.format (string, optional): Response format. JSON when the parameter is left out; one of json, xml; default "json"
 async function main() {
   const body = BulkWhoisRequest.constructFromObject({ domainNames: ["whoisfreaks.com", "jfreaks.com"] });
   const result = await api.bulkWhois(body);

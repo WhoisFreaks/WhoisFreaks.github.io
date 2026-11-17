@@ -2,7 +2,7 @@
 // IP Reputation Lookup
 //
 // Parameters for ipReputation (GET /v1.0/security):
-//   - ip (string, required)
+//   - ip (string, required): IP address to look up.
 
 require __DIR__ . '/vendor/autoload.php';
 

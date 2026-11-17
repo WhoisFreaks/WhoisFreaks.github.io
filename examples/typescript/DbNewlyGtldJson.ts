@@ -8,7 +8,7 @@ const api = new DatabasesNewlyRegisteredApi(config);
 
 // dbNewlyGtldJson({ date?, tlds? })
 //   date (Date, optional): yyyy-MM-dd; omit for latest
-//   tlds (string, optional)
+//   tlds (string, optional): Comma separated TLDs to limit the file to, for example com,net. Every TLD is ...
 async function main(): Promise<void> {
   const domains = await api.dbNewlyGtldJson({ date: new Date("2026-10-01") });
   console.log(`${domains.length} domains`);

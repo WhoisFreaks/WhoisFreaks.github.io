@@ -1,10 +1,10 @@
 // Runnable example: Live DNS Lookup (GET /v2.0/dns/live)
 // Run it from the Getting Started project: mvn -q compile exec:java -Dexec.mainClass=DnsLive
 // Parameters for dnsLive (GET /v2.0/dns/live):
-//   - domainName (string, optional)
+//   - domainName (string, optional): Domain to look up.
 //   - ipAddress (string, optional): Use for PTR lookups
 //   - type (string, required): all or comma-separated: A,MX,NS,TXT,SOA,SPF,AAAA,CNAME
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 import com.whoisfreaks.client.ApiClient;
 import com.whoisfreaks.client.Configuration;
 import com.whoisfreaks.client.api.DnsApi;

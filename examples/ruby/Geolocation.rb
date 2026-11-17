@@ -1,7 +1,7 @@
 # IP Geolocation Lookup
 #
 # Parameters for geolocation (GET /v1.0/geolocation):
-#   - ip (string, required)
+#   - ip (string, required): IP address to look up.
 
 require "json"
 require "whoisfreaks"

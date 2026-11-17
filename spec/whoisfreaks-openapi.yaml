@@ -6,7 +6,7 @@ info:
     \ Domain Reputation, and bulk database downloads.\n\n## Authentication\nAll requests require an `apiKey`\
     \ query parameter.\n\n## Resources\n- Docs: https://whoisfreaks.com/documentation\n- Billing: https://billing.whoisfreaks.com\n\
     - Support: support@whoisfreaks.com\n"
-  version: 1.0.0
+  version: 2026-11-17.1
   contact:
     name: WhoisFreaks Support
     email: support@whoisfreaks.com
@@ -78,6 +78,7 @@ paths:
       operationId: whoisLive
       parameters:
         - name: domainName
+          description: "Domain to look up."
           in: query
           schema:
             type: string
@@ -142,6 +143,7 @@ paths:
       operationId: dnsLive
       parameters:
         - name: domainName
+          description: "Domain to look up."
           in: query
           schema:
             type: string
@@ -181,12 +183,14 @@ paths:
       operationId: dnsHistorical
       parameters:
         - name: domainName
+          description: "Domain to look up."
           in: query
           schema:
             type: string
           required: true
           example: whoisfreaks.com
         - name: type
+          description: "Comma separated DNS record types to return, for example A,MX,TXT. Defaults to all."
           in: query
           schema:
             type: string
@@ -194,6 +198,7 @@ paths:
           required: true
           example: "A,MX,TXT"
         - name: page
+          description: "Page of results to return. Defaults to 1."
           in: query
           schema:
             type: integer
@@ -225,6 +230,7 @@ paths:
           description: IP, CIDR, or record value
           example: 8.8.8.8
         - name: type
+          description: "DNS record type to search by."
           in: query
           schema:
             type: string
@@ -238,11 +244,13 @@ paths:
               - soa
           required: true
         - name: exact
+          description: "Set true to match value exactly. Defaults to false, where value is treated as a pattern and '*' matches any characters. Ignored for A and AAAA records, which always match the IP."
           in: query
           schema:
             type: boolean
-            default: true
+            default: false
         - name: page
+          description: "Page of results to return. Defaults to 1."
           in: query
           schema:
             type: integer
@@ -270,12 +278,14 @@ paths:
       operationId: dnsHistoricalV22
       parameters:
         - name: domainName
+          description: "Domain to look up."
           in: query
           schema:
             type: string
           required: true
           example: whoisfreaks.com
         - name: type
+          description: "Comma separated DNS record types to return, for example A,MX,TXT. Defaults to all."
           in: query
           schema:
             type: string
@@ -283,6 +293,7 @@ paths:
           required: true
           example: "A,MX,TXT"
         - name: page
+          description: "Page of results to return. Defaults to 1."
           in: query
           schema:
             type: integer
@@ -313,12 +324,14 @@ paths:
       operationId: dnsHistoricalV23
       parameters:
         - name: domainName
+          description: "Domain to look up."
           in: query
           schema:
             type: string
           required: true
           example: whoisfreaks.com
         - name: type
+          description: "Comma separated DNS record types to return, for example A,MX,TXT. Defaults to all."
           in: query
           schema:
             type: string
@@ -326,6 +339,7 @@ paths:
           required: true
           example: "A,MX,TXT"
         - name: page
+          description: "Page of results to return. Defaults to 1."
           in: query
           schema:
             type: integer
@@ -359,6 +373,7 @@ paths:
         - $ref: "#/components/parameters/ReverseType"
         - $ref: "#/components/parameters/ReverseExact"
         - name: page
+          description: "Page of results to return. Defaults to 1."
           in: query
           schema:
             type: integer
@@ -393,6 +408,7 @@ paths:
         - $ref: "#/components/parameters/ReverseType"
         - $ref: "#/components/parameters/ReverseExact"
         - name: page
+          description: "Page of results to return. Defaults to 1."
           in: query
           schema:
             type: integer
@@ -421,6 +437,7 @@ paths:
       operationId: dnsBulk
       parameters:
         - name: type
+          description: "Comma separated DNS record types to return, for example A,MX,TXT. Defaults to all."
           in: query
           schema:
             type: string
@@ -542,16 +559,19 @@ paths:
       operationId: typosquatting
       parameters:
         - name: keyword
+          description: "Brand or label to find typo variants for. Pass either keyword or pattern, not both."
           in: query
           schema:
             type: string
           example: whoisfreaks
         - name: pattern
+          description: "Wildcard search string, where '*' matches any characters. Pass either keyword or pattern, not both."
           in: query
           schema:
             type: string
           example: "whois*"
         - name: pageToken
+          description: "Token from nextPageToken in the previous response, needed from page 2 onward. Send it with the original keyword or pattern."
           in: query
           schema:
             type: string
@@ -566,6 +586,64 @@ paths:
           $ref: "#/components/responses/BadRequest"
         "401":
           $ref: "#/components/responses/Unauthorized"
+  /v3.0/subdomains/typos:
+    get:
+      tags:
+        - Typosquatting
+      summary: Subdomain Typosquatting Lookup
+      description: >-
+        Find subdomains that carry a typo variant of a brand as one of their
+        labels, such as login.paypa1.example.com. Phishing pages often hide the
+        brand in the subdomain of an unrelated domain, so these hosts never show
+        up in a domain typosquatting search. Pass either keyword or pattern, not
+        both. 5 credits per page.
+      operationId: subdomainTyposquatting
+      parameters:
+        - name: keyword
+          description: "Brand or label to find typo variants for. 3 to 63 characters, letters, digits and hyphens, a single label with no dots, and it cannot start or end with a hyphen."
+          in: query
+          schema:
+            type: string
+            minLength: 3
+            maxLength: 63
+          example: paypal
+        - name: pattern
+          description: "Wildcard search string, where '*' matches any characters and '?' matches one. At most 2 wildcards, at least 5 characters besides the wildcards, and no more than 63 characters in total."
+          in: query
+          schema:
+            type: string
+            minLength: 5
+            maxLength: 63
+          example: paypa*
+        - name: pageToken
+          description: "Token from nextPageToken in the previous response, needed from page 2 onward. Send it with the original keyword or pattern."
+          in: query
+          schema:
+            type: string
+        - name: fetch_size
+          description: "Subdomains per page. 100 when the parameter is left out, and values above 10000 are capped at 10000."
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 10000
+            default: 100
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TyposquatSubdomainsResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "429":
+          $ref: "#/components/responses/RateLimited"
+
   /v1.0/ssl/live:
     get:
       tags:
@@ -575,17 +653,20 @@ paths:
       operationId: sslLookup
       parameters:
         - name: domainName
+          description: "Domain to look up."
           in: query
           schema:
             type: string
           required: true
           example: whoisfreaks.com
         - name: chain
+          description: "Set true to return the full certificate chain, ordered from the end-user certificate to the root. Defaults to false."
           in: query
           schema:
             type: boolean
             default: false
         - name: sslRaw
+          description: "Set true to include the raw OpenSSL response for the domain. Defaults to false."
           in: query
           schema:
             type: boolean
@@ -609,6 +690,7 @@ paths:
       operationId: geolocation
       parameters:
         - name: ip
+          description: "IP address to look up."
           in: query
           schema:
             type: string
@@ -664,24 +746,28 @@ paths:
       operationId: subdomains
       parameters:
         - name: domain
+          description: "Domain whose subdomains you want."
           in: query
           schema:
             type: string
           required: true
           example: whoisfreaks.com
         - name: after
+          description: "Only return records created after this date, in YYYY-MM-DD format. Defaults to the oldest record held, and must not be in the future or later than before."
           in: query
           schema:
             type: string
             format: date
           example: "2026-01-01"
         - name: before
+          description: "Only return records created before this date, in YYYY-MM-DD format. Defaults to today, and must not be in the future."
           in: query
           schema:
             type: string
             format: date
           example: "2026-10-01"
         - name: status
+          description: "Limit results to active or inactive subdomains. Both are returned when the parameter is left out."
           in: query
           schema:
             type: string
@@ -689,6 +775,7 @@ paths:
               - active
               - inactive
         - name: page
+          description: "Page of results to return. Defaults to 1."
           in: query
           schema:
             type: integer
@@ -713,6 +800,7 @@ paths:
       operationId: ipReputation
       parameters:
         - name: ip
+          description: "IP address to look up."
           in: query
           schema:
             type: string
@@ -773,6 +861,7 @@ paths:
       operationId: ipReputationV2
       parameters:
         - name: ip
+          description: "IP address to look up."
           in: query
           schema:
             type: string
@@ -868,6 +957,7 @@ paths:
       operationId: asnWhois
       parameters:
         - name: asn
+          description: "Autonomous system number to look up, with or without the AS prefix."
           in: query
           schema:
             type: string
@@ -892,6 +982,7 @@ paths:
       operationId: ipWhois
       parameters:
         - name: ip
+          description: "IP address to look up."
           in: query
           schema:
             type: string
@@ -955,6 +1046,7 @@ paths:
       operationId: dbNewlyGtld
       parameters:
         - name: whois
+          description: "Set true for the file with full WHOIS records, false for domain names only."
           in: query
           schema:
             type: boolean
@@ -962,6 +1054,7 @@ paths:
           example: true
         - $ref: "#/components/parameters/DateParam"
         - name: tlds
+          description: "Comma separated TLDs to limit the file to, for example com,net. Every TLD is included when the parameter is left out."
           in: query
           schema:
             type: string
@@ -986,6 +1079,7 @@ paths:
       operationId: dbNewlyCctld
       parameters:
         - name: whois
+          description: "Set true for the file with full WHOIS records, false for domain names only."
           in: query
           schema:
             type: boolean
@@ -993,6 +1087,7 @@ paths:
           example: true
         - $ref: "#/components/parameters/DateParam"
         - name: tlds
+          description: "Comma separated TLDs to limit the file to, for example com,net. Every TLD is included when the parameter is left out."
           in: query
           schema:
             type: string
@@ -1062,6 +1157,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/DateParam"
         - name: tlds
+          description: "Comma separated TLDs to limit the file to, for example com,net. Every TLD is included when the parameter is left out."
           in: query
           schema:
             type: string
@@ -1088,6 +1184,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/DateParam"
         - name: tlds
+          description: "Comma separated TLDs to limit the file to, for example com,net. Every TLD is included when the parameter is left out."
           in: query
           schema:
             type: string
@@ -1133,6 +1230,7 @@ paths:
       operationId: dbExpired
       parameters:
         - name: whois
+          description: "Set true for the file with full WHOIS records, false for domain names only."
           in: query
           schema:
             type: boolean
@@ -1179,6 +1277,7 @@ paths:
       operationId: dbDropped
       parameters:
         - name: whois
+          description: "Set true for the file with full WHOIS records, false for domain names only."
           in: query
           schema:
             type: boolean
@@ -1206,6 +1305,7 @@ paths:
       parameters:
         - $ref: "#/components/parameters/DateParam"
         - name: tlds
+          description: "Comma separated TLDs to limit the file to, for example com,net. Every TLD is included when the parameter is left out."
           in: query
           schema:
             type: string
@@ -1231,6 +1331,7 @@ paths:
       operationId: dbDroppedBacklinks
       parameters:
         - name: whois
+          description: "Set true for the file with full WHOIS records, false for domain names only."
           in: query
           schema:
             type: boolean
@@ -1454,6 +1555,7 @@ paths:
       operationId: dbIpCountry
       parameters:
         - name: date
+          description: "The day whose file you want, in YYYY-MM-DD format."
           in: query
           schema:
             type: string
@@ -1498,6 +1600,7 @@ paths:
       operationId: dbIpCity
       parameters:
         - name: date
+          description: "The day whose file you want, in YYYY-MM-DD format."
           in: query
           schema:
             type: string
@@ -1524,6 +1627,7 @@ paths:
       operationId: dbAsnWhois
       parameters:
         - name: date
+          description: "The day whose file you want, in YYYY-MM-DD format."
           in: query
           schema:
             type: string
@@ -1568,6 +1672,7 @@ paths:
       operationId: dbIpWhois
       parameters:
         - name: date
+          description: "The day whose file you want, in YYYY-MM-DD format."
           in: query
           schema:
             type: string
@@ -1612,6 +1717,7 @@ paths:
       operationId: dbIpSecurity
       parameters:
         - name: date
+          description: "The day whose file you want, in YYYY-MM-DD format."
           in: query
           schema:
             type: string
@@ -1663,6 +1769,7 @@ paths:
           description: Domain to fetch historical WHOIS records for
           example: whoisfreaks.com
         - name: format
+          description: "Response format. JSON when the parameter is left out."
           in: query
           required: false
           schema:
@@ -1683,6 +1790,7 @@ paths:
         - WHOIS
       operationId: whoisReverse
       summary: Reverse WHOIS lookup by keyword
+      description: "Find every domain whose WHOIS record carries a keyword, owner name, company, email or postal address. Results are paginated 100 domains per page."
       parameters:
         - name: keyword
           in: query
@@ -1699,6 +1807,7 @@ paths:
           description: Page number
           example: 1
         - name: format
+          description: "Response format. JSON when the parameter is left out."
           in: query
           required: false
           schema:
@@ -1720,6 +1829,7 @@ paths:
         - Databases - Threat Feed
       operationId: downloadThreatFeedPhishing
       summary: Download the daily phishing threat feed (CSV)
+      description: "Download the day's phishing domain feed as a gzip-compressed CSV file."
       parameters:
         - name: date
           in: query
@@ -1745,6 +1855,7 @@ paths:
         - Databases - Threat Feed
       operationId: downloadThreatFeedPhishingSample
       summary: Download a sample of the phishing threat feed (CSV)
+      description: "Download an open sample of the phishing domain feed as a gzip-compressed CSV file. No API key and no date are needed."
       parameters: []
       responses:
         "200":
@@ -1763,6 +1874,7 @@ paths:
         - Databases - Threat Feed
       operationId: downloadThreatFeedMalware
       summary: Download the daily malware threat feed (CSV)
+      description: "Download the day's malware domain feed as a gzip-compressed CSV file."
       parameters:
         - name: date
           in: query
@@ -1788,6 +1900,7 @@ paths:
         - Databases - Threat Feed
       operationId: downloadThreatFeedMalwareSample
       summary: Download a sample of the malware threat feed (CSV)
+      description: "Download an open sample of the malware domain feed as a gzip-compressed CSV file. No API key and no date are needed."
       parameters: []
       responses:
         "200":
@@ -1806,6 +1919,7 @@ paths:
         - Databases - Threat Feed
       operationId: downloadThreatFeedSpam
       summary: Download the daily spam threat feed (CSV)
+      description: "Download the day's spam domain feed as a gzip-compressed CSV file."
       parameters:
         - name: date
           in: query
@@ -1831,6 +1945,7 @@ paths:
         - Databases - Threat Feed
       operationId: downloadThreatFeedSpamSample
       summary: Download a sample of the spam threat feed (CSV)
+      description: "Download an open sample of the spam domain feed as a gzip-compressed CSV file. No API key and no date are needed."
       parameters: []
       responses:
         "200":
@@ -2480,6 +2595,7 @@ components:
     Format:
       name: format
       in: query
+      description: "Response format. JSON when the parameter is left out."
       schema:
         type: string
         enum:
@@ -2559,6 +2675,7 @@ components:
     ReverseType:
       name: type
       in: query
+      description: "DNS record type to search by."
       schema:
         type: string
         enum:
@@ -3188,6 +3305,51 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/DomainAvailabilityItem"
+      additionalProperties: true
+    TyposquatSubdomainsResponse:
+      type: object
+      properties:
+        status:
+          type: boolean
+        totalRecords:
+          type: integer
+        currentPage:
+          type: integer
+        totalPages:
+          type: integer
+        hasNextPage:
+          type: boolean
+        nextPageToken:
+          type: string
+        subdomains:
+          type: array
+          items:
+            $ref: "#/components/schemas/TyposquatSubdomain"
+      additionalProperties: true
+    TyposquatSubdomain:
+      type: object
+      properties:
+        subdomain:
+          type: string
+          description: The matching hostname.
+        domain:
+          type: string
+          description: The registrable domain the subdomain belongs to.
+        status:
+          type: string
+          description: Whether the subdomain is still resolving.
+          enum:
+            - active
+            - inactive
+        firstSeen:
+          type: string
+          description: Date the subdomain was first seen, in YYYY-MM-DD format.
+        lastSeen:
+          type: string
+          description: Date the subdomain was last seen, in YYYY-MM-DD format.
+        inactiveFrom:
+          type: string
+          description: Date the subdomain stopped resolving, absent while it is active.
       additionalProperties: true
     TyposquattingDomain:
       type: object

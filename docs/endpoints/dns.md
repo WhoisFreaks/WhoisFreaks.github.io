@@ -16,10 +16,10 @@ Real-time DNS record lookup. 1 credit per query.
 
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
-| `domainName` | query | no | string |  |  |
+| `domainName` | query | no | string |  | Domain to look up. |
 | `ipAddress` | query | no | string |  | Use for PTR lookups |
 | `type` | query | yes | string | `all` | all or comma-separated: A,MX,NS,TXT,SOA,SPF,AAAA,CNAME |
-| `format` | query | no | string | `json` |  (one of: json, xml) |
+| `format` | query | no | string | `json` | Response format. JSON when the parameter is left out. (one of: json, xml) |
 
 **Response** (`DnsResponse`)
 
@@ -83,9 +83,9 @@ with whoisfreaks.ApiClient(config) as client:
 
     # dns_live parameters:
     #   type (str, required): all or comma-separated: A,MX,NS,TXT,SOA,SPF,AAAA,CNAME; default "all"
-    #   domain_name (str, optional, keyword)
+    #   domain_name (str, optional, keyword): Domain to look up
     #   ip_address (str, optional, keyword): Use for PTR lookups
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.dns_live("A,MX,TXT", domain_name="whoisfreaks.com")
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -105,9 +105,9 @@ const api = new DNSApi(config);
 
 // dnsLive({ type, domainName?, ipAddress?, format? })
 //   type (string, required): all or comma-separated: A,MX,NS,TXT,SOA,SPF,AAAA,CNAME; default "all"
-//   domainName (string, optional)
+//   domainName (string, optional): Domain to look up
 //   ipAddress (string, optional): Use for PTR lookups
-//   format ("json" | "xml", optional): default "json"
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.dnsLive({ type: "A,MX,TXT", domainName: "whoisfreaks.com" });
   console.log(JSON.stringify(result, null, 2));
@@ -132,10 +132,10 @@ main().catch(async (err: unknown) => {
 // Runnable example: Live DNS Lookup (GET /v2.0/dns/live)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dnsLive (GET /v2.0/dns/live):
-//   - domainName (string, optional)
+//   - domainName (string, optional): Domain to look up.
 //   - ipAddress (string, optional): Use for PTR lookups
 //   - type (string, required): all or comma-separated: A,MX,NS,TXT,SOA,SPF,AAAA,CNAME
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 
@@ -180,10 +180,10 @@ All historical DNS records. 2 credits per page (100 records/page).
 
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
-| `domainName` | query | yes | string |  |  |
-| `type` | query | yes | string | `all` |  |
-| `page` | query | no | integer | `1` |  |
-| `format` | query | no | string | `json` |  (one of: json, xml) |
+| `domainName` | query | yes | string |  | Domain to look up. |
+| `type` | query | yes | string | `all` | Comma separated DNS record types to return, for example A,MX,TXT. Defaults to all. |
+| `page` | query | no | integer | `1` | Page of results to return. Defaults to 1. |
+| `format` | query | no | string | `json` | Response format. JSON when the parameter is left out. (one of: json, xml) |
 
 **Response** (`HistoricalDnsResponse`)
 
@@ -231,10 +231,10 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DNSApi(client)
 
     # dns_historical parameters:
-    #   domain_name (str, required)
-    #   type (str, required): default "all"
-    #   page (int, optional, keyword): default 1
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   domain_name (str, required): Domain to look up
+    #   type (str, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to...; default "all"
+    #   page (int, optional, keyword): Page of results to return. Defaults to 1; default 1
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.dns_historical("whoisfreaks.com", "A,MX,TXT", page=1)
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -253,10 +253,10 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DNSApi(config);
 
 // dnsHistorical({ domainName, type, page?, format? })
-//   domainName (string, required)
-//   type (string, required): default "all"
-//   page (number, optional): default 1
-//   format ("json" | "xml", optional): default "json"
+//   domainName (string, required): Domain to look up
+//   type (string, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to...; default "all"
+//   page (number, optional): Page of results to return. Defaults to 1; default 1
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.dnsHistorical({ domainName: "whoisfreaks.com", type: "A,MX,TXT", page: 1 });
   console.log(JSON.stringify(result, null, 2));
@@ -281,10 +281,10 @@ main().catch(async (err: unknown) => {
 // Runnable example: Historical DNS Lookup (GET /v2.0/dns/historical)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dnsHistorical (GET /v2.0/dns/historical):
-//   - domainName (string, required)
-//   - type (string, required)
-//   - page (integer, optional)
-//   - format (string (one of: json, xml), optional)
+//   - domainName (string, required): Domain to look up.
+//   - type (string, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to all.
+//   - page (integer, optional): Page of results to return. Defaults to 1.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 
@@ -330,10 +330,10 @@ Search domains by IP or DNS value. 5 credits per page.
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
 | `value` | query | yes | string |  | IP, CIDR, or record value |
-| `type` | query | yes | string |  |  (one of: a, mx, cname, ns, aaaa, txt, soa) |
-| `exact` | query | no | boolean | `true` |  |
-| `page` | query | no | integer | `1` |  |
-| `format` | query | no | string | `json` |  (one of: json, xml) |
+| `type` | query | yes | string |  | DNS record type to search by. (one of: a, mx, cname, ns, aaaa, txt, soa) |
+| `exact` | query | no | boolean | `false` | Set true to match value exactly. Defaults to false, where value is treated as a pattern and '*' matches any characters. Ignored for A and AAAA records, which always match the IP. |
+| `page` | query | no | integer | `1` | Page of results to return. Defaults to 1. |
+| `format` | query | no | string | `json` | Response format. JSON when the parameter is left out. (one of: json, xml) |
 
 **Response** (`ReverseDnsResponse`)
 
@@ -382,10 +382,10 @@ with whoisfreaks.ApiClient(config) as client:
 
     # dns_reverse parameters:
     #   value (str, required): IP, CIDR, or record value
-    #   type (str, required): one of a, mx, cname, ns, aaaa, txt, soa
-    #   exact (bool, optional, keyword): default True
-    #   page (int, optional, keyword): default 1
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   type (str, required): DNS record type to search by; one of a, mx, cname, ns, aaaa, txt, soa
+    #   exact (bool, optional, keyword): Set true to match value exactly. Defaults to false, where value is treated as...; default False
+    #   page (int, optional, keyword): Page of results to return. Defaults to 1; default 1
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.dns_reverse("8.8.8.8", "a", page=1)
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -405,10 +405,10 @@ const api = new DNSApi(config);
 
 // dnsReverse({ value, type, exact?, page?, format? })
 //   value (string, required): IP, CIDR, or record value
-//   type ("a" | "mx" | "cname" | "ns" | "aaaa" | "txt" | "soa", required)
-//   exact (boolean, optional): default true
-//   page (number, optional): default 1
-//   format ("json" | "xml", optional): default "json"
+//   type ("a" | "mx" | "cname" | "ns" | "aaaa" | "txt" | "soa", required): DNS record type to search by
+//   exact (boolean, optional): Set true to match value exactly. Defaults to false, where value is treated as...; default false
+//   page (number, optional): Page of results to return. Defaults to 1; default 1
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.dnsReverse({ value: "8.8.8.8", type: "a", page: 1 });
   console.log(JSON.stringify(result, null, 2));
@@ -434,10 +434,10 @@ main().catch(async (err: unknown) => {
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dnsReverse (GET /v2.1/dns/reverse):
 //   - value (string, required): IP, CIDR, or record value
-//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
-//   - exact (boolean, optional)
-//   - page (integer, optional)
-//   - format (string (one of: json, xml), optional)
+//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required): DNS record type to search by.
+//   - exact (boolean, optional): Set true to match value exactly. Defaults to false, where value is treated as a pattern...
+//   - page (integer, optional): Page of results to return. Defaults to 1.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 
@@ -481,12 +481,12 @@ Same records as /v2.0/dns/historical, with two differences. Each entry reports f
 
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
-| `domainName` | query | yes | string |  |  |
-| `type` | query | yes | string | `all` |  |
-| `page` | query | no | integer | `1` |  |
+| `domainName` | query | yes | string |  | Domain to look up. |
+| `type` | query | yes | string | `all` | Comma separated DNS record types to return, for example A,MX,TXT. Defaults to all. |
+| `page` | query | no | integer | `1` | Page of results to return. Defaults to 1. |
 | `sort` | query | no | string |  | Sort direction. Omit to leave the results unsorted. (one of: asc, desc) |
 | `sortBy` | query | no | string | `lastSeen` | Field to sort on. Only applies when sort is given. (one of: firstSeen, lastSeen) |
-| `format` | query | no | string | `json` |  (one of: json, xml) |
+| `format` | query | no | string | `json` | Response format. JSON when the parameter is left out. (one of: json, xml) |
 
 **Response** (`HistoricalDnsResponseV2_2`)
 
@@ -535,12 +535,12 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DNSApi(client)
 
     # dns_historical_v22 parameters:
-    #   domain_name (str, required)
-    #   type (str, required): default "all"
-    #   page (int, optional, keyword): default 1
+    #   domain_name (str, required): Domain to look up
+    #   type (str, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to...; default "all"
+    #   page (int, optional, keyword): Page of results to return. Defaults to 1; default 1
     #   sort (str, optional, keyword): Sort direction. Omit to leave the results unsorted; one of asc, desc
     #   sort_by (str, optional, keyword): Field to sort on. Only applies when sort is given; one of firstSeen, lastSeen; default "lastSeen"
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.dns_historical_v22("whoisfreaks.com", "A,MX,TXT", page=1)
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -559,12 +559,12 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DNSApi(config);
 
 // dnsHistoricalV22({ domainName, type, page?, sort?, sortBy?, format? })
-//   domainName (string, required)
-//   type (string, required): default "all"
-//   page (number, optional): default 1
+//   domainName (string, required): Domain to look up
+//   type (string, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to...; default "all"
+//   page (number, optional): Page of results to return. Defaults to 1; default 1
 //   sort ("asc" | "desc", optional): Sort direction. Omit to leave the results unsorted
 //   sortBy ("firstSeen" | "lastSeen", optional): Field to sort on. Only applies when sort is given; default "lastSeen"
-//   format ("json" | "xml", optional): default "json"
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.dnsHistoricalV22({ domainName: "whoisfreaks.com", type: "A,MX,TXT", page: 1 });
   console.log(JSON.stringify(result, null, 2));
@@ -589,12 +589,12 @@ main().catch(async (err: unknown) => {
 // Runnable example: Historical DNS Lookup (v2.2) (GET /v2.2/dns/historical)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dnsHistoricalV22 (GET /v2.2/dns/historical):
-//   - domainName (string, required)
-//   - type (string, required)
-//   - page (integer, optional)
+//   - domainName (string, required): Domain to look up.
+//   - type (string, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to all.
+//   - page (integer, optional): Page of results to return. Defaults to 1.
 //   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
 //   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 
@@ -639,12 +639,12 @@ Same response as /v2.2/dns/historical. The difference is in error handling. Up t
 
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
-| `domainName` | query | yes | string |  |  |
-| `type` | query | yes | string | `all` |  |
-| `page` | query | no | integer | `1` |  |
+| `domainName` | query | yes | string |  | Domain to look up. |
+| `type` | query | yes | string | `all` | Comma separated DNS record types to return, for example A,MX,TXT. Defaults to all. |
+| `page` | query | no | integer | `1` | Page of results to return. Defaults to 1. |
 | `sort` | query | no | string |  | Sort direction. Omit to leave the results unsorted. (one of: asc, desc) |
 | `sortBy` | query | no | string | `lastSeen` | Field to sort on. Only applies when sort is given. (one of: firstSeen, lastSeen) |
-| `format` | query | no | string | `json` |  (one of: json, xml) |
+| `format` | query | no | string | `json` | Response format. JSON when the parameter is left out. (one of: json, xml) |
 
 **Response** (`HistoricalDnsResponseV2_2`)
 
@@ -693,12 +693,12 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DNSApi(client)
 
     # dns_historical_v23 parameters:
-    #   domain_name (str, required)
-    #   type (str, required): default "all"
-    #   page (int, optional, keyword): default 1
+    #   domain_name (str, required): Domain to look up
+    #   type (str, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to...; default "all"
+    #   page (int, optional, keyword): Page of results to return. Defaults to 1; default 1
     #   sort (str, optional, keyword): Sort direction. Omit to leave the results unsorted; one of asc, desc
     #   sort_by (str, optional, keyword): Field to sort on. Only applies when sort is given; one of firstSeen, lastSeen; default "lastSeen"
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.dns_historical_v23("whoisfreaks.com", "A,MX,TXT", page=1)
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -717,12 +717,12 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DNSApi(config);
 
 // dnsHistoricalV23({ domainName, type, page?, sort?, sortBy?, format? })
-//   domainName (string, required)
-//   type (string, required): default "all"
-//   page (number, optional): default 1
+//   domainName (string, required): Domain to look up
+//   type (string, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to...; default "all"
+//   page (number, optional): Page of results to return. Defaults to 1; default 1
 //   sort ("asc" | "desc", optional): Sort direction. Omit to leave the results unsorted
 //   sortBy ("firstSeen" | "lastSeen", optional): Field to sort on. Only applies when sort is given; default "lastSeen"
-//   format ("json" | "xml", optional): default "json"
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.dnsHistoricalV23({ domainName: "whoisfreaks.com", type: "A,MX,TXT", page: 1 });
   console.log(JSON.stringify(result, null, 2));
@@ -747,12 +747,12 @@ main().catch(async (err: unknown) => {
 // Runnable example: Historical DNS Lookup (v2.3) (GET /v2.3/dns/historical)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dnsHistoricalV23 (GET /v2.3/dns/historical):
-//   - domainName (string, required)
-//   - type (string, required)
-//   - page (integer, optional)
+//   - domainName (string, required): Domain to look up.
+//   - type (string, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to all.
+//   - page (integer, optional): Page of results to return. Defaults to 1.
 //   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
 //   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 
@@ -798,12 +798,12 @@ Same search as /v2.1/dns/reverse. Each entry reports firstSeen and lastSeen inst
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
 | `value` | query | yes | string |  | IP, CIDR, or record value |
-| `type` | query | yes | string |  |  (one of: a, mx, cname, ns, aaaa, txt, soa) |
+| `type` | query | yes | string |  | DNS record type to search by. (one of: a, mx, cname, ns, aaaa, txt, soa) |
 | `exact` | query | no | boolean | `true` | When false the value is matched as a substring, which is far slower than an exact match on a large record type. |
-| `page` | query | no | integer | `1` |  |
+| `page` | query | no | integer | `1` | Page of results to return. Defaults to 1. |
 | `sort` | query | no | string |  | Sort direction. Omit to leave the results unsorted. (one of: asc, desc) |
 | `sortBy` | query | no | string | `lastSeen` | Field to sort on. Only applies when sort is given. (one of: firstSeen, lastSeen) |
-| `format` | query | no | string | `json` |  (one of: json, xml) |
+| `format` | query | no | string | `json` | Response format. JSON when the parameter is left out. (one of: json, xml) |
 
 **Response** (`ReverseDnsResponseV2_2`)
 
@@ -853,12 +853,12 @@ with whoisfreaks.ApiClient(config) as client:
 
     # dns_reverse_v22 parameters:
     #   value (str, required): IP, CIDR, or record value
-    #   type (str, required): one of a, mx, cname, ns, aaaa, txt, soa
+    #   type (str, required): DNS record type to search by; one of a, mx, cname, ns, aaaa, txt, soa
     #   exact (bool, optional, keyword): When false the value is matched as a substring, which is far slower than an e...; default True
-    #   page (int, optional, keyword): default 1
+    #   page (int, optional, keyword): Page of results to return. Defaults to 1; default 1
     #   sort (str, optional, keyword): Sort direction. Omit to leave the results unsorted; one of asc, desc
     #   sort_by (str, optional, keyword): Field to sort on. Only applies when sort is given; one of firstSeen, lastSeen; default "lastSeen"
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.dns_reverse_v22("8.8.8.8", "a", page=1)
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -878,12 +878,12 @@ const api = new DNSApi(config);
 
 // dnsReverseV22({ value, type, exact?, page?, sort?, sortBy?, format? })
 //   value (string, required): IP, CIDR, or record value
-//   type ("a" | "mx" | "cname" | "ns" | "aaaa" | "txt" | "soa", required)
+//   type ("a" | "mx" | "cname" | "ns" | "aaaa" | "txt" | "soa", required): DNS record type to search by
 //   exact (boolean, optional): When false the value is matched as a substring, which is far slower than an e...; default true
-//   page (number, optional): default 1
+//   page (number, optional): Page of results to return. Defaults to 1; default 1
 //   sort ("asc" | "desc", optional): Sort direction. Omit to leave the results unsorted
 //   sortBy ("firstSeen" | "lastSeen", optional): Field to sort on. Only applies when sort is given; default "lastSeen"
-//   format ("json" | "xml", optional): default "json"
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.dnsReverseV22({ value: "8.8.8.8", type: "a", page: 1 });
   console.log(JSON.stringify(result, null, 2));
@@ -909,12 +909,12 @@ main().catch(async (err: unknown) => {
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dnsReverseV22 (GET /v2.2/dns/reverse):
 //   - value (string, required): IP, CIDR, or record value
-//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
+//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required): DNS record type to search by.
 //   - exact (boolean, optional): When false the value is matched as a substring, which is far slower than an exact match...
-//   - page (integer, optional)
+//   - page (integer, optional): Page of results to return. Defaults to 1.
 //   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
 //   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 
@@ -959,12 +959,12 @@ Same search as /v2.2/dns/reverse, with a bounded total. Counting every match of 
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
 | `value` | query | yes | string |  | IP, CIDR, or record value |
-| `type` | query | yes | string |  |  (one of: a, mx, cname, ns, aaaa, txt, soa) |
+| `type` | query | yes | string |  | DNS record type to search by. (one of: a, mx, cname, ns, aaaa, txt, soa) |
 | `exact` | query | no | boolean | `true` | When false the value is matched as a substring, which is far slower than an exact match on a large record type. |
-| `page` | query | no | integer | `1` |  |
+| `page` | query | no | integer | `1` | Page of results to return. Defaults to 1. |
 | `sort` | query | no | string |  | Sort direction. Omit to leave the results unsorted. (one of: asc, desc) |
 | `sortBy` | query | no | string | `lastSeen` | Field to sort on. Only applies when sort is given. (one of: firstSeen, lastSeen) |
-| `format` | query | no | string | `json` |  (one of: json, xml) |
+| `format` | query | no | string | `json` | Response format. JSON when the parameter is left out. (one of: json, xml) |
 
 **Response** (`ReverseDnsResponseV2_3`)
 
@@ -1015,12 +1015,12 @@ with whoisfreaks.ApiClient(config) as client:
 
     # dns_reverse_v23 parameters:
     #   value (str, required): IP, CIDR, or record value
-    #   type (str, required): one of a, mx, cname, ns, aaaa, txt, soa
+    #   type (str, required): DNS record type to search by; one of a, mx, cname, ns, aaaa, txt, soa
     #   exact (bool, optional, keyword): When false the value is matched as a substring, which is far slower than an e...; default True
-    #   page (int, optional, keyword): default 1
+    #   page (int, optional, keyword): Page of results to return. Defaults to 1; default 1
     #   sort (str, optional, keyword): Sort direction. Omit to leave the results unsorted; one of asc, desc
     #   sort_by (str, optional, keyword): Field to sort on. Only applies when sort is given; one of firstSeen, lastSeen; default "lastSeen"
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.dns_reverse_v23("8.8.8.8", "a", page=1)
     print(json.dumps(result.to_dict(), indent=2))
 ```
@@ -1040,12 +1040,12 @@ const api = new DNSApi(config);
 
 // dnsReverseV23({ value, type, exact?, page?, sort?, sortBy?, format? })
 //   value (string, required): IP, CIDR, or record value
-//   type ("a" | "mx" | "cname" | "ns" | "aaaa" | "txt" | "soa", required)
+//   type ("a" | "mx" | "cname" | "ns" | "aaaa" | "txt" | "soa", required): DNS record type to search by
 //   exact (boolean, optional): When false the value is matched as a substring, which is far slower than an e...; default true
-//   page (number, optional): default 1
+//   page (number, optional): Page of results to return. Defaults to 1; default 1
 //   sort ("asc" | "desc", optional): Sort direction. Omit to leave the results unsorted
 //   sortBy ("firstSeen" | "lastSeen", optional): Field to sort on. Only applies when sort is given; default "lastSeen"
-//   format ("json" | "xml", optional): default "json"
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.dnsReverseV23({ value: "8.8.8.8", type: "a", page: 1 });
   console.log(JSON.stringify(result, null, 2));
@@ -1071,12 +1071,12 @@ main().catch(async (err: unknown) => {
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dnsReverseV23 (GET /v2.3/dns/reverse):
 //   - value (string, required): IP, CIDR, or record value
-//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required)
+//   - type (string (one of: a, mx, cname, ns, aaaa, txt, soa), required): DNS record type to search by.
 //   - exact (boolean, optional): When false the value is matched as a substring, which is far slower than an exact match...
-//   - page (integer, optional)
+//   - page (integer, optional): Page of results to return. Defaults to 1.
 //   - sort (string (one of: asc, desc), optional): Sort direction. Omit to leave the results unsorted.
 //   - sortBy (string (one of: firstSeen, lastSeen), optional): Field to sort on. Only applies when sort is given.
-//   - format (string (one of: json, xml), optional)
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 
 package main
 
@@ -1120,8 +1120,8 @@ Up to 100 domains + 100 IPs in one request.
 
 | Parameter | In | Required | Type | Default | Description |
 |-----------|----|----------|------|---------|-------------|
-| `type` | query | yes | string | `all` |  |
-| `format` | query | no | string | `json` |  (one of: json, xml) |
+| `type` | query | yes | string | `all` | Comma separated DNS record types to return, for example A,MX,TXT. Defaults to all. |
+| `format` | query | no | string | `json` | Response format. JSON when the parameter is left out. (one of: json, xml) |
 
 **Request body** (`application/json`, model `DnsBulkRequest`)
 
@@ -1175,9 +1175,9 @@ with whoisfreaks.ApiClient(config) as client:
     api = whoisfreaks.DNSApi(client)
 
     # dns_bulk parameters:
-    #   type (str, required): default "all"
+    #   type (str, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to...; default "all"
     #   dns_bulk_request (DnsBulkRequest, required): request body
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     body = whoisfreaks.DnsBulkRequest(domain_names=["whoisfreaks.com", "example.com"])
     result = api.dns_bulk("A,MX,TXT", body)
     print(json.dumps(result.to_dict(), indent=2))
@@ -1197,9 +1197,9 @@ const config = new Configuration({ apiKey: process.env.WHOISFREAKS_API_KEY });
 const api = new DNSApi(config);
 
 // dnsBulk({ type, dnsBulkRequest, format? })
-//   type (string, required): default "all"
+//   type (string, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to...; default "all"
 //   dnsBulkRequest (DnsBulkRequest, required): request body
-//   format ("json" | "xml", optional): default "json"
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const body: DnsBulkRequest = { domainNames: ["whoisfreaks.com", "example.com"] };
   const result = await api.dnsBulk({ type: "A,MX,TXT", dnsBulkRequest: body });
@@ -1225,8 +1225,8 @@ main().catch(async (err: unknown) => {
 // Runnable example: Bulk DNS Lookup (POST /v2.0/dns/bulk/live)
 // Run it from the Getting Started module: save it as main.go, then `go run .`
 // Parameters for dnsBulk (POST /v2.0/dns/bulk/live):
-//   - type (string, required)
-//   - format (string (one of: json, xml), optional)
+//   - type (string, required): Comma separated DNS record types to return, for example A,MX,TXT. Defaults to all.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 //   - body: DnsBulkRequest (required): request body object
 
 package main

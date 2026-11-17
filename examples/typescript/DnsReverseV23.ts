@@ -8,12 +8,12 @@ const api = new DNSApi(config);
 
 // dnsReverseV23({ value, type, exact?, page?, sort?, sortBy?, format? })
 //   value (string, required): IP, CIDR, or record value
-//   type ("a" | "mx" | "cname" | "ns" | "aaaa" | "txt" | "soa", required)
+//   type ("a" | "mx" | "cname" | "ns" | "aaaa" | "txt" | "soa", required): DNS record type to search by
 //   exact (boolean, optional): When false the value is matched as a substring, which is far slower than an e...; default true
-//   page (number, optional): default 1
+//   page (number, optional): Page of results to return. Defaults to 1; default 1
 //   sort ("asc" | "desc", optional): Sort direction. Omit to leave the results unsorted
 //   sortBy ("firstSeen" | "lastSeen", optional): Field to sort on. Only applies when sort is given; default "lastSeen"
-//   format ("json" | "xml", optional): default "json"
+//   format ("json" | "xml", optional): Response format. JSON when the parameter is left out; default "json"
 async function main(): Promise<void> {
   const result = await api.dnsReverseV23({ value: "8.8.8.8", type: "a", page: 1 });
   console.log(JSON.stringify(result, null, 2));

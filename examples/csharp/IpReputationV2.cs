@@ -1,7 +1,7 @@
 // Runnable example: IP Reputation Lookup (v2.0) (GET /v2.0/security)
 // Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for ipReputationV2 (GET /v2.0/security):
-//   - ip (string, required)
+//   - ip (string, required): IP address to look up.
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;

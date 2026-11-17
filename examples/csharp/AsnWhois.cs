@@ -1,8 +1,8 @@
 // Runnable example: ASN WHOIS Lookup (GET /v2.0/asn-whois)
 // Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for asnWhois (GET /v2.0/asn-whois):
-//   - asn (string, required)
-//   - format (string (one of: json, xml), optional)
+//   - asn (string, required): Autonomous system number to look up, with or without the AS prefix.
+//   - format (string (one of: json, xml), optional): Response format. JSON when the parameter is left out.
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;

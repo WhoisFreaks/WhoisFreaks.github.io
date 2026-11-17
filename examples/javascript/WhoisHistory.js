@@ -9,7 +9,7 @@ const api = new WHOISApi(client);
 
 // whoisHistory(domainName, opts)
 //   domainName (string, required): Domain to fetch historical WHOIS records for
-//   opts.format (string, optional): one of json, xml
+//   opts.format (string, optional): Response format. JSON when the parameter is left out; one of json, xml
 async function main() {
   const result = await api.whoisHistory("whoisfreaks.com");
   console.log(JSON.stringify(result, null, 2));

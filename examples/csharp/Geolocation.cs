@@ -1,7 +1,7 @@
 // Runnable example: IP Geolocation Lookup (GET /v1.0/geolocation)
 // Run it from the Getting Started project: replace Program.cs with this file, then `dotnet run`
 // Parameters for geolocation (GET /v1.0/geolocation):
-//   - ip (string, required)
+//   - ip (string, required): IP address to look up.
 using System;
 using WhoisFreaks.Api;
 using WhoisFreaks.Client;

@@ -16,6 +16,6 @@ with whoisfreaks.ApiClient(config) as client:
 
     # domain_reputation parameters:
     #   domain_name (str, required): The domain name to assess
-    #   format (str, optional, keyword): one of json, xml; default "json"
+    #   format (str, optional, keyword): Response format. JSON when the parameter is left out; one of json, xml; default "json"
     result = api.domain_reputation("amazon.com")
     print(json.dumps(result.to_dict(), indent=2))
